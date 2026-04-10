@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "lastModified": "2026-04-09T09:40:35.991Z",
+  "lastModified": "2026-04-10T10:47:30.790Z",
   "collections": [
     {
       "id": "VariableCollectionId:14896:17462",
@@ -72,8 +72,7 @@
         "VariableID:17810:2513",
         "VariableID:15009:4323",
         "VariableID:17055:8724",
-        "VariableID:17055:8725",
-        "VariableID:19722:2842"
+        "VariableID:17055:8725"
       ],
       "variables": [
         {
@@ -1374,25 +1373,6 @@
             "iOS": "tokens.theme.componentBehaviour.justifyItem.alignCentre"
           },
           "variableCollectionId": "VariableCollectionId:14896:17462"
-        },
-        {
-          "id": "VariableID:19722:2842",
-          "name": "_text",
-          "description": "",
-          "key": "f2397129e1b0729e4ba07bff2312c2dfcc685c8b",
-          "resolvedType": "STRING",
-          "valuesByMode": {
-            "14896:0": "Cars24",
-            "17216:0": "Team BHP",
-            "17216:1": "Carinfo",
-            "17216:2": "Vehicle Info"
-          },
-          "scopes": [
-            "ALL_SCOPES"
-          ],
-          "hiddenFromPublishing": false,
-          "codeSyntax": {},
-          "variableCollectionId": "VariableCollectionId:14896:17462"
         }
       ]
     },
@@ -1406,10 +1386,6 @@
         {
           "name": "Mobile",
           "modeId": "14995:0"
-        },
-        {
-          "name": "Desktop",
-          "modeId": "17308:0"
         }
       ],
       "remote": false,
@@ -1479,8 +1455,7 @@
           "key": "2625cf1739dac3c419692b2a1594c49c50c7b73a",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 32,
-            "17308:0": 56
+            "14995:0": 32
           },
           "scopes": [
             "FONT_SIZE"
@@ -1500,8 +1475,7 @@
           "key": "e643893e49e869ab366dc2a65e9da7678c745121",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 24,
-            "17308:0": 48
+            "14995:0": 24
           },
           "scopes": [
             "FONT_SIZE"
@@ -1521,8 +1495,7 @@
           "key": "92a877fab2c4b12ada8e98c820abb846fff57786",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 24,
-            "17308:0": 40
+            "14995:0": 24
           },
           "scopes": [
             "FONT_SIZE"
@@ -1542,8 +1515,7 @@
           "key": "eb2150a948a2003e11a6652bf08995fca6de3b9b",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 19,
-            "17308:0": 32
+            "14995:0": 19
           },
           "scopes": [
             "FONT_SIZE"
@@ -1563,8 +1535,7 @@
           "key": "1ca4eb25cdcccb5da52a06de594cb98258bbc511",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 17,
-            "17308:0": 24
+            "14995:0": 17
           },
           "scopes": [
             "FONT_SIZE"
@@ -1584,8 +1555,7 @@
           "key": "c6291818a3359022923b2a2d5844dda8afae09ed",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 15,
-            "17308:0": 20
+            "14995:0": 15
           },
           "scopes": [
             "FONT_SIZE"
@@ -1605,8 +1575,7 @@
           "key": "738c8a33c8bdbbaa77ff3359e3fe4b49bab21445",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 13,
-            "17308:0": 16
+            "14995:0": 13
           },
           "scopes": [
             "FONT_SIZE"
@@ -1626,8 +1595,7 @@
           "key": "11db7e790c64a1848f7d7023f21b56af2ce51bf3",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 11,
-            "17308:0": 14
+            "14995:0": 11
           },
           "scopes": [
             "FONT_SIZE"
@@ -1647,8 +1615,7 @@
           "key": "2684c210a9b3d3e980112b6411b755cee7dbe8bd",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 16,
-            "17308:0": 18
+            "14995:0": 16
           },
           "scopes": [
             "FONT_SIZE"
@@ -1668,8 +1635,7 @@
           "key": "754f130c2ff67954e906c3851f1d1093c29bfff9",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 14,
-            "17308:0": 16
+            "14995:0": 14
           },
           "scopes": [
             "FONT_SIZE"
@@ -1689,8 +1655,7 @@
           "key": "efae2d18bd6da79ab31ff64e16a832f2822136cd",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 12,
-            "17308:0": 14
+            "14995:0": 12
           },
           "scopes": [
             "FONT_SIZE"
@@ -1710,8 +1675,7 @@
           "key": "fe4601ad5b01d3f4ea3d55343a255408553beac0",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 11,
-            "17308:0": 12
+            "14995:0": 11
           },
           "scopes": [
             "FONT_SIZE"
@@ -1731,8 +1695,7 @@
           "key": "cd742d48f35b2f44cbffc601f261c7a5e2820b73",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 16,
-            "17308:0": 18
+            "14995:0": 16
           },
           "scopes": [
             "FONT_SIZE"
@@ -1752,8 +1715,7 @@
           "key": "21f1e5d2d6842cb377aae63e1c96fe59ebf30960",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 14,
-            "17308:0": 16
+            "14995:0": 14
           },
           "scopes": [
             "FONT_SIZE"
@@ -1773,8 +1735,7 @@
           "key": "8e6db39bc96aedf4069bb188b97db56602fd3e4a",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 12,
-            "17308:0": 14
+            "14995:0": 12
           },
           "scopes": [
             "FONT_SIZE"
@@ -1794,8 +1755,7 @@
           "key": "0c542a429faef17282522eecae94e35a960535ee",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 9,
-            "17308:0": 10
+            "14995:0": 9
           },
           "scopes": [
             "FONT_SIZE"
@@ -1815,8 +1775,7 @@
           "key": "a37654623b37890a783cec4be7c01a719543cba7",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 10,
-            "17308:0": 12
+            "14995:0": 10
           },
           "scopes": [
             "FONT_SIZE"
@@ -1836,8 +1795,7 @@
           "key": "7e256df4d3f86d10b05d20ae2962e8d55aa1f4f9",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 9,
-            "17308:0": 10
+            "14995:0": 9
           },
           "scopes": [
             "FONT_SIZE"
@@ -1857,8 +1815,7 @@
           "key": "84ede3975c47a84cba12c540917674696d2c35e6",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 36,
-            "17308:0": 60
+            "14995:0": 36
           },
           "scopes": [
             "LINE_HEIGHT"
@@ -1878,8 +1835,7 @@
           "key": "3080e09429646e3cd892e1c9fba0e76372530ad9",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 28,
-            "17308:0": 54
+            "14995:0": 28
           },
           "scopes": [
             "LINE_HEIGHT"
@@ -1899,8 +1855,7 @@
           "key": "35d355d74df4a93252365a712de34c466bc440f0",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 28,
-            "17308:0": 48
+            "14995:0": 28
           },
           "scopes": [
             "LINE_HEIGHT"
@@ -1920,8 +1875,7 @@
           "key": "8913d79b177804b2eb84411e85d9c57012448b65",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 24,
-            "17308:0": 40
+            "14995:0": 24
           },
           "scopes": [
             "LINE_HEIGHT"
@@ -1941,8 +1895,7 @@
           "key": "c7c7670e0e1fb04aadd2ae34d8c625815154b40e",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 22,
-            "17308:0": 28
+            "14995:0": 22
           },
           "scopes": [
             "LINE_HEIGHT"
@@ -1962,8 +1915,7 @@
           "key": "1ab8eceec084041c0cc24161b1b143a41153a5be",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 20,
-            "17308:0": 20
+            "14995:0": 20
           },
           "scopes": [
             "LINE_HEIGHT"
@@ -1983,8 +1935,7 @@
           "key": "56ec57d788f584d9aa01a2ed27595b7caad47770",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 18,
-            "17308:0": 18
+            "14995:0": 18
           },
           "scopes": [
             "LINE_HEIGHT"
@@ -2004,8 +1955,7 @@
           "key": "787215957f048e9ff22b2f6e6c57122c54b1e612",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 16,
-            "17308:0": 16
+            "14995:0": 16
           },
           "scopes": [
             "LINE_HEIGHT"
@@ -2025,8 +1975,7 @@
           "key": "f9df45dddc52420b10579cb3fa257fbb25ad0665",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 20,
-            "17308:0": 24
+            "14995:0": 20
           },
           "scopes": [
             "LINE_HEIGHT"
@@ -2046,8 +1995,7 @@
           "key": "f05e1a1c4f4a1d3cc3366b43dfadaf2f0e220d74",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 18,
-            "17308:0": 18
+            "14995:0": 18
           },
           "scopes": [
             "LINE_HEIGHT"
@@ -2067,8 +2015,7 @@
           "key": "a5ed5fbc14f0fbafb37b8c9e2497d4ce5ca83756",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 16,
-            "17308:0": 16
+            "14995:0": 16
           },
           "scopes": [
             "LINE_HEIGHT"
@@ -2088,8 +2035,7 @@
           "key": "9319b2a48f499dcbdff98d059e5c0674c3b19ff7",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 14,
-            "17308:0": 14
+            "14995:0": 14
           },
           "scopes": [
             "LINE_HEIGHT"
@@ -2109,8 +2055,7 @@
           "key": "54bc32b78d898ccd8136eadbb7c90f8ea1fa2f53",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 24,
-            "17308:0": 24
+            "14995:0": 24
           },
           "scopes": [
             "LINE_HEIGHT"
@@ -2130,8 +2075,7 @@
           "key": "abcf454470474d52d49297437c7e079cc4cdee79",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 20,
-            "17308:0": 20
+            "14995:0": 20
           },
           "scopes": [
             "LINE_HEIGHT"
@@ -2151,8 +2095,7 @@
           "key": "d37d8d26be917c4d3ded3cdf6cf3e407e31ec148",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 18,
-            "17308:0": 18
+            "14995:0": 18
           },
           "scopes": [
             "LINE_HEIGHT"
@@ -2172,8 +2115,7 @@
           "key": "e690ce512e609c0b5958ecf30b103c12ac691747",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 13,
-            "17308:0": 14
+            "14995:0": 13
           },
           "scopes": [
             "LINE_HEIGHT"
@@ -2193,8 +2135,7 @@
           "key": "8bb13126bc7935e61dba6b7b7449635ba4a0ed3d",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 14,
-            "17308:0": 10
+            "14995:0": 14
           },
           "scopes": [
             "LINE_HEIGHT"
@@ -2214,8 +2155,7 @@
           "key": "0bbe321bd0e8dd90bad6732af101b70be5ca7ec6",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 12,
-            "17308:0": 10
+            "14995:0": 12
           },
           "scopes": [
             "LINE_HEIGHT"
@@ -2235,8 +2175,7 @@
           "key": "bb42f0f75e415ca82e5b7430964632764f25e097",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": -0.05,
-            "17308:0": -0.05
+            "14995:0": -0.05
           },
           "scopes": [
             "LETTER_SPACING"
@@ -2256,8 +2195,7 @@
           "key": "8f4a824b7f219f90002778972519f5ead432164a",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": -0.05,
-            "17308:0": -0.05
+            "14995:0": -0.05
           },
           "scopes": [
             "LETTER_SPACING"
@@ -2277,8 +2215,7 @@
           "key": "1f7b35c58f4d0ee4aa1b1ffb3be09be80777c3c4",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": -0.05,
-            "17308:0": -0.05
+            "14995:0": -0.05
           },
           "scopes": [
             "LETTER_SPACING"
@@ -2298,8 +2235,7 @@
           "key": "840f3ba989b5f3fe0691b2f5ff4fd99f8464076c",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": -0.03,
-            "17308:0": -0.03
+            "14995:0": -0.03
           },
           "scopes": [
             "LETTER_SPACING"
@@ -2319,8 +2255,7 @@
           "key": "b5f6fba9ed1515a2fcab561ca5104dfbd6146533",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": -0.02,
-            "17308:0": -0.02
+            "14995:0": -0.02
           },
           "scopes": [
             "LETTER_SPACING"
@@ -2340,8 +2275,7 @@
           "key": "714b4c16ee0d454648e87f6494ecd4e5c8fc8560",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": -0.02,
-            "17308:0": -0.02
+            "14995:0": -0.02
           },
           "scopes": [
             "LETTER_SPACING"
@@ -2361,8 +2295,7 @@
           "key": "cf737824e7679ce73100b6f1232e9fbb36d78563",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 0,
-            "17308:0": 0
+            "14995:0": 0
           },
           "scopes": [
             "LETTER_SPACING"
@@ -2382,8 +2315,7 @@
           "key": "b6d2ac3e99216094b9158d95c2bb353a34628ac9",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 0,
-            "17308:0": 0
+            "14995:0": 0
           },
           "scopes": [
             "LETTER_SPACING"
@@ -2403,8 +2335,7 @@
           "key": "62007f2c8eea53b5e482b1c6ad90292f19d28ba2",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 0,
-            "17308:0": 0
+            "14995:0": 0
           },
           "scopes": [
             "LETTER_SPACING"
@@ -2424,8 +2355,7 @@
           "key": "ee2ee0ddd056423880dd13475950a3f76c1b8644",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 0,
-            "17308:0": 0
+            "14995:0": 0
           },
           "scopes": [
             "LETTER_SPACING"
@@ -2445,8 +2375,7 @@
           "key": "0ee4f7fd17d086bb18e5b6f120fc28dcb5e09440",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 0,
-            "17308:0": 0
+            "14995:0": 0
           },
           "scopes": [
             "LETTER_SPACING"
@@ -2466,8 +2395,7 @@
           "key": "2af40c6930311fc6289f4c28f670e31e1b643bc7",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 0,
-            "17308:0": 0
+            "14995:0": 0
           },
           "scopes": [
             "LETTER_SPACING"
@@ -2487,8 +2415,7 @@
           "key": "97f958a0a242dd508371fa4267259fa60eb20334",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 0,
-            "17308:0": 0
+            "14995:0": 0
           },
           "scopes": [
             "LETTER_SPACING"
@@ -2508,8 +2435,7 @@
           "key": "6c8714c5d9a6c96cb0bebc368cfd024bbbc7f679",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 0,
-            "17308:0": 0
+            "14995:0": 0
           },
           "scopes": [
             "LETTER_SPACING"
@@ -2529,8 +2455,7 @@
           "key": "33fa0399494121bf7cb4f76be398c599fa072781",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 0,
-            "17308:0": 0
+            "14995:0": 0
           },
           "scopes": [
             "LETTER_SPACING"
@@ -2550,8 +2475,7 @@
           "key": "f6868fc5f79dacb8d6ee0d333d31f444ffb43517",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 0,
-            "17308:0": 0
+            "14995:0": 0
           },
           "scopes": [
             "LETTER_SPACING"
@@ -2571,8 +2495,7 @@
           "key": "420df8e84e43c91c0cd28308b4b809dd9c0234d7",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 0,
-            "17308:0": 0
+            "14995:0": 0
           },
           "scopes": [
             "LETTER_SPACING"
@@ -2592,8 +2515,7 @@
           "key": "f4d9a2771654cc90ba3ecdd4247411dbe447c10c",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 0,
-            "17308:0": 0
+            "14995:0": 0
           },
           "scopes": [
             "LETTER_SPACING"
@@ -2613,8 +2535,7 @@
           "key": "a34ee6b8640c01b94d5a52c2fae54b4144a2c52f",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 4,
-            "17308:0": 4
+            "14995:0": 2
           },
           "scopes": [
             "LETTER_SPACING"
@@ -2634,8 +2555,7 @@
           "key": "836dbb43f85c22156f98a98cc14f8677d40f60ae",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "14995:0": 4,
-            "17308:0": 4
+            "14995:0": 2
           },
           "scopes": [
             "LETTER_SPACING"
@@ -7897,8 +7817,8 @@
         "VariableID:17067:4894",
         "VariableID:17067:4893",
         "VariableID:17067:4905",
-        "VariableID:17067:4904",
         "VariableID:17788:12613",
+        "VariableID:17067:4904",
         "VariableID:17067:4903",
         "VariableID:17067:4916",
         "VariableID:17067:4917",
@@ -10672,29 +10592,6 @@
           "variableCollectionId": "VariableCollectionId:15019:28614"
         },
         {
-          "id": "VariableID:17067:4904",
-          "name": "text/warning/base",
-          "description": "WCAG contrast audit\nHex: #E17100\nContrast vs white (#FFFFFF): 3.2:1 | AA Large\nContrast vs black (#000000): 6.56:1 | AA\nBest contrast: Higher contrast vs black\nThresholds: AAA >= 7, AA >= 4.5, AA Large >= 3",
-          "key": "b7b2a663377ab279f74330a3d1b981564fa830ee",
-          "resolvedType": "COLOR",
-          "valuesByMode": {
-            "15019:4": {
-              "type": "VARIABLE_ALIAS",
-              "id": "VariableID:15019:28500"
-            }
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ],
-          "hiddenFromPublishing": false,
-          "codeSyntax": {
-            "WEB": "var(--cars24-semantic-text-warning-base)",
-            "ANDROID": "tokens.semantic.text.warning.base",
-            "iOS": "tokens.semantic.text.warning.base"
-          },
-          "variableCollectionId": "VariableCollectionId:15019:28614"
-        },
-        {
           "id": "VariableID:17788:12613",
           "name": "icon/brand/subtler",
           "description": "WCAG contrast audit\nHex: #E1E3FD\nContrast vs white (#FFFFFF): 1.26:1 | Fail\nContrast vs black (#000000): 16.61:1 | AAA\nBest contrast: Higher contrast vs black\nThresholds: AAA >= 7, AA >= 4.5, AA Large >= 3",
@@ -10714,6 +10611,29 @@
             "WEB": "var(--cars24-semantic-icon-brand-subtler)",
             "ANDROID": "tokens.semantic.icon.brand.subtler",
             "iOS": "tokens.semantic.icon.brand.subtler"
+          },
+          "variableCollectionId": "VariableCollectionId:15019:28614"
+        },
+        {
+          "id": "VariableID:17067:4904",
+          "name": "text/warning/base",
+          "description": "WCAG contrast audit\nHex: #E17100\nContrast vs white (#FFFFFF): 3.2:1 | AA Large\nContrast vs black (#000000): 6.56:1 | AA\nBest contrast: Higher contrast vs black\nThresholds: AAA >= 7, AA >= 4.5, AA Large >= 3",
+          "key": "b7b2a663377ab279f74330a3d1b981564fa830ee",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "15019:4": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:15019:28500"
+            }
+          },
+          "scopes": [
+            "TEXT_FILL"
+          ],
+          "hiddenFromPublishing": false,
+          "codeSyntax": {
+            "WEB": "var(--cars24-semantic-text-warning-base)",
+            "ANDROID": "tokens.semantic.text.warning.base",
+            "iOS": "tokens.semantic.text.warning.base"
           },
           "variableCollectionId": "VariableCollectionId:15019:28614"
         },
@@ -12102,8 +12022,8 @@
         "VariableID:17400:1619",
         "VariableID:17400:1620",
         "VariableID:17356:22677",
-        "VariableID:17400:1621",
         "VariableID:17407:1624",
+        "VariableID:17400:1621",
         "VariableID:17407:1625",
         "VariableID:17407:1626",
         "VariableID:17407:1627",
@@ -12127,8 +12047,8 @@
         "VariableID:17407:1642",
         "VariableID:17407:1643",
         "VariableID:17407:1644",
-        "VariableID:17356:22680",
         "VariableID:17400:1623",
+        "VariableID:17356:22680",
         "VariableID:17356:22681",
         "VariableID:17356:22682",
         "VariableID:17356:22683",
@@ -12561,26 +12481,6 @@
           "variableCollectionId": "VariableCollectionId:17356:22675"
         },
         {
-          "id": "VariableID:17400:1621",
-          "name": "opacity/90",
-          "description": "",
-          "key": "bd283a8749d924b1007185a973cc9b30b2f28273",
-          "resolvedType": "FLOAT",
-          "valuesByMode": {
-            "17356:0": 90
-          },
-          "scopes": [
-            "OPACITY"
-          ],
-          "hiddenFromPublishing": false,
-          "codeSyntax": {
-            "WEB": "var(--cars24-misc-opacity-90)",
-            "ANDROID": "tokens.misc.opacity.90",
-            "iOS": "tokens.misc.opacity.90"
-          },
-          "variableCollectionId": "VariableCollectionId:17356:22675"
-        },
-        {
           "id": "VariableID:17407:1624",
           "name": "gap/2",
           "description": "",
@@ -12597,6 +12497,26 @@
             "WEB": "var(--cars24-misc-gap-2)",
             "ANDROID": "tokens.misc.gap.2",
             "iOS": "tokens.misc.gap.2"
+          },
+          "variableCollectionId": "VariableCollectionId:17356:22675"
+        },
+        {
+          "id": "VariableID:17400:1621",
+          "name": "opacity/90",
+          "description": "",
+          "key": "bd283a8749d924b1007185a973cc9b30b2f28273",
+          "resolvedType": "FLOAT",
+          "valuesByMode": {
+            "17356:0": 90
+          },
+          "scopes": [
+            "OPACITY"
+          ],
+          "hiddenFromPublishing": false,
+          "codeSyntax": {
+            "WEB": "var(--cars24-misc-opacity-90)",
+            "ANDROID": "tokens.misc.opacity.90",
+            "iOS": "tokens.misc.opacity.90"
           },
           "variableCollectionId": "VariableCollectionId:17356:22675"
         },
@@ -13061,26 +12981,6 @@
           "variableCollectionId": "VariableCollectionId:17356:22675"
         },
         {
-          "id": "VariableID:17356:22680",
-          "name": "stroke/none",
-          "description": "",
-          "key": "6a0648d049f0fef70387632f427965c38cd3b6d8",
-          "resolvedType": "FLOAT",
-          "valuesByMode": {
-            "17356:0": 0
-          },
-          "scopes": [
-            "STROKE_FLOAT"
-          ],
-          "hiddenFromPublishing": false,
-          "codeSyntax": {
-            "WEB": "var(--cars24-misc-stroke-none)",
-            "ANDROID": "tokens.misc.stroke.none",
-            "iOS": "tokens.misc.stroke.none"
-          },
-          "variableCollectionId": "VariableCollectionId:17356:22675"
-        },
-        {
           "id": "VariableID:17400:1623",
           "name": "opacity/100",
           "description": "",
@@ -13097,6 +12997,26 @@
             "WEB": "var(--cars24-misc-opacity-100)",
             "ANDROID": "tokens.misc.opacity.100",
             "iOS": "tokens.misc.opacity.100"
+          },
+          "variableCollectionId": "VariableCollectionId:17356:22675"
+        },
+        {
+          "id": "VariableID:17356:22680",
+          "name": "stroke/none",
+          "description": "",
+          "key": "6a0648d049f0fef70387632f427965c38cd3b6d8",
+          "resolvedType": "FLOAT",
+          "valuesByMode": {
+            "17356:0": 0
+          },
+          "scopes": [
+            "STROKE_FLOAT"
+          ],
+          "hiddenFromPublishing": false,
+          "codeSyntax": {
+            "WEB": "var(--cars24-misc-stroke-none)",
+            "ANDROID": "tokens.misc.stroke.none",
+            "iOS": "tokens.misc.stroke.none"
           },
           "variableCollectionId": "VariableCollectionId:17356:22675"
         },
