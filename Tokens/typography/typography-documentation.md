@@ -1,7 +1,7 @@
 # Typography Documentation - v2 LEGO Design System
 
 > **Source node:** [18915-638 - Typography Section](https://www.figma.com/design/AZgWt0KHVuVeWBAcQ6Jcy4/branch/yxI5H0FhaUg0YR0uhNuqR6/%F0%9F%9A%80-v2.0-Global-Component-Library?node-id=18915-638)
-> **Token file:** `Tokens/token-bible.json`
+> **Token file:** `Tokens/Tokens-variables-full.json`
 > **Last synced:** 2026-04-03
 
 ---
@@ -218,7 +218,7 @@ Always apply both collections together. A component needs a brand mode and a typ
 
 ### Platform notes
 
-All tokens have platform equivalents via `tokens.typography.*` in `Tokens/token-bible.json`.
+All tokens have platform equivalents via `tokens.typography.*` in `Tokens/Tokens-variables-full.json`.
 
 ---
 
