@@ -1,6 +1,6 @@
 # Token Guidelines
 
-> **Source file:** `Tokens/Tokens-variables-full.json`
+> **Source file:** `token/token.json`
 > **Type:** Figma variable export reference
 > **Current shape:** 6 collections, 549 variables
 
@@ -233,7 +233,7 @@ Guidelines:
 
 When updating token system:
 
-1. Check whether token already exists in `Tokens/Tokens-variables-full.json`.
+1. Check whether token already exists in `token/token.json`.
 2. If token is for shared UI meaning, prefer Semantic layer.
 3. If token is raw foundation, add to Primitive or Misc.
 4. If token differs by brand, place in Theme mode structure.
@@ -267,7 +267,7 @@ Before approving new token work:
 
 ## Related Paths
 
-- `Tokens/Tokens-variables-full.json`
+- `token/token.json`
 - `packages/tokens/README.md`
 - `packages/tokens/tokens/base.json`
 - `packages/tokens/tokens/brands/core.json`
