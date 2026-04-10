@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { designSystemRegistry } from "@geist/contracts";
-import { Accordion, Badge, Banner, Button } from "@geist/web";
+import { Accordion, Badge, Banner, Button, Icon } from "@geist/web";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 const componentCards = [
@@ -9,16 +9,29 @@ const componentCards = [
     canonicalId: "component.button",
     title: "Button",
     preview: (
-      <Button tone="primary" size="md">
-        Continue
+      <Button
+        styleVariant="Solid"
+        size="Medium"
+        shape="Regular"
+        leadingIcon={<Icon name="sparkle-filled" decorative />}
+        trailingIcon={<Icon name="chevron-small-right-filled" decorative />}
+      >
+        Label
       </Button>
     ),
     snippet: `import { Button } from "@geist/web";
 
 export function Example() {
   return (
-    <Button tone="primary" size="md">
-      Continue
+    <Button
+      styleVariant="Solid"
+      size="Medium"
+      shape="Regular"
+      onDark={false}
+      leadingIcon="sparkle-filled"
+      trailingIcon="chevron-small-right-filled"
+    >
+      Label
     </Button>
   );
 }`,

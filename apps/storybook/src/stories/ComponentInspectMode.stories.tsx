@@ -82,7 +82,17 @@ function manualBindings(
 const inspectItems = [
   {
     title: "Button",
-    preview: <Button tone="primary" size="md">Continue</Button>,
+    preview: (
+      <Button
+        styleVariant="Solid"
+        size="Medium"
+        shape="Regular"
+        leadingIcon={<Icon name="sparkle-filled" decorative />}
+        trailingIcon={<Icon name="chevron-small-right-filled" decorative />}
+      >
+        Label
+      </Button>
+    ),
     bindings:
       designSystemRegistry.components.find((component) => component.canonicalId === "component.button")
         ?.tokenBindings ?? []
