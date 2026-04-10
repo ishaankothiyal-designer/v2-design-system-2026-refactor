@@ -2,7 +2,7 @@
 
 > **Source file:** `Tokens/Tokens-variables-full.json`
 > **Type:** Figma variable export reference
-> **Current shape:** 6 collections, 550 variables
+> **Current shape:** 6 collections, 549 variables
 
 ## Purpose
 
@@ -97,6 +97,9 @@ Examples:
 
 Rule:
 Typography tokens must be used as matched sets, not mixed ad hoc.
+
+Current note:
+This export currently exposes only `Mobile` mode in the Typography collection. If tablet or desktop scales are needed, add them deliberately instead of assuming they exist in this file.
 
 ### 3. Primitive
 
