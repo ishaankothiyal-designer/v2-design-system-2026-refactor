@@ -1,0 +1,26 @@
+{
+  "name": "@geist/storybook",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "storybook build",
+    "storybook": "storybook dev -p 6008",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@geist/contracts": "workspace:*",
+    "@geist/tokens": "workspace:*",
+    "@storybook/react": "*",
+    "react": "*",
+    "react-dom": "*"
+  },
+  "devDependencies": {
+    "@types/react": "*",
+    "@types/react-dom": "*",
+    "@storybook/react-vite": "*",
+    "storybook": "*",
+    "typescript": "*",
+    "vite": "*"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "geist-design-system",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.0.0",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "storybook": "pnpm --filter @geist/storybook storybook",
+    "typecheck": "turbo run typecheck",
+    "validate:registry": "pnpm --filter @geist/contracts validate:registry"
+  },
+  "devDependencies": {
+    "@types/react": "*",
+    "@types/react-dom": "*",
+    "tsx": "*",
+    "turbo": "*",
+    "typescript": "*"
+  }
+}

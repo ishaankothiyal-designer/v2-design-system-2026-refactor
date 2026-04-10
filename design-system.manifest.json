@@ -1,0 +1,18 @@
+{
+  "name": "Geist Design System",
+  "scope": "sandbox",
+  "layers": ["tokens", "components", "widgets", "pages", "flows"],
+  "ownership": {
+    "tokens": "code/json",
+    "figma": "visual component specs",
+    "implementation": "github",
+    "documentation": "storybook"
+  },
+  "rules": [
+    "no freeform component invention",
+    "no hardcoded styles where tokens exist",
+    "no visual drift outside the design system",
+    "unsupported designs must be translated or flagged"
+  ]
+}
+

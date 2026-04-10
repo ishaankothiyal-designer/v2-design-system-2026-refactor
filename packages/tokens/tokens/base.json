@@ -1,0 +1,99 @@
+{
+  "color": {
+    "brand": {
+      "primary": {
+        "50": "#EEF4FF",
+        "100": "#D1E0FF",
+        "600": "#155EEF",
+        "700": "#004EEB"
+      },
+      "secondary": {
+        "50": "#F4ECF7",
+        "100": "#E9D7FE",
+        "600": "#7F56D9"
+      }
+    },
+    "surface": {
+      "canvas": "#FFFFFF",
+      "subtle": "#F9FAFB",
+      "raised": "#FFFFFF",
+      "inverse": "#101828"
+    },
+    "text": {
+      "primary": "#101828",
+      "secondary": "#475467",
+      "inverse": "#FFFFFF",
+      "muted": "#667085"
+    },
+    "border": {
+      "default": "#D0D5DD",
+      "strong": "#98A2B3",
+      "focus": "#84CAFF"
+    },
+    "status": {
+      "success": "#12B76A",
+      "warning": "#F79009",
+      "danger": "#F04438",
+      "info": "#2E90FA"
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "sans": "Inter",
+      "mono": "ui-monospace"
+    },
+    "fontSize": {
+      "xs": 12,
+      "sm": 14,
+      "md": 16,
+      "lg": 18,
+      "xl": 20,
+      "2xl": 24
+    },
+    "lineHeight": {
+      "xs": 16,
+      "sm": 20,
+      "md": 24,
+      "lg": 28,
+      "xl": 30,
+      "2xl": 36
+    },
+    "fontWeight": {
+      "regular": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700
+    }
+  },
+  "spacing": {
+    "0": 0,
+    "1": 4,
+    "2": 8,
+    "3": 12,
+    "4": 16,
+    "5": 20,
+    "6": 24,
+    "8": 32,
+    "10": 40,
+    "12": 48,
+    "16": 64
+  },
+  "radius": {
+    "none": 0,
+    "sm": 4,
+    "md": 8,
+    "lg": 12,
+    "xl": 16,
+    "pill": 999
+  },
+  "icon": {
+    "style": "line",
+    "strokeWidth": 1.5,
+    "size": {
+      "sm": 16,
+      "md": 20,
+      "lg": 24
+    }
+  }
+}
+

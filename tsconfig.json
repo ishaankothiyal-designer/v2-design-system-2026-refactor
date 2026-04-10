@@ -1,0 +1,11 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./packages/tokens" },
+    { "path": "./packages/contracts" },
+    { "path": "./packages/web" },
+    { "path": "./packages/native" },
+    { "path": "./apps/storybook" }
+  ]
+}
+

@@ -1,0 +1,15 @@
+interface:
+  display_name: "Figma Designer Read"
+  short_description: "Read Figma as the source of truth"
+  default_prompt: "Use $figma-designer-read to extract exact Figma values and mirror them into Storybook or code without inventing styles."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "figma"
+      description: "Figma MCP server"
+      transport: "streamable_http"
+      url: "https://mcp.figma.com/mcp"
+
+policy:
+  allow_implicit_invocation: true

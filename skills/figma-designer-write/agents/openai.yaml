@@ -1,0 +1,15 @@
+interface:
+  display_name: "Figma Designer Write"
+  short_description: "Write Figma with tokens and sync"
+  default_prompt: "Use $figma-designer-write to author or update Figma while keeping tokens, typography, icons, Storybook, and code in sync."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "figma"
+      description: "Figma MCP server"
+      transport: "streamable_http"
+      url: "https://mcp.figma.com/mcp"
+
+policy:
+  allow_implicit_invocation: true

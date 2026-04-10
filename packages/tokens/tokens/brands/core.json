@@ -1,0 +1,19 @@
+{
+  "color": {
+    "brand": {
+      "primary": {
+        "600": "#155EEF",
+        "700": "#004EEB"
+      },
+      "secondary": {
+        "600": "#7F56D9"
+      }
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "sans": "Inter"
+    }
+  }
+}
+

@@ -1,0 +1,401 @@
+{
+  "fileName": "Tokens",
+  "textStyles": [
+    {
+      "name": "title/display-1/medium",
+      "fontFamily": "Geist",
+      "fontWeight": "Medium",
+      "fontSize": 32,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": -0.05000000074505806
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "title/display-1/semibold",
+      "fontFamily": "Geist",
+      "fontWeight": "SemiBold",
+      "fontSize": 32,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": -0.05000000074505806
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "title/display-1/bold",
+      "fontFamily": "Geist",
+      "fontWeight": "Bold",
+      "fontSize": 32,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": -0.05000000074505806
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "title/display-2/medium",
+      "fontFamily": "Geist",
+      "fontWeight": "Medium",
+      "fontSize": 24,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": -0.05000000074505806
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "title/display-2/semibold",
+      "fontFamily": "Geist",
+      "fontWeight": "SemiBold",
+      "fontSize": 24,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": -0.05000000074505806
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "title/display-2/bold",
+      "fontFamily": "Geist",
+      "fontWeight": "Bold",
+      "fontSize": 24,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": -0.05000000074505806
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "headline/h1/semibold",
+      "fontFamily": "Geist",
+      "fontWeight": "SemiBold",
+      "fontSize": 24,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": -0.05000000074505806
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "headline/h1/bold",
+      "fontFamily": "Geist",
+      "fontWeight": "Bold",
+      "fontSize": 24,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": -0.05000000074505806
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "headline/h2/semibold",
+      "fontFamily": "Geist",
+      "fontWeight": "SemiBold",
+      "fontSize": 19,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": -0.029999999329447746
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "headline/h2/bold",
+      "fontFamily": "Geist",
+      "fontWeight": "Bold",
+      "fontSize": 19,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": -0.029999999329447746
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "headline/h3/semibold",
+      "fontFamily": "Geist",
+      "fontWeight": "SemiBold",
+      "fontSize": 17,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": -0.019999999552965164
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "headline/h3/bold",
+      "fontFamily": "Geist",
+      "fontWeight": "Bold",
+      "fontSize": 17,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": -0.019999999552965164
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "headline/h4/semibold",
+      "fontFamily": "Geist",
+      "fontWeight": "SemiBold",
+      "fontSize": 15,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": -0.019999999552965164
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "headline/h4/bold",
+      "fontFamily": "Geist",
+      "fontWeight": "Bold",
+      "fontSize": 15,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": -0.019999999552965164
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "headline/h5/semibold",
+      "fontFamily": "Geist",
+      "fontWeight": "SemiBold",
+      "fontSize": 13,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "headline/h5/bold",
+      "fontFamily": "Geist",
+      "fontWeight": "Bold",
+      "fontSize": 13,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "headline/h6/semibold",
+      "fontFamily": "Geist",
+      "fontWeight": "SemiBold",
+      "fontSize": 11,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "headline/h6/bold",
+      "fontFamily": "Geist",
+      "fontWeight": "Bold",
+      "fontSize": 11,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "utility/label-1/regular",
+      "fontFamily": "Geist",
+      "fontWeight": "Regular",
+      "fontSize": 16,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "utility/label-1/medium",
+      "fontFamily": "Geist",
+      "fontWeight": "Medium",
+      "fontSize": 16,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "utility/label-1/semibold",
+      "fontFamily": "Geist",
+      "fontWeight": "SemiBold",
+      "fontSize": 16,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "utility/label-2/regular",
+      "fontFamily": "Geist",
+      "fontWeight": "Regular",
+      "fontSize": 14,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "utility/label-2/medium",
+      "fontFamily": "Geist",
+      "fontWeight": "Medium",
+      "fontSize": 14,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "utility/label-2/semibold",
+      "fontFamily": "Geist",
+      "fontWeight": "SemiBold",
+      "fontSize": 14,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "utility/label-3/regular",
+      "fontFamily": "Geist",
+      "fontWeight": "Regular",
+      "fontSize": 12,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "utility/label-3/medium",
+      "fontFamily": "Geist",
+      "fontWeight": "Medium",
+      "fontSize": 12,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "utility/label-3/semibold",
+      "fontFamily": "Geist",
+      "fontWeight": "SemiBold",
+      "fontSize": 12,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "utility/label-4/regular",
+      "fontFamily": "Geist",
+      "fontWeight": "Regular",
+      "fontSize": 11,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "utility/label-4/medium",
+      "fontFamily": "Geist",
+      "fontWeight": "Medium",
+      "fontSize": 11,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "utility/label-4/semibold",
+      "fontFamily": "Geist",
+      "fontWeight": "SemiBold",
+      "fontSize": 11,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "paragraph/body-1",
+      "fontFamily": "Geist",
+      "fontWeight": "Regular",
+      "fontSize": 16,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "paragraph/body-2",
+      "fontFamily": "Geist",
+      "fontWeight": "Regular",
+      "fontSize": 14,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "paragraph/body-3",
+      "fontFamily": "Geist",
+      "fontWeight": "Regular",
+      "fontSize": 12,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "paragraph/fine-print",
+      "fontFamily": "Geist",
+      "fontWeight": "Regular",
+      "fontSize": 9,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "caption/md",
+      "fontFamily": "Geist",
+      "fontWeight": "Bold",
+      "fontSize": 10,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 5
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "caption/sm",
+      "fontFamily": "Geist",
+      "fontWeight": "Bold",
+      "fontSize": 9,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 5
+      },
+      "textCase": "ORIGINAL"
+    }
+  ]
+}
