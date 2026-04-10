@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { designSystemRegistry } from "@geist/contracts";
-import { Accordion, Badge, Button } from "@geist/web";
+import { Accordion, Badge, Banner, Button } from "@geist/web";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 const componentCards = [
@@ -106,6 +106,41 @@ export function Example() {
   );
 }`,
     file: "@geist/web/canonical/badge"
+  },
+  {
+    canonicalId: "component.banner",
+    title: "Banner",
+    preview: (
+      <Banner
+        theme="Light"
+        state="Info"
+        heading
+        icon
+        action
+        actionType="Text button"
+        title="New Message Alert"
+        description="New message received!"
+        actionLabel="Label"
+      />
+    ),
+    snippet: `import { Banner } from "@geist/web";
+
+export function Example() {
+  return (
+    <Banner
+      theme="Light"
+      state="Info"
+      heading={true}
+      icon={true}
+      action={true}
+      actionType="Text button"
+      title="New Message Alert"
+      description="New message received!"
+      actionLabel="Label"
+    />
+  );
+}`,
+    file: "@geist/web/canonical/banner"
   }
 ] as const;
 

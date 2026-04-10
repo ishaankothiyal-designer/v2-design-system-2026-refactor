@@ -234,10 +234,10 @@ export function Badge({
 
   const containerStyles: CSSProperties = {
     display: "inline-flex",
+    boxSizing: "border-box",
     alignItems: "center",
     justifyContent: "center",
     gap: metrics.gap,
-    minHeight: metrics.height,
     height: metrics.height,
     width: "fit-content",
     padding: `${metrics.paddingY}px ${isPill ? metrics.pillPaddingX : metrics.paddingX}px`,
@@ -253,6 +253,7 @@ export function Badge({
     fontSize: metrics.fontSize,
     fontWeight: medium,
     lineHeight: `${metrics.lineHeight}px`,
+    letterSpacing: 0,
     whiteSpace: "nowrap",
     transition: `filter ${transition}, box-shadow ${transition}, opacity ${transition}`,
     ...style

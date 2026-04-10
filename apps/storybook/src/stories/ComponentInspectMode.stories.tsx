@@ -8,7 +8,7 @@ import {
 } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { designSystemRegistry } from "@geist/contracts";
-import { Accordion, Badge, Button, Icon, Text } from "@geist/web";
+import { Accordion, Badge, Banner, Button, Icon, Text } from "@geist/web";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 type Measurement = {
@@ -125,6 +125,25 @@ const inspectItems = [
     ),
     bindings:
       designSystemRegistry.components.find((component) => component.canonicalId === "component.accordion")
+        ?.tokenBindings ?? []
+  },
+  {
+    title: "Banner",
+    preview: (
+      <Banner
+        theme="Light"
+        state="Warning"
+        heading
+        icon
+        action
+        actionType="Text button"
+        title="New Message Alert"
+        description="New message received!"
+        actionLabel="Label"
+      />
+    ),
+    bindings:
+      designSystemRegistry.components.find((component) => component.canonicalId === "component.banner")
         ?.tokenBindings ?? []
   },
   {

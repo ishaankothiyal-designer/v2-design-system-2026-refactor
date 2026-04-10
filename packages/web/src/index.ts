@@ -4,3 +4,4 @@ export * from "./canonical/button";
 export * from "./canonical/badge";
 export * from "./canonical/text";
 export * from "./canonical/accordion";
+export * from "./canonical/banner";
