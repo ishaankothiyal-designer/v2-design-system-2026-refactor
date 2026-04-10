@@ -332,6 +332,17 @@
       "textCase": "ORIGINAL"
     },
     {
+      "name": "utility/fine-print/sm",
+      "fontFamily": "Geist",
+      "fontWeight": "Regular",
+      "fontSize": 9,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
       "name": "paragraph/body-1",
       "fontFamily": "Geist",
       "fontWeight": "Regular",
@@ -365,9 +376,20 @@
       "textCase": "ORIGINAL"
     },
     {
-      "name": "paragraph/fine-print",
+      "name": "caption/md",
       "fontFamily": "Geist",
-      "fontWeight": "Regular",
+      "fontWeight": "Medium",
+      "fontSize": 10,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "caption/sm",
+      "fontFamily": "Geist",
+      "fontWeight": "Medium",
       "fontSize": 9,
       "letterSpacing": {
         "unit": "PIXELS",
@@ -376,26 +398,26 @@
       "textCase": "ORIGINAL"
     },
     {
-      "name": "caption/md",
+      "name": "caption/extended/md",
       "fontFamily": "Geist",
       "fontWeight": "Bold",
       "fontSize": 10,
       "letterSpacing": {
         "unit": "PIXELS",
-        "value": 5
+        "value": 2
       },
-      "textCase": "ORIGINAL"
+      "textCase": "UPPER"
     },
     {
-      "name": "caption/sm",
+      "name": "caption/extended/sm",
       "fontFamily": "Geist",
       "fontWeight": "Bold",
       "fontSize": 9,
       "letterSpacing": {
         "unit": "PIXELS",
-        "value": 5
+        "value": 2
       },
-      "textCase": "ORIGINAL"
+      "textCase": "UPPER"
     }
   ]
 }
