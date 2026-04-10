@@ -1,4 +1,5 @@
 import type { Preview } from "@storybook/react";
+import "@geist/icons/style.css";
 
 const preview: Preview = {
   parameters: {

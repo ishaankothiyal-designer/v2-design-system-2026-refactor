@@ -2,7 +2,7 @@
 
 > **Source of truth:** `packages/tokens/tokens/base.json`
 > **Brand overrides:** `packages/tokens/tokens/brands/core.json`, `packages/tokens/tokens/brands/acme.json`
-> **Legacy Figma export:** `Tokens/token.json`
+> **Legacy Figma export:** `token/token.json`
 
 This package owns the shared token catalog for the design system and the brand override layer that sits on top of it.
 
@@ -132,7 +132,7 @@ The package exposes a bridge for flattening token trees into variable-like recor
 - `toFigmaVariables(collection, tokenTree)` for collection export
 - `createFlattenedTokenSet(brandId, mode, tokenTree)` for brand/mode-aware payloads
 
-The legacy `Tokens/token.json` file is retained as a reference export from the earlier Figma variable setup.
+The legacy `token/token.json` file is retained as a reference export from the earlier Figma variable setup.
 
 ## Rules to follow
 
