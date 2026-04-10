@@ -34,7 +34,7 @@ The token system is documented in [`packages/tokens/README.md`](packages/tokens/
 
 - Base tokens live in `packages/tokens/tokens/base.json`.
 - Brand overrides live in `packages/tokens/tokens/brands/core.json` and `packages/tokens/tokens/brands/acme.json`.
-- The legacy Figma export remains in `Tokens/token-bible.json` for reference.
+- The legacy Figma export remains in `Tokens/Tokens-variables-full.json` for reference.
 
 ## Icons
 
