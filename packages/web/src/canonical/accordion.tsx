@@ -25,40 +25,6 @@ const FIGMA_ACCORDION_TOKENS = {
   border: "#E2E8F0",
   textPrimary: "#020617",
   textSecondary: "#64748B",
-  radius: {
-    sm: 12,
-    lg: 14
-  },
-  icon: {
-    sm: 18,
-    lg: 20
-  },
-  spacing: {
-    none: 0,
-    titleGap: 2,
-    contentGap: 6,
-    sectionGap: 8,
-    headerGap: 12,
-    padding: 16
-  },
-  typography: {
-    titleSm: {
-      fontSize: 14,
-      lineHeight: 18
-    },
-    titleLg: {
-      fontSize: 16,
-      lineHeight: 20
-    },
-    supporting: {
-      fontSize: 14,
-      lineHeight: 18
-    },
-    body: {
-      fontSize: 14,
-      lineHeight: 20
-    }
-  },
   transition: {
     duration: 180,
     timing: "cubic-bezier(0.2, 0, 0, 1)"
@@ -81,10 +47,73 @@ function hexToRgba(hex: string, alpha: number) {
   return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
 }
 
-function getAccordionTypography(size: AccordionSize) {
-  return size === "lg"
-    ? FIGMA_ACCORDION_TOKENS.typography.titleLg
-    : FIGMA_ACCORDION_TOKENS.typography.titleSm;
+function getAccordionToken(slot: string) {
+  return canonicalAccordionWebContract?.tokenBindings.find((binding) => binding.slot === slot)?.token;
+}
+
+function withTokenFallback(token: string | undefined, fallback: string) {
+  if (!token) {
+    return fallback;
+  }
+
+  if (token.startsWith("var(") && !token.includes(",")) {
+    return token.replace(/\)$/, `, ${fallback})`);
+  }
+
+  return token;
+}
+
+function getAccordionMetrics(size: AccordionSize) {
+  return {
+    background: withTokenFallback(
+      getAccordionToken("container.background.rest"),
+      FIGMA_ACCORDION_TOKENS.background
+    ),
+    backgroundHover: withTokenFallback(
+      getAccordionToken("container.background.hover"),
+      FIGMA_ACCORDION_TOKENS.backgroundHover
+    ),
+    border: withTokenFallback(getAccordionToken("container.border"), FIGMA_ACCORDION_TOKENS.border),
+    textPrimary: withTokenFallback(
+      getAccordionToken("content.title.color"),
+      FIGMA_ACCORDION_TOKENS.textPrimary
+    ),
+    supportingColor: withTokenFallback(
+      getAccordionToken("content.supporting.color"),
+      FIGMA_ACCORDION_TOKENS.textSecondary
+    ),
+    bodyColor: withTokenFallback(
+      getAccordionToken("content.body.color"),
+      FIGMA_ACCORDION_TOKENS.textSecondary
+    ),
+    titleGap: withTokenFallback(getAccordionToken("spacing.titleGap"), "2px"),
+    contentGap: withTokenFallback(getAccordionToken("spacing.contentGap"), "6px"),
+    sectionGap: withTokenFallback(getAccordionToken("spacing.sectionGap"), "8px"),
+    headerGap: withTokenFallback(getAccordionToken("spacing.headerGap"), "12px"),
+    padding: withTokenFallback(getAccordionToken("spacing.padding"), "16px"),
+    contentStackGap: "var(--cars24-misc-gap-10, 10px)",
+    contentIndent: "var(--cars24-misc-size-20, 20px)",
+    radius:
+      size === "lg"
+        ? withTokenFallback(getAccordionToken("radius.container.lg"), "14px")
+        : withTokenFallback(getAccordionToken("radius.container.sm"), "12px"),
+    iconSize:
+      size === "lg"
+        ? withTokenFallback(getAccordionToken("icon.size.lg"), "20px")
+        : withTokenFallback(getAccordionToken("icon.size.sm"), "18px"),
+    titleFontSize:
+      size === "lg"
+        ? "var(--cars24-typography-size-utility-label-1, 16px)"
+        : "var(--cars24-typography-size-utility-label-2, 14px)",
+    titleLineHeight:
+      size === "lg"
+        ? "var(--cars24-typography-line-height-utility-label-1, 20px)"
+        : "var(--cars24-typography-line-height-utility-label-2, 18px)",
+    supportingFontSize: "var(--cars24-typography-size-utility-label-2, 14px)",
+    supportingLineHeight: "var(--cars24-typography-line-height-utility-label-2, 18px)",
+    bodyFontSize: "var(--cars24-typography-size-paragraph-body-2, 14px)",
+    bodyLineHeight: "var(--cars24-typography-line-height-paragraph-body-2, 20px)"
+  };
 }
 
 function resolveInteractiveState({
@@ -191,11 +220,7 @@ export function Accordion({
     focused,
     pressed
   });
-  const typography = getAccordionTypography(size);
-  const iconSize =
-    size === "lg" ? FIGMA_ACCORDION_TOKENS.icon.lg : FIGMA_ACCORDION_TOKENS.icon.sm;
-  const radius =
-    size === "lg" ? FIGMA_ACCORDION_TOKENS.radius.lg : FIGMA_ACCORDION_TOKENS.radius.sm;
+  const metrics = getAccordionMetrics(size);
   const fallbackFontFamily = String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"));
   const semibold = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.semibold"));
   const regular = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.regular"));
@@ -240,16 +265,22 @@ export function Accordion({
   };
 
   const rootStyles: CSSProperties = {
-    width: "100%",
-    border: `1px solid ${FIGMA_ACCORDION_TOKENS.border}`,
-    borderRadius: radius,
+    display: "flex",
+    flexDirection: "column",
+    width: 328,
+    boxSizing: "border-box",
+    alignItems: "center",
+    gap: isExpanded ? metrics.sectionGap : 0,
+    border: `1px solid ${metrics.border}`,
+    borderRadius: metrics.radius,
     background:
       activeState === "hover" || activeState === "active"
-        ? FIGMA_ACCORDION_TOKENS.backgroundHover
-        : FIGMA_ACCORDION_TOKENS.background,
+        ? metrics.backgroundHover
+        : metrics.background,
     boxShadow:
       activeState === "focus" ? `0 0 0 3px ${hexToRgba(focusColor, 0.28)}` : "none",
     opacity: disabled ? 0.52 : 1,
+    padding: metrics.padding,
     transition: `background-color ${transition}, box-shadow ${transition}, opacity ${transition}`,
     ...style
   };
@@ -258,11 +289,11 @@ export function Accordion({
     width: "100%",
     display: "flex",
     alignItems: "center",
-    gap: FIGMA_ACCORDION_TOKENS.spacing.headerGap,
-    padding: FIGMA_ACCORDION_TOKENS.spacing.padding,
+    gap: metrics.headerGap,
+    padding: 0,
     border: 0,
     background: "transparent",
-    borderRadius: radius,
+    borderRadius: 0,
     cursor: disabled ? "not-allowed" : "pointer",
     font: "inherit",
     textAlign: "left"
@@ -270,11 +301,11 @@ export function Accordion({
 
   const leadingIconStyles: CSSProperties = {
     flexShrink: 0,
-    color: FIGMA_ACCORDION_TOKENS.textPrimary,
-    fontSize: iconSize,
+    color: withTokenFallback(getAccordionToken("icon.color.primary"), FIGMA_ACCORDION_TOKENS.textPrimary),
+    fontSize: metrics.iconSize,
     lineHeight: 1,
-    width: iconSize,
-    height: iconSize,
+    width: metrics.iconSize,
+    height: metrics.iconSize,
     display: "inline-flex",
     alignItems: "center",
     justifyContent: "center"
@@ -282,11 +313,11 @@ export function Accordion({
 
   const chevronStyles: CSSProperties = {
     flexShrink: 0,
-    color: FIGMA_ACCORDION_TOKENS.textSecondary,
-    fontSize: iconSize,
+    color: withTokenFallback(getAccordionToken("icon.color.secondary"), FIGMA_ACCORDION_TOKENS.textSecondary),
+    fontSize: metrics.iconSize,
     lineHeight: 1,
-    width: iconSize,
-    height: iconSize,
+    width: metrics.iconSize,
+    height: metrics.iconSize,
     display: "inline-flex",
     alignItems: "center",
     justifyContent: "center",
@@ -326,7 +357,7 @@ export function Accordion({
         }}
         onKeyUp={() => setPressed(false)}
       >
-        <div style={{ display: "flex", alignItems: "flex-start", gap: FIGMA_ACCORDION_TOKENS.spacing.contentGap, flex: 1, minWidth: 0 }}>
+        <div style={{ display: "flex", alignItems: "flex-start", gap: metrics.contentGap, flex: 1, minWidth: 0 }}>
           {usesLeadingIcon ? (
             leadingIcon ?? (
               <Icon
@@ -341,7 +372,7 @@ export function Accordion({
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: FIGMA_ACCORDION_TOKENS.spacing.titleGap,
+              gap: metrics.titleGap,
               flex: 1,
               minWidth: 0
             }}
@@ -349,10 +380,10 @@ export function Accordion({
             <span
               style={{
                 margin: 0,
-                color: FIGMA_ACCORDION_TOKENS.textPrimary,
-                fontFamily: `Geist, ${fallbackFontFamily}, sans-serif`,
-                fontSize: typography.fontSize,
-                lineHeight: `${typography.lineHeight}px`,
+                color: metrics.textPrimary,
+                fontFamily: `var(--cars24-theme-font-family-primary, Geist), ${fallbackFontFamily}, sans-serif`,
+                fontSize: metrics.titleFontSize,
+                lineHeight: metrics.titleLineHeight,
                 fontWeight: semibold
               }}
             >
@@ -362,10 +393,10 @@ export function Accordion({
               <span
                 style={{
                   margin: 0,
-                  color: FIGMA_ACCORDION_TOKENS.textSecondary,
-                  fontFamily: `Geist, ${fallbackFontFamily}, sans-serif`,
-                  fontSize: FIGMA_ACCORDION_TOKENS.typography.supporting.fontSize,
-                  lineHeight: `${FIGMA_ACCORDION_TOKENS.typography.supporting.lineHeight}px`,
+                  color: metrics.supportingColor,
+                  fontFamily: `var(--cars24-theme-font-family-primary, Geist), ${fallbackFontFamily}, sans-serif`,
+                  fontSize: metrics.supportingFontSize,
+                  lineHeight: metrics.supportingLineHeight,
                   fontWeight: regular
                 }}
               >
@@ -398,22 +429,30 @@ export function Accordion({
           style={{
             display: "flex",
             alignItems: "flex-start",
-            gap: FIGMA_ACCORDION_TOKENS.spacing.contentGap,
-            padding: `0 ${FIGMA_ACCORDION_TOKENS.spacing.padding}px ${FIGMA_ACCORDION_TOKENS.spacing.padding}px`,
-            marginTop: isExpanded ? FIGMA_ACCORDION_TOKENS.spacing.sectionGap : 0
+            gap: metrics.contentGap
           }}
         >
-          {usesLeadingIcon ? <div aria-hidden="true" style={{ width: iconSize, flexShrink: 0 }} /> : null}
-          <div style={{ flex: 1, minWidth: 0 }}>
+          {usesLeadingIcon ? (
+            <div aria-hidden="true" style={{ width: metrics.contentIndent, flexShrink: 0 }} />
+          ) : null}
+          <div
+            style={{
+              flex: 1,
+              minWidth: 0,
+              display: "flex",
+              flexDirection: "column",
+              gap: metrics.contentStackGap
+            }}
+          >
             {resolvedContent ? (
               typeof resolvedContent === "string" ? (
                 <p
                   style={{
                     margin: 0,
-                    color: FIGMA_ACCORDION_TOKENS.textSecondary,
-                    fontFamily: `Geist, ${fallbackFontFamily}, sans-serif`,
-                    fontSize: FIGMA_ACCORDION_TOKENS.typography.body.fontSize,
-                    lineHeight: `${FIGMA_ACCORDION_TOKENS.typography.body.lineHeight}px`,
+                    color: metrics.bodyColor,
+                    fontFamily: `var(--cars24-theme-font-family-primary, Geist), ${fallbackFontFamily}, sans-serif`,
+                    fontSize: metrics.bodyFontSize,
+                    lineHeight: metrics.bodyLineHeight,
                     fontWeight: regular
                   }}
                 >

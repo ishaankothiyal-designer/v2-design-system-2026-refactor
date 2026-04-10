@@ -95,22 +95,20 @@ function OverviewGrid() {
 
         <StoryCard>
           <Column
-            title="Large / Hover"
+            title="Large / Rest"
             items={[
               <Accordion
                 key="large-collapsed"
                 size="lg"
                 title="Additional Insights"
                 content={sampleItems[0].content}
-                forceState="hover"
               />,
               <Accordion
                 key="large-expanded"
                 size="lg"
                 title="Additional Insights"
-                content={sampleItems[0].content}
+                content="Accordions help manage space by letting users expand sections to view additional info. This keeps the layout tidy and improves user experience."
                 expanded
-                forceState="hover"
               />
             ]}
           />
