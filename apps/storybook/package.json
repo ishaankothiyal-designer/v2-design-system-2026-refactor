@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@geist/contracts": "workspace:*",
+    "@geist/icons": "workspace:*",
     "@geist/tokens": "workspace:*",
+    "@geist/web": "workspace:*",
     "@storybook/react": "*",
     "react": "*",
     "react-dom": "*"
