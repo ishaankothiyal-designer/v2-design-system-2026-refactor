@@ -10,6 +10,7 @@ import {
   type TextInputSize,
   type TextInputValidationState
 } from "@geist/web";
+import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 const textInputSizes: TextInputSize[] = ["Small", "Large"];
@@ -225,12 +226,16 @@ const textInputUiExampleSourceCode = `<TextInput
   showLabelInfoIcon
 />`;
 
+const TEXT_INPUT_FIGMA_URL =
+  "https://www.figma.com/design/AZgWt0KHVuVeWBAcQ6Jcy4/branch/yxI5H0FhaUg0YR0uhNuqR6/%F0%9F%9A%80-v2.0-Global-Component-Library?node-id=6451-19520&t=1zgOyFpiLYMyM4XM-11";
+
 const meta = {
   title: "Components/Text Input",
   component: TextInput,
   tags: ["autodocs"],
   parameters: {
-    layout: "fullscreen"
+    layout: "fullscreen",
+    design: createFigspecDesign(TEXT_INPUT_FIGMA_URL)
   },
   args: {
     brand: "Cars24",

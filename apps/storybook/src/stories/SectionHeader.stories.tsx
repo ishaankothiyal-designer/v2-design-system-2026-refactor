@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
 import { Icon, SectionHeader, type SectionHeaderProps } from "@geist/web";
+import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 function FigmaVariantsStory() {
@@ -101,12 +102,16 @@ const sectionHeaderUiExampleSourceCode = `<SectionHeader
   showAction={false}
 />`;
 
+const SECTION_HEADER_FIGMA_URL =
+  "https://www.figma.com/design/AZgWt0KHVuVeWBAcQ6Jcy4/branch/yxI5H0FhaUg0YR0uhNuqR6/%F0%9F%9A%80-v2.0-Global-Component-Library?node-id=17055-8619&t=1zgOyFpiLYMyM4XM-11";
+
 const meta: Meta<SectionHeaderProps> = {
   title: "Components/Section Header",
   component: SectionHeader,
   tags: ["autodocs"],
   parameters: {
-    layout: "fullscreen"
+    layout: "fullscreen",
+    design: createFigspecDesign(SECTION_HEADER_FIGMA_URL)
   },
   args: {
     brand: "Cars24",

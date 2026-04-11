@@ -14,11 +14,15 @@ import {
   type BannerState,
   type BannerTheme
 } from "@geist/web";
+import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 const bannerStates: BannerState[] = ["Warning", "Success", "Error", "Info", "Brand"];
 const bannerThemes: BannerTheme[] = ["Light", "Dark"];
 const actionTypes: BannerActionType[] = ["Text button", "Icon button"];
+
+const BANNER_FIGMA_URL =
+  "https://www.figma.com/design/AZgWt0KHVuVeWBAcQ6Jcy4/branch/yxI5H0FhaUg0YR0uhNuqR6/%F0%9F%9A%80-v2.0-Global-Component-Library?node-id=831-8218&t=1zgOyFpiLYMyM4XM-11";
 
 function VariantCell({
   brand,
@@ -358,7 +362,8 @@ const meta: Meta<BannerProps> = {
   component: Banner,
   tags: ["autodocs"],
   parameters: {
-    layout: "fullscreen"
+    layout: "fullscreen",
+    design: createFigspecDesign(BANNER_FIGMA_URL)
   },
   args: {
     brand: "Cars24",

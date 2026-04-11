@@ -2,6 +2,7 @@ import type { CSSProperties, ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog } from "@geist/tokens";
 import { Badge, Icon, Accordion, SectionHeader, Text, type AccordionProps } from "@geist/web";
+import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 type AccordionStoryArgs = AccordionProps & {
@@ -46,6 +47,9 @@ const accordionStates = [
   { key: "active", label: "Active", forceState: "active" as const },
   { key: "disabled", label: "Disabled", disabled: true }
 ] as const;
+
+const ACCORDION_FIGMA_URL =
+  "https://www.figma.com/design/AZgWt0KHVuVeWBAcQ6Jcy4/branch/yxI5H0FhaUg0YR0uhNuqR6/%F0%9F%9A%80-v2.0-Global-Component-Library?node-id=77-2187&t=1zgOyFpiLYMyM4XM-11";
 
 const cars24FaqItems = [
   {
@@ -589,7 +593,8 @@ const meta: Meta<AccordionStoryArgs> = {
   component: Accordion,
   tags: ["autodocs"],
   parameters: {
-    layout: "fullscreen"
+    layout: "fullscreen",
+    design: createFigspecDesign(ACCORDION_FIGMA_URL)
   },
   args: {
     brand: "Cars24",

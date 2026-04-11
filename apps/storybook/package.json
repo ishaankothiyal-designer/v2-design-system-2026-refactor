@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "storybook build",
-    "storybook": "storybook dev -p 6008",
+    "build": "node ./scripts/generate-design-token-css.mjs && storybook build",
+    "storybook": "node ./scripts/generate-design-token-css.mjs && LAUNCH_EDITOR='/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' storybook dev -p 6008",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "@github-ui/storybook-addon-performance-panel": "^1.1.4",
+    "@storybook/addon-designs": "^11.1.3",
     "@storybook/addon-docs": "^10.3.5",
     "@storybook/addon-vitest": "^10.3.5",
     "@storybook/react-vite": "*",
@@ -28,6 +29,8 @@
     "@vitest/browser-playwright": "^4.1.4",
     "playwright": "^1.59.1",
     "storybook": "*",
+    "storybook-code-panel": "^0.2.1",
+    "storybook-design-token": "^5.0.0",
     "typescript": "*",
     "vite": "*",
     "vitest": "^4.1.4"

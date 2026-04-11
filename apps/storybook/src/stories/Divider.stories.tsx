@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
 import { Divider, Icon, type DividerLabelPosition, type DividerLineStyle, type DividerProps, type DividerThickness } from "@geist/web";
+import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 type DividerStoryArgs = Omit<DividerProps, "leadingIcon" | "trailingIcon"> & {
@@ -100,12 +101,16 @@ const dividerUiExampleSourceCode = `<Divider
   trailingIcon={<Icon name="sparkle-filled" decorative />}
 />`;
 
+const DIVIDER_FIGMA_URL =
+  "https://www.figma.com/design/AZgWt0KHVuVeWBAcQ6Jcy4/branch/yxI5H0FhaUg0YR0uhNuqR6/%F0%9F%9A%80-v2.0-Global-Component-Library?node-id=473-7681&t=1zgOyFpiLYMyM4XM-11";
+
 const meta: Meta<DividerStoryArgs> = {
   title: "Components/Divider",
   component: Divider,
   tags: ["autodocs"],
   parameters: {
-    layout: "fullscreen"
+    layout: "fullscreen",
+    design: createFigspecDesign(DIVIDER_FIGMA_URL)
   },
   args: {
     brand: "Cars24",

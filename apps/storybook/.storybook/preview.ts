@@ -18,6 +18,19 @@ const preview: Preview = {
         color: /(background|color)$/i,
         date: /Date$/i
       }
+    },
+    storybookCodePanel: {
+      disabled: true,
+      extensionMapping: {
+        ts: "typescript",
+        md: "markdown",
+        mdx: "markdown"
+      },
+      allowedExtensions: ["tsx", "ts", "jsx", "js", "css", "scss", "json", "md", "mdx"]
+    },
+    designToken: {
+      defaultTab: "Colors",
+      pageSize: Number.MAX_VALUE
     }
   }
 };

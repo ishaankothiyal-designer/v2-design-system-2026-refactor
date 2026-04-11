@@ -5,9 +5,16 @@ const config: StorybookConfig = {
     name: "@storybook/react-vite",
     options: {}
   },
-  stories: ["../src/**/*.stories.@(ts|tsx|mdx)"],
+  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(ts|tsx)"],
   addons: [
     "@storybook/addon-docs",
+    "@storybook/addon-designs",
+    {
+      name: "storybook-design-token",
+      options: {
+        designTokenGlob: "src/generated/*.tokens.css"
+      }
+    },
     "@storybook/addon-vitest",
     "@github-ui/storybook-addon-performance-panel/preset"
   ]

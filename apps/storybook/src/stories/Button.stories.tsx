@@ -14,6 +14,7 @@ import {
   type ButtonSize,
   type ButtonStyleVariant
 } from "@geist/web";
+import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 type ButtonStoryArgs = Omit<ButtonProps, "children" | "leadingIcon" | "trailingIcon"> & {
@@ -38,6 +39,9 @@ const documentedStates: Array<{
   { key: "loading", label: "Loading", loading: true },
   { key: "disabled", label: "Disabled", disabled: true }
 ];
+
+const BUTTON_FIGMA_URL =
+  "https://www.figma.com/design/AZgWt0KHVuVeWBAcQ6Jcy4/branch/yxI5H0FhaUg0YR0uhNuqR6/%F0%9F%9A%80-v2.0-Global-Component-Library?node-id=215-254&t=1zgOyFpiLYMyM4XM-11";
 
 function makeIcons(showLeadingIcon: boolean, showTrailingIcon: boolean) {
   return {
@@ -484,7 +488,8 @@ const meta: Meta<ButtonStoryArgs> = {
   component: Button,
   tags: ["autodocs"],
   parameters: {
-    layout: "fullscreen"
+    layout: "fullscreen",
+    design: createFigspecDesign(BUTTON_FIGMA_URL)
   },
   args: {
     brand: "Cars24",
@@ -562,12 +567,54 @@ export default meta;
 
 type Story = StoryObj<ButtonStoryArgs>;
 
-const buttonVariantsSourceCode = `<div>
-  <Button styleVariant="Solid" size="Medium">Label</Button>
-  <Button styleVariant="Solid" size="Medium" forceState="Hover/Pressed">Label</Button>
-  <Button styleVariant="Solid" size="Medium" loading>Label</Button>
-  <Button styleVariant="Solid" size="Medium" disabled>Label</Button>
-</div>`;
+function buildButtonVariantsSourceCode(brand: DisplayBrandId) {
+  return `import { Button, Icon } from "@geist/web";
+
+const styles = ["Solid", "Outline", "Ghost", "Transparent", "Destructive"] as const;
+const shapes = ["Regular", "Pill"] as const;
+const sizes = ["Extra Small", "Small", "Medium", "Large", "Extra Large"] as const;
+const states = [
+  { label: "Default" },
+  { label: "Hover / Pressed", forceState: "Hover/Pressed" as const },
+  { label: "Loading", loading: true },
+  { label: "Disabled", disabled: true }
+] as const;
+
+export function ButtonVariants() {
+  return (
+    <div style={{ display: "grid", gap: 24 }}>
+      {styles.map((styleVariant) => (
+        <section key={styleVariant}>
+          {shapes.map((shape) => (
+            <div key={shape} style={{ display: "grid", gap: 16 }}>
+              {sizes.map((size) => (
+                <div key={size} style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+                  {states.map((state) => (
+                    <Button
+                      key={state.label}
+                      brand="${brand}"
+                      styleVariant={styleVariant}
+                      shape={shape}
+                      size={size}
+                      leadingIcon={<Icon name="sparkle-filled" decorative />}
+                      trailingIcon={<Icon name="chevron-small-right-filled" decorative />}
+                      {...("forceState" in state ? { forceState: state.forceState } : {})}
+                      {...("loading" in state ? { loading: true } : {})}
+                      {...("disabled" in state ? { disabled: true } : {})}
+                    >
+                      Label
+                    </Button>
+                  ))}
+                </div>
+              ))}
+            </div>
+          ))}
+        </section>
+      ))}
+    </div>
+  );
+}`;
+}
 
 const buttonUiExampleSourceCode = `<SectionHeader
   title="Log in"
@@ -592,7 +639,7 @@ export const Cars24: Story = {
   render: () => <BrandVariantMatrixStory brand="Cars24" />,
   parameters: {
     controls: { disable: true },
-    docs: { source: { code: buttonVariantsSourceCode } }
+    docs: { source: { code: buildButtonVariantsSourceCode("Cars24") } }
   }
 };
 
@@ -600,7 +647,7 @@ export const TeamBHP: Story = {
   render: () => <BrandVariantMatrixStory brand="Team BHP" />,
   parameters: {
     controls: { disable: true },
-    docs: { source: { code: buttonVariantsSourceCode } }
+    docs: { source: { code: buildButtonVariantsSourceCode("Team BHP") } }
   }
 };
 
@@ -608,7 +655,7 @@ export const CarInfo: Story = {
   render: () => <BrandVariantMatrixStory brand="CarInfo" />,
   parameters: {
     controls: { disable: true },
-    docs: { source: { code: buttonVariantsSourceCode } }
+    docs: { source: { code: buildButtonVariantsSourceCode("CarInfo") } }
   }
 };
 
@@ -616,7 +663,7 @@ export const VehicleInfo: Story = {
   render: () => <BrandVariantMatrixStory brand="VehicleInfo" />,
   parameters: {
     controls: { disable: true },
-    docs: { source: { code: buttonVariantsSourceCode } }
+    docs: { source: { code: buildButtonVariantsSourceCode("VehicleInfo") } }
   }
 };
 

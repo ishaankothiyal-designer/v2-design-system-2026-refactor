@@ -9,6 +9,7 @@ import {
   type PhoneInputProps,
   type PhoneInputSize
 } from "@geist/web";
+import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 const phoneInputSizes: PhoneInputSize[] = ["Small", "Large"];
@@ -309,12 +310,16 @@ const phoneInputUiExampleSourceCode = `<PhoneInput
   defaultCountry="India"
 />`;
 
+const PHONE_INPUT_FIGMA_URL =
+  "https://www.figma.com/design/AZgWt0KHVuVeWBAcQ6Jcy4/branch/yxI5H0FhaUg0YR0uhNuqR6/%F0%9F%9A%80-v2.0-Global-Component-Library?node-id=1114-13995&t=1zgOyFpiLYMyM4XM-11";
+
 const meta: Meta<PhoneInputProps> = {
   title: "Components/Phone Input",
   component: PhoneInput,
   tags: ["autodocs"],
   parameters: {
-    layout: "fullscreen"
+    layout: "fullscreen",
+    design: createFigspecDesign(PHONE_INPUT_FIGMA_URL)
   },
   args: {
     brand: "Cars24",
