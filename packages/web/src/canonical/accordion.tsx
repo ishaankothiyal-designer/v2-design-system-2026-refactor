@@ -93,7 +93,7 @@ function getAccordionMetrics(brand: DisplayBrandId, size: AccordionSize) {
     padding: withTokenFallback(getAccordionToken("spacing.padding"), "16px"),
     contentStackGap: "10px",
     contentIndent: "20px",
-    radius: `${Number(getRequiredThemeTokenValue(brand, size === "lg" ? "radius.alt.lg" : "radius.alt.md"))}px`,
+    radius: `${Number(getRequiredThemeTokenValue(brand, size === "lg" ? "radius.lg" : "radius.md"))}px`,
     iconSize:
       size === "lg"
         ? withTokenFallback(getAccordionToken("icon.size.lg"), "20px")
