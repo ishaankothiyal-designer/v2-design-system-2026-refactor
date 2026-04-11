@@ -85,12 +85,7 @@ function MatrixSection({
   return (
     <StoryCard {...(onDark ? { style: darkCardStyles } : {})}>
       <div style={{ display: "grid", gap: 20 }}>
-        <header style={{ display: "grid", gap: 8 }}>
-          <h2 style={{ margin: 0, fontSize: 24, lineHeight: "30px" }}>{title}</h2>
-          <p style={sectionCopyStyles}>
-            Medium regular review matrix aligned to the Figma icon button states for this surface mode.
-          </p>
-        </header>
+        <strong>{title}</strong>
 
         <div style={matrixGridStyles}>
           <HeaderCell label="Variant" />
@@ -121,12 +116,7 @@ function SizeScaleSection() {
       {iconButtonShapes.map((shape) => (
         <StoryCard key={shape}>
           <div style={{ display: "grid", gap: 18 }}>
-            <header style={{ display: "grid", gap: 8 }}>
-              <h2 style={{ margin: 0, fontSize: 24, lineHeight: "30px" }}>{shape}</h2>
-              <p style={sectionCopyStyles}>
-                Figma size ladder from large through xxxsmall using the default solid primary treatment.
-              </p>
-            </header>
+            <strong>{shape}</strong>
 
             <div style={sizeGridStyles}>
               {iconButtonSizes.map((size) => (
@@ -152,39 +142,15 @@ function PlaygroundStory(args: IconButtonStoryArgs) {
   const { iconName, ...rest } = args;
 
   return (
-    <StoryPage>
-      <div style={playgroundGridStyles}>
-        <StoryCard>
-          <div style={{ display: "grid", gap: 12 }}>
-            <strong>Configured</strong>
-            <IconButton {...rest} icon={<Icon name={iconName} decorative />} />
-          </div>
-        </StoryCard>
-
-        <StoryCard>
-          <div style={{ display: "grid", gap: 12 }}>
-            <strong>Hover Preview</strong>
-            <IconButton {...rest} forceState="Hover/Pressed" icon={<Icon name={iconName} decorative />} />
-          </div>
-        </StoryCard>
-      </div>
-    </StoryPage>
+    <div style={rest.onDark ? { background: "#0A0A0A", padding: 24, borderRadius: 16 } : undefined}>
+      <IconButton {...rest} icon={<Icon name={iconName} decorative />} />
+    </div>
   );
 }
 
 function MatrixStory() {
   return (
     <StoryPage fullscreen>
-      <StoryCard>
-        <div style={{ display: "grid", gap: 8 }}>
-          <h1 style={{ margin: 0, fontSize: 40, lineHeight: "48px" }}>Icon Button</h1>
-          <p style={introCopyStyles}>
-            Token-driven icon-only action button with six sizes, square and round shapes, and surface-aware treatments
-            across light and on-dark contexts.
-          </p>
-        </div>
-      </StoryCard>
-
       <MatrixSection onDark={false} styleVariants={lightStyleVariants} title="Light" />
       <MatrixSection onDark styleVariants={darkStyleVariants} title="On Dark" />
       <SizeScaleSection />
@@ -222,13 +188,15 @@ const matrixGridStyles: CSSProperties = {
   columnGap: 20,
   display: "grid",
   gridTemplateColumns: "180px repeat(3, minmax(0, 1fr))",
-  rowGap: 16
+  rowGap: 16,
+  justifyItems: "center"
 };
 
 const sizeGridStyles: CSSProperties = {
   display: "grid",
   gap: 20,
-  gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))"
+  gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
+  justifyContent: "center"
 };
 
 const playgroundGridStyles: CSSProperties = {
@@ -282,10 +250,30 @@ export default meta;
 
 type Story = StoryObj<IconButtonStoryArgs>;
 
-export const Matrix: Story = {
-  render: () => <MatrixStory />
+export const Playground: Story = {
+  render: (args) => <PlaygroundStory {...args} />,
+  parameters: {
+    layout: "centered"
+  }
 };
 
-export const Playground: Story = {
-  render: (args) => <PlaygroundStory {...args} />
+export const Variants: Story = {
+  render: () => <MatrixStory />,
+  parameters: {
+    controls: { disable: true }
+  }
+};
+
+export const UsageGuidelines: Story = {
+  render: (args) => <PlaygroundStory {...args} />,
+  parameters: {
+    layout: "centered"
+  }
+};
+
+export const UIExample: Story = {
+  render: (args) => <PlaygroundStory {...args} />,
+  parameters: {
+    layout: "centered"
+  }
 };

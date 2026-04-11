@@ -67,7 +67,8 @@ function ConfigurationsStory() {
 const variantGridStyles: CSSProperties = {
   display: "grid",
   gap: 24,
-  gridTemplateColumns: "repeat(auto-fit, minmax(360px, max-content))"
+  gridTemplateColumns: "repeat(auto-fit, minmax(360px, max-content))",
+  justifyContent: "center"
 };
 
 const configGridStyles: CSSProperties = {
@@ -133,25 +134,36 @@ const meta: Meta<SectionHeaderProps> = {
       control: false
     }
   },
-  render: (args) => (
-    <StoryPage>
-      <StoryCard style={{ width: "fit-content" }}>
-        <SectionHeader {...args} />
-      </StoryCard>
-    </StoryPage>
-  )
+  render: (args) => <SectionHeader {...args} />
 };
 
 export default meta;
 
 type Story = StoryObj<SectionHeaderProps>;
 
-export const Playground: Story = {};
-
-export const FigmaVariants: StoryObj = {
-  render: () => <FigmaVariantsStory />
+export const Playground: Story = {
+  parameters: {
+    layout: "centered"
+  }
 };
 
-export const Configurations: StoryObj = {
-  render: () => <ConfigurationsStory />
+export const Variants: StoryObj = {
+  render: () => <FigmaVariantsStory />,
+  parameters: {
+    controls: { disable: true }
+  }
+};
+
+export const UsageGuidelines: StoryObj = {
+  render: () => <ConfigurationsStory />,
+  parameters: {
+    controls: { disable: true }
+  }
+};
+
+export const UIExample: StoryObj = {
+  render: () => <ConfigurationsStory />,
+  parameters: {
+    controls: { disable: true }
+  }
 };

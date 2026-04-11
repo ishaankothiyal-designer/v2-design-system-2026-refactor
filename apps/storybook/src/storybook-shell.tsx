@@ -2,26 +2,25 @@ import type { CSSProperties, ReactNode } from "react";
 import { coreTokenCatalog } from "@geist/tokens";
 
 const pageStyles: CSSProperties = {
-  minHeight: "100vh",
-  padding: 32,
-  background: `radial-gradient(circle at top left, rgba(71, 54, 254, 0.12), transparent 30%), linear-gradient(180deg, ${String(coreTokenCatalog.color.surface.subtle)} 0%, ${String(coreTokenCatalog.color.surface.canvas)} 60%, #FFFFFF 100%)`,
-  color: String(coreTokenCatalog.color.text.primary),
-  fontFamily: String(coreTokenCatalog.typography.fontFamily.sans)
+  minHeight: "auto",
+  padding: 0,
+  background: "transparent",
+  color: String(coreTokenCatalog.color.text.primary)
 };
 
 const pageInnerStyles: CSSProperties = {
   display: "grid",
   gap: 24,
-  maxWidth: 1160,
-  margin: "0 auto"
+  maxWidth: "none",
+  margin: 0
 };
 
 const cardStyles: CSSProperties = {
-  border: `1px solid ${String(coreTokenCatalog.color.border.default)}`,
-  borderRadius: Number(coreTokenCatalog.radius.lg),
-  background: "#FFFFFF",
-  padding: 20,
-  boxShadow: "0 8px 28px rgba(16, 24, 40, 0.06)"
+  border: "none",
+  borderRadius: 0,
+  background: "transparent",
+  padding: 0,
+  boxShadow: "none"
 };
 
 const badgeStyles: CSSProperties = {

@@ -88,13 +88,6 @@ function MatrixStory() {
     <StoryPage fullscreen>
       <StoryCard>
         <div style={{ display: "grid", gap: 20 }}>
-          <header style={{ display: "grid", gap: 8 }}>
-            <h1 style={{ margin: 0, fontSize: 40, lineHeight: "48px" }}>Link Button</h1>
-            <p style={{ margin: 0, color: "#64748B", fontSize: 16, lineHeight: "24px" }}>
-              Figma matrix for size, tone, hover, disabled, and on-dark presentation.
-            </p>
-          </header>
-
           <div style={matrixGridStyles}>
             <HeaderCell label="State" />
             {linkButtonSizes.map((size) => (
@@ -120,12 +113,7 @@ function MatrixStory() {
 
       <StoryCard style={{ background: "#0B0B0C" }}>
         <div style={{ display: "grid", gap: 20 }}>
-          <header style={{ display: "grid", gap: 8 }}>
-            <h2 style={{ color: "#F8FAFC", margin: 0, fontSize: 28, lineHeight: "34px" }}>On Dark</h2>
-            <p style={{ color: "#94A3B8", margin: 0, fontSize: 14, lineHeight: "20px" }}>
-              Brand link buttons on dark surfaces including hover and disabled states.
-            </p>
-          </header>
+          <strong style={{ color: "#F8FAFC" }}>On Dark</strong>
 
           <div style={matrixGridStyles}>
             <HeaderCell label="State" />
@@ -154,39 +142,15 @@ function MatrixStory() {
 }
 
 function ConfigurationStory(args: LinkButtonStoryArgs) {
-  const { label, showLeadingIcon, showTrailingIcon, ...rest } = args;
+  const { label, showLeadingIcon, showTrailingIcon, onDark, ...rest } = args;
+  const resolvedOnDark = Boolean(onDark);
 
   return (
-    <StoryPage>
-      <div style={configGridStyles}>
-        <StoryCard>
-          <div style={{ display: "grid", gap: 12 }}>
-            <strong>Default</strong>
-            <LinkButton {...rest} {...makeIcons(showLeadingIcon, showTrailingIcon)}>
-              {label}
-            </LinkButton>
-          </div>
-        </StoryCard>
-
-        <StoryCard style={{ background: "#0B0B0C" }}>
-          <div style={{ display: "grid", gap: 12 }}>
-            <strong style={{ color: "#F8FAFC" }}>On Dark</strong>
-            <LinkButton {...rest} onDark {...makeIcons(showLeadingIcon, showTrailingIcon)}>
-              {label}
-            </LinkButton>
-          </div>
-        </StoryCard>
-
-        <StoryCard>
-          <div style={{ display: "grid", gap: 12 }}>
-            <strong>No Underline</strong>
-            <LinkButton {...rest} underline={false} {...makeIcons(showLeadingIcon, showTrailingIcon)}>
-              {label}
-            </LinkButton>
-          </div>
-        </StoryCard>
-      </div>
-    </StoryPage>
+    <div style={resolvedOnDark ? { background: "#0B0B0C", padding: 24, borderRadius: 16 } : undefined}>
+      <LinkButton {...rest} onDark={resolvedOnDark} {...makeIcons(showLeadingIcon, showTrailingIcon)}>
+        {label}
+      </LinkButton>
+    </div>
   );
 }
 
@@ -195,7 +159,8 @@ const matrixGridStyles: CSSProperties = {
   columnGap: 20,
   display: "grid",
   gridTemplateColumns: "140px repeat(4, minmax(0, 1fr))",
-  rowGap: 18
+  rowGap: 18,
+  justifyItems: "center"
 };
 
 const configGridStyles: CSSProperties = {
@@ -246,10 +211,30 @@ export default meta;
 
 type Story = StoryObj<LinkButtonStoryArgs>;
 
-export const Matrix: Story = {
-  render: () => <MatrixStory />
+export const Playground: Story = {
+  render: (args) => <ConfigurationStory {...args} />,
+  parameters: {
+    layout: "centered"
+  }
 };
 
-export const Playground: Story = {
-  render: (args) => <ConfigurationStory {...args} />
+export const Variants: Story = {
+  render: () => <MatrixStory />,
+  parameters: {
+    controls: { disable: true }
+  }
+};
+
+export const UsageGuidelines: Story = {
+  render: (args) => <ConfigurationStory {...args} />,
+  parameters: {
+    layout: "centered"
+  }
+};
+
+export const UIExample: Story = {
+  render: (args) => <ConfigurationStory {...args} />,
+  parameters: {
+    layout: "centered"
+  }
 };

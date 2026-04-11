@@ -30,7 +30,6 @@ export interface DividerProps {
   label?: string;
   leadingIcon?: ReactNode;
   trailingIcon?: ReactNode;
-  content?: ReactNode;
   style?: StyleProp<ViewStyle>;
 }
 
@@ -99,7 +98,6 @@ export function Divider({
   label,
   leadingIcon,
   trailingIcon,
-  content,
   style
 }: DividerProps) {
   const width = Number(getRequiredNativeThemeTokenValue(brand, "component.divider.size.width"));
@@ -141,31 +139,8 @@ export function Divider({
   const letterSpacing = Number(
     getRequiredNativeThemeTokenValue(brand, "component.divider.typography.label.letterSpacing")
   );
-  const hasContent = content !== undefined && content !== null
-    ? true
-    : Boolean(label || leadingIcon || trailingIcon);
+  const hasContent = Boolean(label || leadingIcon || trailingIcon);
   const resolvedLabelPosition = hasContent ? labelPosition : "None";
-
-  const contentNode = content ?? (
-    <>
-      {leadingIcon ? renderDecorativeSlot(leadingIcon, contentColor, iconSize) : null}
-      {label ? (
-        <Text
-          style={{
-            color: contentColor,
-            fontFamily,
-            fontSize,
-            fontWeight,
-            letterSpacing,
-            lineHeight
-          }}
-        >
-          {label}
-        </Text>
-      ) : null}
-      {trailingIcon ? renderDecorativeSlot(trailingIcon, contentColor, iconSize) : null}
-    </>
-  );
 
   if (resolvedLabelPosition === "None") {
     return (
@@ -211,7 +186,22 @@ export function Divider({
           paddingVertical: contentPaddingBlock
         }}
       >
-        {contentNode}
+        {leadingIcon ? renderDecorativeSlot(leadingIcon, contentColor, iconSize) : null}
+        {label ? (
+          <Text
+            style={{
+              color: contentColor,
+              fontFamily,
+              fontSize,
+              fontWeight,
+              letterSpacing,
+              lineHeight
+            }}
+          >
+            {label}
+          </Text>
+        ) : null}
+        {trailingIcon ? renderDecorativeSlot(trailingIcon, contentColor, iconSize) : null}
       </View>
       <DividerLine
         color={lineColor}

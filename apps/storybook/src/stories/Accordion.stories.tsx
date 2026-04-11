@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
-import { Badge, Icon, Accordion, AccordionGroup, type AccordionProps } from "@geist/web";
+import { Badge, Icon, Accordion, SectionHeader, type AccordionProps } from "@geist/web";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 type AccordionStoryArgs = AccordionProps & {
@@ -9,6 +9,8 @@ type AccordionStoryArgs = AccordionProps & {
   showLeadingIcon?: boolean;
   content: string;
 };
+
+type AccordionBrand = NonNullable<AccordionProps["brand"]>;
 
 const sampleItems = [
   {
@@ -29,6 +31,33 @@ const sampleItems = [
     title: "Implementation Notes",
     content:
       "The component supports controlled and uncontrolled state, keyboard interaction, and single or multiple expansion groups."
+  }
+] as const;
+
+const cars24FaqItems = [
+  {
+    id: "inspection",
+    title: "How does the Cars24 car inspection work?",
+    content:
+      "Cars24 schedules a doorstep or hub inspection to verify the vehicle condition, documents, and service history. The inspection summary is then used to guide pricing and the next selling step."
+  },
+  {
+    id: "documents",
+    title: "Which documents should I keep ready before selling?",
+    content:
+      "Keep the RC, insurance copy, valid ID proof, pollution certificate, and service records ready. Having these documents handy helps the evaluation and ownership transfer process move faster."
+  },
+  {
+    id: "payment",
+    title: "When will I receive the payment after the sale is confirmed?",
+    content:
+      "Once the final offer is accepted and required checks are completed, the payout is usually initiated quickly through the registered bank account details shared during the process."
+  },
+  {
+    id: "loan",
+    title: "Can I sell my car if there is an active loan on it?",
+    content:
+      "Yes. Cars24 can guide you through the loan closure and NOC process. The outstanding amount and lender paperwork are reviewed before finalizing the transaction."
   }
 ] as const;
 
@@ -54,7 +83,7 @@ function renderAccordion(args: AccordionStoryArgs) {
   const { badgeLabel, showLeadingIcon, ...accordionProps } = args;
 
   return (
-    <div style={{ width: 328 }}>
+    <div style={{ width: "100%" }}>
       <Accordion
         {...accordionProps}
         badge={renderBadge(badgeLabel)}
@@ -64,16 +93,9 @@ function renderAccordion(args: AccordionStoryArgs) {
   );
 }
 
-function OverviewGrid() {
+function OverviewGrid({ brand }: { brand: AccordionBrand }) {
   return (
     <StoryPage>
-      <header style={{ display: "grid", gap: 12, maxWidth: 720 }}>
-        <h1 style={{ margin: 0, fontSize: 40, lineHeight: "48px" }}>Accordion</h1>
-        <p style={{ margin: 0, fontSize: 16, lineHeight: "24px", color: "#64748B" }}>
-          Canonical accordion implementation translated directly from the provided Figma component.
-        </p>
-      </header>
-
       <div style={comparisonGridStyles}>
         <StoryCard>
           <Column
@@ -81,11 +103,13 @@ function OverviewGrid() {
             items={[
               <Accordion
                 key="small-collapsed"
+                brand={brand}
                 title="Additional Insights"
                 content={sampleItems[0].content}
               />,
               <Accordion
                 key="small-expanded"
+                brand={brand}
                 title="Additional Insights"
                 content="With an accordion, users can click to expand or collapse content areas, making it simple to access details without overwhelming the screen."
                 expanded
@@ -100,12 +124,14 @@ function OverviewGrid() {
             items={[
               <Accordion
                 key="large-collapsed"
+                brand={brand}
                 size="lg"
                 title="Additional Insights"
                 content={sampleItems[0].content}
               />,
               <Accordion
                 key="large-expanded"
+                brand={brand}
                 size="lg"
                 title="Additional Insights"
                 content="Accordions help manage space by letting users expand sections to view additional info. This keeps the layout tidy and improves user experience."
@@ -125,7 +151,7 @@ function Column({ title, items }: { title: string; items: ReactNode[] }) {
       <strong style={{ fontSize: 14 }}>{title}</strong>
       <div style={{ display: "grid", gap: 16 }}>
         {items.map((item, index) => (
-          <div key={index} style={{ width: 328 }}>
+          <div key={index} style={{ width: "100%" }}>
             {item}
           </div>
         ))}
@@ -134,10 +160,119 @@ function Column({ title, items }: { title: string; items: ReactNode[] }) {
   );
 }
 
+function buildAccordionKey({
+  brand,
+  title,
+  supportingText,
+  content,
+  size,
+  disabled,
+  defaultExpanded,
+  forceState,
+  badgeLabel,
+  showLeadingIcon
+}: AccordionStoryArgs) {
+  return JSON.stringify({
+    brand,
+    title,
+    supportingText,
+    content: typeof content === "string" ? content : "content",
+    size,
+    disabled,
+    defaultExpanded,
+    forceState,
+    badgeLabel,
+    showLeadingIcon
+  });
+}
+
+function FaqStory(args: AccordionStoryArgs) {
+  const {
+    brand = "Cars24",
+    title,
+    supportingText,
+    content,
+    size = "sm",
+    disabled = false,
+    defaultExpanded = false,
+    forceState,
+    onExpandedChange,
+    badgeLabel,
+    showLeadingIcon = true
+  } = args;
+
+  const sharedAccordionProps = {
+    brand,
+    size,
+    disabled,
+    ...(forceState ? { forceState } : {}),
+    ...(badgeLabel ? { badge: renderBadge(badgeLabel) } : {}),
+    ...(showLeadingIcon === false ? { leadingIcon: false as const } : {})
+  } satisfies Partial<AccordionProps>;
+
+  const storyKey = buildAccordionKey(args);
+
+  return (
+    <StoryPage>
+      <div style={faqShellStyles}>
+        <SectionHeader
+          brand={brand}
+          title="Frequently asked questions"
+          subtitle=""
+          description=""
+          showTag={false}
+          showAction={false}
+        />
+
+        <div style={faqListStyles}>
+          <div style={faqAccordionListStyles}>
+            <Accordion
+              key={`${storyKey}-primary`}
+              {...sharedAccordionProps}
+              title={title}
+              {...(supportingText ? { supportingText } : {})}
+              content={content}
+              defaultExpanded={defaultExpanded}
+              {...(onExpandedChange ? { onExpandedChange } : {})}
+            />
+
+            {cars24FaqItems.slice(1).map((item) => (
+              <Accordion
+                key={`${storyKey}-${item.id}`}
+                {...sharedAccordionProps}
+                title={item.title}
+                content={item.content}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </StoryPage>
+  );
+}
+
 const comparisonGridStyles: CSSProperties = {
   display: "grid",
   gap: 24,
-  gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))"
+  gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+  justifyContent: "center"
+};
+
+const faqShellStyles: CSSProperties = {
+  display: "grid",
+  gap: 24,
+  maxWidth: 760,
+  margin: "0 auto",
+  padding: 24
+};
+
+const faqListStyles: CSSProperties = {
+  width: "100%"
+};
+
+const faqAccordionListStyles: CSSProperties = {
+  display: "grid",
+  gap: 24
 };
 
 const meta: Meta<AccordionStoryArgs> = {
@@ -198,81 +333,94 @@ export default meta;
 
 type Story = StoryObj<AccordionStoryArgs>;
 
-export const Playground: Story = {};
-
-export const FigmaReference: StoryObj = {
-  render: () => <OverviewGrid />
+export const Playground: Story = {
+  parameters: {
+    layout: "centered"
+  }
 };
 
-export const States: StoryObj = {
-  render: () => (
-    <StoryPage>
-      <div style={comparisonGridStyles}>
-        <StoryCard>
-          <Column
-            title="Collapsed"
-            items={[
-              <Accordion key="default" title="Default" content={sampleItems[0].content} />,
-              <Accordion key="hover" title="Hover" content={sampleItems[0].content} forceState="hover" />,
-              <Accordion key="focus" title="Focus" content={sampleItems[0].content} forceState="focus" />,
-              <Accordion key="active" title="Active" content={sampleItems[0].content} forceState="active" />,
-              <Accordion key="disabled" title="Disabled" content={sampleItems[0].content} disabled />
-            ]}
-          />
-        </StoryCard>
+export const Variants: Story = {
+  render: ({ brand = "Cars24" }) => (
+    <>
+      <OverviewGrid brand={brand} />
+      <StoryPage>
+        <div style={comparisonGridStyles}>
+          <StoryCard>
+            <Column
+              title="Collapsed"
+              items={[
+                <Accordion key="default" brand={brand} title="Default" content={sampleItems[0].content} />,
+                <Accordion key="hover" brand={brand} title="Hover" content={sampleItems[0].content} forceState="hover" />,
+                <Accordion key="focus" brand={brand} title="Focus" content={sampleItems[0].content} forceState="focus" />,
+                <Accordion key="active" brand={brand} title="Active" content={sampleItems[0].content} forceState="active" />,
+                <Accordion key="disabled" brand={brand} title="Disabled" content={sampleItems[0].content} disabled />
+              ]}
+            />
+          </StoryCard>
 
-        <StoryCard>
-          <Column
-            title="Expanded"
-            items={[
-              <Accordion key="expanded-default" title="Default" content={sampleItems[0].content} expanded />,
-              <Accordion
-                key="expanded-hover"
-                title="Hover"
-                content={sampleItems[0].content}
-                expanded
-                forceState="hover"
-              />,
-              <Accordion
-                key="expanded-focus"
-                title="Focus"
-                content={sampleItems[0].content}
-                expanded
-                forceState="focus"
-              />,
-              <Accordion
-                key="expanded-active"
-                title="Active"
-                content={sampleItems[0].content}
-                expanded
-                forceState="active"
-              />,
-              <Accordion
-                key="expanded-disabled"
-                title="Disabled"
-                content={sampleItems[0].content}
-                expanded
-                disabled
-              />
-            ]}
-          />
-        </StoryCard>
-      </div>
-    </StoryPage>
-  )
+          <StoryCard>
+            <Column
+              title="Expanded"
+              items={[
+                <Accordion key="expanded-default" brand={brand} title="Default" content={sampleItems[0].content} expanded />,
+                <Accordion
+                  key="expanded-hover"
+                  brand={brand}
+                  title="Hover"
+                  content={sampleItems[0].content}
+                  expanded
+                  forceState="hover"
+                />,
+                <Accordion
+                  key="expanded-focus"
+                  brand={brand}
+                  title="Focus"
+                  content={sampleItems[0].content}
+                  expanded
+                  forceState="focus"
+                />,
+                <Accordion
+                  key="expanded-active"
+                  brand={brand}
+                  title="Active"
+                  content={sampleItems[0].content}
+                  expanded
+                  forceState="active"
+                />,
+                <Accordion
+                  key="expanded-disabled"
+                  brand={brand}
+                  title="Disabled"
+                  content={sampleItems[0].content}
+                  expanded
+                  disabled
+                />
+              ]}
+            />
+          </StoryCard>
+        </div>
+      </StoryPage>
+    </>
+  ),
+  parameters: {
+    controls: {
+      include: ["brand"]
+    }
+  }
 };
 
-export const SizesAndConfigurations: StoryObj = {
-  render: () => (
+export const UsageGuidelines: Story = {
+  render: ({ brand = "Cars24" }) => (
     <StoryPage>
       <div style={comparisonGridStyles}>
         <StoryCard>
           <Column
             title="Small"
             items={[
-              <Accordion key="small-default" title="Additional Insights" content={sampleItems[0].content} />,
+              <Accordion key="small-default" brand={brand} title="Additional Insights" content={sampleItems[0].content} />,
               <Accordion
                 key="small-supporting"
+                brand={brand}
                 title="Additional Insights"
                 supportingText="Optional supporting text stays visible in the header."
                 content={sampleItems[0].content}
@@ -280,6 +428,7 @@ export const SizesAndConfigurations: StoryObj = {
               />,
               <Accordion
                 key="small-badge"
+                brand={brand}
                 title="Additional Insights"
                 content={sampleItems[0].content}
                 badge={
@@ -296,6 +445,7 @@ export const SizesAndConfigurations: StoryObj = {
               />,
               <Accordion
                 key="small-no-icon"
+                brand={brand}
                 title="Additional Insights"
                 content={sampleItems[0].content}
                 leadingIcon={false}
@@ -308,9 +458,16 @@ export const SizesAndConfigurations: StoryObj = {
           <Column
             title="Large"
             items={[
-              <Accordion key="large-default" size="lg" title="Additional Insights" content={sampleItems[0].content} />,
+              <Accordion
+                key="large-default"
+                brand={brand}
+                size="lg"
+                title="Additional Insights"
+                content={sampleItems[0].content}
+              />,
               <Accordion
                 key="large-supporting"
+                brand={brand}
                 size="lg"
                 title="Additional Insights"
                 supportingText="Optional supporting text stays visible in the header."
@@ -319,6 +476,7 @@ export const SizesAndConfigurations: StoryObj = {
               />,
               <Accordion
                 key="large-badge"
+                brand={brand}
                 size="lg"
                 title="Additional Insights"
                 content={sampleItems[0].content}
@@ -336,6 +494,7 @@ export const SizesAndConfigurations: StoryObj = {
               />,
               <Accordion
                 key="large-custom-icon"
+                brand={brand}
                 size="lg"
                 title="Additional Insights"
                 content={sampleItems[0].content}
@@ -346,29 +505,14 @@ export const SizesAndConfigurations: StoryObj = {
         </StoryCard>
       </div>
     </StoryPage>
-  )
+  ),
+  parameters: {
+    controls: {
+      include: ["brand"]
+    }
+  }
 };
 
-export const SingleExpandGroup: StoryObj = {
-  render: () => (
-    <StoryPage>
-      <StoryCard style={{ width: 360 }}>
-        <AccordionGroup items={sampleItems.map((item) => ({ ...item, size: "sm" as const }))} />
-      </StoryCard>
-    </StoryPage>
-  )
-};
-
-export const MultipleExpandGroup: StoryObj = {
-  render: () => (
-    <StoryPage>
-      <StoryCard style={{ width: 360 }}>
-        <AccordionGroup
-          selectionMode="multiple"
-          defaultExpandedIds={["insights"]}
-          items={sampleItems.map((item) => ({ ...item, size: "sm" as const }))}
-        />
-      </StoryCard>
-    </StoryPage>
-  )
+export const UIExample: Story = {
+  render: (args) => <FaqStory {...args} />
 };

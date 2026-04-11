@@ -26,7 +26,6 @@ export interface DividerProps extends Omit<HTMLAttributes<HTMLDivElement>, "cont
   label?: string;
   leadingIcon?: ReactNode;
   trailingIcon?: ReactNode;
-  content?: ReactNode;
 }
 
 function toPx(value: number) {
@@ -107,7 +106,6 @@ export function Divider({
   label,
   leadingIcon,
   trailingIcon,
-  content,
   className,
   style,
   ...rest
@@ -149,32 +147,8 @@ export function Divider({
   const letterSpacing = Number(
     getRequiredThemeTokenValue(brand, "component.divider.typography.label.letterSpacing")
   );
-  const hasContent = content !== undefined && content !== null
-    ? true
-    : Boolean(label || leadingIcon || trailingIcon);
+  const hasContent = Boolean(label || leadingIcon || trailingIcon);
   const resolvedLabelPosition = hasContent ? labelPosition : "None";
-
-  const contentNode = content ?? (
-    <>
-      {leadingIcon ? renderDecorativeSlot(leadingIcon, contentColor, iconSize) : null}
-      {label ? (
-        <span
-          style={{
-            color: contentColor,
-            fontFamily: `${fontFamily}, sans-serif`,
-            fontSize: toPx(fontSize),
-            fontWeight,
-            letterSpacing: toPx(letterSpacing),
-            lineHeight: toPx(lineHeight),
-            whiteSpace: "nowrap"
-          }}
-        >
-          {label}
-        </span>
-      ) : null}
-      {trailingIcon ? renderDecorativeSlot(trailingIcon, contentColor, iconSize) : null}
-    </>
-  );
 
   if (resolvedLabelPosition === "None") {
     return (
@@ -227,7 +201,23 @@ export function Divider({
           padding: `${toPx(contentPaddingBlock)} ${toPx(contentPaddingInline)}`
         }}
       >
-        {contentNode}
+        {leadingIcon ? renderDecorativeSlot(leadingIcon, contentColor, iconSize) : null}
+        {label ? (
+          <span
+            style={{
+              color: contentColor,
+              fontFamily: `${fontFamily}, sans-serif`,
+              fontSize: toPx(fontSize),
+              fontWeight,
+              letterSpacing: toPx(letterSpacing),
+              lineHeight: toPx(lineHeight),
+              whiteSpace: "nowrap"
+            }}
+          >
+            {label}
+          </span>
+        ) : null}
+        {trailingIcon ? renderDecorativeSlot(trailingIcon, contentColor, iconSize) : null}
       </div>
       <DividerLine
         color={lineColor}

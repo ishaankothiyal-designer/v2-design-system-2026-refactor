@@ -1,17 +1,10 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
-import {
-  Divider,
-  Icon,
-  type DividerLabelPosition,
-  type DividerLineStyle,
-  type DividerProps,
-  type DividerThickness
-} from "@geist/web";
+import { Divider, Icon, type DividerLabelPosition, type DividerLineStyle, type DividerProps, type DividerThickness } from "@geist/web";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
-type DividerStoryArgs = Omit<DividerProps, "leadingIcon" | "trailingIcon" | "content"> & {
+type DividerStoryArgs = Omit<DividerProps, "leadingIcon" | "trailingIcon"> & {
   showLeadingIcon: boolean;
   showTrailingIcon: boolean;
 };
@@ -36,42 +29,31 @@ function HeaderCell({ label }: { label: string }) {
 function VariantGridStory() {
   return (
     <StoryPage fullscreen>
-      <StoryCard>
-        <div style={{ display: "grid", gap: 20 }}>
-          <header style={{ display: "grid", gap: 8 }}>
-            <h1 style={{ margin: 0, fontSize: 40, lineHeight: "48px" }}>Divider</h1>
-            <p style={{ margin: 0, color: "#64748B", fontSize: 16, lineHeight: "24px" }}>
-              Figma variant matrix for label position, thickness, and line style.
-            </p>
-          </header>
+      <div style={variantGridStyles}>
+        <HeaderCell label="Variant" />
+        <HeaderCell label="Plain" />
+        <HeaderCell label="Dash" />
 
-          <div style={variantGridStyles}>
-            <HeaderCell label="Variant" />
-            <HeaderCell label="Plain" />
-            <HeaderCell label="Dash" />
-
-            {thicknesses.flatMap((thickness) =>
-              labelPositions.flatMap((labelPosition) => [
-                <HeaderCell
-                  key={`${thickness}-${labelPosition}-label`}
-                  label={`${labelPosition} / ${thickness}`}
-                />,
-                ...lineStyles.map((lineStyle) => (
-                  <Divider
-                    key={`${thickness}-${labelPosition}-${lineStyle}`}
-                    labelPosition={labelPosition}
-                    thickness={thickness}
-                    lineStyle={lineStyle}
-                    label="Continue"
-                    leadingIcon={labelPosition === "None" ? undefined : <Icon name="sparkle-filled" decorative />}
-                    trailingIcon={labelPosition === "None" ? undefined : <Icon name="sparkle-filled" decorative />}
-                  />
-                ))
-              ])
-            )}
-          </div>
-        </div>
-      </StoryCard>
+        {thicknesses.flatMap((thickness) =>
+          labelPositions.flatMap((labelPosition) => [
+            <HeaderCell
+              key={`${thickness}-${labelPosition}-label`}
+              label={`${labelPosition} / ${thickness}`}
+            />,
+            ...lineStyles.map((lineStyle) => (
+              <Divider
+                key={`${thickness}-${labelPosition}-${lineStyle}`}
+                labelPosition={labelPosition}
+                thickness={thickness}
+                lineStyle={lineStyle}
+                label="Continue"
+                leadingIcon={labelPosition === "None" ? undefined : <Icon name="sparkle-filled" decorative />}
+                trailingIcon={labelPosition === "None" ? undefined : <Icon name="sparkle-filled" decorative />}
+              />
+            ))
+          ])
+        )}
+      </div>
     </StoryPage>
   );
 }
@@ -80,31 +62,9 @@ function ConfigurationStory(args: DividerStoryArgs) {
   const { showLeadingIcon, showTrailingIcon, ...rest } = args;
 
   return (
-    <StoryPage>
-      <div style={configurationGridStyles}>
-        <StoryCard>
-          <div style={{ display: "grid", gap: 12 }}>
-            <strong>Tokenized Content</strong>
-            <Divider {...rest} {...makeIcons(showLeadingIcon, showTrailingIcon)} />
-          </div>
-        </StoryCard>
-
-        <StoryCard>
-          <div style={{ display: "grid", gap: 12 }}>
-            <strong>Custom Content</strong>
-            <Divider
-              {...rest}
-              content={
-                <>
-                  <Icon name="sparkle-filled" decorative />
-                  <span>Featured</span>
-                </>
-              }
-            />
-          </div>
-        </StoryCard>
-      </div>
-    </StoryPage>
+    <div style={{ minWidth: 320, width: "100%", maxWidth: 640 }}>
+      <Divider {...rest} {...makeIcons(showLeadingIcon, showTrailingIcon)} />
+    </div>
   );
 }
 
@@ -113,13 +73,9 @@ const variantGridStyles: CSSProperties = {
   columnGap: 20,
   display: "grid",
   gridTemplateColumns: "180px repeat(2, minmax(0, 1fr))",
-  rowGap: 18
-};
-
-const configurationGridStyles: CSSProperties = {
-  display: "grid",
-  gap: 24,
-  gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))"
+  rowGap: 18,
+  justifyContent: "center",
+  justifyItems: "center"
 };
 
 const meta: Meta<DividerStoryArgs> = {
@@ -172,8 +128,29 @@ export default meta;
 
 type Story = StoryObj<DividerStoryArgs>;
 
-export const Playground: Story = {};
+export const Playground: Story = {
+  parameters: {
+    layout: "centered"
+  }
+};
 
-export const VariantMatrix: Story = {
-  render: () => <VariantGridStory />
+export const Variants: Story = {
+  render: () => <VariantGridStory />,
+  parameters: {
+    controls: { disable: true }
+  }
+};
+
+export const UsageGuidelines: Story = {
+  render: (args) => <ConfigurationStory {...args} />,
+  parameters: {
+    layout: "centered"
+  }
+};
+
+export const UIExample: Story = {
+  render: (args) => <ConfigurationStory {...args} />,
+  parameters: {
+    layout: "centered"
+  }
 };

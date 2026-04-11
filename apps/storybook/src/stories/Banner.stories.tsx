@@ -40,17 +40,10 @@ function VariantCell({
 function FigmaMatrixStory() {
   return (
     <StoryPage fullscreen>
-      <header style={{ display: "grid", gap: 12, maxWidth: 860 }}>
-        <h1 style={{ margin: 0, fontSize: 40, lineHeight: "48px" }}>Banner</h1>
-        <p style={{ margin: 0, fontSize: 16, lineHeight: "24px", color: "#64748B" }}>
-          Full Figma variant matrix across theme, status, heading, and action type.
-        </p>
-      </header>
-
       {actionTypes.map((actionType) => (
         <StoryCard key={actionType}>
           <div style={{ display: "grid", gap: 16 }}>
-            <strong style={{ fontSize: 16 }}>{actionType}</strong>
+            <strong>{actionType}</strong>
             <div style={matrixGridStyles}>
               <HeaderCell label="Light / Heading" />
               <HeaderCell label="Dark / Heading" />
@@ -162,7 +155,8 @@ const matrixGridStyles: CSSProperties = {
   display: "grid",
   gap: 16,
   gridTemplateColumns: "repeat(4, minmax(328px, 1fr))",
-  alignItems: "start"
+  alignItems: "start",
+  justifyItems: "center"
 };
 
 const configGridStyles: CSSProperties = {
@@ -232,25 +226,36 @@ const meta: Meta<BannerProps> = {
       action: "dismiss"
     }
   },
-  render: (args) => (
-    <StoryPage>
-      <StoryCard style={{ width: "fit-content" }}>
-        <Banner {...args} />
-      </StoryCard>
-    </StoryPage>
-  )
+  render: (args) => <Banner {...args} />
 };
 
 export default meta;
 
 type Story = StoryObj<BannerProps>;
 
-export const Playground: Story = {};
-
-export const FigmaMatrix: StoryObj = {
-  render: () => <FigmaMatrixStory />
+export const Playground: Story = {
+  parameters: {
+    layout: "centered"
+  }
 };
 
-export const Configurations: StoryObj = {
-  render: () => <ConfigurationsStory />
+export const Variants: StoryObj = {
+  render: () => <FigmaMatrixStory />,
+  parameters: {
+    controls: { disable: true }
+  }
+};
+
+export const UsageGuidelines: StoryObj = {
+  render: () => <ConfigurationsStory />,
+  parameters: {
+    controls: { disable: true }
+  }
+};
+
+export const UIExample: StoryObj = {
+  render: () => <ConfigurationsStory />,
+  parameters: {
+    controls: { disable: true }
+  }
 };

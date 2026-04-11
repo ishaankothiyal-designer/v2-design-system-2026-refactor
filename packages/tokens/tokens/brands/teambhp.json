@@ -71,6 +71,28 @@
           }
         }
       }
+    },
+    "phoneInput": {
+      "color": {
+        "field": {
+          "active": {
+            "border": "#64748B"
+          }
+        }
+      }
+    },
+    "textInput": {
+      "color": {
+        "field": {
+          "hover": {
+            "background": "#FCF3F3",
+            "border": "#FBE0E1"
+          },
+          "active": {
+            "border": "#64748B"
+          }
+        }
+      }
     }
   },
   "radius": {

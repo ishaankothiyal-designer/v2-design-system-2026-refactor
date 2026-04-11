@@ -48,13 +48,6 @@ function matrixBadge(type: BadgeType, priority: BadgePriority, size: BadgeSize, 
 function MatrixStory() {
   return (
     <StoryPage>
-      <header style={{ display: "grid", gap: 12, maxWidth: 760 }}>
-        <h1 style={{ margin: 0, fontSize: 40, lineHeight: "48px" }}>Badge</h1>
-        <p style={{ margin: 0, fontSize: 16, lineHeight: "24px", color: "#64748B" }}>
-          Exact Figma property matrix for `Size`, `Type`, `Priority`, and `Pill shape`.
-        </p>
-      </header>
-
       <div style={{ display: "grid", gap: 24 }}>
         {badgeTypes.map((type) => (
           <StoryCard key={type}>
@@ -93,7 +86,7 @@ function StateGallery() {
       <StoryCard>
         <div style={{ display: "grid", gap: 16 }}>
           <strong>Relevant states</strong>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center" }}>
             {states.map((state) => (
               <div key={String(state ?? "default")} style={{ display: "grid", gap: 8, justifyItems: "start" }}>
                 <span style={{ fontSize: 13, color: "#64748B", textTransform: "capitalize" }}>
@@ -319,13 +312,7 @@ const meta: Meta<BadgeStoryArgs> = {
       ...(dismissible ? { onDismiss: () => undefined } : {})
     };
 
-    return (
-      <StoryPage>
-        <StoryCard style={{ width: "fit-content" }}>
-          <Badge {...rest} {...optionalProps} />
-        </StoryCard>
-      </StoryPage>
-    );
+    return <Badge {...rest} {...optionalProps} />;
   }
 };
 
@@ -333,20 +320,34 @@ export default meta;
 
 type Story = StoryObj<BadgeStoryArgs>;
 
-export const Playground: Story = {};
-
-export const FigmaMatrix: StoryObj = {
-  render: () => <MatrixStory />
+export const Playground: Story = {
+  parameters: {
+    layout: "centered"
+  }
 };
 
-export const Sizes: StoryObj = {
-  render: () => <SizesStory />
+export const Variants: StoryObj = {
+  render: () => <MatrixStory />,
+  parameters: {
+    controls: { disable: true }
+  }
 };
 
-export const Configurations: StoryObj = {
-  render: () => <ConfigurationsStory />
+export const UsageGuidelines: StoryObj = {
+  render: () => (
+    <>
+      <SizesStory />
+      <StateGallery />
+    </>
+  ),
+  parameters: {
+    controls: { disable: true }
+  }
 };
 
-export const States: StoryObj = {
-  render: () => <StateGallery />
+export const UIExample: StoryObj = {
+  render: () => <ConfigurationsStory />,
+  parameters: {
+    controls: { disable: true }
+  }
 };

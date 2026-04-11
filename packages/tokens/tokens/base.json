@@ -182,6 +182,342 @@
         "outlineOffset": 2
       }
     },
+    "phoneInput": {
+      "color": {
+        "label": {
+          "default": "#020617",
+          "required": "#DC2626",
+          "info": "#94A3B8"
+        },
+        "helper": {
+          "default": {
+            "text": "#64748B",
+            "icon": "#94A3B8"
+          },
+          "destructive": {
+            "text": "#DC2626",
+            "icon": "#DC2626"
+          }
+        },
+        "field": {
+          "rest": {
+            "background": "#FFFFFF",
+            "border": "#CBD5E1",
+            "placeholder": "#94A3B8",
+            "value": "#020617",
+            "countryCode": "#020617",
+            "chevron": "#020617",
+            "actionBorder": "#CBD5E1",
+            "actionIcon": "#94A3B8"
+          },
+          "hover": {
+            "background": "#FFFFFF",
+            "border": "#64748B",
+            "placeholder": "#94A3B8",
+            "value": "#020617",
+            "countryCode": "#020617",
+            "chevron": "#020617",
+            "actionBorder": "#CBD5E1",
+            "actionIcon": "#94A3B8"
+          },
+          "active": {
+            "background": "#FFFFFF",
+            "border": "#4736FE",
+            "placeholder": "#94A3B8",
+            "value": "#020617",
+            "countryCode": "#020617",
+            "chevron": "#020617",
+            "caret": "#64748B",
+            "actionBorder": "#CBD5E1",
+            "actionIcon": "#94A3B8"
+          },
+          "filled": {
+            "background": "#FFFFFF",
+            "border": "#94A3B8",
+            "placeholder": "#94A3B8",
+            "value": "#020617",
+            "countryCode": "#020617",
+            "chevron": "#020617",
+            "actionBorder": "#CBD5E1",
+            "actionIcon": "#94A3B8"
+          },
+          "destructive": {
+            "background": "#FFFFFF",
+            "border": "#DC2626",
+            "placeholder": "#94A3B8",
+            "value": "#020617",
+            "countryCode": "#020617",
+            "chevron": "#020617",
+            "actionBorder": "#CBD5E1",
+            "actionIcon": "#94A3B8"
+          },
+          "disabled": {
+            "background": "#E2E8F0",
+            "border": "#CBD5E1",
+            "placeholder": "#94A3B8",
+            "value": "#94A3B8",
+            "countryCode": "#94A3B8",
+            "chevron": "#94A3B8",
+            "actionBorder": "#94A3B8",
+            "actionIcon": "#94A3B8"
+          }
+        }
+      },
+      "size": {
+        "sm": {
+          "height": 44,
+          "containerGap": 6,
+          "labelPaddingInline": 2,
+          "fieldPaddingInline": 12,
+          "fieldPaddingBlock": 10,
+          "contentGap": 8,
+          "countryCodeWidth": 46,
+          "actionSize": 24
+        },
+        "lg": {
+          "height": 48,
+          "containerGap": 8,
+          "labelPaddingInline": 2,
+          "fieldPaddingInline": 12,
+          "fieldPaddingBlock": 10,
+          "contentGap": 8,
+          "countryCodeWidth": 46,
+          "actionSize": 24
+        }
+      },
+      "typography": {
+        "label": {
+          "sm": {
+            "fontSize": 14,
+            "lineHeight": 18,
+            "letterSpacing": 0
+          },
+          "lg": {
+            "fontSize": 16,
+            "lineHeight": 20,
+            "letterSpacing": 0
+          }
+        },
+        "input": {
+          "fontSize": 19,
+          "lineHeight": 24,
+          "letterSpacing": -0.03
+        },
+        "helper": {
+          "fontSize": 12,
+          "lineHeight": 18,
+          "letterSpacing": 0
+        }
+      },
+      "icon": {
+        "flagSize": 24,
+        "labelInfoSize": 16,
+        "helperSize": 14,
+        "countryChevronSize": 14,
+        "actionSize": 12
+      },
+      "border": {
+        "width": 1
+      }
+    },
+    "textInput": {
+      "color": {
+        "field": {
+          "rest": {
+            "background": "#FFFFFF",
+            "border": "#CBD5E1",
+            "placeholder": "#94A3B8",
+            "value": "#020617",
+            "affix": "#94A3B8"
+          },
+          "hover": {
+            "background": "#F6F6FF",
+            "border": "#C8CCFB",
+            "placeholder": "#94A3B8",
+            "value": "#020617",
+            "affix": "#94A3B8"
+          },
+          "active": {
+            "background": "#FFFFFF",
+            "border": "#4736FE",
+            "placeholder": "#94A3B8",
+            "value": "#020617",
+            "affix": "#94A3B8"
+          },
+          "typed": {
+            "background": "#FFFFFF",
+            "border": "#CBD5E1",
+            "placeholder": "#94A3B8",
+            "value": "#020617",
+            "affix": "#94A3B8"
+          },
+          "error": {
+            "background": "#FFFFFF",
+            "border": "#DC2626",
+            "placeholder": "#94A3B8",
+            "value": "#020617",
+            "affix": "#94A3B8"
+          },
+          "success": {
+            "background": "#FFFFFF",
+            "border": "#1C9C1C",
+            "placeholder": "#94A3B8",
+            "value": "#020617",
+            "affix": "#94A3B8"
+          },
+          "disabled": {
+            "background": "#F1F5F9",
+            "border": "#CBD5E1",
+            "placeholder": "#94A3B8",
+            "value": "#94A3B8",
+            "affix": "#94A3B8"
+          }
+        },
+        "helper": {
+          "default": {
+            "text": "#64748B",
+            "icon": "#64748B"
+          },
+          "error": {
+            "text": "#DC2626",
+            "icon": "#DC2626"
+          },
+          "success": {
+            "text": "#215F23",
+            "icon": "#215F23"
+          }
+        }
+      },
+      "size": {
+        "sm": {
+          "affixBoxSize": 20,
+          "containerGap": 8,
+          "fieldGap": 8,
+          "fieldPaddingBlock": 10,
+          "fieldPaddingInline": 12,
+          "height": 40,
+          "helperGap": 4,
+          "labelPaddingInline": 2
+        },
+        "lg": {
+          "affixBoxSize": 20,
+          "containerGap": 8,
+          "fieldGap": 8,
+          "fieldPaddingBlock": 10,
+          "fieldPaddingInline": 12,
+          "height": 44,
+          "helperGap": 4,
+          "labelPaddingInline": 2
+        }
+      },
+      "typography": {
+        "input": {
+          "sm": {
+            "fontSize": 14,
+            "lineHeight": 18,
+            "letterSpacing": 0
+          },
+          "lg": {
+            "fontSize": 16,
+            "lineHeight": 20,
+            "letterSpacing": 0
+          }
+        },
+        "helper": {
+          "sm": {
+            "fontSize": 12,
+            "lineHeight": 18,
+            "letterSpacing": 0
+          },
+          "lg": {
+            "fontSize": 14,
+            "lineHeight": 20,
+            "letterSpacing": 0
+          }
+        }
+      },
+      "icon": {
+        "affixSize": 18,
+        "helperSize": 14
+      },
+      "border": {
+        "width": 1
+      },
+      "caret": {
+        "gap": 2,
+        "width": 1
+      }
+    },
+    "label": {
+      "xs": {
+        "stackGap": 2,
+        "slotGap": 2,
+        "iconSize": 16,
+        "typography": {
+          "label": {
+            "fontSize": 11,
+            "lineHeight": 14,
+            "letterSpacing": 0
+          },
+          "description": {
+            "fontSize": 9,
+            "lineHeight": 13,
+            "letterSpacing": 0
+          }
+        }
+      },
+      "sm": {
+        "stackGap": 4,
+        "slotGap": 4,
+        "iconSize": 16,
+        "typography": {
+          "label": {
+            "fontSize": 12,
+            "lineHeight": 16,
+            "letterSpacing": 0
+          },
+          "description": {
+            "fontSize": 12,
+            "lineHeight": 18,
+            "letterSpacing": 0
+          }
+        }
+      },
+      "md": {
+        "stackGap": 4,
+        "slotGap": 4,
+        "iconSize": 16,
+        "typography": {
+          "label": {
+            "fontSize": 14,
+            "lineHeight": 18,
+            "letterSpacing": 0
+          },
+          "description": {
+            "fontSize": 12,
+            "lineHeight": 18,
+            "letterSpacing": 0
+          }
+        }
+      },
+      "lg": {
+        "stackGap": 6,
+        "slotGap": 4,
+        "iconSize": 16,
+        "typography": {
+          "label": {
+            "fontSize": 16,
+            "lineHeight": 20,
+            "letterSpacing": 0
+          },
+          "description": {
+            "fontSize": 12,
+            "lineHeight": 18,
+            "letterSpacing": 0
+          }
+        }
+      }
+    },
     "sectionHeader": {
       "layout": {
         "variant": "split"

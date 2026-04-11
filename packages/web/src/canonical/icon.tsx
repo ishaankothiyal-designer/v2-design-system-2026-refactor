@@ -1,6 +1,6 @@
 import type { HTMLAttributes } from "react";
 import type { DisplayBrandId } from "@geist/tokens";
-import { getIconClassName, type IconName } from "@geist/icons";
+import { getIconClassName, getIconPathCount, type IconName } from "@geist/icons";
 import { getRequiredThemeTokenValue } from "../theme";
 
 export interface IconProps extends HTMLAttributes<HTMLSpanElement> {
@@ -45,6 +45,7 @@ export function Icon({
   const colorStyle = colorToken
     ? { color: String(getRequiredThemeTokenValue(brand, colorToken)) }
     : {};
+  const pathCount = getIconPathCount(name);
 
   const accessibilityProps =
     label || title
@@ -74,6 +75,16 @@ export function Icon({
         ...colorStyle,
         ...style
       }}
-    />
+    >
+      {pathCount > 1
+        ? Array.from({ length: pathCount }, (_, index) => (
+            <span
+              key={`${name}-path-${index + 1}`}
+              aria-hidden="true"
+              className={`path${index + 1}`}
+            />
+          ))
+        : null}
+    </span>
   );
 }

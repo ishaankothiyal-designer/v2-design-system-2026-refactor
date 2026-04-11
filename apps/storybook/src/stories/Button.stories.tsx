@@ -67,10 +67,7 @@ function MatrixCell({
 function SectionHeading({ title, description }: { title: string; description?: string }) {
   return (
     <div style={{ display: "grid", gap: 6 }}>
-      <h2 style={{ margin: 0, fontSize: 24, lineHeight: "30px" }}>{title}</h2>
-      {description ? (
-        <p style={{ margin: 0, color: "#64748B", fontSize: 14, lineHeight: "20px" }}>{description}</p>
-      ) : null}
+      <strong>{title}</strong>
     </div>
   );
 }
@@ -84,13 +81,6 @@ function HeaderCell({ label }: { label: string }) {
 function VariantMatrixStory() {
   return (
     <StoryPage fullscreen>
-      <header style={{ display: "grid", gap: 12, maxWidth: 960 }}>
-        <h1 style={{ margin: 0, fontSize: 40, lineHeight: "48px" }}>Button</h1>
-        <p style={{ margin: 0, color: "#64748B", fontSize: 16, lineHeight: "24px" }}>
-          Full review matrix for the canonical Figma button family across light and on-dark surfaces.
-        </p>
-      </header>
-
       <StoryCard>
         <div style={{ display: "grid", gap: 24 }}>
           <SectionHeading
@@ -247,7 +237,8 @@ const matrixGridStyles: CSSProperties = {
   columnGap: 20,
   display: "grid",
   gridTemplateColumns: "140px repeat(4, minmax(0, 1fr))",
-  rowGap: 16
+  rowGap: 16,
+  justifyItems: "center"
 };
 
 const sizeGridStyles: CSSProperties = {
@@ -336,15 +327,11 @@ const meta: Meta<ButtonStoryArgs> = {
     const resolvedOnDark = Boolean(onDark);
 
     return (
-      <StoryPage>
-        <StoryCard style={{ width: "fit-content" }}>
-          <div style={resolvedOnDark ? { background: "#0F172A", padding: 24, borderRadius: 16 } : undefined}>
-            <Button {...args} onDark={resolvedOnDark} {...icons}>
-              {label}
-            </Button>
-          </div>
-        </StoryCard>
-      </StoryPage>
+      <div style={resolvedOnDark ? { background: "#0F172A", padding: 24, borderRadius: 16 } : undefined}>
+        <Button {...args} onDark={resolvedOnDark} {...icons}>
+          {label}
+        </Button>
+      </div>
     );
   }
 };
@@ -353,16 +340,29 @@ export default meta;
 
 type Story = StoryObj<ButtonStoryArgs>;
 
-export const Playground: Story = {};
-
-export const VariantMatrix: StoryObj = {
-  render: () => <VariantMatrixStory />
+export const Playground: Story = {
+  parameters: {
+    layout: "centered"
+  }
 };
 
-export const SizeScale: StoryObj = {
-  render: () => <SizeScaleStory />
+export const Variants: StoryObj = {
+  render: () => <VariantMatrixStory />,
+  parameters: {
+    controls: { disable: true }
+  }
 };
 
-export const ShapeAndStyle: StoryObj = {
-  render: () => <ShapeAndStyleStory />
+export const UsageGuidelines: StoryObj = {
+  render: () => <SizeScaleStory />,
+  parameters: {
+    controls: { disable: true }
+  }
+};
+
+export const UIExample: StoryObj = {
+  render: () => <ShapeAndStyleStory />,
+  parameters: {
+    controls: { disable: true }
+  }
 };

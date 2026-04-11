@@ -59,12 +59,7 @@ function BrandSection({
   return (
     <StoryCard>
       <div style={{ display: "grid", gap: 20 }}>
-        <header style={{ display: "grid", gap: 8 }}>
-          <h2 style={{ margin: 0, fontSize: 24, lineHeight: "30px" }}>{title}</h2>
-          <p style={sectionCopyStyles}>
-            Brand-aware light and inverse surfaces using the Back to top token bindings captured from Figma.
-          </p>
-        </header>
+        <strong>{title}</strong>
 
         <div style={matrixGridStyles}>
           <HeaderCell label="State" />
@@ -98,41 +93,15 @@ function PlaygroundStory(args: BackToTopButtonStoryArgs) {
   const { label, ...rest } = args;
 
   return (
-    <StoryPage>
-      <div style={playgroundGridStyles}>
-        <StoryCard>
-          <div style={{ display: "grid", gap: 12 }}>
-            <strong>Configured</strong>
-            <BackToTopButton {...rest}>{label}</BackToTopButton>
-          </div>
-        </StoryCard>
-
-        <StoryCard>
-          <div style={{ display: "grid", gap: 12 }}>
-            <strong>Hover Preview</strong>
-            <BackToTopButton {...rest} forceState="Hover">
-              {label}
-            </BackToTopButton>
-          </div>
-        </StoryCard>
-      </div>
-    </StoryPage>
+    <div style={rest.inverse ? { background: "#0A0A0A", padding: 24, borderRadius: 16 } : undefined}>
+      <BackToTopButton {...rest}>{label}</BackToTopButton>
+    </div>
   );
 }
 
 function MatrixStory() {
   return (
     <StoryPage fullscreen>
-      <StoryCard>
-        <div style={{ display: "grid", gap: 8 }}>
-          <h1 style={{ margin: 0, fontSize: 40, lineHeight: "48px" }}>Back To Top Button</h1>
-          <p style={introCopyStyles}>
-            Token-driven pill action with a fixed utility-label rhythm, shared elevation, and inverse presentation for
-            darker surfaces.
-          </p>
-        </div>
-      </StoryCard>
-
       <BrandSection brand="Cars24" title="Cars24" />
       <BrandSection brand="Team BHP" title="Team BHP" />
       <BrandSection brand="CarInfo" title="CarInfo" />
@@ -167,7 +136,8 @@ const matrixGridStyles: CSSProperties = {
   columnGap: 20,
   display: "grid",
   gridTemplateColumns: "140px repeat(2, minmax(0, 1fr))",
-  rowGap: 18
+  rowGap: 18,
+  justifyItems: "center"
 };
 
 const inverseCellStyles: CSSProperties = {
@@ -217,9 +187,29 @@ export default meta;
 type Story = StoryObj<BackToTopButtonStoryArgs>;
 
 export const Playground: Story = {
-  render: (args) => <PlaygroundStory {...args} />
+  render: (args) => <PlaygroundStory {...args} />,
+  parameters: {
+    layout: "centered"
+  }
 };
 
-export const Matrix: Story = {
-  render: () => <MatrixStory />
+export const Variants: Story = {
+  render: () => <MatrixStory />,
+  parameters: {
+    controls: { disable: true }
+  }
+};
+
+export const UsageGuidelines: Story = {
+  render: (args) => <PlaygroundStory {...args} />,
+  parameters: {
+    layout: "centered"
+  }
+};
+
+export const UIExample: Story = {
+  render: (args) => <PlaygroundStory {...args} />,
+  parameters: {
+    layout: "centered"
+  }
 };

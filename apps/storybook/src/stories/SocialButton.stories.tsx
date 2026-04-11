@@ -58,35 +58,24 @@ function MatrixStory() {
 
   return (
     <StoryPage fullscreen>
-      <StoryCard>
-        <div style={{ display: "grid", gap: 20 }}>
-          <header style={{ display: "grid", gap: 8 }}>
-            <h1 style={{ margin: 0, fontSize: 40, lineHeight: "48px" }}>Social Button</h1>
-            <p style={introCopyStyles}>
-              Figma-aligned social sign-in treatment across large and medium sizes with rest, hover, and disabled states.
-            </p>
-          </header>
+      <div style={matrixGridStyles}>
+        <HeaderCell label="State" />
+        {socialButtonSizes.map((size) => (
+          <HeaderCell key={size} label={size} />
+        ))}
 
-          <div style={matrixGridStyles}>
-            <HeaderCell label="State" />
-            {socialButtonSizes.map((size) => (
-              <HeaderCell key={size} label={size} />
-            ))}
-
-            {rows.flatMap((row) => [
-              <HeaderCell key={`${row.label}-label`} label={row.label} />,
-              ...socialButtonSizes.map((size) => (
-                <MatrixCell
-                  key={`${row.label}-${size}`}
-                  size={size}
-                  {...(row.forceState ? { forceState: row.forceState } : {})}
-                  {...(row.disabled ? { disabled: true } : {})}
-                />
-              ))
-            ])}
-          </div>
-        </div>
-      </StoryCard>
+        {rows.flatMap((row) => [
+          <HeaderCell key={`${row.label}-label`} label={row.label} />,
+          ...socialButtonSizes.map((size) => (
+            <MatrixCell
+              key={`${row.label}-${size}`}
+              size={size}
+              {...(row.forceState ? { forceState: row.forceState } : {})}
+              {...(row.disabled ? { disabled: true } : {})}
+            />
+          ))
+        ])}
+      </div>
     </StoryPage>
   );
 }
@@ -95,27 +84,9 @@ function PlaygroundStory(args: SocialButtonStoryArgs) {
   const { iconName, label, ...rest } = args;
 
   return (
-    <StoryPage>
-      <div style={playgroundGridStyles}>
-        <StoryCard>
-          <div style={{ display: "grid", gap: 12 }}>
-            <strong>Configured</strong>
-            <SocialButton {...rest} icon={<Icon name={iconName} decorative />}>
-              {label}
-            </SocialButton>
-          </div>
-        </StoryCard>
-
-        <StoryCard>
-          <div style={{ display: "grid", gap: 12 }}>
-            <strong>Hover Preview</strong>
-            <SocialButton {...rest} forceState="Hover" icon={<Icon name={iconName} decorative />}>
-              {label}
-            </SocialButton>
-          </div>
-        </StoryCard>
-      </div>
-    </StoryPage>
+    <SocialButton {...rest} icon={<Icon name={iconName} decorative />}>
+      {label}
+    </SocialButton>
   );
 }
 
@@ -138,7 +109,9 @@ const matrixGridStyles: CSSProperties = {
   columnGap: 20,
   display: "grid",
   gridTemplateColumns: "140px repeat(2, minmax(0, 1fr))",
-  rowGap: 18
+  rowGap: 18,
+  justifyContent: "center",
+  justifyItems: "center"
 };
 
 const playgroundGridStyles: CSSProperties = {
@@ -185,10 +158,30 @@ export default meta;
 
 type Story = StoryObj<SocialButtonStoryArgs>;
 
-export const Matrix: Story = {
-  render: () => <MatrixStory />
+export const Playground: Story = {
+  render: (args) => <PlaygroundStory {...args} />,
+  parameters: {
+    layout: "centered"
+  }
 };
 
-export const Playground: Story = {
-  render: (args) => <PlaygroundStory {...args} />
+export const Variants: Story = {
+  render: () => <MatrixStory />,
+  parameters: {
+    controls: { disable: true }
+  }
+};
+
+export const UsageGuidelines: Story = {
+  render: (args) => <PlaygroundStory {...args} />,
+  parameters: {
+    layout: "centered"
+  }
+};
+
+export const UIExample: Story = {
+  render: (args) => <PlaygroundStory {...args} />,
+  parameters: {
+    layout: "centered"
+  }
 };

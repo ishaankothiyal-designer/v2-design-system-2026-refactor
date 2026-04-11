@@ -125,27 +125,9 @@ function PlaygroundStory(args: CaptionButtonStoryArgs) {
   const { captionText, label, ...rest } = args;
 
   return (
-    <StoryPage>
-      <div style={playgroundGridStyles}>
-        <StoryCard>
-          <div style={{ display: "grid", gap: 12 }}>
-            <strong>Configured</strong>
-            <CaptionButton {...rest} caption={captionText}>
-              {label}
-            </CaptionButton>
-          </div>
-        </StoryCard>
-
-        <StoryCard>
-          <div style={{ display: "grid", gap: 12 }}>
-            <strong>Hover Preview</strong>
-            <CaptionButton {...rest} caption={captionText} forceState="Hover/Pressed">
-              {label}
-            </CaptionButton>
-          </div>
-        </StoryCard>
-      </div>
-    </StoryPage>
+    <CaptionButton {...rest} caption={captionText}>
+      {label}
+    </CaptionButton>
   );
 }
 
@@ -254,10 +236,30 @@ export default meta;
 
 type Story = StoryObj<CaptionButtonStoryArgs>;
 
-export const Matrix: Story = {
-  render: () => <MatrixStory />
+export const Playground: Story = {
+  render: (args) => <PlaygroundStory {...args} />,
+  parameters: {
+    layout: "centered"
+  }
 };
 
-export const Playground: Story = {
-  render: (args) => <PlaygroundStory {...args} />
+export const Variants: Story = {
+  render: () => <MatrixStory />,
+  parameters: {
+    controls: { disable: true }
+  }
+};
+
+export const UsageGuidelines: Story = {
+  render: (args) => <PlaygroundStory {...args} />,
+  parameters: {
+    layout: "centered"
+  }
+};
+
+export const UIExample: Story = {
+  render: (args) => <PlaygroundStory {...args} />,
+  parameters: {
+    layout: "centered"
+  }
 };
