@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
 import { coreTokenCatalog } from "@geist/tokens";
 
 type BrandPreview = {
@@ -78,39 +78,178 @@ const codeStyles: CSSProperties = {
   overflowX: "auto"
 };
 
+const brandListStyles: CSSProperties = {
+  display: "grid",
+  gap: 20
+};
+
+const brandRowStyles: CSSProperties = {
+  display: "grid",
+  gap: 24,
+  padding: 24,
+  borderRadius: 20,
+  border: `1px solid ${String(coreTokenCatalog.color.border.default)}`,
+  background: String(coreTokenCatalog.color.surface.canvas),
+  gridTemplateColumns: "minmax(220px, 280px) minmax(0, 1fr)"
+};
+
+const brandMetaStyles: CSSProperties = {
+  display: "grid",
+  gap: 16,
+  alignContent: "start"
+};
+
+const brandPreviewStyles: CSSProperties = {
+  display: "grid",
+  gap: 16,
+  alignContent: "start"
+};
+
+const detailListStyles: CSSProperties = {
+  display: "grid",
+  gap: 10
+};
+
+const detailRowStyles: CSSProperties = {
+  display: "grid",
+  gap: 4
+};
+
+const filterTabsStyles: CSSProperties = {
+  display: "flex",
+  flexWrap: "wrap",
+  gap: 12
+};
+
+const filterTabBaseStyles: CSSProperties = {
+  appearance: "none",
+  borderRadius: 999,
+  padding: "8px 14px",
+  fontSize: 13,
+  fontWeight: 700,
+  lineHeight: "18px",
+  cursor: "pointer",
+  transition: "all 160ms ease"
+};
+
 function formatLetterSpacing(value: number) {
   return value === 0 ? "0" : `${value}em`;
 }
 
 export function TypographyBrandPreviewGrid({ brands }: { brands: BrandPreview[] }) {
+  const [activeBrand, setActiveBrand] = useState<string>("All");
+  const visibleBrands = useMemo(
+    () => (activeBrand === "All" ? brands : brands.filter((brand) => brand.name === activeBrand)),
+    [activeBrand, brands]
+  );
+
   return (
-    <div style={gridStyles}>
-      {brands.map((brand) => (
-        <div key={brand.name} style={cardStyles}>
-          <div style={{ display: "grid", gap: 4 }}>
-            <strong>{brand.name}</strong>
-            <span style={{ color: String(coreTokenCatalog.color.text.secondary), fontSize: 13 }}>
-              {brand.fontFamily}
-            </span>
-          </div>
-          <div
-            style={{
-              fontFamily: brand.fontFamily,
-              fontSize: 24,
-              lineHeight: "32px"
-            }}
-          >
-            The quick brown fox jumps over the lazy dog
-          </div>
-          <div style={chipRowStyles}>
-            {Object.entries(brand.fontWeights).map(([weightName, weightValue]) => (
-              <span key={weightName} style={chipStyles}>
-                {weightName}: {weightValue}
-              </span>
-            ))}
-          </div>
-        </div>
-      ))}
+    <div style={{ display: "grid", gap: 24 }}>
+      <div style={filterTabsStyles}>
+        {["All", ...brands.map((brand) => brand.name)].map((brandName) => {
+          const isActive = activeBrand === brandName;
+
+          return (
+            <button
+              key={brandName}
+              type="button"
+              onClick={() => setActiveBrand(brandName)}
+              style={{
+                ...filterTabBaseStyles,
+                border: `1px solid ${
+                  isActive
+                    ? String(coreTokenCatalog.color.brand.primary[600])
+                    : String(coreTokenCatalog.color.border.default)
+                }`,
+                background: isActive
+                  ? String(coreTokenCatalog.color.brand.primary[50])
+                  : String(coreTokenCatalog.color.surface.canvas),
+                color: isActive
+                  ? String(coreTokenCatalog.color.brand.primary[700])
+                  : String(coreTokenCatalog.color.text.primary)
+              }}
+            >
+              {brandName}
+            </button>
+          );
+        })}
+      </div>
+
+      <div style={brandListStyles}>
+        {visibleBrands.map((brand) => (
+          <article key={brand.name} style={brandRowStyles}>
+            <div style={brandMetaStyles}>
+              <div style={{ display: "grid", gap: 6 }}>
+                <strong style={{ fontSize: 24, lineHeight: "30px" }}>{brand.name}</strong>
+                <span style={{ color: String(coreTokenCatalog.color.text.secondary), fontSize: 14, lineHeight: "20px" }}>
+                  Brand font family
+                </span>
+                <span style={{ fontSize: 18, lineHeight: "24px" }}>{brand.fontFamily}</span>
+              </div>
+
+              <div style={detailListStyles}>
+                <div style={detailRowStyles}>
+                  <span style={{ color: String(coreTokenCatalog.color.text.secondary), fontSize: 12, fontWeight: 700 }}>
+                    Weights
+                  </span>
+                  <div style={chipRowStyles}>
+                    {Object.entries(brand.fontWeights).map(([weightName, weightValue]) => (
+                      <span key={weightName} style={chipStyles}>
+                        {weightName}: {weightValue}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div style={detailRowStyles}>
+                  <span style={{ color: String(coreTokenCatalog.color.text.secondary), fontSize: 12, fontWeight: 700 }}>
+                    Recommended usage
+                  </span>
+                  <span style={{ color: String(coreTokenCatalog.color.text.secondary), lineHeight: "22px" }}>
+                    Use {brand.fontFamily} for {brand.name} headings, interface copy, and long-form reading surfaces.
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div style={brandPreviewStyles}>
+              <div style={{ color: String(coreTokenCatalog.color.text.secondary), fontSize: 12, fontWeight: 700 }}>
+                Live preview
+              </div>
+              <div
+                style={{
+                  display: "grid",
+                  gap: 12,
+                  padding: 20,
+                  borderRadius: 16,
+                  background: String(coreTokenCatalog.color.surface.subtle),
+                  border: `1px solid ${String(coreTokenCatalog.color.border.default)}`
+                }}
+              >
+                <div
+                  style={{
+                    fontFamily: brand.fontFamily,
+                    fontSize: 36,
+                    lineHeight: "42px"
+                  }}
+                >
+                  The quick brown fox jumps over the lazy dog
+                </div>
+                <div
+                  style={{
+                    fontFamily: brand.fontFamily,
+                    fontSize: 16,
+                    lineHeight: "24px",
+                    color: String(coreTokenCatalog.color.text.secondary)
+                  }}
+                >
+                  0123456789 Aa Bb Cc
+                </div>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
     </div>
   );
 }

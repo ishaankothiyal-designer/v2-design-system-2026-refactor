@@ -125,6 +125,34 @@
           }
         }
       }
+    },
+    "checkbox": {
+      "color": {
+        "checked": {
+          "background": "#456DFF",
+          "border": "#456DFF"
+        }
+      }
+    },
+    "radio": {
+      "color": {
+        "selected": {
+          "background": "#456DFF",
+          "border": "#456DFF"
+        }
+      }
+    },
+    "switch": {
+      "color": {
+        "selected": {
+          "track": "#456DFF"
+        },
+        "disabled": {
+          "selected": {
+            "track": "#CFDAFF"
+          }
+        }
+      }
     }
   },
   "radius": {

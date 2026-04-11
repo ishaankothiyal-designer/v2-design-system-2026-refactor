@@ -448,6 +448,364 @@
         "width": 1
       }
     },
+    "otpInput": {
+      "size": {
+        "sm": {
+          "boxSize": 40,
+          "boxGap": 8,
+          "containerGap": 8,
+          "helperGap": 4,
+          "labelPaddingInline": 2,
+          "supportingPaddingInline": 2
+        },
+        "lg": {
+          "boxSize": 44,
+          "boxGap": 8,
+          "containerGap": 8,
+          "helperGap": 4,
+          "labelPaddingInline": 2,
+          "supportingPaddingInline": 2
+        }
+      },
+      "typography": {
+        "code": {
+          "sm": {
+            "fontSize": 14,
+            "lineHeight": 18,
+            "letterSpacing": 0
+          },
+          "lg": {
+            "fontSize": 16,
+            "lineHeight": 20,
+            "letterSpacing": 0
+          }
+        },
+        "helper": {
+          "sm": {
+            "fontSize": 12,
+            "lineHeight": 18,
+            "letterSpacing": 0
+          },
+          "lg": {
+            "fontSize": 14,
+            "lineHeight": 20,
+            "letterSpacing": 0
+          }
+        }
+      },
+      "icon": {
+        "helperSize": 14
+      },
+      "border": {
+        "width": 1
+      }
+    },
+    "checkbox": {
+      "color": {
+        "rest": {
+          "background": "#FFFFFF",
+          "border": "#CBD5E1"
+        },
+        "checked": {
+          "background": "#4736FE",
+          "border": "#4736FE",
+          "foreground": "#FFFFFF"
+        },
+        "disabled": {
+          "rest": {
+            "background": "#F1F5F9",
+            "border": "#CBD5E1"
+          },
+          "checked": {
+            "background": "#E2E8F0",
+            "border": "#E2E8F0",
+            "foreground": "#94A3B8"
+          }
+        }
+      },
+      "size": {
+        "sm": {
+          "boxSize": 16,
+          "iconSize": 10,
+          "borderWidth": 1.5,
+          "disabledCheckedBorderWidth": 0
+        },
+        "md": {
+          "boxSize": 20,
+          "iconSize": 12,
+          "borderWidth": 1.5,
+          "disabledCheckedBorderWidth": 0
+        },
+        "lg": {
+          "boxSize": 24,
+          "iconSize": 14,
+          "borderWidth": 1.5,
+          "disabledCheckedBorderWidth": 0
+        },
+        "xl": {
+          "boxSize": 32,
+          "iconSize": 20,
+          "borderWidth": 2,
+          "disabledCheckedBorderWidth": 2
+        }
+      },
+      "focus": {
+        "outlineWidth": 2,
+        "outlineOffset": 2
+      }
+    },
+    "checkboxLabel": {
+      "layout": {
+        "gap": 8,
+        "contentPaddingInline": 2
+      },
+      "color": {
+        "label": {
+          "default": "#020617",
+          "disabled": "#94A3B8"
+        },
+        "description": {
+          "default": "#64748B",
+          "disabled": "#94A3B8"
+        }
+      },
+      "size": {
+        "sm": {
+          "contentGap": 2
+        },
+        "md": {
+          "contentGap": 4
+        },
+        "lg": {
+          "contentGap": 4
+        }
+      },
+      "typography": {
+        "label": {
+          "sm": {
+            "fontSize": 12,
+            "lineHeight": 16,
+            "letterSpacing": 0
+          },
+          "md": {
+            "fontSize": 16,
+            "lineHeight": 20,
+            "letterSpacing": 0
+          },
+          "lg": {
+            "fontSize": 16,
+            "lineHeight": 20,
+            "letterSpacing": 0
+          }
+        },
+        "description": {
+          "sm": {
+            "fontSize": 12,
+            "lineHeight": 16,
+            "letterSpacing": 0
+          },
+          "md": {
+            "fontSize": 14,
+            "lineHeight": 18,
+            "letterSpacing": 0
+          },
+          "lg": {
+            "fontSize": 14,
+            "lineHeight": 18,
+            "letterSpacing": 0
+          }
+        }
+      }
+    },
+    "radioLabel": {
+      "layout": {
+        "gap": 8,
+        "contentPaddingInline": 2
+      },
+      "color": {
+        "label": {
+          "default": "#020617",
+          "disabled": "#94A3B8"
+        },
+        "description": {
+          "default": "#64748B",
+          "disabled": "#94A3B8"
+        }
+      },
+      "size": {
+        "sm": {
+          "contentGap": 2
+        },
+        "md": {
+          "contentGap": 4
+        }
+      },
+      "typography": {
+        "label": {
+          "sm": {
+            "fontSize": 12,
+            "lineHeight": 16,
+            "letterSpacing": 0
+          },
+          "md": {
+            "fontSize": 16,
+            "lineHeight": 20,
+            "letterSpacing": 0
+          }
+        },
+        "description": {
+          "sm": {
+            "fontSize": 12,
+            "lineHeight": 16,
+            "letterSpacing": 0
+          },
+          "md": {
+            "fontSize": 14,
+            "lineHeight": 18,
+            "letterSpacing": 0
+          }
+        }
+      }
+    },
+    "switchLabel": {
+      "layout": {
+        "gap": 8,
+        "contentPaddingInline": 2
+      },
+      "color": {
+        "label": {
+          "default": "#020617",
+          "disabled": "#94A3B8"
+        },
+        "description": {
+          "default": "#64748B",
+          "disabled": "#94A3B8"
+        }
+      },
+      "size": {
+        "sm": {
+          "contentGap": 2
+        },
+        "default": {
+          "contentGap": 4
+        }
+      },
+      "typography": {
+        "label": {
+          "sm": {
+            "fontSize": 12,
+            "lineHeight": 16,
+            "letterSpacing": 0
+          },
+          "default": {
+            "fontSize": 16,
+            "lineHeight": 20,
+            "letterSpacing": 0
+          }
+        },
+        "description": {
+          "sm": {
+            "fontSize": 12,
+            "lineHeight": 16,
+            "letterSpacing": 0
+          },
+          "default": {
+            "fontSize": 14,
+            "lineHeight": 18,
+            "letterSpacing": 0
+          }
+        }
+      }
+    },
+    "radio": {
+      "color": {
+        "rest": {
+          "background": "#FFFFFF",
+          "border": "#94A3B8"
+        },
+        "selected": {
+          "background": "#4736FE",
+          "border": "#4736FE",
+          "foreground": "#FFFFFF"
+        },
+        "disabled": {
+          "rest": {
+            "background": "#F1F5F9",
+            "border": "#CBD5E1"
+          },
+          "selected": {
+            "background": "#F1F5F9",
+            "border": "#CBD5E1",
+            "foreground": "#CBD5E1"
+          }
+        }
+      },
+      "size": {
+        "sm": {
+          "boxSize": 16,
+          "dotSize": 6,
+          "borderWidth": 1,
+          "selectedBorderWidth": 0,
+          "disabledSelectedBorderWidth": 1
+        },
+        "md": {
+          "boxSize": 20,
+          "dotSize": 8,
+          "borderWidth": 1,
+          "selectedBorderWidth": 0,
+          "disabledSelectedBorderWidth": 1
+        }
+      },
+      "focus": {
+        "outlineWidth": 2,
+        "outlineOffset": 2
+      }
+    },
+    "switch": {
+      "color": {
+        "rest": {
+          "track": "#E2E8F0",
+          "thumb": "#FFFFFF"
+        },
+        "selected": {
+          "track": "#4736FE",
+          "thumb": "#FFFFFF"
+        },
+        "disabled": {
+          "rest": {
+            "track": "#E2E8F0",
+            "thumb": "rgba(26, 26, 26, 0.1)"
+          },
+          "selected": {
+            "track": "#E1E3FD",
+            "thumb": "#FFFFFF"
+          }
+        }
+      },
+      "size": {
+        "default": {
+          "trackWidth": 32,
+          "trackHeight": 20,
+          "thumbSize": 16,
+          "padding": 2,
+          "thumbTranslateX": 12
+        },
+        "sm": {
+          "trackWidth": 24,
+          "trackHeight": 16,
+          "thumbSize": 12,
+          "padding": 2,
+          "thumbTranslateX": 8
+        }
+      },
+      "thumb": {
+        "shadow": "0px 0px 4px rgba(31, 41, 55, 0.02), 0px 4px 4px rgba(31, 41, 55, 0.04)"
+      },
+      "focus": {
+        "outlineWidth": 2,
+        "outlineOffset": 2
+      }
+    },
     "label": {
       "xs": {
         "stackGap": 2,

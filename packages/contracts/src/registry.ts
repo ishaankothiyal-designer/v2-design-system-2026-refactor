@@ -100,6 +100,42 @@ export const designSystemRegistry: DesignSystemRegistry = {
       themeScopes: ["cars24", "teambhp", "carinfo", "vehicleinfo"]
     },
     {
+      canonicalId: "component.buttonGroup",
+      canonicalName: "Button Group",
+      layer: "component",
+      status: "approved",
+      platform: "web",
+      figmaComponentName: "Button group",
+      description: "Grouped button layout that composes primary, secondary, and contextual action patterns.",
+      webExport: "@geist/web/canonical/button-group",
+      nativeExport: "",
+      variants: [
+        { name: "type", values: ["Vertical", "Horizontal", "Contextual Action"] },
+        { name: "size", values: ["Small", "Medium", "Large"] },
+        { name: "shape", values: ["Regular", "Pill"] },
+        { name: "secondaryAction", values: ["false", "true"] },
+        { name: "contextualAction", values: ["false", "true"] },
+        { name: "onDark", values: ["false", "true"] }
+      ],
+      states: ["rest"],
+      tokenBindings: [
+        { slot: "layout.stackGap", token: "spacing.2" },
+        { slot: "layout.inlineGap", token: "spacing.1" },
+        { slot: "contextual.paddingBlock.default", token: "spacing.1" },
+        { slot: "contextual.paddingBlock.medium", token: "component.linkButton.focus.outlineOffset" },
+        { slot: "contextual.typography.fontSize", token: "component.linkButton.typography.md.fontSize" },
+        { slot: "contextual.typography.lineHeight", token: "component.linkButton.typography.md.lineHeight" },
+        { slot: "contextual.typography.letterSpacing", token: "component.linkButton.typography.md.letterSpacing" },
+        { slot: "contextual.prompt.color.light", token: "color.text.primary" },
+        { slot: "contextual.prompt.color.dark", token: "color.text.inverse" },
+        { slot: "contextual.link.size", token: "component.linkButton.size.md.height" },
+        { slot: "button.primary.size.sm", token: "component.button.typography.sm.fontSize" },
+        { slot: "button.primary.size.md", token: "component.button.typography.md.fontSize" },
+        { slot: "button.primary.size.lg", token: "component.button.typography.lg.fontSize" }
+      ],
+      themeScopes: ["cars24", "teambhp", "carinfo", "vehicleinfo"]
+    },
+    {
       canonicalId: "component.linkButton",
       canonicalName: "Link Button",
       layer: "component",
@@ -359,6 +395,97 @@ export const designSystemRegistry: DesignSystemRegistry = {
         { slot: "color.field.disabled.placeholder", token: "component.textInput.color.field.disabled.placeholder" },
         { slot: "color.field.disabled.value", token: "component.textInput.color.field.disabled.value" },
         { slot: "color.field.disabled.affix", token: "component.textInput.color.field.disabled.affix" }
+      ],
+      themeScopes: ["cars24", "teambhp", "carinfo", "vehicleinfo"]
+    },
+    {
+      canonicalId: "component.otpInput",
+      canonicalName: "OTP Input",
+      layer: "component",
+      status: "approved",
+      platform: "web",
+      figmaComponentName: "OTP",
+      description:
+        "Token-driven one-time-password input with per-box focus states, helper feedback, and resend or countdown support.",
+      webExport: "@geist/web/canonical/otp-input",
+      nativeExport: "",
+      variants: [
+        { name: "size", values: ["Small", "Large"] },
+        { name: "validationState", values: ["Default", "Error", "Success"] },
+        { name: "disabled", values: ["false", "true"] },
+        { name: "showLabelInfo", values: ["false", "true"] },
+        { name: "showHelperIcon", values: ["false", "true"] },
+        { name: "supportingMode", values: ["Helper", "Resend OTP", "OTP Timer"] }
+      ],
+      states: ["rest", "hover", "active", "typed", "error", "success", "disabled"],
+      tokenBindings: [
+        { slot: "size.sm.boxSize", token: "component.otpInput.size.sm.boxSize" },
+        { slot: "size.lg.boxSize", token: "component.otpInput.size.lg.boxSize" },
+        { slot: "size.sm.boxGap", token: "component.otpInput.size.sm.boxGap" },
+        { slot: "size.lg.boxGap", token: "component.otpInput.size.lg.boxGap" },
+        { slot: "size.sm.containerGap", token: "component.otpInput.size.sm.containerGap" },
+        { slot: "size.lg.containerGap", token: "component.otpInput.size.lg.containerGap" },
+        { slot: "size.sm.helperGap", token: "component.otpInput.size.sm.helperGap" },
+        { slot: "size.lg.helperGap", token: "component.otpInput.size.lg.helperGap" },
+        { slot: "size.sm.labelPaddingInline", token: "component.otpInput.size.sm.labelPaddingInline" },
+        { slot: "size.lg.labelPaddingInline", token: "component.otpInput.size.lg.labelPaddingInline" },
+        { slot: "size.sm.supportingPaddingInline", token: "component.otpInput.size.sm.supportingPaddingInline" },
+        { slot: "size.lg.supportingPaddingInline", token: "component.otpInput.size.lg.supportingPaddingInline" },
+        { slot: "radius.sm", token: "radius.alt.md" },
+        { slot: "radius.lg", token: "radius.alt.lg" },
+        { slot: "border.width", token: "component.otpInput.border.width" },
+        { slot: "icon.helper", token: "component.otpInput.icon.helperSize" },
+        { slot: "typography.code.sm.fontSize", token: "component.otpInput.typography.code.sm.fontSize" },
+        { slot: "typography.code.sm.lineHeight", token: "component.otpInput.typography.code.sm.lineHeight" },
+        { slot: "typography.code.sm.letterSpacing", token: "component.otpInput.typography.code.sm.letterSpacing" },
+        { slot: "typography.code.lg.fontSize", token: "component.otpInput.typography.code.lg.fontSize" },
+        { slot: "typography.code.lg.lineHeight", token: "component.otpInput.typography.code.lg.lineHeight" },
+        { slot: "typography.code.lg.letterSpacing", token: "component.otpInput.typography.code.lg.letterSpacing" },
+        { slot: "typography.helper.sm.fontSize", token: "component.otpInput.typography.helper.sm.fontSize" },
+        { slot: "typography.helper.sm.lineHeight", token: "component.otpInput.typography.helper.sm.lineHeight" },
+        { slot: "typography.helper.sm.letterSpacing", token: "component.otpInput.typography.helper.sm.letterSpacing" },
+        { slot: "typography.helper.lg.fontSize", token: "component.otpInput.typography.helper.lg.fontSize" },
+        { slot: "typography.helper.lg.lineHeight", token: "component.otpInput.typography.helper.lg.lineHeight" },
+        { slot: "typography.helper.lg.letterSpacing", token: "component.otpInput.typography.helper.lg.letterSpacing" },
+        { slot: "color.helper.default.text", token: "component.textInput.color.helper.default.text" },
+        { slot: "color.helper.default.icon", token: "component.textInput.color.helper.default.icon" },
+        { slot: "color.helper.error.text", token: "component.textInput.color.helper.error.text" },
+        { slot: "color.helper.error.icon", token: "component.textInput.color.helper.error.icon" },
+        { slot: "color.helper.success.text", token: "component.textInput.color.helper.success.text" },
+        { slot: "color.helper.success.icon", token: "component.textInput.color.helper.success.icon" },
+        { slot: "color.field.rest.background", token: "component.textInput.color.field.rest.background" },
+        { slot: "color.field.rest.border", token: "component.textInput.color.field.rest.border" },
+        { slot: "color.field.rest.placeholder", token: "component.textInput.color.field.rest.placeholder" },
+        { slot: "color.field.rest.value", token: "component.textInput.color.field.rest.value" },
+        { slot: "color.field.hover.background", token: "component.textInput.color.field.hover.background" },
+        { slot: "color.field.hover.border", token: "component.textInput.color.field.hover.border" },
+        { slot: "color.field.hover.placeholder", token: "component.textInput.color.field.hover.placeholder" },
+        { slot: "color.field.hover.value", token: "component.textInput.color.field.hover.value" },
+        { slot: "color.field.active.background", token: "component.textInput.color.field.active.background" },
+        { slot: "color.field.active.border", token: "component.textInput.color.field.active.border" },
+        { slot: "color.field.active.placeholder", token: "component.textInput.color.field.active.placeholder" },
+        { slot: "color.field.active.value", token: "component.textInput.color.field.active.value" },
+        { slot: "color.field.typed.background", token: "component.textInput.color.field.typed.background" },
+        { slot: "color.field.typed.border", token: "component.textInput.color.field.typed.border" },
+        { slot: "color.field.typed.placeholder", token: "component.textInput.color.field.typed.placeholder" },
+        { slot: "color.field.typed.value", token: "component.textInput.color.field.typed.value" },
+        { slot: "color.field.error.background", token: "component.textInput.color.field.error.background" },
+        { slot: "color.field.error.border", token: "component.textInput.color.field.error.border" },
+        { slot: "color.field.error.placeholder", token: "component.textInput.color.field.error.placeholder" },
+        { slot: "color.field.error.value", token: "component.textInput.color.field.error.value" },
+        { slot: "color.field.success.background", token: "component.textInput.color.field.success.background" },
+        { slot: "color.field.success.border", token: "component.textInput.color.field.success.border" },
+        { slot: "color.field.success.placeholder", token: "component.textInput.color.field.success.placeholder" },
+        { slot: "color.field.success.value", token: "component.textInput.color.field.success.value" },
+        { slot: "color.field.disabled.background", token: "component.textInput.color.field.disabled.background" },
+        { slot: "color.field.disabled.border", token: "component.textInput.color.field.disabled.border" },
+        { slot: "color.field.disabled.placeholder", token: "component.textInput.color.field.disabled.placeholder" },
+        { slot: "color.field.disabled.value", token: "component.textInput.color.field.disabled.value" },
+        { slot: "action.typography.fontSize", token: "component.linkButton.typography.sm.fontSize" },
+        { slot: "action.typography.lineHeight", token: "component.linkButton.typography.sm.lineHeight" },
+        { slot: "action.typography.letterSpacing", token: "component.linkButton.typography.sm.letterSpacing" },
+        { slot: "action.color.rest", token: "component.linkButton.color.light.brand.rest" },
+        { slot: "action.color.hover", token: "component.linkButton.color.light.brand.hover" }
       ],
       themeScopes: ["cars24", "teambhp", "carinfo", "vehicleinfo"]
     },
@@ -751,6 +878,212 @@ export const designSystemRegistry: DesignSystemRegistry = {
       themeScopes: ["cars24", "teambhp", "carinfo", "vehicleinfo"]
     },
     {
+      canonicalId: "component.checkbox",
+      canonicalName: "Checkbox",
+      layer: "component",
+      status: "approved",
+      platform: "web",
+      figmaComponentName: "Checkbox",
+      description:
+        "Token-driven checkbox input with rest, indeterminate, selected, and disabled states across four visual sizes.",
+      webExport: "@geist/web/canonical/checkbox",
+      nativeExport: "",
+      variants: [
+        { name: "size", values: ["Small", "Medium", "Large", "Extra Large"] },
+        { name: "state", values: ["Rest", "Intermediate", "Selected"] },
+        { name: "disabled", values: ["false", "true"] }
+      ],
+      states: ["rest", "intermediate", "selected", "disabled"],
+      tokenBindings: [
+        { slot: "size.sm.boxSize", token: "component.checkbox.size.sm.boxSize" },
+        { slot: "size.md.boxSize", token: "component.checkbox.size.md.boxSize" },
+        { slot: "size.lg.boxSize", token: "component.checkbox.size.lg.boxSize" },
+        { slot: "size.xl.boxSize", token: "component.checkbox.size.xl.boxSize" },
+        { slot: "size.sm.borderRadius", token: "radius.sm" },
+        { slot: "size.md.borderRadius", token: "radius.alt.xs" },
+        { slot: "size.lg.borderRadius", token: "radius.alt.xs" },
+        { slot: "size.xl.borderRadius", token: "radius.alt.sm" },
+        { slot: "size.sm.iconSize", token: "component.checkbox.size.sm.iconSize" },
+        { slot: "size.md.iconSize", token: "component.checkbox.size.md.iconSize" },
+        { slot: "size.lg.iconSize", token: "component.checkbox.size.lg.iconSize" },
+        { slot: "size.xl.iconSize", token: "component.checkbox.size.xl.iconSize" },
+        { slot: "size.sm.borderWidth", token: "component.checkbox.size.sm.borderWidth" },
+        { slot: "size.md.borderWidth", token: "component.checkbox.size.md.borderWidth" },
+        { slot: "size.lg.borderWidth", token: "component.checkbox.size.lg.borderWidth" },
+        { slot: "size.xl.borderWidth", token: "component.checkbox.size.xl.borderWidth" },
+        {
+          slot: "size.sm.disabledCheckedBorderWidth",
+          token: "component.checkbox.size.sm.disabledCheckedBorderWidth"
+        },
+        {
+          slot: "size.md.disabledCheckedBorderWidth",
+          token: "component.checkbox.size.md.disabledCheckedBorderWidth"
+        },
+        {
+          slot: "size.lg.disabledCheckedBorderWidth",
+          token: "component.checkbox.size.lg.disabledCheckedBorderWidth"
+        },
+        {
+          slot: "size.xl.disabledCheckedBorderWidth",
+          token: "component.checkbox.size.xl.disabledCheckedBorderWidth"
+        },
+        { slot: "color.rest.background", token: "component.checkbox.color.rest.background" },
+        { slot: "color.rest.border", token: "component.checkbox.color.rest.border" },
+        { slot: "color.checked.background", token: "component.checkbox.color.checked.background" },
+        { slot: "color.checked.border", token: "component.checkbox.color.checked.border" },
+        { slot: "color.checked.foreground", token: "component.checkbox.color.checked.foreground" },
+        {
+          slot: "color.disabled.rest.background",
+          token: "component.checkbox.color.disabled.rest.background"
+        },
+        { slot: "color.disabled.rest.border", token: "component.checkbox.color.disabled.rest.border" },
+        {
+          slot: "color.disabled.checked.background",
+          token: "component.checkbox.color.disabled.checked.background"
+        },
+        {
+          slot: "color.disabled.checked.border",
+          token: "component.checkbox.color.disabled.checked.border"
+        },
+        {
+          slot: "color.disabled.checked.foreground",
+          token: "component.checkbox.color.disabled.checked.foreground"
+        },
+        { slot: "focus.outlineWidth", token: "component.checkbox.focus.outlineWidth" },
+        { slot: "focus.outlineOffset", token: "component.checkbox.focus.outlineOffset" },
+        { slot: "focus.outlineColor", token: "color.border.focus" }
+      ],
+      themeScopes: ["cars24", "teambhp", "carinfo", "vehicleinfo"]
+    },
+    {
+      canonicalId: "component.radio",
+      canonicalName: "Radio",
+      layer: "component",
+      status: "approved",
+      platform: "web",
+      figmaComponentName: "Radio",
+      description:
+        "Token-driven radio input with small and medium sizes, brand-aware selected fills, and disabled-state support.",
+      webExport: "@geist/web/canonical/radio",
+      nativeExport: "",
+      variants: [
+        { name: "size", values: ["Small", "Medium"] },
+        { name: "selected", values: ["false", "true"] },
+        { name: "disabled", values: ["false", "true"] }
+      ],
+      states: ["rest", "selected", "disabled"],
+      tokenBindings: [
+        { slot: "container.radius", token: "radius.pill" },
+        { slot: "size.sm.boxSize", token: "component.radio.size.sm.boxSize" },
+        { slot: "size.md.boxSize", token: "component.radio.size.md.boxSize" },
+        { slot: "size.sm.dotSize", token: "component.radio.size.sm.dotSize" },
+        { slot: "size.md.dotSize", token: "component.radio.size.md.dotSize" },
+        { slot: "size.sm.borderWidth", token: "component.radio.size.sm.borderWidth" },
+        { slot: "size.md.borderWidth", token: "component.radio.size.md.borderWidth" },
+        {
+          slot: "size.sm.selectedBorderWidth",
+          token: "component.radio.size.sm.selectedBorderWidth"
+        },
+        {
+          slot: "size.md.selectedBorderWidth",
+          token: "component.radio.size.md.selectedBorderWidth"
+        },
+        {
+          slot: "size.sm.disabledSelectedBorderWidth",
+          token: "component.radio.size.sm.disabledSelectedBorderWidth"
+        },
+        {
+          slot: "size.md.disabledSelectedBorderWidth",
+          token: "component.radio.size.md.disabledSelectedBorderWidth"
+        },
+        { slot: "color.rest.background", token: "component.radio.color.rest.background" },
+        { slot: "color.rest.border", token: "component.radio.color.rest.border" },
+        { slot: "color.selected.background", token: "component.radio.color.selected.background" },
+        { slot: "color.selected.border", token: "component.radio.color.selected.border" },
+        { slot: "color.selected.foreground", token: "component.radio.color.selected.foreground" },
+        {
+          slot: "color.disabled.rest.background",
+          token: "component.radio.color.disabled.rest.background"
+        },
+        { slot: "color.disabled.rest.border", token: "component.radio.color.disabled.rest.border" },
+        {
+          slot: "color.disabled.selected.background",
+          token: "component.radio.color.disabled.selected.background"
+        },
+        {
+          slot: "color.disabled.selected.border",
+          token: "component.radio.color.disabled.selected.border"
+        },
+        {
+          slot: "color.disabled.selected.foreground",
+          token: "component.radio.color.disabled.selected.foreground"
+        },
+        { slot: "focus.outlineWidth", token: "component.radio.focus.outlineWidth" },
+        { slot: "focus.outlineOffset", token: "component.radio.focus.outlineOffset" },
+        { slot: "focus.outlineColor", token: "color.border.focus" }
+      ],
+      themeScopes: ["cars24", "teambhp", "carinfo", "vehicleinfo"]
+    },
+    {
+      canonicalId: "component.switch",
+      canonicalName: "Switch",
+      layer: "component",
+      status: "approved",
+      platform: "web",
+      figmaComponentName: "Switch",
+      description:
+        "Token-driven switch input with default and small sizes, brand-aware selected states, and disabled-state support.",
+      webExport: "@geist/web/canonical/switch",
+      nativeExport: "",
+      variants: [
+        { name: "size", values: ["Default", "Small"] },
+        { name: "active", values: ["false", "true"] },
+        { name: "disabled", values: ["false", "true"] }
+      ],
+      states: ["rest", "selected", "disabled"],
+      tokenBindings: [
+        { slot: "container.radius", token: "radius.pill" },
+        { slot: "size.default.trackWidth", token: "component.switch.size.default.trackWidth" },
+        { slot: "size.default.trackHeight", token: "component.switch.size.default.trackHeight" },
+        { slot: "size.default.thumbSize", token: "component.switch.size.default.thumbSize" },
+        { slot: "size.default.padding", token: "component.switch.size.default.padding" },
+        {
+          slot: "size.default.thumbTranslateX",
+          token: "component.switch.size.default.thumbTranslateX"
+        },
+        { slot: "size.sm.trackWidth", token: "component.switch.size.sm.trackWidth" },
+        { slot: "size.sm.trackHeight", token: "component.switch.size.sm.trackHeight" },
+        { slot: "size.sm.thumbSize", token: "component.switch.size.sm.thumbSize" },
+        { slot: "size.sm.padding", token: "component.switch.size.sm.padding" },
+        { slot: "size.sm.thumbTranslateX", token: "component.switch.size.sm.thumbTranslateX" },
+        { slot: "color.rest.track", token: "component.switch.color.rest.track" },
+        { slot: "color.rest.thumb", token: "component.switch.color.rest.thumb" },
+        { slot: "color.selected.track", token: "component.switch.color.selected.track" },
+        { slot: "color.selected.thumb", token: "component.switch.color.selected.thumb" },
+        {
+          slot: "color.disabled.rest.track",
+          token: "component.switch.color.disabled.rest.track"
+        },
+        {
+          slot: "color.disabled.rest.thumb",
+          token: "component.switch.color.disabled.rest.thumb"
+        },
+        {
+          slot: "color.disabled.selected.track",
+          token: "component.switch.color.disabled.selected.track"
+        },
+        {
+          slot: "color.disabled.selected.thumb",
+          token: "component.switch.color.disabled.selected.thumb"
+        },
+        { slot: "thumb.shadow", token: "component.switch.thumb.shadow" },
+        { slot: "focus.outlineWidth", token: "component.switch.focus.outlineWidth" },
+        { slot: "focus.outlineOffset", token: "component.switch.focus.outlineOffset" },
+        { slot: "focus.outlineColor", token: "color.border.focus" }
+      ],
+      themeScopes: ["cars24", "teambhp", "carinfo", "vehicleinfo"]
+    },
+    {
       canonicalId: "component.accordion",
       canonicalName: "Accordion",
       layer: "component",
@@ -794,6 +1127,236 @@ export const designSystemRegistry: DesignSystemRegistry = {
         { slot: "typography.supporting.fontSize", token: "var(--cars24-typography-size-utility-label-2)" },
         { slot: "typography.supporting.lineHeight", token: "var(--cars24-typography-line-height-utility-label-2)" },
         { slot: "typography.body", token: "paragraph/body-2" }
+      ],
+      themeScopes: ["cars24", "teambhp", "carinfo", "vehicleinfo"]
+    },
+    {
+      canonicalId: "component.checkboxLabel",
+      canonicalName: "Checkbox Label",
+      layer: "component",
+      status: "approved",
+      platform: "web",
+      figmaComponentName: "Checkbox Label",
+      description:
+        "Composed checkbox field with inline label and supporting description sized to match the checkbox control.",
+      webExport: "@geist/web/canonical/checkbox-label",
+      nativeExport: "",
+      variants: [
+        { name: "size", values: ["Small", "Medium", "Large"] },
+        { name: "state", values: ["Rest", "Intermediate", "Selected"] },
+        { name: "disabled", values: ["false", "true"] },
+        { name: "description", values: ["false", "true"] }
+      ],
+      states: ["rest", "intermediate", "selected", "disabled"],
+      tokenBindings: [
+        { slot: "layout.gap", token: "component.checkboxLabel.layout.gap" },
+        {
+          slot: "layout.contentPaddingInline",
+          token: "component.checkboxLabel.layout.contentPaddingInline"
+        },
+        { slot: "size.sm.contentGap", token: "component.checkboxLabel.size.sm.contentGap" },
+        { slot: "size.md.contentGap", token: "component.checkboxLabel.size.md.contentGap" },
+        { slot: "size.lg.contentGap", token: "component.checkboxLabel.size.lg.contentGap" },
+        {
+          slot: "typography.label.sm.fontSize",
+          token: "component.checkboxLabel.typography.label.sm.fontSize"
+        },
+        {
+          slot: "typography.label.sm.lineHeight",
+          token: "component.checkboxLabel.typography.label.sm.lineHeight"
+        },
+        {
+          slot: "typography.label.md.fontSize",
+          token: "component.checkboxLabel.typography.label.md.fontSize"
+        },
+        {
+          slot: "typography.label.md.lineHeight",
+          token: "component.checkboxLabel.typography.label.md.lineHeight"
+        },
+        {
+          slot: "typography.label.lg.fontSize",
+          token: "component.checkboxLabel.typography.label.lg.fontSize"
+        },
+        {
+          slot: "typography.label.lg.lineHeight",
+          token: "component.checkboxLabel.typography.label.lg.lineHeight"
+        },
+        {
+          slot: "typography.description.sm.fontSize",
+          token: "component.checkboxLabel.typography.description.sm.fontSize"
+        },
+        {
+          slot: "typography.description.sm.lineHeight",
+          token: "component.checkboxLabel.typography.description.sm.lineHeight"
+        },
+        {
+          slot: "typography.description.md.fontSize",
+          token: "component.checkboxLabel.typography.description.md.fontSize"
+        },
+        {
+          slot: "typography.description.md.lineHeight",
+          token: "component.checkboxLabel.typography.description.md.lineHeight"
+        },
+        {
+          slot: "typography.description.lg.fontSize",
+          token: "component.checkboxLabel.typography.description.lg.fontSize"
+        },
+        {
+          slot: "typography.description.lg.lineHeight",
+          token: "component.checkboxLabel.typography.description.lg.lineHeight"
+        },
+        { slot: "color.label.default", token: "component.checkboxLabel.color.label.default" },
+        { slot: "color.label.disabled", token: "component.checkboxLabel.color.label.disabled" },
+        {
+          slot: "color.description.default",
+          token: "component.checkboxLabel.color.description.default"
+        },
+        {
+          slot: "color.description.disabled",
+          token: "component.checkboxLabel.color.description.disabled"
+        }
+      ],
+      themeScopes: ["cars24", "teambhp", "carinfo", "vehicleinfo"]
+    },
+    {
+      canonicalId: "component.radioLabel",
+      canonicalName: "Radio Label",
+      layer: "component",
+      status: "approved",
+      platform: "web",
+      figmaComponentName: "Radio Label",
+      description:
+        "Composed radio field with inline label and supporting description sized to match the underlying radio control.",
+      webExport: "@geist/web/canonical/radio-label",
+      nativeExport: "",
+      variants: [
+        { name: "size", values: ["Small", "Medium"] },
+        { name: "selected", values: ["false", "true"] },
+        { name: "disabled", values: ["false", "true"] },
+        { name: "description", values: ["false", "true"] }
+      ],
+      states: ["rest", "selected", "disabled"],
+      tokenBindings: [
+        { slot: "layout.gap", token: "component.radioLabel.layout.gap" },
+        {
+          slot: "layout.contentPaddingInline",
+          token: "component.radioLabel.layout.contentPaddingInline"
+        },
+        { slot: "size.sm.contentGap", token: "component.radioLabel.size.sm.contentGap" },
+        { slot: "size.md.contentGap", token: "component.radioLabel.size.md.contentGap" },
+        {
+          slot: "typography.label.sm.fontSize",
+          token: "component.radioLabel.typography.label.sm.fontSize"
+        },
+        {
+          slot: "typography.label.sm.lineHeight",
+          token: "component.radioLabel.typography.label.sm.lineHeight"
+        },
+        {
+          slot: "typography.label.md.fontSize",
+          token: "component.radioLabel.typography.label.md.fontSize"
+        },
+        {
+          slot: "typography.label.md.lineHeight",
+          token: "component.radioLabel.typography.label.md.lineHeight"
+        },
+        {
+          slot: "typography.description.sm.fontSize",
+          token: "component.radioLabel.typography.description.sm.fontSize"
+        },
+        {
+          slot: "typography.description.sm.lineHeight",
+          token: "component.radioLabel.typography.description.sm.lineHeight"
+        },
+        {
+          slot: "typography.description.md.fontSize",
+          token: "component.radioLabel.typography.description.md.fontSize"
+        },
+        {
+          slot: "typography.description.md.lineHeight",
+          token: "component.radioLabel.typography.description.md.lineHeight"
+        },
+        { slot: "color.label.default", token: "component.radioLabel.color.label.default" },
+        { slot: "color.label.disabled", token: "component.radioLabel.color.label.disabled" },
+        {
+          slot: "color.description.default",
+          token: "component.radioLabel.color.description.default"
+        },
+        {
+          slot: "color.description.disabled",
+          token: "component.radioLabel.color.description.disabled"
+        }
+      ],
+      themeScopes: ["cars24", "teambhp", "carinfo", "vehicleinfo"]
+    },
+    {
+      canonicalId: "component.switchLabel",
+      canonicalName: "Switch Label",
+      layer: "component",
+      status: "approved",
+      platform: "web",
+      figmaComponentName: "Switch Label",
+      description:
+        "Composed switch field with inline label and supporting description sized to match the underlying switch control.",
+      webExport: "@geist/web/canonical/switch-label",
+      nativeExport: "",
+      variants: [
+        { name: "size", values: ["Default", "Small"] },
+        { name: "selected", values: ["false", "true"] },
+        { name: "disabled", values: ["false", "true"] },
+        { name: "description", values: ["false", "true"] }
+      ],
+      states: ["rest", "selected", "disabled"],
+      tokenBindings: [
+        { slot: "layout.gap", token: "component.switchLabel.layout.gap" },
+        {
+          slot: "layout.contentPaddingInline",
+          token: "component.switchLabel.layout.contentPaddingInline"
+        },
+        { slot: "size.default.contentGap", token: "component.switchLabel.size.default.contentGap" },
+        { slot: "size.sm.contentGap", token: "component.switchLabel.size.sm.contentGap" },
+        {
+          slot: "typography.label.default.fontSize",
+          token: "component.switchLabel.typography.label.default.fontSize"
+        },
+        {
+          slot: "typography.label.default.lineHeight",
+          token: "component.switchLabel.typography.label.default.lineHeight"
+        },
+        {
+          slot: "typography.label.sm.fontSize",
+          token: "component.switchLabel.typography.label.sm.fontSize"
+        },
+        {
+          slot: "typography.label.sm.lineHeight",
+          token: "component.switchLabel.typography.label.sm.lineHeight"
+        },
+        {
+          slot: "typography.description.default.fontSize",
+          token: "component.switchLabel.typography.description.default.fontSize"
+        },
+        {
+          slot: "typography.description.default.lineHeight",
+          token: "component.switchLabel.typography.description.default.lineHeight"
+        },
+        {
+          slot: "typography.description.sm.fontSize",
+          token: "component.switchLabel.typography.description.sm.fontSize"
+        },
+        {
+          slot: "typography.description.sm.lineHeight",
+          token: "component.switchLabel.typography.description.sm.lineHeight"
+        },
+        { slot: "color.label.default", token: "component.switchLabel.color.label.default" },
+        { slot: "color.label.disabled", token: "component.switchLabel.color.label.disabled" },
+        {
+          slot: "color.description.default",
+          token: "component.switchLabel.color.description.default"
+        },
+        {
+          slot: "color.description.disabled",
+          token: "component.switchLabel.color.description.disabled"
+        }
       ],
       themeScopes: ["cars24", "teambhp", "carinfo", "vehicleinfo"]
     },
@@ -1142,6 +1705,32 @@ export const designSystemRegistry: DesignSystemRegistry = {
     }
   ],
   widgets: [
+    {
+      canonicalId: "widget.module",
+      canonicalName: "Module",
+      layer: "widget",
+      status: "approved",
+      platform: "web",
+      description: "Reusable content module that packages related information and actions into one block.",
+      composition: ["component.sectionHeader", "component.buttonGroup"],
+      allowedChildren: [
+        "component.accordion",
+        "component.backToTopButton",
+        "component.badge",
+        "component.banner",
+        "component.button",
+        "component.buttonGroup",
+        "component.captionButton",
+        "component.divider",
+        "component.iconButton",
+        "component.label",
+        "component.linkButton",
+        "component.phoneInput",
+        "component.sectionHeader",
+        "component.socialButton",
+        "component.textInput"
+      ]
+    },
     {
       canonicalId: "widget.auth-card",
       canonicalName: "Auth Card",

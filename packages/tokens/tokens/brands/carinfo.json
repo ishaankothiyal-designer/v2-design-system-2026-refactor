@@ -103,6 +103,34 @@
           }
         }
       }
+    },
+    "checkbox": {
+      "color": {
+        "checked": {
+          "background": "#08979C",
+          "border": "#08979C"
+        }
+      }
+    },
+    "radio": {
+      "color": {
+        "selected": {
+          "background": "#08979C",
+          "border": "#08979C"
+        }
+      }
+    },
+    "switch": {
+      "color": {
+        "selected": {
+          "track": "#08979C"
+        },
+        "disabled": {
+          "selected": {
+            "track": "#B4F7EE"
+          }
+        }
+      }
     }
   },
   "radius": {
