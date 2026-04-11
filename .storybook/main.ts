@@ -9,7 +9,7 @@ const config: StorybookConfig = {
   addons: [
     "@storybook/addon-docs",
     "@storybook/addon-vitest",
-    "@github-ui/storybook-addon-performance-panel"
+    "@github-ui/storybook-addon-performance-panel/preset"
   ]
 };
 
