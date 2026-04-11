@@ -126,8 +126,8 @@ const inspectItems = [
               type="Neutral"
               priority="Low"
               pillShape="Yes"
-              iconLeft={false}
-              iconRight={false}
+              showLeadingIcon={false}
+              showTrailingIcon={false}
             />
           }
         />

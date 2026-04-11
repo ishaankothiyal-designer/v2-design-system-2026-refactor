@@ -28,89 +28,187 @@ export type BadgePriority = "High" | "Medium" | "Low";
 export type BadgePillShape = "Yes" | "No";
 export type BadgeInteractionState = "default" | "hover" | "focus" | "active";
 
-const BADGE_SIZE_TOKENS = {
+type BadgeSizeTokens = {
+  minHeight: string;
+  icon: string;
+  gap: string;
+  radius: string;
+  paddingX: string;
+  paddingY: string;
+  pillPaddingX: string;
+  fontSize: string;
+  lineHeight: string;
+};
+
+type BadgeToneTokens = {
+  background: string;
+  text: string;
+  border?: string;
+};
+
+const BADGE_SIZE_TOKENS: Record<BadgeSize, BadgeSizeTokens> = {
   "Extra Small": {
-    height: 20,
-    icon: 12,
-    gap: 2,
-    radius: 6,
-    paddingX: 4,
-    paddingY: 4,
-    pillPaddingX: 6,
-    fontSize: 11,
-    lineHeight: 14
+    minHeight: "var(--cars24-misc-size-20, 20px)",
+    icon: "var(--cars24-misc-size-12, 12px)",
+    gap: "var(--cars24-misc-gap-2, 2px)",
+    radius: "var(--cars24-theme-radius-alt-xs, 6px)",
+    paddingX: "var(--cars24-misc-gap-4, 4px)",
+    paddingY: "var(--cars24-misc-gap-4, 4px)",
+    pillPaddingX: "var(--cars24-misc-gap-6, 6px)",
+    fontSize: "var(--cars24-typography-size-utility-label-4, 11px)",
+    lineHeight: "var(--cars24-typography-line-height-utility-label-4, 14px)"
   },
   Small: {
-    height: 24,
-    icon: 14,
-    gap: 2,
-    radius: 8,
-    paddingX: 4,
-    paddingY: 4,
-    pillPaddingX: 8,
-    fontSize: 14,
-    lineHeight: 18
+    minHeight: "var(--cars24-misc-size-24, 24px)",
+    icon: "var(--cars24-misc-size-14, 14px)",
+    gap: "var(--cars24-misc-gap-2, 2px)",
+    radius: "var(--cars24-theme-radius-alt-sm, 8px)",
+    paddingX: "var(--cars24-misc-gap-4, 4px)",
+    paddingY: "var(--cars24-misc-gap-4, 4px)",
+    pillPaddingX: "var(--cars24-misc-gap-8, 8px)",
+    fontSize: "var(--cars24-typography-size-utility-label-3, 12px)",
+    lineHeight: "var(--cars24-typography-line-height-utility-label-3, 16px)"
   },
   Medium: {
-    height: 36,
-    icon: 18,
-    gap: 4,
-    radius: 12,
-    paddingX: 8,
-    paddingY: 8,
-    pillPaddingX: 10,
-    fontSize: 16,
-    lineHeight: 20
+    minHeight: "var(--cars24-misc-size-36, 36px)",
+    icon: "var(--cars24-misc-size-18, 18px)",
+    gap: "var(--cars24-misc-gap-4, 4px)",
+    radius: "var(--cars24-theme-radius-alt-md, 12px)",
+    paddingX: "var(--cars24-misc-gap-8, 8px)",
+    paddingY: "var(--cars24-misc-gap-8, 8px)",
+    pillPaddingX: "var(--cars24-misc-gap-10, 10px)",
+    fontSize: "var(--cars24-typography-size-utility-label-1, 16px)",
+    lineHeight: "var(--cars24-typography-line-height-utility-label-1, 20px)"
   }
-} as const;
+};
 
 const BADGE_TYPE_TOKENS: Record<
   BadgeType,
   {
-    High: { background: string; text: string; border?: string };
-    Medium: { background: string; text: string; border?: string };
-    Low: { background: string; text: string; border?: string };
+    High: BadgeToneTokens;
+    Medium: BadgeToneTokens;
+    Low: BadgeToneTokens;
   }
 > = {
   "Drive pink": {
-    High: { background: "#E519A0", text: "#FFFFFF" },
-    Medium: { background: "#FFE8F7", text: "#E519A0", border: "#E519A0" },
-    Low: { background: "#FFE8F7", text: "#E519A0" }
+    High: {
+      background: "var(--cars24-primitive-drive-pink-600, #E519A0)",
+      text: "var(--cars24-semantic-text-primary-inverse, #FFFFFF)"
+    },
+    Medium: {
+      background: "var(--cars24-primitive-drive-pink-50, #FFE8F7)",
+      text: "var(--cars24-primitive-drive-pink-600, #E519A0)",
+      border: "var(--cars24-primitive-drive-pink-600, #E519A0)"
+    },
+    Low: {
+      background: "var(--cars24-primitive-drive-pink-50, #FFE8F7)",
+      text: "var(--cars24-primitive-drive-pink-600, #E519A0)"
+    }
   },
   Error: {
-    High: { background: "#DC2626", text: "#FFFFFF" },
-    Medium: { background: "#FEF2F2", text: "#DC2626", border: "#DC2626" },
-    Low: { background: "#FEF2F2", text: "#DC2626" }
+    High: {
+      background: "var(--cars24-semantic-bg-danger-base, #DC2626)",
+      text: "var(--cars24-semantic-text-primary-inverse, #FFFFFF)"
+    },
+    Medium: {
+      background: "var(--cars24-semantic-bg-danger-subtler, #FEF2F2)",
+      text: "var(--cars24-semantic-text-danger-base, #DC2626)",
+      border: "var(--cars24-semantic-border-danger-base, #DC2626)"
+    },
+    Low: {
+      background: "var(--cars24-semantic-bg-danger-subtler, #FEF2F2)",
+      text: "var(--cars24-semantic-text-danger-base, #DC2626)"
+    }
   },
   Feature: {
-    High: { background: "#D300F4", text: "#FFFFFF" },
-    Medium: { background: "#FBE6FE", text: "#D300F4", border: "#D300F4" },
-    Low: { background: "#FBE6FE", text: "#D300F4" }
+    High: {
+      background: "var(--cars24-primitive-pop-purple-500, #D300F4)",
+      text: "var(--cars24-semantic-text-primary-inverse, #FFFFFF)"
+    },
+    Medium: {
+      background: "var(--cars24-primitive-pop-purple-50, #FBE6FE)",
+      text: "var(--cars24-primitive-pop-purple-500, #D300F4)",
+      border: "var(--cars24-primitive-pop-purple-500, #D300F4)"
+    },
+    Low: {
+      background: "var(--cars24-primitive-pop-purple-50, #FBE6FE)",
+      text: "var(--cars24-primitive-pop-purple-500, #D300F4)"
+    }
   },
   Information: {
-    High: { background: "#296FE3", text: "#FFFFFF" },
-    Medium: { background: "#F0F7FF", text: "#296FE3", border: "#296FE3" },
-    Low: { background: "#F0F7FF", text: "#296FE3" }
+    High: {
+      background: "var(--cars24-semantic-bg-info-base, #296FE3)",
+      text: "var(--cars24-semantic-text-primary-inverse, #FFFFFF)"
+    },
+    Medium: {
+      background: "var(--cars24-semantic-bg-info-subtler, #F0F7FF)",
+      text: "var(--cars24-semantic-text-info-base, #296FE3)",
+      border: "var(--cars24-semantic-bg-info-base, #296FE3)"
+    },
+    Low: {
+      background: "var(--cars24-semantic-bg-info-subtler, #F0F7FF)",
+      text: "var(--cars24-semantic-text-info-base, #296FE3)"
+    }
   },
   Neutral: {
-    High: { background: "#0A0A0A", text: "#FFFFFF" },
-    Medium: { background: "#F1F5F9", text: "#64748B", border: "#94A3B8" },
-    Low: { background: "#E2E8F0", text: "#64748B" }
+    High: {
+      background: "var(--cars24-semantic-bg-primary-inverse, #0A0A0A)",
+      text: "var(--cars24-semantic-text-primary-inverse, #FFFFFF)"
+    },
+    Medium: {
+      background: "var(--cars24-semantic-bg-secondary, #F1F5F9)",
+      text: "var(--cars24-semantic-text-secondary, #64748B)",
+      border: "var(--cars24-semantic-border-tertiary, #94A3B8)"
+    },
+    Low: {
+      background: "var(--cars24-semantic-bg-tertiary, #E2E8F0)",
+      text: "var(--cars24-semantic-text-secondary, #64748B)"
+    }
   },
   "Sky surge": {
-    High: { background: "#159DA3", text: "#FFFFFF" },
-    Medium: { background: "#EFFDFD", text: "#159DA3", border: "#159DA3" },
-    Low: { background: "#CEFBFA", text: "#159DA3" }
+    High: {
+      background: "var(--cars24-primitive-sky-surge-700, #159DA3)",
+      text: "var(--cars24-semantic-text-primary-inverse, #FFFFFF)"
+    },
+    Medium: {
+      background: "var(--cars24-primitive-sky-surge-50, #EFFDFD)",
+      text: "var(--cars24-primitive-sky-surge-700, #159DA3)",
+      border: "var(--cars24-primitive-sky-surge-700, #159DA3)"
+    },
+    Low: {
+      background: "var(--cars24-primitive-sky-surge-100, #CEFBFA)",
+      text: "var(--cars24-primitive-sky-surge-700, #159DA3)"
+    }
   },
   Success: {
-    High: { background: "#1C9C1C", text: "#FFFFFF" },
-    Medium: { background: "#F4FCF4", text: "#1C9C1C", border: "#1C9C1C" },
-    Low: { background: "#E4F9E0", text: "#1C9C1C" }
+    High: {
+      background: "var(--cars24-semantic-bg-success-base, #1C9C1C)",
+      text: "var(--cars24-semantic-text-primary-inverse, #FFFFFF)"
+    },
+    Medium: {
+      background: "var(--cars24-semantic-bg-success-subtler, #F4FCF4)",
+      text: "var(--cars24-semantic-text-success-base, #1C9C1C)",
+      border: "var(--cars24-semantic-border-success-base, #1C9C1C)"
+    },
+    Low: {
+      background: "var(--cars24-semantic-bg-success-subtle, #E4F9E0)",
+      text: "var(--cars24-semantic-text-success-base, #1C9C1C)"
+    }
   },
   Warning: {
-    High: { background: "#E17100", text: "#FFFFFF" },
-    Medium: { background: "#FFFBEB", text: "#E17100", border: "#E17100" },
-    Low: { background: "#FEF3C6", text: "#E17100" }
+    High: {
+      background: "var(--cars24-semantic-bg-warning-base, #E17100)",
+      text: "var(--cars24-semantic-text-primary-inverse, #FFFFFF)"
+    },
+    Medium: {
+      background: "var(--cars24-semantic-bg-warning-subtler, #FFFBEB)",
+      text: "var(--cars24-semantic-text-warning-base, #E17100)",
+      border: "var(--cars24-semantic-border-warning-base, #E17100)"
+    },
+    Low: {
+      background: "var(--cars24-semantic-bg-warning-subtle, #FEF3C6)",
+      text: "var(--cars24-semantic-text-warning-base, #E17100)"
+    }
   }
 };
 
@@ -185,6 +283,10 @@ export interface BadgeProps {
   type?: BadgeType;
   priority?: BadgePriority;
   pillShape?: BadgePillShape;
+  showLeadingIcon?: boolean;
+  showTrailingIcon?: boolean;
+  leadingIcon?: ReactNode | null;
+  trailingIcon?: ReactNode | null;
   iconLeft?: boolean;
   iconRight?: boolean;
   changeLeftIcon?: ReactNode | null;
@@ -196,6 +298,31 @@ export interface BadgeProps {
   style?: CSSProperties;
 }
 
+function renderBadgeIcon(icon: ReactNode, color: string, size: string) {
+  if (!icon) {
+    return null;
+  }
+
+  return (
+    <span
+      aria-hidden="true"
+      style={{
+        alignItems: "center",
+        color,
+        display: "inline-flex",
+        flexShrink: 0,
+        fontSize: size,
+        height: size,
+        justifyContent: "center",
+        lineHeight: 0,
+        width: size
+      }}
+    >
+      {icon}
+    </span>
+  );
+}
+
 export function Badge({
   brand = "core",
   labelText = "Badge",
@@ -203,10 +330,14 @@ export function Badge({
   type = "Neutral",
   priority = "Medium",
   pillShape = "No",
-  iconLeft = true,
-  iconRight = true,
-  changeLeftIcon = null,
-  changeRightIcon = null,
+  showLeadingIcon,
+  showTrailingIcon,
+  leadingIcon,
+  trailingIcon,
+  iconLeft,
+  iconRight,
+  changeLeftIcon,
+  changeRightIcon,
   disabled = false,
   forceState,
   onDismiss,
@@ -228,20 +359,20 @@ export function Badge({
   });
   const transition = "180ms cubic-bezier(0.2, 0, 0, 1)";
   const focusColor = String(getRequiredThemeTokenValue(brand, "color.border.focus"));
-  const medium = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.medium"));
   const fallbackFontFamily = String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"));
   const isPill = pillShape === "Yes";
+  const resolvedShowLeadingIcon = showLeadingIcon ?? iconLeft ?? true;
+  const resolvedShowTrailingIcon = showTrailingIcon ?? iconRight ?? true;
 
   const containerStyles: CSSProperties = {
     display: "inline-flex",
     boxSizing: "border-box",
     alignItems: "center",
     justifyContent: "center",
-    gap: metrics.gap,
-    height: metrics.height,
+    minHeight: metrics.minHeight,
     width: "fit-content",
-    padding: `${metrics.paddingY}px ${isPill ? metrics.pillPaddingX : metrics.paddingX}px`,
-    borderRadius: isPill ? 999 : metrics.radius,
+    padding: `${metrics.paddingY} ${isPill ? metrics.pillPaddingX : metrics.paddingX}`,
+    borderRadius: isPill ? "var(--cars24-theme-radius-full, 999px)" : metrics.radius,
     backgroundColor: colors.background,
     border: colors.border ? `1px solid ${colors.border}` : "1px solid transparent",
     color: colors.text,
@@ -249,35 +380,36 @@ export function Badge({
     opacity: disabled ? 0.48 : 1,
     boxShadow:
       activeState === "focus" ? `0 0 0 3px ${hexToRgba(focusColor, 0.26)}` : "none",
-    fontFamily: `Geist, ${fallbackFontFamily}, sans-serif`,
+    fontFamily: `var(--cars24-theme-font-family-primary, Geist), ${fallbackFontFamily}, sans-serif`,
     fontSize: metrics.fontSize,
-    fontWeight: medium,
-    lineHeight: `${metrics.lineHeight}px`,
+    fontWeight: "var(--cars24-theme-font-weight-medium, 500)",
+    lineHeight: metrics.lineHeight,
     letterSpacing: 0,
     whiteSpace: "nowrap",
     transition: `filter ${transition}, box-shadow ${transition}, opacity ${transition}`,
     ...style
   };
 
-  const iconStyles: CSSProperties = {
-    fontSize: metrics.icon,
-    color: colors.text,
-    lineHeight: 1,
-    width: metrics.icon,
-    height: metrics.icon,
-    display: "inline-flex",
+  const contentStyles: CSSProperties = {
     alignItems: "center",
+    columnGap: metrics.gap,
+    display: "inline-flex",
     justifyContent: "center",
-    flexShrink: 0
+    minWidth: 0
   };
 
-  const defaultLeadingIcon = (
-    <Icon brand={brand} name="sparkle-line" decorative style={iconStyles} />
-  );
+  const labelStyles: CSSProperties = {
+    color: colors.text,
+    display: "inline-flex",
+    alignItems: "center",
+    lineHeight: metrics.lineHeight
+  };
 
-  const defaultTrailingIcon = (
-    <Icon brand={brand} name="close-line" decorative style={iconStyles} />
-  );
+  const defaultLeadingIcon = <Icon brand={brand} name="sparkle-line" decorative />;
+
+  const defaultTrailingIcon = <Icon brand={brand} name="close-line" decorative />;
+  const resolvedLeadingIcon = leadingIcon ?? changeLeftIcon ?? defaultLeadingIcon;
+  const resolvedTrailingIcon = trailingIcon ?? changeRightIcon ?? defaultTrailingIcon;
 
   const handleDismiss = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
@@ -305,43 +437,47 @@ export function Badge({
         setPressed(false);
       }}
     >
-      {iconLeft ? changeLeftIcon ?? defaultLeadingIcon : null}
-      <span>{labelText}</span>
-      {iconRight ? (
-        onDismiss ? (
-          <button
-            type="button"
-            aria-label={`Remove ${labelText}`}
-            disabled={disabled}
-            onClick={handleDismiss}
-            onFocus={() => setFocused(true)}
-            onBlur={() => {
-              setFocused(false);
-              setPressed(false);
-            }}
-            onMouseDown={() => setPressed(true)}
-            onMouseUp={() => setPressed(false)}
-            onKeyDown={handleDismissKeyDown}
-            onKeyUp={() => setPressed(false)}
-            style={{
-              appearance: "none",
-              background: "transparent",
-              border: 0,
-              color: "inherit",
-              padding: 0,
-              margin: 0,
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: disabled ? "not-allowed" : "pointer"
-            }}
-          >
-            {changeRightIcon ?? defaultTrailingIcon}
-          </button>
-        ) : (
-          changeRightIcon ?? defaultTrailingIcon
-        )
-      ) : null}
+      <span style={contentStyles}>
+        {resolvedShowLeadingIcon ? renderBadgeIcon(resolvedLeadingIcon, colors.text, metrics.icon) : null}
+        <span style={labelStyles}>{labelText}</span>
+        {resolvedShowTrailingIcon ? (
+          onDismiss ? (
+            <button
+              type="button"
+              aria-label={`Remove ${labelText}`}
+              disabled={disabled}
+              onClick={handleDismiss}
+              onFocus={() => setFocused(true)}
+              onBlur={() => {
+                setFocused(false);
+                setPressed(false);
+              }}
+              onMouseDown={() => setPressed(true)}
+              onMouseUp={() => setPressed(false)}
+              onKeyDown={handleDismissKeyDown}
+              onKeyUp={() => setPressed(false)}
+              style={{
+                appearance: "none",
+                background: "transparent",
+                border: 0,
+                color: "inherit",
+                padding: 0,
+                margin: 0,
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: disabled ? "not-allowed" : "pointer",
+                flexShrink: 0,
+                lineHeight: 0
+              }}
+            >
+              {renderBadgeIcon(resolvedTrailingIcon, colors.text, metrics.icon)}
+            </button>
+          ) : (
+            renderBadgeIcon(resolvedTrailingIcon, colors.text, metrics.icon)
+          )
+        ) : null}
+      </span>
     </span>
   );
 }

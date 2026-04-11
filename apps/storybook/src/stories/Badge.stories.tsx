@@ -127,8 +127,8 @@ function ConfigurationsStory() {
           size="Extra Small"
           pillShape="Yes"
           labelText="Badge"
-          iconLeft={false}
-          iconRight={false}
+          showLeadingIcon={false}
+          showTrailingIcon={false}
         />
       )
     },
@@ -161,8 +161,8 @@ function ConfigurationsStory() {
           priority="Medium"
           size="Medium"
           labelText="Custom"
-          changeLeftIcon={<Icon name="calendar-line" decorative style={{ fontSize: 18, color: "#D300F4" }} />}
-          changeRightIcon={<Icon name="check-outline" decorative style={{ fontSize: 18, color: "#D300F4" }} />}
+          leadingIcon={<Icon name="calendar-line" decorative />}
+          trailingIcon={<Icon name="check-outline" decorative />}
         />
       )
     },
@@ -180,8 +180,8 @@ function ConfigurationsStory() {
                 size="Extra Small"
                 pillShape="Yes"
                 labelText="New"
-                iconLeft={false}
-                iconRight={false}
+                showLeadingIcon={false}
+                showTrailingIcon={false}
               />
             }
           />
@@ -243,10 +243,10 @@ const meta: Meta<BadgeStoryArgs> = {
     type: "Neutral",
     priority: "Medium",
     pillShape: "No",
-    iconLeft: true,
-    iconRight: true,
-    changeLeftIcon: null,
-    changeRightIcon: null,
+    showLeadingIcon: true,
+    showTrailingIcon: true,
+    leadingIcon: null,
+    trailingIcon: null,
     disabled: false,
     dismissible: false
   },
@@ -271,10 +271,10 @@ const meta: Meta<BadgeStoryArgs> = {
       control: "inline-radio",
       options: pillShapes
     },
-    iconLeft: {
+    showLeadingIcon: {
       control: "boolean"
     },
-    iconRight: {
+    showTrailingIcon: {
       control: "boolean"
     },
     forceState: {
@@ -284,11 +284,31 @@ const meta: Meta<BadgeStoryArgs> = {
     dismissible: {
       control: "boolean"
     },
-    changeLeftIcon: {
+    leadingIcon: {
       control: false
     },
-    changeRightIcon: {
+    trailingIcon: {
       control: false
+    },
+    iconLeft: {
+      table: {
+        disable: true
+      }
+    },
+    iconRight: {
+      table: {
+        disable: true
+      }
+    },
+    changeLeftIcon: {
+      table: {
+        disable: true
+      }
+    },
+    changeRightIcon: {
+      table: {
+        disable: true
+      }
     }
   },
   render: (args) => {

@@ -52,8 +52,8 @@ export function Example() {
               type="Neutral"
               priority="Low"
               pillShape="Yes"
-              iconLeft={false}
-              iconRight={false}
+              showLeadingIcon={false}
+              showTrailingIcon={false}
             />
           }
         />
@@ -73,8 +73,8 @@ export function Example() {
           type="Neutral"
           priority="Low"
           pillShape="Yes"
-          iconLeft={false}
-          iconRight={false}
+          showLeadingIcon={false}
+          showTrailingIcon={false}
         />
       }
     />
@@ -113,8 +113,8 @@ export function Example() {
       type="Neutral"
       priority="Medium"
       pillShape="No"
-      iconLeft={true}
-      iconRight={true}
+      showLeadingIcon={true}
+      showTrailingIcon={true}
     />
   );
 }`,
