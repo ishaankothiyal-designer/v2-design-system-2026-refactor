@@ -5,7 +5,7 @@ import {
   type ReactNode,
   useState
 } from "react";
-import type { BrandId } from "@geist/tokens";
+import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
 import { getRequiredThemeTokenValue } from "../theme";
 
@@ -418,7 +418,7 @@ function renderSlot(content: ReactNode, color: string, size: string) {
 }
 
 export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "size"> {
-  brand?: BrandId;
+  brand?: DisplayBrandId;
   shape?: ButtonShape;
   styleVariant?: ButtonStyleVariant;
   size?: ButtonSize | LegacyButtonSize;
@@ -431,7 +431,7 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
 }
 
 export function Button({
-  brand = "core",
+  brand = "Cars24",
   shape = "Regular",
   styleVariant,
   size = "Medium",

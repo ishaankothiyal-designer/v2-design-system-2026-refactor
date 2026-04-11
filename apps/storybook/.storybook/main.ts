@@ -6,7 +6,11 @@ const config: StorybookConfig = {
     options: {}
   },
   stories: ["../src/**/*.stories.@(ts|tsx|mdx)"],
-  addons: ["@storybook/addon-docs", "@storybook/addon-vitest"]
+  addons: [
+    "@storybook/addon-docs",
+    "@storybook/addon-vitest",
+    "@github-ui/storybook-addon-performance-panel"
+  ]
 };
 
 export default config;

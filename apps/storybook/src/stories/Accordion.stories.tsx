@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
+import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
 import { Badge, Icon, Accordion, AccordionGroup, type AccordionProps } from "@geist/web";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
@@ -147,6 +148,7 @@ const meta: Meta<AccordionStoryArgs> = {
     layout: "fullscreen"
   },
   args: {
+    brand: "Cars24",
     title: "Additional Insights",
     supportingText: "",
     content:
@@ -160,7 +162,7 @@ const meta: Meta<AccordionStoryArgs> = {
   argTypes: {
     brand: {
       control: "radio",
-      options: ["core", "acme"]
+      options: STORYBOOK_BRAND_OPTIONS
     },
     size: {
       control: "inline-radio",

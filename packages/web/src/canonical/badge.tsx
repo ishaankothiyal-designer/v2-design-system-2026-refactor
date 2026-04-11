@@ -5,7 +5,7 @@ import {
   type ReactNode,
   useState
 } from "react";
-import type { BrandId } from "@geist/tokens";
+import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
 import { Icon } from "./icon";
 import { getRequiredThemeTokenValue } from "../theme";
@@ -277,7 +277,7 @@ function resolveBadgeState({
 }
 
 export interface BadgeProps {
-  brand?: BrandId;
+  brand?: DisplayBrandId;
   labelText?: string;
   size?: BadgeSize;
   type?: BadgeType;
@@ -324,7 +324,7 @@ function renderBadgeIcon(icon: ReactNode, color: string, size: string) {
 }
 
 export function Badge({
-  brand = "core",
+  brand = "Cars24",
   labelText = "Badge",
   size = "Extra Small",
   type = "Neutral",

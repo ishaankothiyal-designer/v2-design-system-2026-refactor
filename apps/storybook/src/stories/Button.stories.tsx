@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
+import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
 import {
   Button,
   Icon,
@@ -273,6 +274,7 @@ const meta: Meta<ButtonStoryArgs> = {
     layout: "fullscreen"
   },
   args: {
+    brand: "Cars24",
     shape: "Regular",
     styleVariant: "Solid",
     size: "Medium",
@@ -287,7 +289,7 @@ const meta: Meta<ButtonStoryArgs> = {
   argTypes: {
     brand: {
       control: "radio",
-      options: ["core", "acme"]
+      options: STORYBOOK_BRAND_OPTIONS
     },
     shape: {
       control: "inline-radio",

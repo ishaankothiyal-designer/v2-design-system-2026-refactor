@@ -1,5 +1,5 @@
 import { type CSSProperties, useState } from "react";
-import type { BrandId } from "@geist/tokens";
+import type { BrandId, DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
 import { Icon } from "./icon";
 import { getRequiredThemeTokenValue } from "../theme";
@@ -13,7 +13,7 @@ export type BannerState = "Warning" | "Success" | "Error" | "Info" | "Brand";
 export type BannerActionType = "Text button" | "Icon button";
 
 export interface BannerProps {
-  brand?: BrandId;
+  brand?: DisplayBrandId;
   theme?: BannerTheme;
   state?: BannerState;
   heading?: boolean;
@@ -237,7 +237,7 @@ function getBannerLeadingIconName(state: BannerState) {
 }
 
 export function Banner({
-  brand = "core",
+  brand = "Cars24",
   theme = "Light",
   state = "Warning",
   heading = true,

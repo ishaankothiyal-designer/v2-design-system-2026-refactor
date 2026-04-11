@@ -6,7 +6,7 @@ import {
   useRef,
   useState
 } from "react";
-import type { BrandId } from "@geist/tokens";
+import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
 import { Icon } from "./icon";
 import { getRequiredThemeTokenValue } from "../theme";
@@ -153,7 +153,7 @@ function resolveInteractiveState({
 }
 
 export interface AccordionProps {
-  brand?: BrandId;
+  brand?: DisplayBrandId;
   title: string;
   supportingText?: string;
   content?: ReactNode;
@@ -176,7 +176,7 @@ export interface AccordionGroupItem
 }
 
 export interface AccordionGroupProps {
-  brand?: BrandId;
+  brand?: DisplayBrandId;
   items: AccordionGroupItem[];
   selectionMode?: AccordionSelectionMode;
   defaultExpandedIds?: string[];
@@ -188,7 +188,7 @@ export interface AccordionGroupProps {
 }
 
 export function Accordion({
-  brand = "core",
+  brand = "Cars24",
   title,
   supportingText,
   content,
@@ -470,7 +470,7 @@ export function Accordion({
 }
 
 export function AccordionGroup({
-  brand = "core",
+  brand = "Cars24",
   items,
   selectionMode = "single",
   defaultExpandedIds = [],

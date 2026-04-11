@@ -1,6 +1,6 @@
 import type { PropsWithChildren, ReactNode } from "react";
 import { Pressable, Text, View } from "react-native";
-import type { BrandId } from "@geist/tokens";
+import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
 import { getRequiredNativeThemeTokenValue } from "../theme";
 
@@ -9,7 +9,7 @@ export const canonicalButtonNativeContract = designSystemRegistry.components.fin
 );
 
 export interface ButtonProps {
-  brand?: BrandId;
+  brand?: DisplayBrandId;
   tone?: "primary" | "secondary" | "ghost";
   size?: "sm" | "md" | "lg";
   leadingIcon?: ReactNode;
@@ -19,7 +19,7 @@ export interface ButtonProps {
 }
 
 export function Button({
-  brand = "core",
+  brand = "Cars24",
   tone = "primary",
   size = "md",
   leadingIcon,

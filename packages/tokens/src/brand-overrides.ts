@@ -1,15 +1,15 @@
 import core from "../tokens/brands/core.json";
 import acme from "../tokens/brands/acme.json";
-import { FIGMA_BRAND_TO_REPO_BRAND } from "./types";
-import type { BrandId, BrandTokenSet, FigmaBrandName } from "./types";
+import { BRAND_ALIAS_TO_REPO_BRAND, FIGMA_BRAND_TO_REPO_BRAND } from "./types";
+import type { BrandId, BrandTokenSet, FigmaBrandName, RepoBrandId } from "./types";
 
 /**
  * Figma uses brand names like Cars24 and Team BHP, while the repo currently
  * stores the corresponding override sets as `core` and `acme`.
  */
-export const BRAND_OVERRIDE_SOURCE_MAP: Record<FigmaBrandName, BrandId> = FIGMA_BRAND_TO_REPO_BRAND;
+export const BRAND_OVERRIDE_SOURCE_MAP: Record<FigmaBrandName, RepoBrandId> = FIGMA_BRAND_TO_REPO_BRAND;
 
-const brandSets: Record<BrandId, BrandTokenSet> = {
+const brandSets: Record<RepoBrandId, BrandTokenSet> = {
   core: {
     brandId: "core",
     mode: "light",
@@ -22,6 +22,10 @@ const brandSets: Record<BrandId, BrandTokenSet> = {
   }
 };
 
+export function normalizeBrandId(brandId: BrandId): RepoBrandId {
+  return BRAND_ALIAS_TO_REPO_BRAND[brandId];
+}
+
 export function getBrandTokenSet(brandId: BrandId): BrandTokenSet {
-  return brandSets[brandId];
+  return brandSets[normalizeBrandId(brandId)];
 }

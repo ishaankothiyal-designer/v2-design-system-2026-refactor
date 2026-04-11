@@ -1,10 +1,10 @@
 import type { HTMLAttributes } from "react";
-import type { BrandId } from "@geist/tokens";
+import type { DisplayBrandId } from "@geist/tokens";
 import { getIconClassName, type IconName } from "@geist/icons";
 import { getRequiredThemeTokenValue } from "../theme";
 
 export interface IconProps extends HTMLAttributes<HTMLSpanElement> {
-  brand?: BrandId;
+  brand?: DisplayBrandId;
   name: IconName;
   size?: "sm" | "md" | "lg";
   tone?: "primary" | "secondary" | "muted" | "inverse";
@@ -14,7 +14,7 @@ export interface IconProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 export function Icon({
-  brand = "core",
+  brand = "Cars24",
   name,
   size = "md",
   tone,

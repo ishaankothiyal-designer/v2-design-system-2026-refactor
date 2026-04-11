@@ -1,4 +1,4 @@
-import type { TokenLeaf, TokenTree, FlattenedToken } from "./types";
+import type { TokenLeaf, TokenTree, FlattenedToken, RepoBrandId } from "./types";
 
 export interface FigmaVariableRef {
   collection: string;
@@ -44,7 +44,7 @@ export function toFigmaVariables(
 }
 
 export function createFlattenedTokenSet(
-  brandId: "core" | "acme",
+  brandId: RepoBrandId,
   mode: "light" | "dark",
   tokenTree: TokenTree
 ): FlattenedToken[] {
@@ -55,4 +55,3 @@ export function createFlattenedTokenSet(
     value
   }));
 }
-

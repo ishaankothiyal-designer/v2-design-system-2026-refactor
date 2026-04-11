@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
+import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
 import {
   Banner,
   type BannerActionType,
@@ -178,6 +179,7 @@ const meta: Meta<BannerProps> = {
     layout: "fullscreen"
   },
   args: {
+    brand: "Cars24",
     theme: "Light",
     state: "Warning",
     heading: true,
@@ -191,7 +193,7 @@ const meta: Meta<BannerProps> = {
   argTypes: {
     brand: {
       control: "radio",
-      options: ["core", "acme"]
+      options: STORYBOOK_BRAND_OPTIONS
     },
     theme: {
       control: "inline-radio",

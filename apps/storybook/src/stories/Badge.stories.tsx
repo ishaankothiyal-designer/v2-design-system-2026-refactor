@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
+import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
 import {
   Accordion,
   Badge,
@@ -238,6 +239,7 @@ const meta: Meta<BadgeStoryArgs> = {
     layout: "fullscreen"
   },
   args: {
+    brand: "Cars24",
     labelText: "Badge",
     size: "Extra Small",
     type: "Neutral",
@@ -253,7 +255,7 @@ const meta: Meta<BadgeStoryArgs> = {
   argTypes: {
     brand: {
       control: "radio",
-      options: ["core", "acme"]
+      options: STORYBOOK_BRAND_OPTIONS
     },
     size: {
       control: "inline-radio",

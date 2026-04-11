@@ -2,35 +2,56 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { coreTokenCatalog, getBrandTokenSet, deepMergeTokenTrees } from "@geist/tokens";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
-const brands = ["core", "acme"] as const;
+const brands = ["Cars24", "CarInfo", "VehicleInfo"] as const;
 
 function resolveBrand(brandId: (typeof brands)[number]) {
   return deepMergeTokenTrees(coreTokenCatalog, getBrandTokenSet(brandId).tokens);
 }
 
 function Foundations() {
-  const core = resolveBrand("core") as typeof coreTokenCatalog;
-  const acme = resolveBrand("acme") as typeof coreTokenCatalog;
+  const cars24 = resolveBrand("Cars24") as typeof coreTokenCatalog;
+  const carInfo = resolveBrand("CarInfo") as typeof coreTokenCatalog;
+  const vehicleInfo = resolveBrand("VehicleInfo") as typeof coreTokenCatalog;
 
   const colorRows = [
-    ["Surface / Canvas", String(core.color.surface.canvas), String(acme.color.surface.canvas)],
-    ["Text / Primary", String(core.color.text.primary), String(acme.color.text.primary)],
-    ["Brand / Primary 600", String(core.color.brand.primary["600"]), String(acme.color.brand.primary["600"])],
-    ["Border / Default", String(core.color.border.default), String(acme.color.border.default)]
+    [
+      "Surface / Canvas",
+      String(cars24.color.surface.canvas),
+      String(carInfo.color.surface.canvas),
+      String(vehicleInfo.color.surface.canvas)
+    ],
+    [
+      "Text / Primary",
+      String(cars24.color.text.primary),
+      String(carInfo.color.text.primary),
+      String(vehicleInfo.color.text.primary)
+    ],
+    [
+      "Brand / Primary 600",
+      String(cars24.color.brand.primary["600"]),
+      String(carInfo.color.brand.primary["600"]),
+      String(vehicleInfo.color.brand.primary["600"])
+    ],
+    [
+      "Border / Default",
+      String(cars24.color.border.default),
+      String(carInfo.color.border.default),
+      String(vehicleInfo.color.border.default)
+    ]
   ] as const;
 
   const typeRows = [
-    ["Font family", String(core.typography.fontFamily.sans)],
-    ["Font size md", `${core.typography.fontSize.md}px`],
-    ["Line height md", `${core.typography.lineHeight.md}px`],
-    ["Semibold", String(core.typography.fontWeight.semibold)]
+    ["Font family", String(cars24.typography.fontFamily.sans)],
+    ["Font size md", `${cars24.typography.fontSize.md}px`],
+    ["Line height md", `${cars24.typography.lineHeight.md}px`],
+    ["Semibold", String(cars24.typography.fontWeight.semibold)]
   ] as const;
 
   return (
     <StoryPage>
       <header style={{ display: "grid", gap: 12, maxWidth: 720 }}>
         <h1 style={{ margin: 0, fontSize: 40, lineHeight: "48px" }}>Foundations</h1>
-        <p style={{ margin: 0, fontSize: 16, lineHeight: "24px", color: core.color.text.secondary }}>
+        <p style={{ margin: 0, fontSize: 16, lineHeight: "24px", color: cars24.color.text.secondary }}>
           A compact reference for the tokens that drive the fresh Storybook surface.
         </p>
       </header>
@@ -39,12 +60,13 @@ function Foundations() {
         <StoryCard>
           <div style={{ display: "grid", gap: 16 }}>
             <strong>Brand colors</strong>
-            {colorRows.map(([label, coreValue, acmeValue]) => (
+            {colorRows.map(([label, cars24Value, carInfoValue, vehicleInfoValue]) => (
               <div key={label} style={{ display: "grid", gap: 10 }}>
-                <div style={{ fontSize: 13, color: core.color.text.secondary }}>{label}</div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-                  <Swatch label="Core" value={coreValue} />
-                  <Swatch label="Acme" value={acmeValue} />
+                <div style={{ fontSize: 13, color: cars24.color.text.secondary }}>{label}</div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+                  <Swatch label="Cars24" value={cars24Value} />
+                  <Swatch label="CarInfo" value={carInfoValue} />
+                  <Swatch label="VehicleInfo" value={vehicleInfoValue} />
                 </div>
               </div>
             ))}
@@ -57,7 +79,7 @@ function Foundations() {
             <div style={{ display: "grid", gap: 12 }}>
               {typeRows.map(([label, value]) => (
                 <div key={label} style={{ display: "grid", gap: 4 }}>
-                  <div style={{ fontSize: 13, color: core.color.text.secondary }}>{label}</div>
+                  <div style={{ fontSize: 13, color: cars24.color.text.secondary }}>{label}</div>
                   <div style={{ fontSize: 18, lineHeight: "24px" }}>{value}</div>
                 </div>
               ))}
