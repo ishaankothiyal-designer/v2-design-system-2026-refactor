@@ -2,10 +2,18 @@
   "color": {
     "brand": {
       "primary": {
-        "50": "#F1F5F9",
-        "100": "#E2E8F0",
-        "600": "#FB2C36",
-        "700": "#C91D27"
+        "50": "#F8FAFC",
+        "100": "#F1F5F9",
+        "500": "#64748B",
+        "600": "#475569",
+        "700": "#334155"
+      },
+      "alt": {
+        "50": "#FCF3F3",
+        "100": "#FBE0E1",
+        "500": "#FB2C36",
+        "600": "#C91D27",
+        "700": "#8F2424"
       }
     }
   },
@@ -15,6 +23,54 @@
     },
     "fontWeight": {
       "medium": 500
+    }
+  },
+  "component": {
+    "captionButton": {
+      "color": {
+        "light": {
+          "primary": {
+            "rest": {
+              "background": "#64748B"
+            },
+            "hover": {
+              "background": "#64748B"
+            }
+          },
+          "secondary": {
+            "rest": {
+              "border": "#64748B",
+              "foreground": "#64748B"
+            },
+            "hover": {
+              "border": "#64748B",
+              "foreground": "#64748B"
+            }
+          }
+        }
+      }
+    },
+    "linkButton": {
+      "color": {
+        "light": {
+          "brand": {
+            "rest": "#64748B",
+            "hover": "#64748B"
+          }
+        }
+      }
+    },
+    "backToTopButton": {
+      "color": {
+        "light": {
+          "rest": {
+            "border": "#FBE0E1"
+          },
+          "hover": {
+            "border": "#FBE0E1"
+          }
+        }
+      }
     }
   },
   "radius": {

@@ -2,10 +2,18 @@
   "color": {
     "brand": {
       "primary": {
-        "50": "#CFDAFF",
-        "100": "#ADBFFF",
-        "600": "#456DFF",
-        "700": "#3D60E0"
+        "50": "#F2F5FF",
+        "100": "#CFDAFF",
+        "500": "#456DFF",
+        "600": "#3D60E0",
+        "700": "#3553C2"
+      },
+      "alt": {
+        "50": "#F2F5FF",
+        "100": "#CFDAFF",
+        "500": "#456DFF",
+        "600": "#3D60E0",
+        "700": "#3553C2"
       }
     }
   },
@@ -15,6 +23,86 @@
     },
     "fontWeight": {
       "medium": 500
+    }
+  },
+  "component": {
+    "captionButton": {
+      "color": {
+        "light": {
+          "primary": {
+            "rest": {
+              "background": "#456DFF"
+            },
+            "hover": {
+              "background": "#3D60E0"
+            }
+          },
+          "secondary": {
+            "rest": {
+              "border": "#456DFF",
+              "foreground": "#456DFF"
+            },
+            "hover": {
+              "border": "#3D60E0",
+              "foreground": "#3D60E0"
+            }
+          }
+        }
+      },
+      "size": {
+        "md": {
+          "borderRadius": 999
+        },
+        "lg": {
+          "borderRadius": 999
+        }
+      }
+    },
+    "linkButton": {
+      "color": {
+        "light": {
+          "brand": {
+            "rest": "#456DFF",
+            "hover": "#3D60E0"
+          }
+        }
+      }
+    },
+    "sectionHeader": {
+      "layout": {
+        "variant": "centered"
+      },
+      "size": {
+        "titleRowGap": 12,
+        "titleStackGap": 2,
+        "paddingBottom": 8,
+        "dividerGap": 12,
+        "dividerThickness": 1
+      },
+      "color": {
+        "light": {
+          "divider": "rgba(26, 26, 26, 0.15)",
+          "dividerOpaque": "rgba(26, 26, 26, 0.15)",
+          "dividerTransparent": "rgba(26, 26, 26, 0)"
+        },
+        "dark": {
+          "divider": "rgba(255, 255, 255, 0.6)",
+          "dividerOpaque": "rgba(255, 255, 255, 0.6)",
+          "dividerTransparent": "rgba(255, 255, 255, 0)"
+        }
+      }
+    },
+    "backToTopButton": {
+      "color": {
+        "light": {
+          "rest": {
+            "border": "#CFDAFF"
+          },
+          "hover": {
+            "border": "#CFDAFF"
+          }
+        }
+      }
     }
   },
   "radius": {

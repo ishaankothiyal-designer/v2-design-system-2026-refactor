@@ -1,5 +1,5 @@
 import type { PropsWithChildren, ReactNode } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, Text, View, type TextStyle } from "react-native";
 import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
 import { getRequiredNativeThemeTokenValue } from "../theme";
@@ -63,6 +63,10 @@ export function Button({
         ? Number(getRequiredNativeThemeTokenValue(brand, "typography.lineHeight.lg"))
         : Number(getRequiredNativeThemeTokenValue(brand, "typography.lineHeight.md"));
 
+  const fontWeight = String(
+    getRequiredNativeThemeTokenValue(brand, "typography.fontWeight.semibold")
+  ) as TextStyle["fontWeight"];
+
   return (
     <Pressable
       accessibilityRole="button"
@@ -87,7 +91,7 @@ export function Button({
             color,
             fontFamily: String(getRequiredNativeThemeTokenValue(brand, "typography.fontFamily.sans")),
             fontSize,
-            fontWeight: String(getRequiredNativeThemeTokenValue(brand, "typography.fontWeight.semibold")),
+            fontWeight,
             lineHeight
           }}
         >

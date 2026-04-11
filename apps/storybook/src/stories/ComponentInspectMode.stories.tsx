@@ -8,7 +8,18 @@ import {
 } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { designSystemRegistry } from "@geist/contracts";
-import { Accordion, Badge, Banner, Button, Icon, Text } from "@geist/web";
+import {
+  Accordion,
+  BackToTopButton,
+  Badge,
+  Banner,
+  Button,
+  Divider,
+  Icon,
+  LinkButton,
+  SectionHeader,
+  Text
+} from "@geist/web";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 type Measurement = {
@@ -98,6 +109,13 @@ const inspectItems = [
         ?.tokenBindings ?? []
   },
   {
+    title: "Back To Top Button",
+    preview: <BackToTopButton>Go to top</BackToTopButton>,
+    bindings:
+      designSystemRegistry.components.find((component) => component.canonicalId === "component.backToTopButton")
+        ?.tokenBindings ?? []
+  },
+  {
     title: "Badge",
     preview: (
       <Badge
@@ -110,6 +128,22 @@ const inspectItems = [
     ),
     bindings:
       designSystemRegistry.components.find((component) => component.canonicalId === "component.badge")
+        ?.tokenBindings ?? []
+  },
+  {
+    title: "Link Button",
+    preview: (
+      <LinkButton
+        tone="Brand"
+        size="Medium"
+        leadingIcon={<Icon name="sparkle-filled" decorative />}
+        trailingIcon={<Icon name="arrow-right-outline" decorative />}
+      >
+        Label
+      </LinkButton>
+    ),
+    bindings:
+      designSystemRegistry.components.find((component) => component.canonicalId === "component.linkButton")
         ?.tokenBindings ?? []
   },
   {
@@ -154,6 +188,37 @@ const inspectItems = [
     ),
     bindings:
       designSystemRegistry.components.find((component) => component.canonicalId === "component.banner")
+        ?.tokenBindings ?? []
+  },
+  {
+    title: "Section Header",
+    preview: (
+      <SectionHeader
+        title="Section title"
+        subtitle="Section title line 2"
+        description="Description goes here upto 2 lines"
+        tagLabel="New"
+        actionLabel="View all"
+      />
+    ),
+    bindings:
+      designSystemRegistry.components.find((component) => component.canonicalId === "component.sectionHeader")
+        ?.tokenBindings ?? []
+  },
+  {
+    title: "Divider",
+    preview: (
+      <Divider
+        labelPosition="Center"
+        thickness="Regular"
+        lineStyle="Plain"
+        label="Continue"
+        leadingIcon={<Icon name="sparkle-filled" decorative />}
+        trailingIcon={<Icon name="sparkle-filled" decorative />}
+      />
+    ),
+    bindings:
+      designSystemRegistry.components.find((component) => component.canonicalId === "component.divider")
         ?.tokenBindings ?? []
   },
   {

@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { designSystemRegistry } from "@geist/contracts";
-import { Accordion, Badge, Banner, Button, Icon } from "@geist/web";
+import { Accordion, BackToTopButton, Badge, Banner, Button, Divider, Icon, LinkButton, SectionHeader } from "@geist/web";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 const componentCards = [
@@ -36,6 +36,55 @@ export function Example() {
   );
 }`,
     file: "@geist/web/canonical/button"
+  },
+  {
+    canonicalId: "component.backToTopButton",
+    title: "Back To Top Button",
+    preview: <BackToTopButton>Go to top</BackToTopButton>,
+    snippet: `import { BackToTopButton } from "@geist/web";
+
+export function Example() {
+  return (
+    <BackToTopButton
+      inverse={false}
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+    >
+      Go to top
+    </BackToTopButton>
+  );
+}`,
+    file: "@geist/web/canonical/back-to-top-button"
+  },
+  {
+    canonicalId: "component.linkButton",
+    title: "Link Button",
+    preview: (
+      <LinkButton
+        tone="Brand"
+        size="Medium"
+        leadingIcon={<Icon name="sparkle-filled" decorative />}
+        trailingIcon={<Icon name="arrow-right-outline" decorative />}
+      >
+        Label
+      </LinkButton>
+    ),
+    snippet: `import { LinkButton } from "@geist/web";
+
+export function Example() {
+  return (
+    <LinkButton
+      tone="Brand"
+      size="Medium"
+      onDark={false}
+      underline={true}
+      leadingIcon="sparkle-filled"
+      trailingIcon="arrow-right-outline"
+    >
+      Label
+    </LinkButton>
+  );
+}`,
+    file: "@geist/web/canonical/link-button"
   },
   {
     canonicalId: "component.accordion",
@@ -154,6 +203,66 @@ export function Example() {
   );
 }`,
     file: "@geist/web/canonical/banner"
+  },
+  {
+    canonicalId: "component.sectionHeader",
+    title: "Section Header",
+    preview: (
+      <SectionHeader
+        title="Section title"
+        subtitle="Section title line 2"
+        description="Description goes here upto 2 lines"
+        tagLabel="New"
+        actionLabel="View all"
+      />
+    ),
+    snippet: `import { SectionHeader } from "@geist/web";
+
+export function Example() {
+  return (
+    <SectionHeader
+      inverse={false}
+      title="Section title"
+      subtitle="Section title line 2"
+      description="Description goes here upto 2 lines"
+      tagLabel="New"
+      showTag={true}
+      showAction={true}
+      actionLabel="View all"
+      onActionClick={() => {}}
+    />
+  );
+}`,
+    file: "@geist/web/canonical/section-header"
+  },
+  {
+    canonicalId: "component.divider",
+    title: "Divider",
+    preview: (
+      <Divider
+        labelPosition="Center"
+        thickness="Regular"
+        lineStyle="Plain"
+        label="Continue"
+        leadingIcon={<Icon name="sparkle-filled" decorative />}
+        trailingIcon={<Icon name="sparkle-filled" decorative />}
+      />
+    ),
+    snippet: `import { Divider } from "@geist/web";
+
+export function Example() {
+  return (
+    <Divider
+      labelPosition="Center"
+      thickness="Regular"
+      lineStyle="Plain"
+      label="Continue"
+      leadingIcon="sparkle-filled"
+      trailingIcon="sparkle-filled"
+    />
+  );
+}`,
+    file: "@geist/web/canonical/divider"
   }
 ] as const;
 
