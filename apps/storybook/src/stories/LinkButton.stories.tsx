@@ -1,9 +1,10 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@geist/tokens";
 import {
   Icon,
   LinkButton,
+  Text,
   type LinkButtonPreviewState,
   type LinkButtonProps,
   type LinkButtonSize,
@@ -18,6 +19,16 @@ type LinkButtonStoryArgs = Omit<LinkButtonProps, "children" | "leadingIcon" | "t
 };
 
 const linkButtonSizes: LinkButtonSize[] = ["Extra Small", "Small", "Medium", "Large"];
+const documentedStates: Array<{
+  key: string;
+  label: string;
+  forceState?: LinkButtonPreviewState;
+  disabled?: boolean;
+}> = [
+  { key: "default", label: "Default" },
+  { key: "hover", label: "Hover", forceState: "Hover" },
+  { key: "disabled", label: "Disabled", disabled: true }
+];
 
 function makeIcons(showLeadingIcon: boolean, showTrailingIcon: boolean) {
   return {
@@ -26,19 +37,31 @@ function makeIcons(showLeadingIcon: boolean, showTrailingIcon: boolean) {
   };
 }
 
-function HeaderCell({ label }: { label: string }) {
+function HeaderCell({
+  brand = "Cars24",
+  label,
+  tone = "secondary"
+}: {
+  brand?: DisplayBrandId;
+  label: string;
+  tone?: "primary" | "secondary" | "inverse";
+}) {
   return (
-    <div style={{ color: "#64748B", fontSize: 13, fontWeight: 600, lineHeight: "18px" }}>{label}</div>
+    <Text brand={brand} as="strong" size="sm" tone={tone} style={{ display: "block" }}>
+      {label}
+    </Text>
   );
 }
 
 function MatrixCell({
+  brand,
   tone,
   size,
   onDark,
   forceState,
   disabled
 }: {
+  brand: DisplayBrandId;
   tone: LinkButtonTone;
   size: LinkButtonSize;
   onDark: boolean;
@@ -47,6 +70,7 @@ function MatrixCell({
 }) {
   return (
     <LinkButton
+      brand={brand}
       tone={tone}
       size={size}
       onDark={onDark}
@@ -59,84 +83,123 @@ function MatrixCell({
   );
 }
 
-function MatrixStory() {
-  const lightRows: Array<{
-    label: string;
-    tone: LinkButtonTone;
-    forceState?: LinkButtonPreviewState;
-    disabled?: boolean;
-  }> = [
-    { label: "Brand / Rest", tone: "Brand" },
-    { label: "Brand / Hover", tone: "Brand", forceState: "Hover" },
-    { label: "Black / Rest", tone: "Black" },
-    { label: "Black / Hover", tone: "Black", forceState: "Hover" },
-    { label: "Disabled", tone: "Brand", disabled: true }
-  ];
+function SectionHeading({
+  brand = "Cars24",
+  title,
+  description,
+  tone = "primary"
+}: {
+  brand?: DisplayBrandId;
+  title: string;
+  description?: string;
+  tone?: "primary" | "secondary" | "inverse";
+}) {
+  return (
+    <div style={{ display: "grid", gap: 6 }}>
+      <Text brand={brand} as="strong" size="md" tone={tone}>
+        {title}
+      </Text>
+      {description ? (
+        <Text brand={brand} as="p" size="sm" tone={tone === "inverse" ? "inverse" : "secondary"}>
+          {description}
+        </Text>
+      ) : null}
+    </div>
+  );
+}
 
-  const darkRows: Array<{
-    label: string;
-    tone: LinkButtonTone;
-    forceState?: LinkButtonPreviewState;
-    disabled?: boolean;
-  }> = [
-    { label: "Brand / Rest", tone: "Brand" },
-    { label: "Brand / Hover", tone: "Brand", forceState: "Hover" },
-    { label: "Disabled", tone: "Brand", disabled: true }
-  ];
+function ToneMatrix({
+  brand,
+  tone,
+  onDark
+}: {
+  brand: DisplayBrandId;
+  tone: LinkButtonTone;
+  onDark: boolean;
+}) {
+  return (
+    <div style={{ display: "grid", gap: 12 }}>
+      <Text brand={brand} as="strong" size="sm" tone={onDark ? "inverse" : "primary"}>
+        {tone}
+      </Text>
+      <div style={matrixTableStyles(onDark)}>
+        <div style={matrixCornerCellStyles(onDark)} />
+        {documentedStates.map((state) => (
+          <div key={`${tone}-${state.key}-header`} style={matrixHeaderCellStyles(onDark)}>
+            <HeaderCell brand={brand} label={state.label} tone={onDark ? "inverse" : "secondary"} />
+          </div>
+        ))}
 
+        {linkButtonSizes.flatMap((size) => [
+          <div key={`${tone}-${size}-label`} style={matrixRowLabelCellStyles(onDark)}>
+            <HeaderCell brand={brand} label={size} tone={onDark ? "inverse" : "secondary"} />
+          </div>,
+          ...documentedStates.map((state) => (
+            <div key={`${tone}-${size}-${state.key}`} style={matrixValueCellStyles(onDark)}>
+              <MatrixCell
+                brand={brand}
+                tone={tone}
+                size={size}
+                onDark={onDark}
+                {...(state.forceState ? { forceState: state.forceState } : {})}
+                {...(state.disabled ? { disabled: true } : {})}
+              />
+            </div>
+          ))
+        ])}
+      </div>
+    </div>
+  );
+}
+
+function VariantDocumentSurface({ brand, onDark }: { brand: DisplayBrandId; onDark: boolean }) {
+  return (
+    <div style={{ display: "grid", gap: 24 }}>
+      {(["Brand", "Black"] as const).map((tone) => (
+        <div
+          key={`${tone}-${onDark ? "dark" : "light"}`}
+          style={{
+            display: "grid",
+            gap: 20,
+            padding: 24,
+            borderRadius: 24,
+            border: `1px solid ${String(coreTokenCatalog.color.border.default)}`,
+            background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
+          }}
+        >
+          <ToneMatrix brand={brand} tone={tone} onDark={onDark} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function BrandVariantMatrixStory({ brand }: { brand: DisplayBrandId }) {
   return (
     <StoryPage fullscreen>
-      <StoryCard>
-        <div style={{ display: "grid", gap: 20 }}>
-          <div style={matrixGridStyles}>
-            <HeaderCell label="State" />
-            {linkButtonSizes.map((size) => (
-              <HeaderCell key={`light-${size}`} label={size} />
-            ))}
+      <div style={{ display: "grid", gap: 32 }}>
+        <StoryCard>
+          <VariantDocumentSurface brand={brand} onDark={false} />
+        </StoryCard>
 
-            {lightRows.flatMap((row) => [
-              <HeaderCell key={`${row.label}-label`} label={row.label} />,
-              ...linkButtonSizes.map((size) => (
-                <MatrixCell
-                  key={`${row.label}-${size}`}
-                  tone={row.tone}
-                  size={size}
-                  onDark={false}
-                  {...(row.forceState ? { forceState: row.forceState } : {})}
-                  {...(row.disabled ? { disabled: true } : {})}
-                />
-              ))
-            ])}
+        <StoryCard
+          style={{
+            background: String(coreTokenCatalog.color.surface.inverse),
+            borderRadius: 24,
+            padding: 32
+          }}
+        >
+          <div style={{ display: "grid", gap: 24 }}>
+            <SectionHeading
+              brand={brand}
+              title="On Dark Surface"
+              description="The same complete matrix on inverse backgrounds for contrast validation."
+              tone="inverse"
+            />
+            <VariantDocumentSurface brand={brand} onDark />
           </div>
-        </div>
-      </StoryCard>
-
-      <StoryCard style={{ background: "#0B0B0C" }}>
-        <div style={{ display: "grid", gap: 20 }}>
-          <strong style={{ color: "#F8FAFC" }}>On Dark</strong>
-
-          <div style={matrixGridStyles}>
-            <HeaderCell label="State" />
-            {linkButtonSizes.map((size) => (
-              <HeaderCell key={`dark-${size}`} label={size} />
-            ))}
-
-            {darkRows.flatMap((row) => [
-              <HeaderCell key={`dark-${row.label}-label`} label={row.label} />,
-              ...linkButtonSizes.map((size) => (
-                <MatrixCell
-                  key={`dark-${row.label}-${size}`}
-                  tone={row.tone}
-                  size={size}
-                  onDark
-                  {...(row.forceState ? { forceState: row.forceState } : {})}
-                  {...(row.disabled ? { disabled: true } : {})}
-                />
-              ))
-            ])}
-          </div>
-        </div>
-      </StoryCard>
+        </StoryCard>
+      </div>
     </StoryPage>
   );
 }
@@ -154,20 +217,60 @@ function ConfigurationStory(args: LinkButtonStoryArgs) {
   );
 }
 
-const matrixGridStyles: CSSProperties = {
-  alignItems: "center",
-  columnGap: 20,
-  display: "grid",
-  gridTemplateColumns: "140px repeat(4, minmax(0, 1fr))",
-  rowGap: 18,
-  justifyItems: "center"
-};
+function matrixTableStyles(onDark: boolean): CSSProperties {
+  return {
+    display: "grid",
+    gridTemplateColumns: "180px repeat(3, minmax(180px, 1fr))",
+    border: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+    borderRadius: 20,
+    overflow: "hidden"
+  };
+}
 
-const configGridStyles: CSSProperties = {
-  display: "grid",
-  gap: 24,
-  gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))"
-};
+function matrixHeaderCellStyles(onDark: boolean): CSSProperties {
+  return {
+    minHeight: 68,
+    padding: "16px 20px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+    background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
+  };
+}
+
+function matrixCornerCellStyles(onDark: boolean): CSSProperties {
+  return {
+    minHeight: 68,
+    borderBottom: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+    background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
+  };
+}
+
+function matrixRowLabelCellStyles(onDark: boolean): CSSProperties {
+  return {
+    minHeight: 88,
+    padding: "20px 16px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+    background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
+  };
+}
+
+function matrixValueCellStyles(onDark: boolean): CSSProperties {
+  return {
+    minHeight: 88,
+    padding: "16px 20px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+    borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+    background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
+  };
+}
 
 const meta: Meta<LinkButtonStoryArgs> = {
   title: "Components/Link Button",
@@ -211,6 +314,13 @@ export default meta;
 
 type Story = StoryObj<LinkButtonStoryArgs>;
 
+const linkButtonVariantsSourceCode = `<LinkButton tone="Brand" size="Medium">Label</LinkButton>
+<LinkButton tone="Brand" size="Medium" forceState="Hover">Label</LinkButton>
+<LinkButton tone="Brand" size="Medium" disabled>Label</LinkButton>
+<LinkButton tone="Black" size="Medium">Label</LinkButton>`;
+
+const linkButtonUiExampleSourceCode = `<LinkButton tone="Brand" size="Small">Privacy statement</LinkButton>`;
+
 export const Playground: Story = {
   render: (args) => <ConfigurationStory {...args} />,
   parameters: {
@@ -218,10 +328,35 @@ export const Playground: Story = {
   }
 };
 
-export const Variants: Story = {
-  render: () => <MatrixStory />,
+export const Cars24: Story = {
+  render: () => <BrandVariantMatrixStory brand="Cars24" />,
   parameters: {
-    controls: { disable: true }
+    controls: { disable: true },
+    docs: { source: { code: linkButtonVariantsSourceCode } }
+  }
+};
+
+export const TeamBHP: Story = {
+  render: () => <BrandVariantMatrixStory brand="Team BHP" />,
+  parameters: {
+    controls: { disable: true },
+    docs: { source: { code: linkButtonVariantsSourceCode } }
+  }
+};
+
+export const CarInfo: Story = {
+  render: () => <BrandVariantMatrixStory brand="CarInfo" />,
+  parameters: {
+    controls: { disable: true },
+    docs: { source: { code: linkButtonVariantsSourceCode } }
+  }
+};
+
+export const VehicleInfo: Story = {
+  render: () => <BrandVariantMatrixStory brand="VehicleInfo" />,
+  parameters: {
+    controls: { disable: true },
+    docs: { source: { code: linkButtonVariantsSourceCode } }
   }
 };
 
@@ -231,6 +366,7 @@ export const UIExample: Story = {
     layout: "centered",
     controls: {
       include: ["brand"]
-    }
+    },
+    docs: { source: { code: linkButtonUiExampleSourceCode } }
   }
 };

@@ -1,9 +1,10 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@geist/tokens";
 import {
   Icon,
   IconButton,
+  Text,
   type IconButtonPreviewState,
   type IconButtonProps,
   type IconButtonShape,
@@ -18,7 +19,7 @@ type IconButtonStoryArgs = Omit<IconButtonProps, "icon"> & {
 
 const iconButtonSizes: IconButtonSize[] = ["Large", "Medium", "Small", "XSmall", "XXSmall", "XXXSmall"];
 const iconButtonShapes: IconButtonShape[] = ["Regular", "Round"];
-const lightStyleVariants: IconButtonStyleVariant[] = [
+const styleVariants: IconButtonStyleVariant[] = [
   "Solid - Primary",
   "Solid - Black",
   "Outline - Primary",
@@ -29,43 +30,87 @@ const lightStyleVariants: IconButtonStyleVariant[] = [
   "Ghost - Black",
   "Transparent"
 ];
-const darkStyleVariants: IconButtonStyleVariant[] = [
-  "Solid - Primary",
-  "Solid - Black",
-  "Outline - Primary",
-  "Outline - Black",
-  "Subtle - Primary",
-  "Subtle - Black",
-  "Ghost - Brand",
-  "Ghost - Black",
-  "Transparent"
+const documentedStates: Array<{
+  key: string;
+  label: string;
+  forceState?: IconButtonPreviewState;
+  disabled?: boolean;
+}> = [
+  { key: "default", label: "Default" },
+  { key: "hover", label: "Hover / Pressed", forceState: "Hover/Pressed" },
+  { key: "disabled", label: "Disabled", disabled: true }
 ];
 
 function StoryIconButton({ iconName, ...rest }: IconButtonStoryArgs) {
   return <IconButton {...rest} icon={<Icon name={iconName} decorative />} />;
 }
 
-function HeaderCell({ label }: { label: string }) {
-  return <div style={headerCellStyles}>{label}</div>;
+function HeaderCell({
+  brand = "Cars24",
+  label,
+  tone = "secondary"
+}: {
+  brand?: DisplayBrandId;
+  label: string;
+  tone?: "primary" | "secondary" | "inverse";
+}) {
+  return (
+    <Text brand={brand} as="strong" size="sm" tone={tone} style={{ display: "block" }}>
+      {label}
+    </Text>
+  );
+}
+
+function SectionHeading({
+  brand = "Cars24",
+  title,
+  description,
+  tone = "primary"
+}: {
+  brand?: DisplayBrandId;
+  title: string;
+  description?: string;
+  tone?: "primary" | "secondary" | "inverse";
+}) {
+  return (
+    <div style={{ display: "grid", gap: 6 }}>
+      <Text brand={brand} as="strong" size="md" tone={tone}>
+        {title}
+      </Text>
+      {description ? (
+        <Text brand={brand} as="p" size="sm" tone={tone === "inverse" ? "inverse" : "secondary"}>
+          {description}
+        </Text>
+      ) : null}
+    </div>
+  );
 }
 
 function MatrixCell({
+  brand,
   disabled,
   forceState,
   onDark,
+  shape,
+  size,
   styleVariant
 }: {
+  brand: DisplayBrandId;
   disabled?: boolean;
   forceState?: IconButtonPreviewState;
   onDark: boolean;
+  shape: IconButtonShape;
+  size: IconButtonSize;
   styleVariant: IconButtonStyleVariant;
 }) {
   return (
     <IconButton
       aria-label="Add item"
+      brand={brand}
       icon={<Icon name="plus-large-filled" decorative />}
       onDark={onDark}
-      size="Medium"
+      shape={shape}
+      size={size}
       styleVariant={styleVariant}
       {...(forceState ? { forceState } : {})}
       {...(disabled ? { disabled: true } : {})}
@@ -73,68 +118,113 @@ function MatrixCell({
   );
 }
 
-function MatrixSection({
+function ShapeMatrix({
+  brand,
   onDark,
-  styleVariants,
-  title
+  shape,
+  styleVariant
 }: {
+  brand: DisplayBrandId;
   onDark: boolean;
-  styleVariants: IconButtonStyleVariant[];
-  title: string;
+  shape: IconButtonShape;
+  styleVariant: IconButtonStyleVariant;
 }) {
   return (
-    <StoryCard {...(onDark ? { style: darkCardStyles } : {})}>
-      <div style={{ display: "grid", gap: 20 }}>
-        <strong>{title}</strong>
+    <div style={{ display: "grid", gap: 12 }}>
+      <Text brand={brand} as="strong" size="sm" tone={onDark ? "inverse" : "primary"}>
+        {shape}
+      </Text>
+      <div style={matrixTableStyles(onDark)}>
+        <div style={matrixCornerCellStyles(onDark)} />
+        {documentedStates.map((state) => (
+          <div key={`${shape}-${styleVariant}-${state.key}-header`} style={matrixHeaderCellStyles(onDark)}>
+            <HeaderCell brand={brand} label={state.label} tone={onDark ? "inverse" : "secondary"} />
+          </div>
+        ))}
 
-        <div style={matrixGridStyles}>
-          <HeaderCell label="Variant" />
-          <HeaderCell label="Rest" />
-          <HeaderCell label="Hover / Pressed" />
-          <HeaderCell label="Disabled" />
-
-          {styleVariants.flatMap((styleVariant) => [
-            <HeaderCell key={`${title}-${styleVariant}-label`} label={styleVariant} />,
-            <MatrixCell key={`${title}-${styleVariant}-rest`} onDark={onDark} styleVariant={styleVariant} />,
-            <MatrixCell
-              key={`${title}-${styleVariant}-hover`}
-              forceState="Hover/Pressed"
-              onDark={onDark}
-              styleVariant={styleVariant}
-            />,
-            <MatrixCell key={`${title}-${styleVariant}-disabled`} disabled onDark={onDark} styleVariant={styleVariant} />
-          ])}
-        </div>
+        {iconButtonSizes.flatMap((size) => [
+          <div key={`${shape}-${styleVariant}-${size}-label`} style={matrixRowLabelCellStyles(onDark)}>
+            <HeaderCell brand={brand} label={size} tone={onDark ? "inverse" : "secondary"} />
+          </div>,
+          ...documentedStates.map((state) => (
+            <div key={`${shape}-${styleVariant}-${size}-${state.key}`} style={matrixValueCellStyles(onDark)}>
+              <MatrixCell
+                brand={brand}
+                onDark={onDark}
+                shape={shape}
+                size={size}
+                styleVariant={styleVariant}
+                {...(state.forceState ? { forceState: state.forceState } : {})}
+                {...(state.disabled ? { disabled: true } : {})}
+              />
+            </div>
+          ))
+        ])}
       </div>
-    </StoryCard>
+    </div>
   );
 }
 
-function SizeScaleSection() {
+function VariantDocumentSurface({ brand, onDark }: { brand: DisplayBrandId; onDark: boolean }) {
   return (
-    <>
-      {iconButtonShapes.map((shape) => (
-        <StoryCard key={shape}>
-          <div style={{ display: "grid", gap: 18 }}>
-            <strong>{shape}</strong>
+    <div style={{ display: "grid", gap: 24 }}>
+      {styleVariants.map((styleVariant) => (
+        <div
+          key={`${styleVariant}-${onDark ? "dark" : "light"}`}
+          style={{
+            display: "grid",
+            gap: 20,
+            padding: 24,
+            borderRadius: 24,
+            border: `1px solid ${String(coreTokenCatalog.color.border.default)}`,
+            background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
+          }}
+        >
+          <SectionHeading brand={brand} title={styleVariant} tone={onDark ? "inverse" : "primary"} />
+          <div style={{ display: "grid", gap: 20 }}>
+            {iconButtonShapes.map((shape) => (
+              <ShapeMatrix
+                key={`${styleVariant}-${shape}-${onDark ? "dark" : "light"}`}
+                brand={brand}
+                onDark={onDark}
+                shape={shape}
+                styleVariant={styleVariant}
+              />
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
-            <div style={sizeGridStyles}>
-              {iconButtonSizes.map((size) => (
-                <div key={`${shape}-${size}`} style={{ display: "grid", gap: 10, justifyItems: "start" }}>
-                  <HeaderCell label={size} />
-                  <IconButton
-                    aria-label={`Add item ${size}`}
-                    icon={<Icon name="plus-large-filled" decorative />}
-                    shape={shape}
-                    size={size}
-                  />
-                </div>
-              ))}
-            </div>
+function BrandVariantMatrixStory({ brand }: { brand: DisplayBrandId }) {
+  return (
+    <StoryPage fullscreen>
+      <div style={{ display: "grid", gap: 32 }}>
+        <StoryCard>
+          <VariantDocumentSurface brand={brand} onDark={false} />
+        </StoryCard>
+
+        <StoryCard
+          style={{
+            background: String(coreTokenCatalog.color.surface.inverse),
+            borderRadius: 24,
+            padding: 32
+          }}
+        >
+          <div style={{ display: "grid", gap: 24 }}>
+            <SectionHeading
+              brand={brand}
+              title="On Dark Surface"
+              description="The same complete matrix on inverse backgrounds for contrast validation."
+              tone="inverse"
+            />
+            <VariantDocumentSurface brand={brand} onDark />
           </div>
         </StoryCard>
-      ))}
-    </>
+      </div>
+    </StoryPage>
   );
 }
 
@@ -148,62 +238,60 @@ function PlaygroundStory(args: IconButtonStoryArgs) {
   );
 }
 
-function MatrixStory() {
-  return (
-    <StoryPage fullscreen>
-      <MatrixSection onDark={false} styleVariants={lightStyleVariants} title="Light" />
-      <MatrixSection onDark styleVariants={darkStyleVariants} title="On Dark" />
-      <SizeScaleSection />
-    </StoryPage>
-  );
+function matrixTableStyles(onDark: boolean): CSSProperties {
+  return {
+    display: "grid",
+    gridTemplateColumns: "180px repeat(3, minmax(180px, 1fr))",
+    border: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+    borderRadius: 20,
+    overflow: "hidden"
+  };
 }
 
-const headerCellStyles: CSSProperties = {
-  color: String(coreTokenCatalog.color.text.secondary),
-  fontSize: 13,
-  fontWeight: 600,
-  lineHeight: "18px"
-};
+function matrixHeaderCellStyles(onDark: boolean): CSSProperties {
+  return {
+    minHeight: 68,
+    padding: "16px 20px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+    background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
+  };
+}
 
-const introCopyStyles: CSSProperties = {
-  color: String(coreTokenCatalog.color.text.secondary),
-  margin: 0,
-  fontSize: 16,
-  lineHeight: "24px"
-};
+function matrixCornerCellStyles(onDark: boolean): CSSProperties {
+  return {
+    minHeight: 68,
+    borderBottom: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+    background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
+  };
+}
 
-const sectionCopyStyles: CSSProperties = {
-  color: String(coreTokenCatalog.color.text.secondary),
-  margin: 0,
-  fontSize: 14,
-  lineHeight: "20px"
-};
+function matrixRowLabelCellStyles(onDark: boolean): CSSProperties {
+  return {
+    minHeight: 96,
+    padding: "20px 16px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+    background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
+  };
+}
 
-const darkCardStyles: CSSProperties = {
-  background: "#0A0A0A"
-};
-
-const matrixGridStyles: CSSProperties = {
-  alignItems: "center",
-  columnGap: 20,
-  display: "grid",
-  gridTemplateColumns: "180px repeat(3, minmax(0, 1fr))",
-  rowGap: 16,
-  justifyItems: "center"
-};
-
-const sizeGridStyles: CSSProperties = {
-  display: "grid",
-  gap: 20,
-  gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
-  justifyContent: "center"
-};
-
-const playgroundGridStyles: CSSProperties = {
-  display: "grid",
-  gap: 24,
-  gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))"
-};
+function matrixValueCellStyles(onDark: boolean): CSSProperties {
+  return {
+    minHeight: 96,
+    padding: "16px 20px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+    borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+    background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
+  };
+}
 
 const meta: Meta<IconButtonStoryArgs> = {
   title: "Components/Icon Button",
@@ -241,7 +329,7 @@ const meta: Meta<IconButtonStoryArgs> = {
     },
     styleVariant: {
       control: "select",
-      options: [...lightStyleVariants]
+      options: [...styleVariants]
     }
   }
 };
@@ -250,6 +338,10 @@ export default meta;
 
 type Story = StoryObj<IconButtonStoryArgs>;
 
+const iconButtonVariantsSourceCode = `<IconButton aria-label="Add item" icon={<Icon name="plus-large-filled" decorative />} size="Medium" styleVariant="Solid - Primary" />
+<IconButton aria-label="Add item" icon={<Icon name="plus-large-filled" decorative />} size="Medium" styleVariant="Solid - Primary" forceState="Hover/Pressed" />
+<IconButton aria-label="Add item" icon={<Icon name="plus-large-filled" decorative />} size="Medium" styleVariant="Solid - Primary" disabled />`;
+
 export const Playground: Story = {
   render: (args) => <PlaygroundStory {...args} />,
   parameters: {
@@ -257,10 +349,35 @@ export const Playground: Story = {
   }
 };
 
-export const Variants: Story = {
-  render: () => <MatrixStory />,
+export const Cars24: Story = {
+  render: () => <BrandVariantMatrixStory brand="Cars24" />,
   parameters: {
-    controls: { disable: true }
+    controls: { disable: true },
+    docs: { source: { code: iconButtonVariantsSourceCode } }
+  }
+};
+
+export const TeamBHP: Story = {
+  render: () => <BrandVariantMatrixStory brand="Team BHP" />,
+  parameters: {
+    controls: { disable: true },
+    docs: { source: { code: iconButtonVariantsSourceCode } }
+  }
+};
+
+export const CarInfo: Story = {
+  render: () => <BrandVariantMatrixStory brand="CarInfo" />,
+  parameters: {
+    controls: { disable: true },
+    docs: { source: { code: iconButtonVariantsSourceCode } }
+  }
+};
+
+export const VehicleInfo: Story = {
+  render: () => <BrandVariantMatrixStory brand="VehicleInfo" />,
+  parameters: {
+    controls: { disable: true },
+    docs: { source: { code: iconButtonVariantsSourceCode } }
   }
 };
 

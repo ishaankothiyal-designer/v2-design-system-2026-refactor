@@ -8,6 +8,7 @@ import {
 import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
 import { getRequiredThemeTokenValue } from "../theme";
+import { getTapFeedbackStyles } from "./press-feedback";
 
 export const canonicalButtonWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.button"
@@ -391,7 +392,13 @@ export function Button({
     transition:
       "background-color 180ms cubic-bezier(0.2, 0, 0, 1), border-color 180ms cubic-bezier(0.2, 0, 0, 1), box-shadow 180ms cubic-bezier(0.2, 0, 0, 1), color 180ms cubic-bezier(0.2, 0, 0, 1)",
     boxShadow: focused ? `0 0 0 3px ${focusColor}40` : "none",
-    ...style
+    ...style,
+    ...getTapFeedbackStyles({
+      disabled: isDisabled,
+      pressed,
+      transition: style?.transition,
+      transform: style?.transform
+    })
   };
 
   const contentStyles: CSSProperties = {

@@ -11,6 +11,7 @@ import {
 import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
 import { getRequiredThemeTokenValue } from "../theme";
+import { getTapFeedbackStyles } from "./press-feedback";
 
 export const canonicalLinkButtonWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.linkButton"
@@ -206,7 +207,14 @@ export function LinkButton({
     textDecoration: "none",
     outline: focused ? `${focusOutlineWidth}px solid ${focusColor}` : "none",
     outlineOffset: focused ? `${focusOutlineOffset}px` : undefined,
-    ...style
+    transition: "color 180ms cubic-bezier(0.2, 0, 0, 1), box-shadow 180ms cubic-bezier(0.2, 0, 0, 1)",
+    ...style,
+    ...getTapFeedbackStyles({
+      disabled,
+      pressed,
+      transition: style?.transition,
+      transform: style?.transform
+    })
   };
 
   const contentStyles: CSSProperties = {

@@ -1,8 +1,9 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@geist/tokens";
 import {
   CaptionButton,
+  Text,
   type CaptionButtonCaptionPosition,
   type CaptionButtonPreviewState,
   type CaptionButtonProps,
@@ -17,18 +18,65 @@ type CaptionButtonStoryArgs = Omit<CaptionButtonProps, "caption" | "children"> &
 };
 
 const captionButtonSizes: CaptionButtonSize[] = ["Medium", "Large"];
+const documentedStates: Array<{
+  key: string;
+  label: string;
+  forceState?: CaptionButtonPreviewState;
+  disabled?: boolean;
+}> = [
+  { key: "default", label: "Default" },
+  { key: "hover", label: "Hover / Pressed", forceState: "Hover/Pressed" },
+  { key: "disabled", label: "Disabled", disabled: true }
+];
 
-function HeaderCell({ label }: { label: string }) {
-  return <div style={headerCellStyles}>{label}</div>;
+function HeaderCell({
+  brand = "Cars24",
+  label,
+  tone = "secondary"
+}: {
+  brand?: DisplayBrandId;
+  label: string;
+  tone?: "primary" | "secondary" | "inverse";
+}) {
+  return (
+    <Text brand={brand} as="strong" size="sm" tone={tone} style={{ display: "block" }}>
+      {label}
+    </Text>
+  );
+}
+
+function SectionHeading({
+  brand = "Cars24",
+  title,
+  description
+}: {
+  brand?: DisplayBrandId;
+  title: string;
+  description?: string;
+}) {
+  return (
+    <div style={{ display: "grid", gap: 6 }}>
+      <Text brand={brand} as="strong" size="md">
+        {title}
+      </Text>
+      {description ? (
+        <Text brand={brand} as="p" size="sm" tone="secondary">
+          {description}
+        </Text>
+      ) : null}
+    </div>
+  );
 }
 
 function MatrixCell({
+  brand,
   captionPosition,
   disabled,
   forceState,
   size,
   styleVariant
 }: {
+  brand: DisplayBrandId;
   captionPosition: CaptionButtonCaptionPosition;
   disabled?: boolean;
   forceState?: CaptionButtonPreviewState;
@@ -37,6 +85,7 @@ function MatrixCell({
 }) {
   return (
     <CaptionButton
+      brand={brand}
       caption="Caption"
       captionPosition={captionPosition}
       size={size}
@@ -49,75 +98,95 @@ function MatrixCell({
   );
 }
 
-function MatrixSection({ captionPosition }: { captionPosition: CaptionButtonCaptionPosition }) {
-  const rows: Array<{
-    forceState?: CaptionButtonPreviewState;
-    label: string;
-    styleVariant: CaptionButtonStyleVariant;
-  }> = [
-    { label: "Primary / Rest", styleVariant: "Primary" },
-    { label: "Primary / Hover", styleVariant: "Primary", forceState: "Hover/Pressed" },
-    { label: "Secondary / Rest", styleVariant: "Secondary" },
-    { label: "Secondary / Hover", styleVariant: "Secondary", forceState: "Hover/Pressed" }
-  ];
-
+function VariantMatrix({
+  brand,
+  captionPosition,
+  styleVariant
+}: {
+  brand: DisplayBrandId;
+  captionPosition: CaptionButtonCaptionPosition;
+  styleVariant: CaptionButtonStyleVariant;
+}) {
   return (
-    <StoryCard>
-      <div style={{ display: "grid", gap: 20 }}>
-        <header style={{ display: "grid", gap: 8 }}>
-          <h2 style={{ margin: 0, fontSize: 24, lineHeight: "30px" }}>Caption {captionPosition}</h2>
-          <p style={sectionCopyStyles}>
-            Figma-aligned matrix for primary and secondary states across both supported sizes.
-          </p>
-        </header>
+    <div style={{ display: "grid", gap: 12 }}>
+      <Text brand={brand} as="strong" size="sm">
+        {styleVariant}
+      </Text>
+      <div style={matrixTableStyles()}>
+        <div style={matrixCornerCellStyles} />
+        {documentedStates.map((state) => (
+          <div key={`${captionPosition}-${styleVariant}-${state.key}-header`} style={matrixHeaderCellStyles}>
+            <HeaderCell brand={brand} label={state.label} />
+          </div>
+        ))}
 
-        <div style={matrixGridStyles}>
-          <HeaderCell label="State" />
-          {captionButtonSizes.map((size) => (
-            <HeaderCell key={`${captionPosition}-${size}`} label={size} />
-          ))}
-
-          {rows.flatMap((row) => [
-            <HeaderCell key={`${captionPosition}-${row.label}`} label={row.label} />,
-            ...captionButtonSizes.map((size) => (
+        {captionButtonSizes.flatMap((size) => [
+          <div key={`${captionPosition}-${styleVariant}-${size}-label`} style={matrixRowLabelCellStyles}>
+            <HeaderCell brand={brand} label={size} />
+          </div>,
+          ...documentedStates.map((state) => (
+            <div key={`${captionPosition}-${styleVariant}-${size}-${state.key}`} style={matrixValueCellStyles}>
               <MatrixCell
-                key={`${captionPosition}-${row.label}-${size}`}
+                brand={brand}
                 captionPosition={captionPosition}
                 size={size}
-                styleVariant={row.styleVariant}
-                {...(row.forceState ? { forceState: row.forceState } : {})}
+                styleVariant={styleVariant}
+                {...(state.forceState ? { forceState: state.forceState } : {})}
+                {...(state.disabled ? { disabled: true } : {})}
               />
-            ))
-          ])}
-        </div>
+            </div>
+          ))
+        ])}
       </div>
-    </StoryCard>
+    </div>
   );
 }
 
-function DisabledSection() {
+function CaptionPositionSection({
+  brand,
+  captionPosition
+}: {
+  brand: DisplayBrandId;
+  captionPosition: CaptionButtonCaptionPosition;
+}) {
   return (
-    <StoryCard>
+    <div
+      style={{
+        display: "grid",
+        gap: 20,
+        padding: 24,
+        borderRadius: 24,
+        border: `1px solid ${String(coreTokenCatalog.color.border.default)}`,
+        background: String(coreTokenCatalog.color.surface.canvas)
+      }}
+    >
+      <SectionHeading brand={brand} title={`Caption ${captionPosition}`} />
       <div style={{ display: "grid", gap: 20 }}>
-        <header style={{ display: "grid", gap: 8 }}>
-          <h2 style={{ margin: 0, fontSize: 24, lineHeight: "30px" }}>Disabled</h2>
-          <p style={sectionCopyStyles}>
-            Disabled presentation captured from the Cars24 Figma matrix for caption-up primary buttons.
-          </p>
-        </header>
-
-        <div style={disabledGridStyles}>
-          {captionButtonSizes.map((size) => (
-            <div key={`disabled-${size}`} style={{ display: "grid", gap: 10, justifyItems: "start" }}>
-              <HeaderCell label={size} />
-              <CaptionButton caption="Caption" disabled size={size} styleVariant="Primary">
-                Primary Button
-              </CaptionButton>
-            </div>
-          ))}
-        </div>
+        {(["Primary", "Secondary"] as const).map((styleVariant) => (
+          <VariantMatrix
+            key={`${captionPosition}-${styleVariant}`}
+            brand={brand}
+            captionPosition={captionPosition}
+            styleVariant={styleVariant}
+          />
+        ))}
       </div>
-    </StoryCard>
+    </div>
+  );
+}
+
+function BrandVariantMatrixStory({ brand }: { brand: DisplayBrandId }) {
+  return (
+    <StoryPage fullscreen>
+      <div style={{ display: "grid", gap: 32 }}>
+        <StoryCard>
+          <CaptionPositionSection brand={brand} captionPosition="Up" />
+        </StoryCard>
+        <StoryCard>
+          <CaptionPositionSection brand={brand} captionPosition="Down" />
+        </StoryCard>
+      </div>
+    </StoryPage>
   );
 }
 
@@ -131,65 +200,51 @@ function PlaygroundStory(args: CaptionButtonStoryArgs) {
   );
 }
 
-function MatrixStory() {
-  return (
-    <StoryPage fullscreen>
-      <StoryCard>
-        <div style={{ display: "grid", gap: 8 }}>
-          <h1 style={{ margin: 0, fontSize: 40, lineHeight: "48px" }}>Caption Button</h1>
-          <p style={introCopyStyles}>
-            Token-driven stacked action button with primary and secondary treatments, two sizes, and caption placement
-            above or below the label.
-          </p>
-        </div>
-      </StoryCard>
-
-      <MatrixSection captionPosition="Up" />
-      <MatrixSection captionPosition="Down" />
-      <DisabledSection />
-    </StoryPage>
-  );
+function matrixTableStyles(): CSSProperties {
+  return {
+    display: "grid",
+    gridTemplateColumns: "180px repeat(3, minmax(220px, 1fr))",
+    border: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+    borderRadius: 20,
+    overflow: "hidden"
+  };
 }
 
-const headerCellStyles: CSSProperties = {
-  color: String(coreTokenCatalog.color.text.secondary),
-  fontSize: 13,
-  fontWeight: 600,
-  lineHeight: "18px"
+const matrixCornerCellStyles: CSSProperties = {
+  minHeight: 68,
+  borderBottom: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+  background: String(coreTokenCatalog.color.surface.canvas)
 };
 
-const introCopyStyles: CSSProperties = {
-  color: String(coreTokenCatalog.color.text.secondary),
-  margin: 0,
-  fontSize: 16,
-  lineHeight: "24px"
-};
-
-const sectionCopyStyles: CSSProperties = {
-  color: String(coreTokenCatalog.color.text.secondary),
-  margin: 0,
-  fontSize: 14,
-  lineHeight: "20px"
-};
-
-const matrixGridStyles: CSSProperties = {
+const matrixHeaderCellStyles: CSSProperties = {
+  minHeight: 68,
+  padding: "16px 20px",
+  display: "flex",
   alignItems: "center",
-  columnGap: 20,
-  display: "grid",
-  gridTemplateColumns: "160px repeat(2, minmax(0, 1fr))",
-  rowGap: 18
+  justifyContent: "center",
+  borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+  background: String(coreTokenCatalog.color.surface.canvas)
 };
 
-const disabledGridStyles: CSSProperties = {
-  display: "grid",
-  gap: 24,
-  gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))"
+const matrixRowLabelCellStyles: CSSProperties = {
+  minHeight: 108,
+  padding: "20px 16px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "flex-start",
+  borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+  background: String(coreTokenCatalog.color.surface.canvas)
 };
 
-const playgroundGridStyles: CSSProperties = {
-  display: "grid",
-  gap: 24,
-  gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))"
+const matrixValueCellStyles: CSSProperties = {
+  minHeight: 108,
+  padding: "16px 20px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+  borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+  background: String(coreTokenCatalog.color.surface.canvas)
 };
 
 const meta: Meta<CaptionButtonStoryArgs> = {
@@ -236,6 +291,16 @@ export default meta;
 
 type Story = StoryObj<CaptionButtonStoryArgs>;
 
+const captionButtonVariantsSourceCode = `<CaptionButton caption="Caption" captionPosition="Up" size="Medium" styleVariant="Primary">
+  Primary Button
+</CaptionButton>
+<CaptionButton caption="Caption" captionPosition="Up" size="Medium" styleVariant="Primary" forceState="Hover/Pressed">
+  Primary Button
+</CaptionButton>
+<CaptionButton caption="Caption" captionPosition="Up" size="Medium" styleVariant="Primary" disabled>
+  Primary Button
+</CaptionButton>`;
+
 export const Playground: Story = {
   render: (args) => <PlaygroundStory {...args} />,
   parameters: {
@@ -243,10 +308,35 @@ export const Playground: Story = {
   }
 };
 
-export const Variants: Story = {
-  render: () => <MatrixStory />,
+export const Cars24: Story = {
+  render: () => <BrandVariantMatrixStory brand="Cars24" />,
   parameters: {
-    controls: { disable: true }
+    controls: { disable: true },
+    docs: { source: { code: captionButtonVariantsSourceCode } }
+  }
+};
+
+export const TeamBHP: Story = {
+  render: () => <BrandVariantMatrixStory brand="Team BHP" />,
+  parameters: {
+    controls: { disable: true },
+    docs: { source: { code: captionButtonVariantsSourceCode } }
+  }
+};
+
+export const CarInfo: Story = {
+  render: () => <BrandVariantMatrixStory brand="CarInfo" />,
+  parameters: {
+    controls: { disable: true },
+    docs: { source: { code: captionButtonVariantsSourceCode } }
+  }
+};
+
+export const VehicleInfo: Story = {
+  render: () => <BrandVariantMatrixStory brand="VehicleInfo" />,
+  parameters: {
+    controls: { disable: true },
+    docs: { source: { code: captionButtonVariantsSourceCode } }
   }
 };
 

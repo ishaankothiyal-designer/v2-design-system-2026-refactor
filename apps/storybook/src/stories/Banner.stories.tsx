@@ -421,6 +421,34 @@ export default meta;
 
 type Story = StoryObj<BannerProps>;
 
+const bannerWithHeadingSourceCode = `<Banner
+  theme="Light"
+  state="Warning"
+  actionType="Text button"
+  heading
+  title="New Message Alert"
+  description="New message received!"
+/>`;
+
+const bannerNoHeadingSourceCode = `<Banner
+  theme="Light"
+  state="Warning"
+  actionType="Text button"
+  heading={false}
+  description="New message received!"
+/>`;
+
+const bannerUiExampleSourceCode = `<SectionHeader
+  title="Sign up"
+  description="All fields are required."
+  showTag={false}
+  showAction={false}
+/>
+
+<Banner state="Warning" heading={false} action={false} description="Fix errors to proceed with signup" />
+<TextInput label="First and last name" validationState="Error" helperText="Enter a valid name: John Smith" />
+<Button styleVariant="Solid" size="Medium">Submit</Button>`;
+
 export const Playground: Story = {
   parameters: {
     layout: "centered"
@@ -432,7 +460,8 @@ export const WithHeading: Story = {
   parameters: {
     controls: {
       include: ["brand"]
-    }
+    },
+    docs: { source: { code: bannerWithHeadingSourceCode } }
   }
 };
 
@@ -441,7 +470,8 @@ export const NoHeading: Story = {
   parameters: {
     controls: {
       include: ["brand"]
-    }
+    },
+    docs: { source: { code: bannerNoHeadingSourceCode } }
   }
 };
 
@@ -450,6 +480,7 @@ export const UIExample: Story = {
   parameters: {
     controls: {
       include: ["brand"]
-    }
+    },
+    docs: { source: { code: bannerUiExampleSourceCode } }
   }
 };

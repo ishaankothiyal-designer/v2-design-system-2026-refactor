@@ -4,7 +4,7 @@ import { coreTokenCatalog } from "@geist/tokens";
 const pageStyles: CSSProperties = {
   minHeight: "auto",
   width: "100%",
-  padding: 80,
+  padding: 40,
   boxSizing: "border-box",
   background: "transparent",
   color: String(coreTokenCatalog.color.text.primary)

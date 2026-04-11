@@ -12,6 +12,7 @@ import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
 import { getRequiredThemeTokenValue } from "../theme";
 import { Icon } from "./icon";
+import { getTapFeedbackStyles } from "./press-feedback";
 
 export const canonicalBackToTopButtonWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.backToTopButton"
@@ -210,7 +211,15 @@ export function BackToTopButton({
     outlineOffset: focused ? `${focusOutlineOffset}px` : undefined,
     padding: `${metrics.paddingBlock}px ${metrics.paddingInline}px`,
     textDecoration: "none",
-    ...style
+    transition:
+      "background-color 180ms cubic-bezier(0.2, 0, 0, 1), box-shadow 180ms cubic-bezier(0.2, 0, 0, 1), outline-color 180ms cubic-bezier(0.2, 0, 0, 1)",
+    ...style,
+    ...getTapFeedbackStyles({
+      disabled,
+      pressed,
+      transition: style?.transition,
+      transform: style?.transform
+    })
   };
 
   const labelStyles: CSSProperties = {

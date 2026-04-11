@@ -1,7 +1,17 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
-import { Icon, SocialButton, type SocialButtonPreviewState, type SocialButtonProps, type SocialButtonSize } from "@geist/web";
+import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@geist/tokens";
+import {
+  Button,
+  Icon,
+  SectionHeader,
+  SocialButton,
+  Text,
+  getRequiredThemeTokenValue,
+  type SocialButtonPreviewState,
+  type SocialButtonProps,
+  type SocialButtonSize
+} from "@geist/web";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 type SocialButtonStoryArgs = Omit<SocialButtonProps, "children" | "icon"> & {
@@ -10,7 +20,47 @@ type SocialButtonStoryArgs = Omit<SocialButtonProps, "children" | "icon"> & {
 };
 
 const socialButtonSizes: SocialButtonSize[] = ["Large", "Medium"];
+const documentedSizes = [
+  { key: "small", label: "Small", size: "Medium" as const },
+  { key: "large", label: "Large", size: "Large" as const }
+] as const;
 const providerIcons: SocialButtonStoryArgs["iconName"][] = ["google-icon", "apple", "facebook", "linkedin", "x"];
+const documentedStates: Array<{
+  key: string;
+  label: string;
+  forceState?: SocialButtonPreviewState;
+  disabled?: boolean;
+}> = [
+  { key: "default", label: "Default" },
+  { key: "hover", label: "Hover", forceState: "Hover" },
+  { key: "disabled", label: "Disabled", disabled: true }
+];
+
+const variantsSourceCode = `<div style={{ display: "grid", gap: 24 }}>
+  <div style={{ display: "grid", gap: 16 }}>
+    <SocialButton brand="Cars24" size="Medium" icon={<Icon name="google-icon" decorative />}>
+      Sign in with Google
+    </SocialButton>
+    <SocialButton brand="Cars24" size="Medium" forceState="Hover" icon={<Icon name="google-icon" decorative />}>
+      Sign in with Google
+    </SocialButton>
+    <SocialButton brand="Cars24" size="Medium" disabled icon={<Icon name="google-icon" decorative />}>
+      Sign in with Google
+    </SocialButton>
+  </div>
+
+  <div style={{ display: "grid", gap: 16 }}>
+    <SocialButton brand="Cars24" size="Large" icon={<Icon name="google-icon" decorative />}>
+      Sign in with Google
+    </SocialButton>
+    <SocialButton brand="Cars24" size="Large" forceState="Hover" icon={<Icon name="google-icon" decorative />}>
+      Sign in with Google
+    </SocialButton>
+    <SocialButton brand="Cars24" size="Large" disabled icon={<Icon name="google-icon" decorative />}>
+      Sign in with Google
+    </SocialButton>
+  </div>
+</div>`;
 
 function StorySocialButton({ iconName, label, ...rest }: SocialButtonStoryArgs) {
   return (
@@ -20,21 +70,34 @@ function StorySocialButton({ iconName, label, ...rest }: SocialButtonStoryArgs) 
   );
 }
 
-function HeaderCell({ label }: { label: string }) {
-  return <div style={headerCellStyles}>{label}</div>;
+function HeaderCell({
+  brand = "Cars24",
+  label
+}: {
+  brand?: DisplayBrandId;
+  label: string;
+}) {
+  return (
+    <Text brand={brand} as="strong" size="sm" tone="secondary" style={{ display: "block" }}>
+      {label}
+    </Text>
+  );
 }
 
 function MatrixCell({
+  brand,
   disabled,
   forceState,
   size
 }: {
+  brand: DisplayBrandId;
   disabled?: boolean;
   forceState?: SocialButtonPreviewState;
   size: SocialButtonSize;
 }) {
   return (
     <SocialButton
+      brand={brand}
       size={size}
       icon={<Icon name="google-icon" decorative />}
       {...(forceState ? { forceState } : {})}
@@ -45,37 +108,85 @@ function MatrixCell({
   );
 }
 
-function MatrixStory() {
-  const rows: Array<{
-    label: string;
-    disabled?: boolean;
-    forceState?: SocialButtonPreviewState;
-  }> = [
-    { label: "Rest" },
-    { label: "Hover", forceState: "Hover" },
-    { label: "Disabled", disabled: true }
-  ];
+function SectionHeading({
+  brand = "Cars24",
+  title
+}: {
+  brand?: DisplayBrandId;
+  title: string;
+}) {
+  return (
+    <Text brand={brand} as="strong" size="md" style={{ display: "block" }}>
+      {title}
+    </Text>
+  );
+}
 
+function SizesDocument({ brand }: { brand: DisplayBrandId }) {
   return (
     <StoryPage fullscreen>
-      <div style={matrixGridStyles}>
-        <HeaderCell label="State" />
-        {socialButtonSizes.map((size) => (
-          <HeaderCell key={size} label={size} />
-        ))}
+      <StoryCard>
+        <div style={matrixTableStyles()}>
+          <div style={matrixCornerCellStyles} />
+          {documentedStates.map((state) => (
+            <div key={`sizes-${state.key}`} style={matrixHeaderCellStyles}>
+              <HeaderCell brand={brand} label={state.label} />
+            </div>
+          ))}
 
-        {rows.flatMap((row) => [
-          <HeaderCell key={`${row.label}-label`} label={row.label} />,
-          ...socialButtonSizes.map((size) => (
-            <MatrixCell
-              key={`${row.label}-${size}`}
-              size={size}
-              {...(row.forceState ? { forceState: row.forceState } : {})}
-              {...(row.disabled ? { disabled: true } : {})}
-            />
-          ))
-        ])}
-      </div>
+          {documentedSizes.flatMap((entry) => [
+            <div key={`sizes-${entry.key}-label`} style={matrixRowLabelCellStyles}>
+              <HeaderCell brand={brand} label={entry.label} />
+            </div>,
+            ...documentedStates.map((state) => (
+              <div key={`sizes-${entry.key}-${state.key}`} style={matrixValueCellStyles}>
+                <MatrixCell
+                  brand={brand}
+                  size={entry.size}
+                  {...(state.forceState ? { forceState: state.forceState } : {})}
+                  {...(state.disabled ? { disabled: true } : {})}
+                />
+              </div>
+            ))
+          ])}
+        </div>
+      </StoryCard>
+    </StoryPage>
+  );
+}
+
+function StatesDocument({ brand }: { brand: DisplayBrandId }) {
+  return (
+    <StoryPage fullscreen>
+      <StoryCard>
+        <div style={{ display: "grid", gap: 20 }}>
+          <SectionHeading brand={brand} title="States" />
+          <div style={matrixTableStyles()}>
+            <div style={matrixCornerCellStyles} />
+            {documentedSizes.map((entry) => (
+              <div key={`states-${entry.key}`} style={matrixHeaderCellStyles}>
+                <HeaderCell brand={brand} label={entry.label} />
+              </div>
+            ))}
+
+            {documentedStates.flatMap((state) => [
+              <div key={`states-${state.key}-label`} style={matrixRowLabelCellStyles}>
+                <HeaderCell brand={brand} label={state.label} />
+              </div>,
+              ...documentedSizes.map((entry) => (
+                <div key={`states-${state.key}-${entry.key}`} style={matrixValueCellStyles}>
+                  <MatrixCell
+                    brand={brand}
+                    size={entry.size}
+                    {...(state.forceState ? { forceState: state.forceState } : {})}
+                    {...(state.disabled ? { disabled: true } : {})}
+                  />
+                </div>
+              ))
+            ])}
+          </div>
+        </div>
+      </StoryCard>
     </StoryPage>
   );
 }
@@ -90,34 +201,124 @@ function PlaygroundStory(args: SocialButtonStoryArgs) {
   );
 }
 
-const headerCellStyles: CSSProperties = {
-  color: "#64748B",
-  fontSize: 13,
-  fontWeight: 600,
-  lineHeight: "18px"
+function LoginActionsStory({ brand = "Cars24" }: Pick<SocialButtonProps, "brand">) {
+  const borderDefault = String(getRequiredThemeTokenValue(brand, "color.border.default"));
+  const surfaceCanvas = String(getRequiredThemeTokenValue(brand, "color.surface.canvas"));
+  const textSecondary = String(getRequiredThemeTokenValue(brand, "color.text.secondary"));
+  const radiusXl = Number(getRequiredThemeTokenValue(brand, "radius.xl"));
+  const spacing4 = Number(getRequiredThemeTokenValue(brand, "spacing.4"));
+  const spacing6 = Number(getRequiredThemeTokenValue(brand, "spacing.6"));
+  const spacing8 = Number(getRequiredThemeTokenValue(brand, "spacing.8"));
+
+  return (
+    <StoryPage>
+      <div
+        style={{
+          width: "100%",
+          maxWidth: 480,
+          margin: "0 auto"
+        }}
+      >
+        <StoryCard>
+          <div
+            style={{
+              display: "grid",
+              gap: spacing6,
+              padding: spacing8,
+              border: `1px solid ${borderDefault}`,
+              borderRadius: radiusXl,
+              background: surfaceCanvas
+            }}
+          >
+            <SectionHeader
+              brand={brand}
+              title="Log in"
+              subtitle=""
+              description="Choose how you want to continue."
+              showTag={false}
+              showAction={false}
+            />
+
+            <div style={{ display: "grid", gap: spacing4 }}>
+              <Button brand={brand} styleVariant="Solid" size="Large" style={{ width: "100%" }}>
+                Login with mobile
+              </Button>
+
+              <Button brand={brand} styleVariant="Outline" size="Large" style={{ width: "100%" }}>
+                Login with Email
+              </Button>
+            </div>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr auto 1fr",
+                gap: spacing4,
+                alignItems: "center"
+              }}
+            >
+              <div style={{ height: 1, background: borderDefault }} />
+              <Text brand={brand} as="span" size="sm" tone="secondary" style={{ color: textSecondary }}>
+                or continue with
+              </Text>
+              <div style={{ height: 1, background: borderDefault }} />
+            </div>
+
+            <SocialButton brand={brand} size="Large" icon={<Icon name="google-icon" decorative />} style={{ width: "100%" }}>
+              Login with Google
+            </SocialButton>
+          </div>
+        </StoryCard>
+      </div>
+    </StoryPage>
+  );
+}
+
+function matrixTableStyles(): CSSProperties {
+  return {
+    display: "grid",
+    gridTemplateColumns: "180px repeat(3, minmax(220px, 1fr))",
+    border: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+    borderRadius: 20,
+    overflow: "hidden"
+  };
+}
+
+const matrixCornerCellStyles: CSSProperties = {
+  minHeight: 68,
+  borderBottom: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+  background: String(coreTokenCatalog.color.surface.canvas)
 };
 
-const introCopyStyles: CSSProperties = {
-  color: "#64748B",
-  margin: 0,
-  fontSize: 16,
-  lineHeight: "24px"
-};
-
-const matrixGridStyles: CSSProperties = {
+const matrixHeaderCellStyles: CSSProperties = {
+  minHeight: 68,
+  padding: "16px 20px",
+  display: "flex",
   alignItems: "center",
-  columnGap: 20,
-  display: "grid",
-  gridTemplateColumns: "140px repeat(2, minmax(0, 1fr))",
-  rowGap: 18,
   justifyContent: "center",
-  justifyItems: "center"
+  borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+  background: String(coreTokenCatalog.color.surface.canvas)
 };
 
-const playgroundGridStyles: CSSProperties = {
-  display: "grid",
-  gap: 24,
-  gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))"
+const matrixRowLabelCellStyles: CSSProperties = {
+  minHeight: 96,
+  padding: "20px 16px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "flex-start",
+  borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+  background: String(coreTokenCatalog.color.surface.canvas)
+};
+
+const matrixValueCellStyles: CSSProperties = {
+  minHeight: 96,
+  padding: "16px 20px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+  borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+  background: String(coreTokenCatalog.color.surface.canvas)
 };
 
 const meta: Meta<SocialButtonStoryArgs> = {
@@ -166,18 +367,40 @@ export const Playground: Story = {
 };
 
 export const Variants: Story = {
-  render: () => <MatrixStory />,
+  render: ({ brand = "Cars24" }) => <SizesDocument brand={brand} />,
   parameters: {
-    controls: { disable: true }
+    controls: {
+      include: ["brand"]
+    },
+    docs: {
+      source: {
+        code: variantsSourceCode
+      }
+    }
   }
 };
 
 export const UIExample: Story = {
-  render: (args) => <PlaygroundStory {...args} />,
+  render: ({ brand = "Cars24" }) => <LoginActionsStory brand={brand} />,
   parameters: {
-    layout: "centered",
     controls: {
       include: ["brand"]
+    },
+    docs: {
+      source: {
+        code: `<SectionHeader
+  title="Log in"
+  description="Choose how you want to continue."
+  showTag={false}
+  showAction={false}
+/>
+
+<Button styleVariant="Solid" size="Large">Login with mobile</Button>
+<Button styleVariant="Outline" size="Large">Login with Email</Button>
+<SocialButton size="Large" icon={<Icon name="google-icon" decorative />}>
+  Login with Google
+</SocialButton>`
+      }
     }
   }
 };

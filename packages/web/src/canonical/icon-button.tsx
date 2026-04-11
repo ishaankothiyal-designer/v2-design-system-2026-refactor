@@ -11,6 +11,7 @@ import {
 import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
 import { getRequiredThemeTokenValue } from "../theme";
+import { getTapFeedbackStyles } from "./press-feedback";
 
 export const canonicalIconButtonWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.iconButton"
@@ -307,7 +308,15 @@ export function IconButton({
     outlineOffset: focused ? `${focusOutlineOffset}px` : undefined,
     padding: 0,
     width: `${metrics.boxSize}px`,
-    ...style
+    transition:
+      "background-color 180ms cubic-bezier(0.2, 0, 0, 1), border-color 180ms cubic-bezier(0.2, 0, 0, 1), outline-color 180ms cubic-bezier(0.2, 0, 0, 1)",
+    ...style,
+    ...getTapFeedbackStyles({
+      disabled,
+      pressed,
+      transition: style?.transition,
+      transform: style?.transform
+    })
   };
 
   function handleMouseEnter(event: MouseEvent<HTMLButtonElement>) {

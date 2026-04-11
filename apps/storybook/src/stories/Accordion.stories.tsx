@@ -642,6 +642,27 @@ export default meta;
 
 type Story = StoryObj<AccordionStoryArgs>;
 
+const accordionSizesSourceCode = `<Accordion size="sm" title="Additional Insights" content="..." />
+<Accordion size="sm" title="Additional Insights" content="..." expanded />
+<Accordion size="lg" title="Additional Insights" content="..." />
+<Accordion size="lg" title="Additional Insights" content="..." expanded />`;
+
+const accordionStatesSourceCode = `<Accordion title="Default" content="..." />
+<Accordion title="Hover" content="..." forceState="hover" />
+<Accordion title="Focus" content="..." forceState="focus" />
+<Accordion title="Active" content="..." forceState="active" />
+<Accordion title="Disabled" content="..." disabled />`;
+
+const accordionUiExampleSourceCode = `<SectionHeader
+  title="Frequently asked questions"
+  showTag={false}
+  showAction={false}
+/>
+
+<Accordion title="How does the car inspection work?" content="..." expanded />
+<Accordion title="Which documents should I keep ready before selling?" content="..." />
+<Accordion title="When will I receive the payment?" content="..." />`;
+
 export const Playground: Story = {
   parameters: {
     layout: "centered"
@@ -653,7 +674,8 @@ export const Sizes: Story = {
   parameters: {
     controls: {
       include: ["brand"]
-    }
+    },
+    docs: { source: { code: accordionSizesSourceCode } }
   }
 };
 
@@ -662,7 +684,8 @@ export const States: Story = {
   parameters: {
     controls: {
       include: ["brand"]
-    }
+    },
+    docs: { source: { code: accordionStatesSourceCode } }
   }
 };
 
@@ -771,6 +794,7 @@ export const UIExample: Story = {
   parameters: {
     controls: {
       include: ["brand"]
-    }
+    },
+    docs: { source: { code: accordionUiExampleSourceCode } }
   }
 };

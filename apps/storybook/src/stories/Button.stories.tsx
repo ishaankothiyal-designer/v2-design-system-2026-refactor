@@ -4,7 +4,10 @@ import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "
 import {
   Button,
   Icon,
+  SectionHeader,
+  SocialButton,
   Text,
+  getRequiredThemeTokenValue,
   type ButtonPreviewState,
   type ButtonProps,
   type ButtonShape,
@@ -325,6 +328,86 @@ function ShapeAndStyleStory({ brand = "Cars24" }: Pick<ButtonProps, "brand">) {
   );
 }
 
+function LoginActionsStory({ brand = "Cars24" }: Pick<ButtonProps, "brand">) {
+  const borderDefault = String(getRequiredThemeTokenValue(brand, "color.border.default"));
+  const surfaceCanvas = String(getRequiredThemeTokenValue(brand, "color.surface.canvas"));
+  const textPrimary = String(getRequiredThemeTokenValue(brand, "color.text.primary"));
+  const textSecondary = String(getRequiredThemeTokenValue(brand, "color.text.secondary"));
+  const radiusXl = Number(getRequiredThemeTokenValue(brand, "radius.xl"));
+  const spacing4 = Number(getRequiredThemeTokenValue(brand, "spacing.4"));
+  const spacing5 = Number(getRequiredThemeTokenValue(brand, "spacing.5"));
+  const spacing6 = Number(getRequiredThemeTokenValue(brand, "spacing.6"));
+  const spacing8 = Number(getRequiredThemeTokenValue(brand, "spacing.8"));
+
+  return (
+    <StoryPage>
+      <div
+        style={{
+          width: "100%",
+          maxWidth: 480,
+          margin: "0 auto"
+        }}
+      >
+        <StoryCard>
+          <div
+            style={{
+              display: "grid",
+              gap: spacing6,
+              padding: spacing8,
+              border: `1px solid ${borderDefault}`,
+              borderRadius: radiusXl,
+              background: surfaceCanvas
+            }}
+          >
+            <SectionHeader
+              brand={brand}
+              title="Log in"
+              subtitle=""
+              description="Choose how you want to continue."
+              showTag={false}
+              showAction={false}
+            />
+
+            <div style={{ display: "grid", gap: spacing4 }}>
+              <Button brand={brand} styleVariant="Solid" size="Large" style={{ width: "100%" }}>
+                Login with mobile
+              </Button>
+
+              <Button brand={brand} styleVariant="Outline" size="Large" style={{ width: "100%" }}>
+                Login with Email
+              </Button>
+            </div>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr auto 1fr",
+                gap: spacing4,
+                alignItems: "center"
+              }}
+            >
+              <div style={{ height: 1, background: borderDefault }} />
+              <Text brand={brand} as="span" size="sm" tone="secondary" style={{ color: textSecondary }}>
+                or continue with
+              </Text>
+              <div style={{ height: 1, background: borderDefault }} />
+            </div>
+
+            <SocialButton
+              brand={brand}
+              size="Large"
+              icon={<Icon name="google-icon" decorative />}
+              style={{ width: "100%" }}
+            >
+              Login with Google
+            </SocialButton>
+          </div>
+        </StoryCard>
+      </div>
+    </StoryPage>
+  );
+}
+
 function matrixTableStyles(onDark: boolean): CSSProperties {
   return {
     display: "grid",
@@ -479,6 +562,26 @@ export default meta;
 
 type Story = StoryObj<ButtonStoryArgs>;
 
+const buttonVariantsSourceCode = `<div>
+  <Button styleVariant="Solid" size="Medium">Label</Button>
+  <Button styleVariant="Solid" size="Medium" forceState="Hover/Pressed">Label</Button>
+  <Button styleVariant="Solid" size="Medium" loading>Label</Button>
+  <Button styleVariant="Solid" size="Medium" disabled>Label</Button>
+</div>`;
+
+const buttonUiExampleSourceCode = `<SectionHeader
+  title="Log in"
+  description="Choose how you want to continue."
+  showTag={false}
+  showAction={false}
+/>
+
+<Button styleVariant="Solid" size="Large">Login with mobile</Button>
+<Button styleVariant="Outline" size="Large">Login with Email</Button>
+<SocialButton size="Large" icon={<Icon name="google-icon" decorative />}>
+  Login with Google
+</SocialButton>`;
+
 export const Playground: Story = {
   parameters: {
     layout: "centered"
@@ -488,36 +591,41 @@ export const Playground: Story = {
 export const Cars24: Story = {
   render: () => <BrandVariantMatrixStory brand="Cars24" />,
   parameters: {
-    controls: { disable: true }
+    controls: { disable: true },
+    docs: { source: { code: buttonVariantsSourceCode } }
   }
 };
 
 export const TeamBHP: Story = {
   render: () => <BrandVariantMatrixStory brand="Team BHP" />,
   parameters: {
-    controls: { disable: true }
+    controls: { disable: true },
+    docs: { source: { code: buttonVariantsSourceCode } }
   }
 };
 
 export const CarInfo: Story = {
   render: () => <BrandVariantMatrixStory brand="CarInfo" />,
   parameters: {
-    controls: { disable: true }
+    controls: { disable: true },
+    docs: { source: { code: buttonVariantsSourceCode } }
   }
 };
 
 export const VehicleInfo: Story = {
   render: () => <BrandVariantMatrixStory brand="VehicleInfo" />,
   parameters: {
-    controls: { disable: true }
+    controls: { disable: true },
+    docs: { source: { code: buttonVariantsSourceCode } }
   }
 };
 
 export const UIExample: Story = {
-  render: ({ brand = "Cars24" }) => <ShapeAndStyleStory brand={brand} />,
+  render: ({ brand = "Cars24" }) => <LoginActionsStory brand={brand} />,
   parameters: {
     controls: {
       include: ["brand"]
-    }
+    },
+    docs: { source: { code: buttonUiExampleSourceCode } }
   }
 };

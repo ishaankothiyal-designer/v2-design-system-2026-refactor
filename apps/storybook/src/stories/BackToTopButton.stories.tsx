@@ -154,6 +154,17 @@ const playgroundGridStyles: CSSProperties = {
   gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))"
 };
 
+const backToTopVariantsSourceCode = `<StoryPage fullscreen>
+  <BrandSection brand="Cars24" title="Cars24" />
+  <BrandSection brand="Team BHP" title="Team BHP" />
+  <BrandSection brand="CarInfo" title="CarInfo" />
+  <BrandSection brand="VehicleInfo" title="VehicleInfo" />
+</StoryPage>`;
+
+const backToTopUiExampleSourceCode = `<BackToTopButton brand="Cars24">
+  Go to top
+</BackToTopButton>`;
+
 const meta: Meta<BackToTopButtonStoryArgs> = {
   title: "Components/Back To Top Button",
   component: BackToTopButton,
@@ -196,7 +207,12 @@ export const Playground: Story = {
 export const Variants: Story = {
   render: () => <MatrixStory />,
   parameters: {
-    controls: { disable: true }
+    controls: { disable: true },
+    docs: {
+      source: {
+        code: backToTopVariantsSourceCode
+      }
+    }
   }
 };
 
@@ -206,6 +222,11 @@ export const UIExample: Story = {
     layout: "centered",
     controls: {
       include: ["brand"]
+    },
+    docs: {
+      source: {
+        code: backToTopUiExampleSourceCode
+      }
     }
   }
 };

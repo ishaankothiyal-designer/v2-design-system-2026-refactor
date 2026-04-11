@@ -229,6 +229,29 @@ const configGridStyles: CSSProperties = {
   gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))"
 };
 
+const badgeVariantsSourceCode = `<StoryPage>
+  <StoryCard>
+    <Badge
+      brand="Cars24"
+      type="Neutral"
+      priority="Medium"
+      size="Extra Small"
+      pillShape="No"
+      labelText="Badge"
+    />
+  </StoryCard>
+</StoryPage>`;
+
+const badgeUiExampleSourceCode = `<Badge
+  brand="Cars24"
+  type="Information"
+  priority="Medium"
+  size="Small"
+  pillShape="Yes"
+  labelText="Dismiss me"
+  onDismiss={() => undefined}
+/>`;
+
 const meta: Meta<BadgeStoryArgs> = {
   title: "Components/Badge",
   component: Badge,
@@ -334,7 +357,12 @@ export const Playground: Story = {
 export const Variants: StoryObj = {
   render: () => <MatrixStory />,
   parameters: {
-    controls: { disable: true }
+    controls: { disable: true },
+    docs: {
+      source: {
+        code: badgeVariantsSourceCode
+      }
+    }
   }
 };
 
@@ -343,6 +371,11 @@ export const UIExample: Story = {
   parameters: {
     controls: {
       include: ["brand"]
+    },
+    docs: {
+      source: {
+        code: badgeUiExampleSourceCode
+      }
     }
   }
 };

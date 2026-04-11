@@ -197,6 +197,34 @@ const rowLabelStyles: CSSProperties = {
   paddingTop: 10
 };
 
+const textInputVariantsSourceCode = `<StoryPage fullscreen>
+  <TextInput
+    brand="Cars24"
+    size="Small"
+    label="Label"
+    placeholder="Placeholder text"
+    helperText="Helper text"
+    prefixIconName="placeholder-generate-outline"
+    suffixIconName="placeholder-generate-outline"
+    required
+    showHelperIcon
+    showLabelInfoIcon
+  />
+</StoryPage>`;
+
+const textInputUiExampleSourceCode = `<TextInput
+  brand="Cars24"
+  size="Small"
+  label="Label"
+  placeholder="Placeholder text"
+  helperText="Helper text"
+  prefixIconName="placeholder-generate-outline"
+  suffixIconName="placeholder-generate-outline"
+  required
+  showHelperIcon
+  showLabelInfoIcon
+/>`;
+
 const meta = {
   title: "Components/Text Input",
   component: TextInput,
@@ -273,7 +301,12 @@ export const Playground: Story = {
 export const Variants: Story = {
   render: VariantMatrixStory,
   parameters: {
-    controls: { disable: true }
+    controls: { disable: true },
+    docs: {
+      source: {
+        code: textInputVariantsSourceCode
+      }
+    }
   }
 };
 
@@ -283,6 +316,11 @@ export const UIExample: Story = {
     layout: "centered",
     controls: {
       include: ["brand"]
+    },
+    docs: {
+      source: {
+        code: textInputUiExampleSourceCode
+      }
     }
   }
 };

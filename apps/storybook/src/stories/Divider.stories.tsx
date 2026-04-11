@@ -78,6 +78,28 @@ const variantGridStyles: CSSProperties = {
   justifyItems: "center"
 };
 
+const dividerVariantsSourceCode = `<StoryPage fullscreen>
+  <Divider
+    brand="Cars24"
+    labelPosition="Center"
+    thickness="Regular"
+    lineStyle="Plain"
+    label="Continue"
+    leadingIcon={<Icon name="sparkle-filled" decorative />}
+    trailingIcon={<Icon name="sparkle-filled" decorative />}
+  />
+</StoryPage>`;
+
+const dividerUiExampleSourceCode = `<Divider
+  brand="Cars24"
+  labelPosition="Center"
+  thickness="Regular"
+  lineStyle="Plain"
+  label="Continue"
+  leadingIcon={<Icon name="sparkle-filled" decorative />}
+  trailingIcon={<Icon name="sparkle-filled" decorative />}
+/>`;
+
 const meta: Meta<DividerStoryArgs> = {
   title: "Components/Divider",
   component: Divider,
@@ -137,7 +159,12 @@ export const Playground: Story = {
 export const Variants: Story = {
   render: () => <VariantGridStory />,
   parameters: {
-    controls: { disable: true }
+    controls: { disable: true },
+    docs: {
+      source: {
+        code: dividerVariantsSourceCode
+      }
+    }
   }
 };
 
@@ -147,6 +174,11 @@ export const UIExample: Story = {
     layout: "centered",
     controls: {
       include: ["brand"]
+    },
+    docs: {
+      source: {
+        code: dividerUiExampleSourceCode
+      }
     }
   }
 };

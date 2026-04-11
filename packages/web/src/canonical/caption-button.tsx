@@ -8,6 +8,7 @@ import {
 import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
 import { getRequiredThemeTokenValue } from "../theme";
+import { getTapFeedbackStyles } from "./press-feedback";
 
 export const canonicalCaptionButtonWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.captionButton"
@@ -168,7 +169,15 @@ export function CaptionButton({
     overflow: "hidden",
     padding: `0 ${metrics.paddingInline}px`,
     textAlign: "center",
-    ...style
+    transition:
+      "background-color 180ms cubic-bezier(0.2, 0, 0, 1), border-color 180ms cubic-bezier(0.2, 0, 0, 1), outline-color 180ms cubic-bezier(0.2, 0, 0, 1)",
+    ...style,
+    ...getTapFeedbackStyles({
+      disabled,
+      pressed,
+      transition: style?.transition,
+      transform: style?.transform
+    })
   };
 
   const labelStyles: CSSProperties = {

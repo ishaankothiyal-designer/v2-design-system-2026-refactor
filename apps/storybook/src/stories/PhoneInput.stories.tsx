@@ -281,6 +281,34 @@ const rowLabelStyles: CSSProperties = {
   paddingTop: 8
 };
 
+const phoneInputVariantsSourceCode = `<StoryPage fullscreen>
+  <PhoneInput
+    brand="Cars24"
+    size="Small"
+    label="Label"
+    placeholder="9876543210"
+    helperText="Helper text"
+    required
+    showCountryChevron
+    showHelperIcon
+    showLabelInfoIcon
+    defaultCountry="India"
+  />
+</StoryPage>`;
+
+const phoneInputUiExampleSourceCode = `<PhoneInput
+  brand="Cars24"
+  size="Small"
+  label="Label"
+  placeholder="9876543210"
+  helperText="Helper text"
+  required
+  showCountryChevron
+  showHelperIcon
+  showLabelInfoIcon
+  defaultCountry="India"
+/>`;
+
 const meta: Meta<PhoneInputProps> = {
   title: "Components/Phone Input",
   component: PhoneInput,
@@ -372,7 +400,12 @@ export const Playground: Story = {
 export const Variants: Story = {
   render: () => <VariantMatrixStory />,
   parameters: {
-    controls: { disable: true }
+    controls: { disable: true },
+    docs: {
+      source: {
+        code: phoneInputVariantsSourceCode
+      }
+    }
   }
 };
 
@@ -382,6 +415,11 @@ export const UIExample: Story = {
     layout: "centered",
     controls: {
       include: ["brand"]
+    },
+    docs: {
+      source: {
+        code: phoneInputUiExampleSourceCode
+      }
     }
   }
 };

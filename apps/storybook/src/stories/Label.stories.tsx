@@ -62,6 +62,26 @@ const matrixStyles: CSSProperties = {
   justifyContent: "center"
 };
 
+const labelVariantsSourceCode = `<StoryPage fullscreen>
+  <Label
+    brand="Cars24"
+    size="Medium"
+    label="Label"
+    description="Helpful description that could potentially wrap to multiple lines"
+    required
+    showInfoIcon
+  />
+</StoryPage>`;
+
+const labelUiExampleSourceCode = `<Label
+  brand="Cars24"
+  size="Medium"
+  label="Label"
+  description="Helpful description that could potentially wrap to multiple lines"
+  required
+  showInfoIcon
+/>`;
+
 const meta: Meta<LabelStoryArgs> = {
   title: "Components/Label",
   component: Label,
@@ -115,7 +135,12 @@ export const Playground: Story = {
 export const Variants: Story = {
   render: () => <VariantMatrixStory />,
   parameters: {
-    controls: { disable: true }
+    controls: { disable: true },
+    docs: {
+      source: {
+        code: labelVariantsSourceCode
+      }
+    }
   }
 };
 
@@ -125,6 +150,11 @@ export const UIExample: Story = {
     layout: "centered",
     controls: {
       include: ["brand"]
+    },
+    docs: {
+      source: {
+        code: labelUiExampleSourceCode
+      }
     }
   }
 };

@@ -79,6 +79,28 @@ const configGridStyles: CSSProperties = {
   gridTemplateColumns: "repeat(auto-fit, minmax(360px, max-content))"
 };
 
+const sectionHeaderVariantsSourceCode = `<StoryPage>
+  <SectionHeader
+    brand="Cars24"
+    title="Section title"
+    subtitle="Section title line 2"
+    description="Description goes here upto 2 lines"
+    tagLabel="New"
+    showTag
+    showAction
+    actionLabel="View all"
+  />
+</StoryPage>`;
+
+const sectionHeaderUiExampleSourceCode = `<SectionHeader
+  brand="Cars24"
+  title="Section title"
+  subtitle="Section title line 2"
+  description="Description goes here upto 2 lines"
+  showTag={false}
+  showAction={false}
+/>`;
+
 const meta: Meta<SectionHeaderProps> = {
   title: "Components/Section Header",
   component: SectionHeader,
@@ -152,7 +174,12 @@ export const Playground: Story = {
 export const Variants: StoryObj = {
   render: () => <FigmaVariantsStory />,
   parameters: {
-    controls: { disable: true }
+    controls: { disable: true },
+    docs: {
+      source: {
+        code: sectionHeaderVariantsSourceCode
+      }
+    }
   }
 };
 
@@ -161,6 +188,11 @@ export const UIExample: Story = {
   parameters: {
     controls: {
       include: ["brand"]
+    },
+    docs: {
+      source: {
+        code: sectionHeaderUiExampleSourceCode
+      }
     }
   }
 };
