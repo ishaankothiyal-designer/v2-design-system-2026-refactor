@@ -16,6 +16,7 @@ function resolveBrand(brandId: (typeof brands)[number]) {
 
 function Tokens() {
   const cars24 = resolveBrand("Cars24") as typeof coreTokenCatalog;
+  const teamBhp = resolveBrand("Team BHP") as typeof coreTokenCatalog;
   const carInfo = resolveBrand("CarInfo") as typeof coreTokenCatalog;
   const vehicleInfo = resolveBrand("VehicleInfo") as typeof coreTokenCatalog;
 
@@ -71,6 +72,7 @@ function Tokens() {
 
   const brandRows = [
     ["Cars24", String(cars24.color.brand.primary["600"]), String(cars24.typography.fontFamily.sans)],
+    ["Team BHP", String(teamBhp.color.brand.primary["600"]), String(teamBhp.typography.fontFamily.sans)],
     ["CarInfo", String(carInfo.color.brand.primary["600"]), String(carInfo.typography.fontFamily.sans)],
     ["VehicleInfo", String(vehicleInfo.color.brand.primary["600"]), String(vehicleInfo.typography.fontFamily.sans)]
   ] as const;
@@ -108,7 +110,7 @@ function Tokens() {
           <div style={{ display: "grid", gap: 12 }}>
             <strong>Brand model</strong>
             <p style={{ margin: 0, color: cars24.color.text.secondary, lineHeight: "24px" }}>
-              Storybook exposes `Cars24`, `CarInfo`, and `VehicleInfo`. Those names normalize through
+              Storybook exposes `Cars24`, `Team BHP`, `CarInfo`, and `VehicleInfo`. Those names normalize through
               `BRAND_ALIAS_TO_REPO_BRAND`, so the UI can stay brand-friendly while the repo still resolves the
               matching token set underneath.
             </p>

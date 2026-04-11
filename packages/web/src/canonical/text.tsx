@@ -60,7 +60,7 @@ export function Text({
       {...rest}
       style={{
         color: String(getRequiredThemeTokenValue(brand, colorToken)),
-        fontFamily: String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans")),
+        fontFamily: `${String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"))}, sans-serif`,
         fontSize,
         fontWeight,
         lineHeight: `${lineHeight}px`,

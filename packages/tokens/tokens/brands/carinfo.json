@@ -1,0 +1,35 @@
+{
+  "color": {
+    "brand": {
+      "primary": {
+        "50": "#B4F7EE",
+        "100": "#87E8DE",
+        "600": "#002329",
+        "700": "#0A0A0A"
+      }
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "sans": "Manrope"
+    },
+    "fontWeight": {
+      "regular": 500,
+      "medium": 600,
+      "semibold": 700
+    }
+  },
+  "radius": {
+    "md": 8,
+    "lg": 12,
+    "xl": 12,
+    "pill": 999,
+    "alt": {
+      "xs": 4,
+      "sm": 4,
+      "md": 8,
+      "lg": 12,
+      "xl": 12
+    }
+  }
+}

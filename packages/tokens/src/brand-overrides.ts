@@ -1,24 +1,36 @@
-import core from "../tokens/brands/core.json";
-import acme from "../tokens/brands/acme.json";
+import cars24 from "../tokens/brands/cars24.json";
+import teamBhp from "../tokens/brands/teambhp.json";
+import carInfo from "../tokens/brands/carinfo.json";
+import vehicleInfo from "../tokens/brands/vehicleinfo.json";
 import { BRAND_ALIAS_TO_REPO_BRAND, FIGMA_BRAND_TO_REPO_BRAND } from "./types";
 import type { BrandId, BrandTokenSet, FigmaBrandName, RepoBrandId } from "./types";
 
 /**
- * Figma uses brand names like Cars24 and Team BHP, while the repo currently
- * stores the corresponding override sets as `core` and `acme`.
+ * Figma and Storybook expose brand-friendly names, while the repo resolves
+ * them to the concrete token override sources below.
  */
 export const BRAND_OVERRIDE_SOURCE_MAP: Record<FigmaBrandName, RepoBrandId> = FIGMA_BRAND_TO_REPO_BRAND;
 
 const brandSets: Record<RepoBrandId, BrandTokenSet> = {
-  core: {
-    brandId: "core",
+  cars24: {
+    brandId: "cars24",
     mode: "light",
-    tokens: core
+    tokens: cars24
   },
-  acme: {
-    brandId: "acme",
+  teambhp: {
+    brandId: "teambhp",
     mode: "light",
-    tokens: acme
+    tokens: teamBhp
+  },
+  carinfo: {
+    brandId: "carinfo",
+    mode: "light",
+    tokens: carInfo
+  },
+  vehicleinfo: {
+    brandId: "vehicleinfo",
+    mode: "light",
+    tokens: vehicleInfo
   }
 };
 

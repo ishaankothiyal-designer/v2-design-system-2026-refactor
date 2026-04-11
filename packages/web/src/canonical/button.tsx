@@ -27,9 +27,6 @@ type SizeMetrics = {
   gap: string;
   paddingInline: string;
   paddingBlock: string;
-  radiusRegular: string;
-  typographySize: string;
-  typographyLineHeight: string;
   loaderSize: string;
 };
 
@@ -51,9 +48,6 @@ const BUTTON_SIZE_METRICS: Record<ButtonSize, SizeMetrics> = {
     gap: "4px",
     paddingInline: "12px",
     paddingBlock: "5px",
-    radiusRegular: "8px",
-    typographySize: "11px",
-    typographyLineHeight: "17px",
     loaderSize: "14px"
   },
   Small: {
@@ -62,9 +56,6 @@ const BUTTON_SIZE_METRICS: Record<ButtonSize, SizeMetrics> = {
     gap: "4px",
     paddingInline: "12px",
     paddingBlock: "7px",
-    radiusRegular: "8px",
-    typographySize: "13px",
-    typographyLineHeight: "18px",
     loaderSize: "16px"
   },
   Medium: {
@@ -73,9 +64,6 @@ const BUTTON_SIZE_METRICS: Record<ButtonSize, SizeMetrics> = {
     gap: "6px",
     paddingInline: "14px",
     paddingBlock: "10px",
-    radiusRegular: "12px",
-    typographySize: "15px",
-    typographyLineHeight: "20px",
     loaderSize: "18px"
   },
   Large: {
@@ -84,9 +72,6 @@ const BUTTON_SIZE_METRICS: Record<ButtonSize, SizeMetrics> = {
     gap: "6px",
     paddingInline: "16px",
     paddingBlock: "12px",
-    radiusRegular: "14px",
-    typographySize: "15px",
-    typographyLineHeight: "20px",
     loaderSize: "18px"
   },
   "Extra Large": {
@@ -95,9 +80,6 @@ const BUTTON_SIZE_METRICS: Record<ButtonSize, SizeMetrics> = {
     gap: "6px",
     paddingInline: "18px",
     paddingBlock: "18px",
-    radiusRegular: "16px",
-    typographySize: "17px",
-    typographyLineHeight: "20px",
     loaderSize: "20px"
   }
 };
@@ -113,209 +95,22 @@ function makeSurface(
   return { background, border, text, icon, loaderTrack, loaderIndicator };
 }
 
-const LIGHT_SURFACES: Record<ButtonStyleVariant, { rest: ButtonSurface; hover: ButtonSurface }> = {
-  Solid: {
-    rest: makeSurface(
-      "var(--cars24-semantic-bg-brand-base, #4736fe)",
-      "transparent",
-      "var(--cars24-semantic-text-primary-inverse, #ffffff)",
-      "var(--cars24-semantic-icon-primary-inverse, #ffffff)",
-      "var(--cars24-utility-alpha-white-300, rgba(255,255,255,0.3))",
-      "var(--cars24-semantic-text-primary-inverse, #ffffff)"
-    ),
-    hover: makeSurface(
-      "var(--cars24-semantic-bg-brand-base-hover, #4031e5)",
-      "transparent",
-      "var(--cars24-semantic-text-primary-inverse, #ffffff)",
-      "var(--cars24-semantic-icon-primary-inverse, #ffffff)",
-      "var(--cars24-utility-alpha-white-300, rgba(255,255,255,0.3))",
-      "var(--cars24-semantic-text-primary-inverse, #ffffff)"
-    )
-  },
-  Outline: {
-    rest: makeSurface(
-      "transparent",
-      "var(--cars24-semantic-border-brand-base, #4736fe)",
-      "var(--cars24-semantic-text-brand-base, #4736fe)",
-      "var(--cars24-semantic-icon-brand-base, #4736fe)",
-      "var(--cars24-utility-alpha-black-300, rgba(10,10,10,0.11))",
-      "var(--cars24-semantic-text-brand-base, #4736fe)"
-    ),
-    hover: makeSurface(
-      "var(--cars24-semantic-bg-brand-subtler, #f6f6ff)",
-      "var(--cars24-semantic-border-brand-base-alt, #392bcb)",
-      "var(--cars24-semantic-text-brand-base, #4736fe)",
-      "var(--cars24-semantic-icon-brand-base, #4736fe)",
-      "var(--cars24-utility-alpha-black-300, rgba(10,10,10,0.11))",
-      "var(--cars24-semantic-text-brand-base, #4736fe)"
-    )
-  },
-  Ghost: {
-    rest: makeSurface(
-      "transparent",
-      "transparent",
-      "var(--cars24-semantic-text-brand-base, #4736fe)",
-      "var(--cars24-semantic-icon-brand-base, #4736fe)",
-      "var(--cars24-utility-alpha-black-300, rgba(10,10,10,0.11))",
-      "var(--cars24-semantic-text-brand-base, #4736fe)"
-    ),
-    hover: makeSurface(
-      "var(--cars24-semantic-bg-brand-subtler, #f6f6ff)",
-      "transparent",
-      "var(--cars24-semantic-text-brand-base, #4736fe)",
-      "var(--cars24-semantic-icon-brand-base, #4736fe)",
-      "var(--cars24-utility-alpha-black-300, rgba(10,10,10,0.11))",
-      "var(--cars24-semantic-text-brand-base, #4736fe)"
-    )
-  },
-  Transparent: {
-    rest: makeSurface(
-      "var(--cars24-utility-alpha-black-200, rgba(10,10,10,0.04))",
-      "transparent",
-      "var(--cars24-semantic-text-primary, #020617)",
-      "var(--cars24-semantic-icon-primary, #020617)",
-      "var(--cars24-utility-alpha-black-300, rgba(10,10,10,0.11))",
-      "var(--cars24-semantic-text-primary, #020617)"
-    ),
-    hover: makeSurface(
-      "var(--cars24-utility-alpha-black-300, rgba(10,10,10,0.11))",
-      "transparent",
-      "var(--cars24-semantic-text-primary, #020617)",
-      "var(--cars24-semantic-icon-primary, #020617)",
-      "var(--cars24-utility-alpha-black-400, rgba(10,10,10,0.18))",
-      "var(--cars24-semantic-text-primary, #020617)"
-    )
-  },
-  Destructive: {
-    rest: makeSurface(
-      "var(--cars24-semantic-bg-danger-subtler, #fef2f2)",
-      "var(--cars24-semantic-border-danger-subtle, #fee2e2)",
-      "var(--cars24-semantic-text-danger-base, #dc2626)",
-      "var(--cars24-semantic-icon-danger-base, #dc2626)",
-      "var(--cars24-utility-alpha-black-300, rgba(10,10,10,0.11))",
-      "var(--cars24-semantic-text-danger-base, #dc2626)"
-    ),
-    hover: makeSurface(
-      "var(--cars24-semantic-bg-danger-subtler, #fef2f2)",
-      "var(--cars24-semantic-border-danger-base, #dc2626)",
-      "var(--cars24-semantic-text-danger-base, #dc2626)",
-      "var(--cars24-semantic-icon-danger-base, #dc2626)",
-      "var(--cars24-utility-alpha-black-300, rgba(10,10,10,0.11))",
-      "var(--cars24-semantic-text-danger-base, #dc2626)"
-    )
+function toAlpha(color: string, alpha: number) {
+  const normalized = color.trim();
+  const hex = normalized.startsWith("#") ? normalized.slice(1) : normalized;
+  const safeAlpha = Math.max(0, Math.min(1, alpha));
+
+  if (!/^[\da-fA-F]{3}$|^[\da-fA-F]{6}$/.test(hex)) {
+    return color;
   }
-};
 
-const DARK_SURFACES: Record<ButtonStyleVariant, { rest: ButtonSurface; hover: ButtonSurface }> = {
-  Solid: {
-    rest: makeSurface(
-      "var(--cars24-semantic-bg-primary, #ffffff)",
-      "transparent",
-      "var(--cars24-semantic-text-primary, #020617)",
-      "var(--cars24-semantic-icon-primary, #020617)",
-      "var(--cars24-utility-alpha-black-200, rgba(10,10,10,0.04))",
-      "var(--cars24-semantic-text-primary, #020617)"
-    ),
-    hover: makeSurface(
-      "var(--cars24-utility-alpha-white-900, rgba(255,255,255,0.9))",
-      "transparent",
-      "var(--cars24-semantic-text-primary, #020617)",
-      "var(--cars24-semantic-icon-primary, #020617)",
-      "var(--cars24-utility-alpha-black-200, rgba(10,10,10,0.04))",
-      "var(--cars24-semantic-text-primary, #020617)"
-    )
-  },
-  Outline: {
-    rest: makeSurface(
-      "transparent",
-      "var(--cars24-semantic-border-secondary-inverse, #ffffff)",
-      "var(--cars24-semantic-text-primary-inverse, #ffffff)",
-      "var(--cars24-semantic-icon-primary-inverse, #ffffff)",
-      "var(--cars24-utility-alpha-white-200, rgba(255,255,255,0.2))",
-      "var(--cars24-semantic-text-primary-inverse, #ffffff)"
-    ),
-    hover: makeSurface(
-      "var(--cars24-utility-alpha-white-100, rgba(255,255,255,0.1))",
-      "var(--cars24-semantic-border-secondary-inverse, #ffffff)",
-      "var(--cars24-semantic-text-primary-inverse, #ffffff)",
-      "var(--cars24-semantic-icon-primary-inverse, #ffffff)",
-      "var(--cars24-utility-alpha-white-200, rgba(255,255,255,0.2))",
-      "var(--cars24-semantic-text-primary-inverse, #ffffff)"
-    )
-  },
-  Ghost: {
-    rest: makeSurface(
-      "transparent",
-      "transparent",
-      "var(--cars24-semantic-text-primary-inverse, #ffffff)",
-      "var(--cars24-semantic-icon-primary-inverse, #ffffff)",
-      "var(--cars24-utility-alpha-white-200, rgba(255,255,255,0.2))",
-      "var(--cars24-semantic-text-primary-inverse, #ffffff)"
-    ),
-    hover: makeSurface(
-      "var(--cars24-utility-alpha-white-100, rgba(255,255,255,0.1))",
-      "transparent",
-      "var(--cars24-semantic-text-primary-inverse, #ffffff)",
-      "var(--cars24-semantic-icon-primary-inverse, #ffffff)",
-      "var(--cars24-utility-alpha-white-200, rgba(255,255,255,0.2))",
-      "var(--cars24-semantic-text-primary-inverse, #ffffff)"
-    )
-  },
-  Transparent: {
-    rest: makeSurface(
-      "var(--cars24-utility-alpha-white-200, rgba(255,255,255,0.2))",
-      "transparent",
-      "var(--cars24-semantic-text-primary-inverse, #ffffff)",
-      "var(--cars24-semantic-icon-primary-inverse, #ffffff)",
-      "var(--cars24-utility-alpha-white-200, rgba(255,255,255,0.2))",
-      "var(--cars24-semantic-text-primary-inverse, #ffffff)"
-    ),
-    hover: makeSurface(
-      "var(--cars24-utility-alpha-white-300, rgba(255,255,255,0.3))",
-      "transparent",
-      "var(--cars24-semantic-text-primary-inverse, #ffffff)",
-      "var(--cars24-semantic-icon-primary-inverse, #ffffff)",
-      "var(--cars24-utility-alpha-white-200, rgba(255,255,255,0.2))",
-      "var(--cars24-semantic-text-primary-inverse, #ffffff)"
-    )
-  },
-  Destructive: {
-    rest: makeSurface(
-      "var(--cars24-semantic-bg-danger-base, #dc2626)",
-      "transparent",
-      "var(--cars24-semantic-text-primary-inverse, #ffffff)",
-      "var(--cars24-semantic-icon-primary-inverse, #ffffff)",
-      "var(--cars24-utility-alpha-white-300, rgba(255,255,255,0.3))",
-      "var(--cars24-semantic-text-primary-inverse, #ffffff)"
-    ),
-    hover: makeSurface(
-      "var(--cars24-semantic-bg-danger-bold, #991b1b)",
-      "transparent",
-      "var(--cars24-semantic-text-primary-inverse, #ffffff)",
-      "var(--cars24-semantic-icon-primary-inverse, #ffffff)",
-      "var(--cars24-utility-alpha-white-300, rgba(255,255,255,0.3))",
-      "var(--cars24-semantic-text-primary-inverse, #ffffff)"
-    )
-  }
-};
+  const expanded = hex.length === 3 ? hex.split("").map((part) => `${part}${part}`).join("") : hex;
+  const red = Number.parseInt(expanded.slice(0, 2), 16);
+  const green = Number.parseInt(expanded.slice(2, 4), 16);
+  const blue = Number.parseInt(expanded.slice(4, 6), 16);
 
-const LIGHT_DISABLED_SURFACE = makeSurface(
-  "var(--cars24-semantic-bg-disabled, #e2e8f0)",
-  "var(--cars24-semantic-border-disabled, transparent)",
-  "var(--cars24-semantic-text-disabled, #90a1b9)",
-  "var(--cars24-semantic-icon-disabled, #90a1b9)",
-  "var(--cars24-utility-alpha-black-200, rgba(10,10,10,0.04))",
-  "var(--cars24-semantic-text-disabled, #90a1b9)"
-);
-
-const DARK_DISABLED_SURFACE = makeSurface(
-  "var(--cars24-semantic-bg-disabled-inverse, rgba(255,255,255,0.1))",
-  "var(--cars24-semantic-border-disabled-inverse, transparent)",
-  "var(--cars24-semantic-text-disabled-inverse, rgba(255,255,255,0.3))",
-  "var(--cars24-semantic-icon-disabled-inverse, rgba(255,255,255,0.3))",
-  "var(--cars24-utility-alpha-white-200, rgba(255,255,255,0.2))",
-  "var(--cars24-semantic-text-disabled-inverse, rgba(255,255,255,0.3))"
-);
+  return `rgba(${red}, ${green}, ${blue}, ${safeAlpha})`;
+}
 
 function normalizeSize(size: ButtonProps["size"]): ButtonSize {
   if (size === "xs") {
@@ -353,17 +148,108 @@ function normalizeVariant(styleVariant: ButtonProps["styleVariant"], tone: Butto
   return "Solid";
 }
 
-function getSurface(styleVariant: ButtonStyleVariant, onDark: boolean, hoveredOrPressed: boolean, disabled: boolean) {
+function getSurface(
+  brand: DisplayBrandId,
+  styleVariant: ButtonStyleVariant,
+  onDark: boolean,
+  hoveredOrPressed: boolean,
+  disabled: boolean
+) {
+  const brandBase = String(getRequiredThemeTokenValue(brand, "color.brand.primary.600"));
+  const brandHover = String(getRequiredThemeTokenValue(brand, "color.brand.primary.700"));
+  const brandSubtle = String(getRequiredThemeTokenValue(brand, "color.brand.primary.50"));
+  const textPrimary = String(getRequiredThemeTokenValue(brand, "color.text.primary"));
+  const textInverse = String(getRequiredThemeTokenValue(brand, "color.text.inverse"));
+  const surfaceCanvas = String(getRequiredThemeTokenValue(brand, "color.surface.canvas"));
+  const surfaceSubtle = String(getRequiredThemeTokenValue(brand, "color.surface.subtle"));
+  const surfaceInverse = String(getRequiredThemeTokenValue(brand, "color.surface.inverse"));
+  const borderDefault = String(getRequiredThemeTokenValue(brand, "color.border.default"));
+  const statusDanger = String(getRequiredThemeTokenValue(brand, "color.status.danger"));
+
   if (disabled) {
-    return onDark ? DARK_DISABLED_SURFACE : LIGHT_DISABLED_SURFACE;
+    return onDark
+      ? makeSurface(
+          toAlpha(textInverse, 0.12),
+          "transparent",
+          toAlpha(textInverse, 0.45),
+          toAlpha(textInverse, 0.45),
+          toAlpha(textInverse, 0.2),
+          toAlpha(textInverse, 0.45)
+        )
+      : makeSurface(
+          surfaceSubtle,
+          "transparent",
+          toAlpha(textPrimary, 0.45),
+          toAlpha(textPrimary, 0.45),
+          toAlpha(textPrimary, 0.12),
+          toAlpha(textPrimary, 0.45)
+        );
   }
 
-  const collection = onDark ? DARK_SURFACES : LIGHT_SURFACES;
-  return hoveredOrPressed ? collection[styleVariant].hover : collection[styleVariant].rest;
+  if (onDark) {
+    switch (styleVariant) {
+      case "Solid":
+        return hoveredOrPressed
+          ? makeSurface(surfaceSubtle, "transparent", textPrimary, textPrimary, toAlpha(textPrimary, 0.14), textPrimary)
+          : makeSurface(surfaceCanvas, "transparent", textPrimary, textPrimary, toAlpha(textPrimary, 0.14), textPrimary);
+      case "Outline":
+        return hoveredOrPressed
+          ? makeSurface(toAlpha(textInverse, 0.1), textInverse, textInverse, textInverse, toAlpha(textInverse, 0.24), textInverse)
+          : makeSurface("transparent", textInverse, textInverse, textInverse, toAlpha(textInverse, 0.24), textInverse);
+      case "Ghost":
+        return hoveredOrPressed
+          ? makeSurface(toAlpha(textInverse, 0.1), "transparent", textInverse, textInverse, toAlpha(textInverse, 0.24), textInverse)
+          : makeSurface("transparent", "transparent", textInverse, textInverse, toAlpha(textInverse, 0.24), textInverse);
+      case "Transparent":
+        return hoveredOrPressed
+          ? makeSurface(toAlpha(textInverse, 0.18), "transparent", textInverse, textInverse, toAlpha(textInverse, 0.24), textInverse)
+          : makeSurface(toAlpha(textInverse, 0.12), "transparent", textInverse, textInverse, toAlpha(textInverse, 0.24), textInverse);
+      case "Destructive":
+        return hoveredOrPressed
+          ? makeSurface(toAlpha(statusDanger, 0.8), "transparent", textInverse, textInverse, toAlpha(textInverse, 0.24), textInverse)
+          : makeSurface(statusDanger, "transparent", textInverse, textInverse, toAlpha(textInverse, 0.24), textInverse);
+    }
+  }
+
+  switch (styleVariant) {
+    case "Solid":
+      return hoveredOrPressed
+        ? makeSurface(brandHover, "transparent", textInverse, textInverse, toAlpha(textInverse, 0.3), textInverse)
+        : makeSurface(brandBase, "transparent", textInverse, textInverse, toAlpha(textInverse, 0.3), textInverse);
+    case "Outline":
+      return hoveredOrPressed
+        ? makeSurface(brandSubtle, brandHover, brandHover, brandHover, toAlpha(textPrimary, 0.16), brandHover)
+        : makeSurface("transparent", brandBase, brandBase, brandBase, toAlpha(textPrimary, 0.16), brandBase);
+    case "Ghost":
+      return hoveredOrPressed
+        ? makeSurface(brandSubtle, "transparent", brandHover, brandHover, toAlpha(textPrimary, 0.16), brandHover)
+        : makeSurface("transparent", "transparent", brandBase, brandBase, toAlpha(textPrimary, 0.16), brandBase);
+    case "Transparent":
+      return hoveredOrPressed
+        ? makeSurface(toAlpha(surfaceInverse, 0.12), "transparent", textPrimary, textPrimary, toAlpha(textPrimary, 0.18), textPrimary)
+        : makeSurface(toAlpha(surfaceInverse, 0.06), "transparent", textPrimary, textPrimary, toAlpha(textPrimary, 0.16), textPrimary);
+    case "Destructive":
+      return hoveredOrPressed
+        ? makeSurface(toAlpha(statusDanger, 0.12), statusDanger, statusDanger, statusDanger, toAlpha(textPrimary, 0.16), statusDanger)
+        : makeSurface(toAlpha(statusDanger, 0.08), toAlpha(statusDanger, 0.24), statusDanger, statusDanger, toAlpha(textPrimary, 0.16), statusDanger);
+  }
 }
 
-function getRadius(metrics: SizeMetrics, shape: ButtonShape) {
-  return shape === "Pill" ? "var(--cars24-theme-radius-full, 999px)" : metrics.radiusRegular;
+function getRadius(brand: DisplayBrandId, size: ButtonSize, shape: ButtonShape) {
+  if (shape === "Pill") {
+    return `${Number(getRequiredThemeTokenValue(brand, "radius.pill"))}px`;
+  }
+
+  const radiusTokenPath =
+    size === "Extra Large"
+      ? "radius.alt.xl"
+      : size === "Large"
+        ? "radius.alt.lg"
+        : size === "Medium"
+          ? "radius.alt.md"
+          : "radius.alt.sm";
+
+  return `${Number(getRequiredThemeTokenValue(brand, radiusTokenPath))}px`;
 }
 
 function getIconSize(size: ButtonSize) {
@@ -380,6 +266,23 @@ function getIconSize(size: ButtonSize) {
   }
 
   return "18px";
+}
+
+function getTypographyTokenPrefix(size: ButtonSize) {
+  if (size === "Extra Small") {
+    return "component.button.typography.xs";
+  }
+  if (size === "Small") {
+    return "component.button.typography.sm";
+  }
+  if (size === "Large") {
+    return "component.button.typography.lg";
+  }
+  if (size === "Extra Large") {
+    return "component.button.typography.xl";
+  }
+
+  return "component.button.typography.md";
 }
 
 function renderSlot(content: ReactNode, color: string, size: string) {
@@ -459,19 +362,23 @@ export function Button({
   const normalizedSize = normalizeSize(size);
   const normalizedVariant = normalizeVariant(styleVariant, tone);
   const metrics = BUTTON_SIZE_METRICS[normalizedSize];
+  const typographyTokenPrefix = getTypographyTokenPrefix(normalizedSize);
   const hoveredOrPressed = forceState === "Hover/Pressed" || pressed || hovered;
-  const surface = getSurface(normalizedVariant, onDark, hoveredOrPressed, disabled);
-  const semibold = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.semibold"));
-  const fallbackFontFamily = String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"));
+  const surface = getSurface(brand, normalizedVariant, onDark, hoveredOrPressed, disabled);
+  const medium = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.medium"));
+  const fontFamily = String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"));
   const focusColor = String(getRequiredThemeTokenValue(brand, "color.border.focus"));
   const iconSize = getIconSize(normalizedSize);
   const isDisabled = disabled || loading;
+  const labelFontSize = Number(getRequiredThemeTokenValue(brand, `${typographyTokenPrefix}.fontSize`));
+  const labelLineHeight = Number(getRequiredThemeTokenValue(brand, `${typographyTokenPrefix}.lineHeight`));
+  const labelLetterSpacing = Number(getRequiredThemeTokenValue(brand, `${typographyTokenPrefix}.letterSpacing`));
 
   const rootStyles: CSSProperties = {
     alignItems: "center",
     background: surface.background,
     border: `1px solid ${surface.border}`,
-    borderRadius: getRadius(metrics, shape),
+    borderRadius: getRadius(brand, normalizedSize, shape),
     boxSizing: "border-box",
     color: surface.text,
     cursor: isDisabled ? "not-allowed" : "pointer",
@@ -497,11 +404,11 @@ export function Button({
 
   const labelStyles: CSSProperties = {
     color: surface.text,
-    fontFamily: `var(--cars24-theme-font-family-primary, Geist), ${fallbackFontFamily}, sans-serif`,
-    fontSize: metrics.typographySize,
-    fontWeight: semibold,
-    letterSpacing: 0,
-    lineHeight: metrics.typographyLineHeight,
+    fontFamily: `${fontFamily}, sans-serif`,
+    fontSize: `${labelFontSize}px`,
+    fontWeight: medium,
+    letterSpacing: `${labelLetterSpacing}px`,
+    lineHeight: `${labelLineHeight}px`,
     whiteSpace: "nowrap"
   };
 

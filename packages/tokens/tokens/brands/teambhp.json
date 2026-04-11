@@ -1,0 +1,33 @@
+{
+  "color": {
+    "brand": {
+      "primary": {
+        "50": "#F1F5F9",
+        "100": "#E2E8F0",
+        "600": "#FB2C36",
+        "700": "#C91D27"
+      }
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "sans": "Geist"
+    },
+    "fontWeight": {
+      "medium": 500
+    }
+  },
+  "radius": {
+    "md": 12,
+    "lg": 14,
+    "xl": 16,
+    "pill": 999,
+    "alt": {
+      "xs": 6,
+      "sm": 8,
+      "md": 12,
+      "lg": 14,
+      "xl": 16
+    }
+  }
+}

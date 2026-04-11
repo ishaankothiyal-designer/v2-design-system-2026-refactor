@@ -1,0 +1,33 @@
+{
+  "color": {
+    "brand": {
+      "primary": {
+        "50": "#CFDAFF",
+        "100": "#ADBFFF",
+        "600": "#456DFF",
+        "700": "#3D60E0"
+      }
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "sans": "Metropolis"
+    },
+    "fontWeight": {
+      "medium": 500
+    }
+  },
+  "radius": {
+    "md": 12,
+    "lg": 14,
+    "xl": 16,
+    "pill": 999,
+    "alt": {
+      "xs": 999,
+      "sm": 999,
+      "md": 999,
+      "lg": 999,
+      "xl": 999
+    }
+  }
+}

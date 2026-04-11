@@ -40,96 +40,6 @@ type BannerTone = {
   actionIcon: string;
 };
 
-const BANNER_TONE_FALLBACKS: Record<Lowercase<BannerTheme>, Record<Lowercase<BannerState>, Omit<BannerTone, "actionBackground" | "actionText" | "actionIcon">>> = {
-  light: {
-    warning: {
-      background: "var(--cars24-semantic-bg-warning-subtler, #fffbeb)",
-      border: "var(--cars24-semantic-border-warning-subtle, #fef3c6)",
-      iconColor: "var(--cars24-semantic-icon-warning-base, #e17100)",
-      titleColor: "var(--cars24-semantic-text-primary, #020617)",
-      descriptionColor: "var(--cars24-semantic-text-secondary, #64748b)"
-    },
-    success: {
-      background: "var(--cars24-semantic-bg-success-subtler, #f4fcf4)",
-      border: "var(--cars24-semantic-border-success-subtle, #e4f9e0)",
-      iconColor: "var(--cars24-semantic-icon-success-base, #1c9c1c)",
-      titleColor: "var(--cars24-semantic-text-primary, #020617)",
-      descriptionColor: "var(--cars24-semantic-text-secondary, #64748b)"
-    },
-    error: {
-      background: "var(--cars24-semantic-bg-danger-subtler, #fef2f2)",
-      border: "var(--cars24-semantic-border-danger-subtle, #fee2e2)",
-      iconColor: "var(--cars24-semantic-icon-danger-base, #dc2626)",
-      titleColor: "var(--cars24-semantic-text-primary, #020617)",
-      descriptionColor: "var(--cars24-semantic-text-secondary, #64748b)"
-    },
-    info: {
-      background: "var(--cars24-semantic-bg-info-subtler, #f0f7ff)",
-      border: "var(--cars24-semantic-border-info-subtle, #dbebfe)",
-      iconColor: "var(--cars24-semantic-icon-info-base, #296fe3)",
-      titleColor: "var(--cars24-semantic-text-primary, #020617)",
-      descriptionColor: "var(--cars24-semantic-text-secondary, #64748b)"
-    },
-    brand: {
-      background: "var(--cars24-semantic-bg-brand-subtler, #f6f6ff)",
-      border: "var(--cars24-semantic-border-brand-subtle, #c8ccfb)",
-      iconColor: "var(--cars24-semantic-icon-brand-base, #4736fe)",
-      titleColor: "var(--cars24-semantic-text-primary, #020617)",
-      descriptionColor: "var(--cars24-semantic-text-secondary, #64748b)"
-    }
-  },
-  dark: {
-    warning: {
-      background: "var(--cars24-semantic-bg-warning-base, #e17100)",
-      border: "transparent",
-      iconColor: "var(--cars24-semantic-icon-primary-inverse, #ffffff)",
-      titleColor: "var(--cars24-semantic-text-primary-inverse, #ffffff)",
-      descriptionColor: "var(--cars24-semantic-text-primary-inverse, #ffffff)"
-    },
-    success: {
-      background: "var(--cars24-semantic-bg-success-base, #1c9c1c)",
-      border: "transparent",
-      iconColor: "var(--cars24-semantic-icon-primary-inverse, #ffffff)",
-      titleColor: "var(--cars24-semantic-text-primary-inverse, #ffffff)",
-      descriptionColor: "var(--cars24-semantic-text-primary-inverse, #ffffff)"
-    },
-    error: {
-      background: "var(--cars24-semantic-bg-danger-base, #dc2626)",
-      border: "transparent",
-      iconColor: "var(--cars24-semantic-icon-primary-inverse, #ffffff)",
-      titleColor: "var(--cars24-semantic-text-primary-inverse, #ffffff)",
-      descriptionColor: "var(--cars24-semantic-text-primary-inverse, #ffffff)"
-    },
-    info: {
-      background: "var(--cars24-semantic-bg-info-base, #296fe3)",
-      border: "transparent",
-      iconColor: "var(--cars24-semantic-icon-primary-inverse, #ffffff)",
-      titleColor: "var(--cars24-semantic-text-primary-inverse, #ffffff)",
-      descriptionColor: "var(--cars24-semantic-text-primary-inverse, #ffffff)"
-    },
-    brand: {
-      background: "var(--cars24-semantic-bg-brand-base, #4736fe)",
-      border: "transparent",
-      iconColor: "var(--cars24-semantic-icon-primary-inverse, #ffffff)",
-      titleColor: "var(--cars24-semantic-text-primary-inverse, #ffffff)",
-      descriptionColor: "var(--cars24-semantic-text-primary-inverse, #ffffff)"
-    }
-  }
-};
-
-const BANNER_ACTION_FALLBACKS: Record<Lowercase<BannerTheme>, { background: string; text: string; icon: string }> = {
-  light: {
-    background: "var(--cars24-semantic-bg-primary-inverse, #0a0a0a)",
-    text: "var(--cars24-semantic-text-primary-inverse, #ffffff)",
-    icon: "var(--cars24-semantic-icon-secondary, #64748b)"
-  },
-  dark: {
-    background: "var(--cars24-semantic-bg-primary, #ffffff)",
-    text: "var(--cars24-semantic-text-primary, #020617)",
-    icon: "var(--cars24-semantic-icon-primary-inverse, #ffffff)"
-  }
-};
-
 const BANNER_SHADOW_FALLBACK =
   "0px 8px 28px -4px rgba(31, 41, 55, 0.06), 0px 18px 84px -2px rgba(31, 41, 55, 0.08)";
 
@@ -177,50 +87,85 @@ function resolveBannerBindingValue(
   return withTokenFallback(token, fallback);
 }
 
-function getBannerTone(theme: BannerTheme, state: BannerState): BannerTone {
-  const normalizedTheme = theme.toLowerCase() as Lowercase<BannerTheme>;
-  const normalizedState = state.toLowerCase() as Lowercase<BannerState>;
-  const slotPrefix = `tone.${normalizedTheme}.${normalizedState}`;
-  const actionSlotPrefix = `action.${normalizedTheme}.${normalizedState}`;
-  const toneFallback = BANNER_TONE_FALLBACKS[normalizedTheme][normalizedState];
-  const actionFallback = BANNER_ACTION_FALLBACKS[normalizedTheme];
+function getBannerTone(brand: BrandId, theme: BannerTheme, state: BannerState): BannerTone {
+  const brand50 = String(getRequiredThemeTokenValue(brand, "color.brand.primary.50"));
+  const brand100 = String(getRequiredThemeTokenValue(brand, "color.brand.primary.100"));
+  const brand600 = String(getRequiredThemeTokenValue(brand, "color.brand.primary.600"));
+  const textPrimary = String(getRequiredThemeTokenValue(brand, "color.text.primary"));
+  const textSecondary = String(getRequiredThemeTokenValue(brand, "color.text.secondary"));
+  const textInverse = String(getRequiredThemeTokenValue(brand, "color.text.inverse"));
+  const canvas = String(getRequiredThemeTokenValue(brand, "color.surface.canvas"));
+  const inverseSurface = String(getRequiredThemeTokenValue(brand, "color.surface.inverse"));
+  const warning = String(getRequiredThemeTokenValue(brand, "color.status.warning"));
+  const success = String(getRequiredThemeTokenValue(brand, "color.status.success"));
+  const danger = String(getRequiredThemeTokenValue(brand, "color.status.danger"));
+  const info = String(getRequiredThemeTokenValue(brand, "color.status.info"));
+
+  if (theme === "Dark") {
+    const background =
+      state === "Warning" ? warning : state === "Success" ? success : state === "Error" ? danger : state === "Info" ? info : brand600;
+
+    return {
+      background,
+      border: "transparent",
+      iconColor: textInverse,
+      titleColor: textInverse,
+      descriptionColor: textInverse,
+      actionBackground: canvas,
+      actionText: textPrimary,
+      actionIcon: textInverse
+    };
+  }
+
+  if (state === "Brand") {
+    return {
+      background: brand50,
+      border: brand100,
+      iconColor: brand600,
+      titleColor: textPrimary,
+      descriptionColor: textSecondary,
+      actionBackground: inverseSurface,
+      actionText: textInverse,
+      actionIcon: textSecondary
+    };
+  }
+
+  const lightTones: Record<Exclude<BannerState, "Brand">, Omit<BannerTone, "actionBackground" | "actionText" | "actionIcon">> = {
+    Warning: {
+      background: "#FFFBEB",
+      border: "#FEF3C6",
+      iconColor: warning,
+      titleColor: textPrimary,
+      descriptionColor: textSecondary
+    },
+    Success: {
+      background: "#F4FCF4",
+      border: "#E4F9E0",
+      iconColor: success,
+      titleColor: textPrimary,
+      descriptionColor: textSecondary
+    },
+    Error: {
+      background: "#FEF2F2",
+      border: "#FEE2E2",
+      iconColor: danger,
+      titleColor: textPrimary,
+      descriptionColor: textSecondary
+    },
+    Info: {
+      background: "#F0F7FF",
+      border: "#DBEBFE",
+      iconColor: info,
+      titleColor: textPrimary,
+      descriptionColor: textSecondary
+    }
+  };
 
   return {
-    background: withTokenFallback(
-      getBannerToken(`${slotPrefix}.background`),
-      toneFallback.background
-    ),
-    border: withTokenFallback(
-      getBannerToken(`${slotPrefix}.border`),
-      toneFallback.border
-    ),
-    iconColor: withTokenFallback(
-      getBannerToken(`${slotPrefix}.icon`),
-      toneFallback.iconColor
-    ),
-    titleColor: withTokenFallback(
-      getBannerToken(`${slotPrefix}.title`),
-      toneFallback.titleColor
-    ),
-    descriptionColor: withTokenFallback(
-      getBannerToken(`${slotPrefix}.description`),
-      toneFallback.descriptionColor
-    ),
-    actionBackground: withTokenFallback(
-      getBannerToken(`${actionSlotPrefix}.background`) ??
-        getBannerToken(`action.${normalizedTheme}.background`),
-      actionFallback.background
-    ),
-    actionText: withTokenFallback(
-      getBannerToken(`${actionSlotPrefix}.text`) ??
-        getBannerToken(`action.${normalizedTheme}.text`),
-      actionFallback.text
-    ),
-    actionIcon: withTokenFallback(
-      getBannerToken(`${actionSlotPrefix}.icon`) ??
-        getBannerToken(`action.${normalizedTheme}.icon`),
-      actionFallback.icon
-    )
+    ...lightTones[state],
+    actionBackground: inverseSurface,
+    actionText: textInverse,
+    actionIcon: textSecondary
   };
 }
 
@@ -253,10 +198,10 @@ export function Banner({
   style
 }: BannerProps) {
   const [actionFocused, setActionFocused] = useState(false);
-  const tone = getBannerTone(theme, state);
+  const tone = getBannerTone(brand, theme, state);
   const medium = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.medium"));
   const regular = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.regular"));
-  const fallbackFontFamily = String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"));
+  const fontFamily = String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"));
   const isDark = theme === "Dark";
   const focusColor = resolveBannerBindingValue(
     brand,
@@ -265,7 +210,7 @@ export function Banner({
   );
   const rootWidth = resolveBannerBindingValue(brand, "container.width", "328px");
   const rootGap = resolveBannerBindingValue(brand, "container.gap", "0px");
-  const rootRadius = resolveBannerBindingValue(brand, "container.radius", "14px");
+  const rootRadius = `${Number(getRequiredThemeTokenValue(brand, "radius.alt.lg"))}px`;
   const rootShadow = resolveBannerBindingValue(brand, "container.shadow", BANNER_SHADOW_FALLBACK);
   const contentGap = icon
     ? resolveBannerBindingValue(brand, "content.gap", "8px")
@@ -274,7 +219,7 @@ export function Banner({
   const contentPaddingBlock = resolveBannerBindingValue(brand, "content.paddingBlock", "16px");
   const leadingIconSize = resolveBannerBindingValue(brand, "icon.leading.size", "20px");
   const actionIconSize = resolveBannerBindingValue(brand, "icon.action.size", "24px");
-  const actionTextRadius = resolveBannerBindingValue(brand, "action.text.radius", "999px");
+  const actionTextRadius = `${Number(getRequiredThemeTokenValue(brand, "radius.pill"))}px`;
   const actionTextPaddingInline = resolveBannerBindingValue(brand, "action.text.paddingInline", "12px");
   const actionTextPaddingBlock = resolveBannerBindingValue(brand, "action.text.paddingBlock", "6px");
 
@@ -306,7 +251,7 @@ export function Banner({
     flexDirection: "column",
     flex: "1 0 0",
     minWidth: 0,
-    gap: heading ? "var(--cars24-misc-gap-2, 2px)" : 0
+    gap: heading ? "2px" : 0
   };
 
   const actionAreaStyles: CSSProperties = {
@@ -314,24 +259,24 @@ export function Banner({
     flexDirection: actionType === "Text button" ? "column" : "row",
     justifyContent: "center",
     alignItems: actionType === "Text button" ? "flex-end" : "center",
-    paddingRight: "var(--cars24-misc-gap-12, 12px)",
-    paddingLeft: "var(--cars24-misc-gap-none, 0px)",
+    paddingRight: "12px",
+    paddingLeft: "0px",
     paddingTop:
       actionType === "Icon button"
         ? heading
-          ? "var(--cars24-misc-gap-20, 20px)"
-          : "var(--cars24-misc-gap-14, 14px)"
+          ? "20px"
+          : "14px"
         : heading
-          ? "var(--cars24-misc-gap-16, 16px)"
-          : "var(--cars24-misc-gap-10, 10px)",
+          ? "16px"
+          : "10px",
     paddingBottom:
       actionType === "Icon button"
         ? heading
-          ? "var(--cars24-misc-gap-20, 20px)"
-          : "var(--cars24-misc-gap-14, 14px)"
+          ? "20px"
+          : "14px"
         : heading
-          ? "var(--cars24-misc-gap-16, 16px)"
-          : "var(--cars24-misc-gap-10, 10px)",
+          ? "16px"
+          : "10px",
     width: actionType === "Text button" ? 68 : undefined,
     flexShrink: 0
   };
@@ -340,7 +285,7 @@ export function Banner({
     display: "inline-flex",
     alignItems: "center",
     justifyContent: "center",
-    gap: "var(--cars24-misc-gap-4, 4px)",
+    gap: "4px",
     height: 28,
     maxHeight: 28,
     border: 0,
@@ -349,9 +294,9 @@ export function Banner({
     background: tone.actionBackground,
     color: tone.actionText,
     cursor: "pointer",
-    fontFamily: `var(--cars24-theme-font-family-primary, Geist), ${fallbackFontFamily}, sans-serif`,
-    fontSize: "var(--cars24-typography-size-utility-label-3, 12px)",
-    lineHeight: "var(--cars24-typography-line-height-utility-label-3, 16px)",
+    fontFamily: `${fontFamily}, sans-serif`,
+    fontSize: "12px",
+    lineHeight: "16px",
     fontWeight: medium,
     boxShadow: actionFocused ? `0 0 0 3px ${focusColor}40` : "none"
   };
@@ -365,7 +310,7 @@ export function Banner({
     background: "transparent",
     color: tone.actionIcon,
     cursor: "pointer",
-    borderRadius: "var(--cars24-theme-radius-alt-md, 12px)",
+    borderRadius: `${Number(getRequiredThemeTokenValue(brand, "radius.alt.md"))}px`,
     boxShadow: actionFocused ? `0 0 0 3px ${focusColor}40` : "none"
   };
 
@@ -393,9 +338,9 @@ export function Banner({
                 style={{
                   margin: 0,
                   color: tone.titleColor,
-                  fontFamily: `var(--cars24-theme-font-family-primary, Geist), ${fallbackFontFamily}, sans-serif`,
-                  fontSize: "var(--cars24-typography-size-utility-label-1, 16px)",
-                  lineHeight: "var(--cars24-typography-line-height-utility-label-1, 20px)",
+                  fontFamily: `${fontFamily}, sans-serif`,
+                  fontSize: "16px",
+                  lineHeight: "20px",
                   fontWeight: medium
                 }}
               >
@@ -405,9 +350,9 @@ export function Banner({
                 style={{
                   margin: 0,
                   color: tone.descriptionColor,
-                  fontFamily: `var(--cars24-theme-font-family-primary, Geist), ${fallbackFontFamily}, sans-serif`,
-                  fontSize: "var(--cars24-typography-size-paragraph-body-3, 12px)",
-                  lineHeight: "var(--cars24-typography-line-height-paragraph-body-3, 18px)",
+                  fontFamily: `${fontFamily}, sans-serif`,
+                  fontSize: "12px",
+                  lineHeight: "18px",
                   fontWeight: regular
                 }}
               >
@@ -419,9 +364,9 @@ export function Banner({
               style={{
                 margin: 0,
                 color: tone.titleColor,
-                fontFamily: `var(--cars24-theme-font-family-primary, Geist), ${fallbackFontFamily}, sans-serif`,
-                fontSize: "var(--cars24-typography-size-paragraph-body-2, 14px)",
-                lineHeight: "var(--cars24-typography-line-height-paragraph-body-2, 20px)",
+                fontFamily: `${fontFamily}, sans-serif`,
+                fontSize: "14px",
+                lineHeight: "20px",
                 fontWeight: regular
               }}
             >

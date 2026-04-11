@@ -65,6 +65,37 @@
       "bold": 700
     }
   },
+  "component": {
+    "button": {
+      "typography": {
+        "xs": {
+          "fontSize": 12,
+          "lineHeight": 16,
+          "letterSpacing": 0
+        },
+        "sm": {
+          "fontSize": 14,
+          "lineHeight": 18,
+          "letterSpacing": 0
+        },
+        "md": {
+          "fontSize": 16,
+          "lineHeight": 20,
+          "letterSpacing": 0
+        },
+        "lg": {
+          "fontSize": 16,
+          "lineHeight": 20,
+          "letterSpacing": 0
+        },
+        "xl": {
+          "fontSize": 18,
+          "lineHeight": 20,
+          "letterSpacing": 0
+        }
+      }
+    }
+  },
   "spacing": {
     "0": 0,
     "1": 4,
@@ -84,7 +115,14 @@
     "md": 8,
     "lg": 12,
     "xl": 16,
-    "pill": 999
+    "pill": 999,
+    "alt": {
+      "xs": 6,
+      "sm": 8,
+      "md": 12,
+      "lg": 14,
+      "xl": 16
+    }
   },
   "icon": {
     "style": "line",
@@ -96,4 +134,3 @@
     }
   }
 }
-

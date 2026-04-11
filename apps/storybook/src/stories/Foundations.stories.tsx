@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { coreTokenCatalog, getBrandTokenSet, deepMergeTokenTrees } from "@geist/tokens";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
-const brands = ["Cars24", "CarInfo", "VehicleInfo"] as const;
+const brands = ["Cars24", "Team BHP", "CarInfo", "VehicleInfo"] as const;
 
 function resolveBrand(brandId: (typeof brands)[number]) {
   return deepMergeTokenTrees(coreTokenCatalog, getBrandTokenSet(brandId).tokens);
@@ -10,6 +10,7 @@ function resolveBrand(brandId: (typeof brands)[number]) {
 
 function Foundations() {
   const cars24 = resolveBrand("Cars24") as typeof coreTokenCatalog;
+  const teamBhp = resolveBrand("Team BHP") as typeof coreTokenCatalog;
   const carInfo = resolveBrand("CarInfo") as typeof coreTokenCatalog;
   const vehicleInfo = resolveBrand("VehicleInfo") as typeof coreTokenCatalog;
 
@@ -17,24 +18,28 @@ function Foundations() {
     [
       "Surface / Canvas",
       String(cars24.color.surface.canvas),
+      String(teamBhp.color.surface.canvas),
       String(carInfo.color.surface.canvas),
       String(vehicleInfo.color.surface.canvas)
     ],
     [
       "Text / Primary",
       String(cars24.color.text.primary),
+      String(teamBhp.color.text.primary),
       String(carInfo.color.text.primary),
       String(vehicleInfo.color.text.primary)
     ],
     [
       "Brand / Primary 600",
       String(cars24.color.brand.primary["600"]),
+      String(teamBhp.color.brand.primary["600"]),
       String(carInfo.color.brand.primary["600"]),
       String(vehicleInfo.color.brand.primary["600"])
     ],
     [
       "Border / Default",
       String(cars24.color.border.default),
+      String(teamBhp.color.border.default),
       String(carInfo.color.border.default),
       String(vehicleInfo.color.border.default)
     ]
@@ -60,11 +65,12 @@ function Foundations() {
         <StoryCard>
           <div style={{ display: "grid", gap: 16 }}>
             <strong>Brand colors</strong>
-            {colorRows.map(([label, cars24Value, carInfoValue, vehicleInfoValue]) => (
+            {colorRows.map(([label, cars24Value, teamBhpValue, carInfoValue, vehicleInfoValue]) => (
               <div key={label} style={{ display: "grid", gap: 10 }}>
                 <div style={{ fontSize: 13, color: cars24.color.text.secondary }}>{label}</div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 12 }}>
                   <Swatch label="Cars24" value={cars24Value} />
+                  <Swatch label="Team BHP" value={teamBhpValue} />
                   <Swatch label="CarInfo" value={carInfoValue} />
                   <Swatch label="VehicleInfo" value={vehicleInfoValue} />
                 </div>

@@ -48,37 +48,37 @@ type BadgeToneTokens = {
 
 const BADGE_SIZE_TOKENS: Record<BadgeSize, BadgeSizeTokens> = {
   "Extra Small": {
-    minHeight: "var(--cars24-misc-size-20, 20px)",
-    icon: "var(--cars24-misc-size-12, 12px)",
-    gap: "var(--cars24-misc-gap-2, 2px)",
-    radius: "var(--cars24-theme-radius-alt-xs, 6px)",
-    paddingX: "var(--cars24-misc-gap-4, 4px)",
-    paddingY: "var(--cars24-misc-gap-4, 4px)",
-    pillPaddingX: "var(--cars24-misc-gap-6, 6px)",
-    fontSize: "var(--cars24-typography-size-utility-label-4, 11px)",
-    lineHeight: "var(--cars24-typography-line-height-utility-label-4, 14px)"
+    minHeight: "20px",
+    icon: "12px",
+    gap: "2px",
+    radius: "6px",
+    paddingX: "4px",
+    paddingY: "4px",
+    pillPaddingX: "6px",
+    fontSize: "11px",
+    lineHeight: "14px"
   },
   Small: {
-    minHeight: "var(--cars24-misc-size-24, 24px)",
-    icon: "var(--cars24-misc-size-14, 14px)",
-    gap: "var(--cars24-misc-gap-2, 2px)",
-    radius: "var(--cars24-theme-radius-alt-sm, 8px)",
-    paddingX: "var(--cars24-misc-gap-4, 4px)",
-    paddingY: "var(--cars24-misc-gap-4, 4px)",
-    pillPaddingX: "var(--cars24-misc-gap-8, 8px)",
-    fontSize: "var(--cars24-typography-size-utility-label-3, 12px)",
-    lineHeight: "var(--cars24-typography-line-height-utility-label-3, 16px)"
+    minHeight: "24px",
+    icon: "14px",
+    gap: "2px",
+    radius: "8px",
+    paddingX: "4px",
+    paddingY: "4px",
+    pillPaddingX: "8px",
+    fontSize: "12px",
+    lineHeight: "16px"
   },
   Medium: {
-    minHeight: "var(--cars24-misc-size-36, 36px)",
-    icon: "var(--cars24-misc-size-18, 18px)",
-    gap: "var(--cars24-misc-gap-4, 4px)",
-    radius: "var(--cars24-theme-radius-alt-md, 12px)",
-    paddingX: "var(--cars24-misc-gap-8, 8px)",
-    paddingY: "var(--cars24-misc-gap-8, 8px)",
-    pillPaddingX: "var(--cars24-misc-gap-10, 10px)",
-    fontSize: "var(--cars24-typography-size-utility-label-1, 16px)",
-    lineHeight: "var(--cars24-typography-line-height-utility-label-1, 20px)"
+    minHeight: "36px",
+    icon: "18px",
+    gap: "4px",
+    radius: "12px",
+    paddingX: "8px",
+    paddingY: "8px",
+    pillPaddingX: "10px",
+    fontSize: "16px",
+    lineHeight: "20px"
   }
 };
 
@@ -359,7 +359,8 @@ export function Badge({
   });
   const transition = "180ms cubic-bezier(0.2, 0, 0, 1)";
   const focusColor = String(getRequiredThemeTokenValue(brand, "color.border.focus"));
-  const fallbackFontFamily = String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"));
+  const fontFamily = String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"));
+  const medium = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.medium"));
   const isPill = pillShape === "Yes";
   const resolvedShowLeadingIcon = showLeadingIcon ?? iconLeft ?? true;
   const resolvedShowTrailingIcon = showTrailingIcon ?? iconRight ?? true;
@@ -372,7 +373,12 @@ export function Badge({
     minHeight: metrics.minHeight,
     width: "fit-content",
     padding: `${metrics.paddingY} ${isPill ? metrics.pillPaddingX : metrics.paddingX}`,
-    borderRadius: isPill ? "var(--cars24-theme-radius-full, 999px)" : metrics.radius,
+    borderRadius: isPill
+      ? `${Number(getRequiredThemeTokenValue(brand, "radius.pill"))}px`
+      : `${Number(getRequiredThemeTokenValue(
+          brand,
+          size === "Extra Small" ? "radius.alt.xs" : size === "Small" ? "radius.alt.sm" : "radius.alt.md"
+        ))}px`,
     backgroundColor: colors.background,
     border: colors.border ? `1px solid ${colors.border}` : "1px solid transparent",
     color: colors.text,
@@ -380,9 +386,9 @@ export function Badge({
     opacity: disabled ? 0.48 : 1,
     boxShadow:
       activeState === "focus" ? `0 0 0 3px ${hexToRgba(focusColor, 0.26)}` : "none",
-    fontFamily: `var(--cars24-theme-font-family-primary, Geist), ${fallbackFontFamily}, sans-serif`,
+    fontFamily: `${fontFamily}, sans-serif`,
     fontSize: metrics.fontSize,
-    fontWeight: "var(--cars24-theme-font-weight-medium, 500)",
+    fontWeight: medium,
     lineHeight: metrics.lineHeight,
     letterSpacing: 0,
     whiteSpace: "nowrap",

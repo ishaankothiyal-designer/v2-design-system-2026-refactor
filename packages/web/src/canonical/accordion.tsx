@@ -63,7 +63,7 @@ function withTokenFallback(token: string | undefined, fallback: string) {
   return token;
 }
 
-function getAccordionMetrics(size: AccordionSize) {
+function getAccordionMetrics(brand: DisplayBrandId, size: AccordionSize) {
   return {
     background: withTokenFallback(
       getAccordionToken("container.background.rest"),
@@ -91,28 +91,19 @@ function getAccordionMetrics(size: AccordionSize) {
     sectionGap: withTokenFallback(getAccordionToken("spacing.sectionGap"), "8px"),
     headerGap: withTokenFallback(getAccordionToken("spacing.headerGap"), "12px"),
     padding: withTokenFallback(getAccordionToken("spacing.padding"), "16px"),
-    contentStackGap: "var(--cars24-misc-gap-10, 10px)",
-    contentIndent: "var(--cars24-misc-size-20, 20px)",
-    radius:
-      size === "lg"
-        ? withTokenFallback(getAccordionToken("radius.container.lg"), "14px")
-        : withTokenFallback(getAccordionToken("radius.container.sm"), "12px"),
+    contentStackGap: "10px",
+    contentIndent: "20px",
+    radius: `${Number(getRequiredThemeTokenValue(brand, size === "lg" ? "radius.alt.lg" : "radius.alt.md"))}px`,
     iconSize:
       size === "lg"
         ? withTokenFallback(getAccordionToken("icon.size.lg"), "20px")
         : withTokenFallback(getAccordionToken("icon.size.sm"), "18px"),
-    titleFontSize:
-      size === "lg"
-        ? "var(--cars24-typography-size-utility-label-1, 16px)"
-        : "var(--cars24-typography-size-utility-label-2, 14px)",
-    titleLineHeight:
-      size === "lg"
-        ? "var(--cars24-typography-line-height-utility-label-1, 20px)"
-        : "var(--cars24-typography-line-height-utility-label-2, 18px)",
-    supportingFontSize: "var(--cars24-typography-size-utility-label-2, 14px)",
-    supportingLineHeight: "var(--cars24-typography-line-height-utility-label-2, 18px)",
-    bodyFontSize: "var(--cars24-typography-size-paragraph-body-2, 14px)",
-    bodyLineHeight: "var(--cars24-typography-line-height-paragraph-body-2, 20px)"
+    titleFontSize: size === "lg" ? "16px" : "14px",
+    titleLineHeight: size === "lg" ? "20px" : "18px",
+    supportingFontSize: "14px",
+    supportingLineHeight: "18px",
+    bodyFontSize: "14px",
+    bodyLineHeight: "20px"
   };
 }
 
@@ -220,8 +211,8 @@ export function Accordion({
     focused,
     pressed
   });
-  const metrics = getAccordionMetrics(size);
-  const fallbackFontFamily = String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"));
+  const metrics = getAccordionMetrics(brand, size);
+  const fontFamily = String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"));
   const semibold = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.semibold"));
   const regular = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.regular"));
   const focusColor = String(getRequiredThemeTokenValue(brand, "color.border.focus"));
@@ -381,7 +372,7 @@ export function Accordion({
               style={{
                 margin: 0,
                 color: metrics.textPrimary,
-                fontFamily: `var(--cars24-theme-font-family-primary, Geist), ${fallbackFontFamily}, sans-serif`,
+                fontFamily: `${fontFamily}, sans-serif`,
                 fontSize: metrics.titleFontSize,
                 lineHeight: metrics.titleLineHeight,
                 fontWeight: semibold
@@ -394,7 +385,7 @@ export function Accordion({
                 style={{
                   margin: 0,
                   color: metrics.supportingColor,
-                  fontFamily: `var(--cars24-theme-font-family-primary, Geist), ${fallbackFontFamily}, sans-serif`,
+                  fontFamily: `${fontFamily}, sans-serif`,
                   fontSize: metrics.supportingFontSize,
                   lineHeight: metrics.supportingLineHeight,
                   fontWeight: regular
@@ -450,7 +441,7 @@ export function Accordion({
                   style={{
                     margin: 0,
                     color: metrics.bodyColor,
-                    fontFamily: `var(--cars24-theme-font-family-primary, Geist), ${fallbackFontFamily}, sans-serif`,
+                    fontFamily: `${fontFamily}, sans-serif`,
                     fontSize: metrics.bodyFontSize,
                     lineHeight: metrics.bodyLineHeight,
                     fontWeight: regular

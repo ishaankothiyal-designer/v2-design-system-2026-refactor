@@ -1,5 +1,6 @@
 import type { Preview } from "@storybook/react";
 import performancePreview from "@github-ui/storybook-addon-performance-panel/preview";
+import "./fonts.css";
 import "@geist/icons/style.css";
 
 const performanceDecorators = Array.isArray(performancePreview.decorators)
