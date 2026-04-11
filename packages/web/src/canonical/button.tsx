@@ -116,92 +116,92 @@ function makeSurface(
 const LIGHT_SURFACES: Record<ButtonStyleVariant, { rest: ButtonSurface; hover: ButtonSurface }> = {
   Solid: {
     rest: makeSurface(
-      "var(--lego/color/surface/brand/primary/rest, #4736fe)",
+      "var(--cars24-semantic-bg-brand-base, #4736fe)",
       "transparent",
-      "var(--lego/color/text/inverse/lego-color-text-inverse-rest, #ffffff)",
-      "var(--lego/color/icon/inverse/lego-color-icon-inverse-light-rest, #ffffff)",
-      "var(--translucent/white/lego-color-alpha-white-30, rgba(255,255,255,0.3))",
-      "var(--lego/color/text/inverse/lego-color-text-inverse-rest, #ffffff)"
+      "var(--cars24-semantic-text-primary-inverse, #ffffff)",
+      "var(--cars24-semantic-icon-primary-inverse, #ffffff)",
+      "var(--cars24-utility-alpha-white-300, rgba(255,255,255,0.3))",
+      "var(--cars24-semantic-text-primary-inverse, #ffffff)"
     ),
     hover: makeSurface(
-      "var(--lego/color/surface/brand/primary/hover, #4031e5)",
+      "var(--cars24-semantic-bg-brand-base-hover, #4031e5)",
       "transparent",
-      "var(--lego/color/text/inverse/lego-color-text-inverse-rest, #ffffff)",
-      "var(--lego/color/icon/inverse/lego-color-icon-inverse-light-rest, #ffffff)",
-      "var(--translucent/white/lego-color-alpha-white-30, rgba(255,255,255,0.3))",
-      "var(--lego/color/text/inverse/lego-color-text-inverse-rest, #ffffff)"
+      "var(--cars24-semantic-text-primary-inverse, #ffffff)",
+      "var(--cars24-semantic-icon-primary-inverse, #ffffff)",
+      "var(--cars24-utility-alpha-white-300, rgba(255,255,255,0.3))",
+      "var(--cars24-semantic-text-primary-inverse, #ffffff)"
     )
   },
   Outline: {
     rest: makeSurface(
       "transparent",
-      "var(--lego/color/border/brand/primary/rest, #4736fe)",
-      "var(--lego/color/text/brand/primary/rest, #4736fe)",
-      "var(--lego/color/icon/brand/primary/rest, #4736fe)",
-      "var(--translucent/black/lego-color-alpha-black-30, rgba(10,10,10,0.11))",
-      "var(--lego/color/text/brand/primary/rest, #4736fe)"
+      "var(--cars24-semantic-border-brand-base, #4736fe)",
+      "var(--cars24-semantic-text-brand-base, #4736fe)",
+      "var(--cars24-semantic-icon-brand-base, #4736fe)",
+      "var(--cars24-utility-alpha-black-300, rgba(10,10,10,0.11))",
+      "var(--cars24-semantic-text-brand-base, #4736fe)"
     ),
     hover: makeSurface(
-      "var(--lego/color/surface/brand/tertairy/rest, #edebff)",
-      "var(--lego/color/border/brand/primary/hover, #392bcb)",
-      "var(--lego/color/text/brand/primary/rest, #4736fe)",
-      "var(--lego/color/icon/brand/primary/rest, #4736fe)",
-      "var(--translucent/black/lego-color-alpha-black-30, rgba(10,10,10,0.11))",
-      "var(--lego/color/text/brand/primary/rest, #4736fe)"
+      "var(--cars24-semantic-bg-brand-subtler, #f6f6ff)",
+      "var(--cars24-semantic-border-brand-base-alt, #392bcb)",
+      "var(--cars24-semantic-text-brand-base, #4736fe)",
+      "var(--cars24-semantic-icon-brand-base, #4736fe)",
+      "var(--cars24-utility-alpha-black-300, rgba(10,10,10,0.11))",
+      "var(--cars24-semantic-text-brand-base, #4736fe)"
     )
   },
   Ghost: {
     rest: makeSurface(
       "transparent",
       "transparent",
-      "var(--lego/color/text/brand/primary/rest, #4736fe)",
-      "var(--lego/color/icon/brand/primary/rest, #4736fe)",
-      "var(--translucent/black/lego-color-alpha-black-30, rgba(10,10,10,0.11))",
-      "var(--lego/color/text/brand/primary/rest, #4736fe)"
+      "var(--cars24-semantic-text-brand-base, #4736fe)",
+      "var(--cars24-semantic-icon-brand-base, #4736fe)",
+      "var(--cars24-utility-alpha-black-300, rgba(10,10,10,0.11))",
+      "var(--cars24-semantic-text-brand-base, #4736fe)"
     ),
     hover: makeSurface(
-      "var(--lego/color/surface/brand/subtle/hover, #edebff)",
+      "var(--cars24-semantic-bg-brand-subtler, #f6f6ff)",
       "transparent",
-      "var(--lego/color/text/brand/primary/rest, #4736fe)",
-      "var(--lego/color/icon/brand/primary/rest, #4736fe)",
-      "var(--translucent/black/lego-color-alpha-black-30, rgba(10,10,10,0.11))",
-      "var(--lego/color/text/brand/primary/rest, #4736fe)"
+      "var(--cars24-semantic-text-brand-base, #4736fe)",
+      "var(--cars24-semantic-icon-brand-base, #4736fe)",
+      "var(--cars24-utility-alpha-black-300, rgba(10,10,10,0.11))",
+      "var(--cars24-semantic-text-brand-base, #4736fe)"
     )
   },
   Transparent: {
     rest: makeSurface(
-      "var(--translucent/black/lego-color-alpha-black-20, rgba(10,10,10,0.04))",
+      "var(--cars24-utility-alpha-black-200, rgba(10,10,10,0.04))",
       "transparent",
-      "var(--lego/color/text/primary/rest, #0f172b)",
-      "var(--lego/color/icon/primary/rest, #0f172b)",
-      "var(--translucent/black/lego-color-alpha-black-30, rgba(10,10,10,0.11))",
-      "var(--lego/color/text/primary/rest, #0f172b)"
+      "var(--cars24-semantic-text-primary, #020617)",
+      "var(--cars24-semantic-icon-primary, #020617)",
+      "var(--cars24-utility-alpha-black-300, rgba(10,10,10,0.11))",
+      "var(--cars24-semantic-text-primary, #020617)"
     ),
     hover: makeSurface(
-      "var(--translucent/black/lego-color-alpha-black-30, rgba(10,10,10,0.11))",
+      "var(--cars24-utility-alpha-black-300, rgba(10,10,10,0.11))",
       "transparent",
-      "var(--lego/color/text/primary/rest, #0f172b)",
-      "var(--lego/color/icon/primary/rest, #0f172b)",
-      "var(--translucent/black/lego-color-alpha-black-40, rgba(10,10,10,0.18))",
-      "var(--lego/color/text/primary/rest, #0f172b)"
+      "var(--cars24-semantic-text-primary, #020617)",
+      "var(--cars24-semantic-icon-primary, #020617)",
+      "var(--cars24-utility-alpha-black-400, rgba(10,10,10,0.18))",
+      "var(--cars24-semantic-text-primary, #020617)"
     )
   },
   Destructive: {
     rest: makeSurface(
-      "var(--lego/color/surface/feedback/lego-color-feedback-surface-error-rest, #fef2f2)",
-      "var(--red/100, #ffe2e2)",
-      "var(--lego/color/text/feedback/error-rest, #c10007)",
-      "var(--lego/color/icon/feedback/error-rest, #c10007)",
-      "var(--translucent/black/lego-color-alpha-black-30, rgba(10,10,10,0.11))",
-      "var(--lego/color/text/feedback/error-rest, #c10007)"
+      "var(--cars24-semantic-bg-danger-subtler, #fef2f2)",
+      "var(--cars24-semantic-border-danger-subtle, #fee2e2)",
+      "var(--cars24-semantic-text-danger-base, #dc2626)",
+      "var(--cars24-semantic-icon-danger-base, #dc2626)",
+      "var(--cars24-utility-alpha-black-300, rgba(10,10,10,0.11))",
+      "var(--cars24-semantic-text-danger-base, #dc2626)"
     ),
     hover: makeSurface(
-      "var(--lego/color/surface/feedback/lego-color-feedback-surface-error-rest, #fef2f2)",
-      "var(--lego/color/border/feedback/error-rest, #b51d02)",
-      "var(--lego/color/text/feedback/error-rest, #c10007)",
-      "var(--lego/color/icon/feedback/error-rest, #c10007)",
-      "var(--translucent/black/lego-color-alpha-black-30, rgba(10,10,10,0.11))",
-      "var(--lego/color/text/feedback/error-rest, #c10007)"
+      "var(--cars24-semantic-bg-danger-subtler, #fef2f2)",
+      "var(--cars24-semantic-border-danger-base, #dc2626)",
+      "var(--cars24-semantic-text-danger-base, #dc2626)",
+      "var(--cars24-semantic-icon-danger-base, #dc2626)",
+      "var(--cars24-utility-alpha-black-300, rgba(10,10,10,0.11))",
+      "var(--cars24-semantic-text-danger-base, #dc2626)"
     )
   }
 };
@@ -209,112 +209,112 @@ const LIGHT_SURFACES: Record<ButtonStyleVariant, { rest: ButtonSurface; hover: B
 const DARK_SURFACES: Record<ButtonStyleVariant, { rest: ButtonSurface; hover: ButtonSurface }> = {
   Solid: {
     rest: makeSurface(
-      "var(--lego/color/surface/light-rest, #ffffff)",
+      "var(--cars24-semantic-bg-primary, #ffffff)",
       "transparent",
-      "var(--lego/color/text/primary/rest, #0f172b)",
-      "var(--lego/color/icon/primary/rest, #0f172b)",
-      "var(--translucent/black/lego-color-alpha-black-20, rgba(10,10,10,0.04))",
-      "var(--lego/color/text/primary/rest, #0f172b)"
+      "var(--cars24-semantic-text-primary, #020617)",
+      "var(--cars24-semantic-icon-primary, #020617)",
+      "var(--cars24-utility-alpha-black-200, rgba(10,10,10,0.04))",
+      "var(--cars24-semantic-text-primary, #020617)"
     ),
     hover: makeSurface(
-      "var(--translucent/white/lego-color-alpha-white-90, rgba(255,255,255,0.9))",
+      "var(--cars24-utility-alpha-white-900, rgba(255,255,255,0.9))",
       "transparent",
-      "var(--lego/color/text/primary/rest, #0f172b)",
-      "var(--lego/color/icon/primary/rest, #0f172b)",
-      "var(--translucent/black/lego-color-alpha-black-20, rgba(10,10,10,0.04))",
-      "var(--lego/color/text/primary/rest, #0f172b)"
+      "var(--cars24-semantic-text-primary, #020617)",
+      "var(--cars24-semantic-icon-primary, #020617)",
+      "var(--cars24-utility-alpha-black-200, rgba(10,10,10,0.04))",
+      "var(--cars24-semantic-text-primary, #020617)"
     )
   },
   Outline: {
     rest: makeSurface(
       "transparent",
-      "var(--lego/color/border/inverse/lego-color-border-inverse-light-rest, #ffffff)",
-      "var(--lego/color/text/inverse/lego-color-text-inverse-rest, #ffffff)",
-      "var(--lego/color/icon/inverse/lego-color-icon-inverse-light-rest, #ffffff)",
-      "var(--translucent/white/lego-color-alpha-white-20, rgba(255,255,255,0.2))",
-      "var(--lego/color/text/inverse/lego-color-text-inverse-rest, #ffffff)"
+      "var(--cars24-semantic-border-secondary-inverse, #ffffff)",
+      "var(--cars24-semantic-text-primary-inverse, #ffffff)",
+      "var(--cars24-semantic-icon-primary-inverse, #ffffff)",
+      "var(--cars24-utility-alpha-white-200, rgba(255,255,255,0.2))",
+      "var(--cars24-semantic-text-primary-inverse, #ffffff)"
     ),
     hover: makeSurface(
-      "var(--translucent/white/lego-color-alpha-white-10, rgba(255,255,255,0.1))",
-      "var(--lego/color/border/inverse/lego-color-border-inverse-light-rest, #ffffff)",
-      "var(--lego/color/text/inverse/lego-color-text-inverse-rest, #ffffff)",
-      "var(--lego/color/icon/inverse/lego-color-icon-inverse-light-rest, #ffffff)",
-      "var(--translucent/white/lego-color-alpha-white-20, rgba(255,255,255,0.2))",
-      "var(--lego/color/text/inverse/lego-color-text-inverse-rest, #ffffff)"
+      "var(--cars24-utility-alpha-white-100, rgba(255,255,255,0.1))",
+      "var(--cars24-semantic-border-secondary-inverse, #ffffff)",
+      "var(--cars24-semantic-text-primary-inverse, #ffffff)",
+      "var(--cars24-semantic-icon-primary-inverse, #ffffff)",
+      "var(--cars24-utility-alpha-white-200, rgba(255,255,255,0.2))",
+      "var(--cars24-semantic-text-primary-inverse, #ffffff)"
     )
   },
   Ghost: {
     rest: makeSurface(
       "transparent",
       "transparent",
-      "var(--lego/color/text/inverse/lego-color-text-inverse-rest, #ffffff)",
-      "var(--lego/color/icon/inverse/lego-color-icon-inverse-light-rest, #ffffff)",
-      "var(--translucent/white/lego-color-alpha-white-20, rgba(255,255,255,0.2))",
-      "var(--lego/color/text/inverse/lego-color-text-inverse-rest, #ffffff)"
+      "var(--cars24-semantic-text-primary-inverse, #ffffff)",
+      "var(--cars24-semantic-icon-primary-inverse, #ffffff)",
+      "var(--cars24-utility-alpha-white-200, rgba(255,255,255,0.2))",
+      "var(--cars24-semantic-text-primary-inverse, #ffffff)"
     ),
     hover: makeSurface(
-      "var(--translucent/white/lego-color-alpha-white-10, rgba(255,255,255,0.1))",
+      "var(--cars24-utility-alpha-white-100, rgba(255,255,255,0.1))",
       "transparent",
-      "var(--lego/color/text/inverse/lego-color-text-inverse-rest, #ffffff)",
-      "var(--lego/color/icon/inverse/lego-color-icon-inverse-light-rest, #ffffff)",
-      "var(--translucent/white/lego-color-alpha-white-20, rgba(255,255,255,0.2))",
-      "var(--lego/color/text/inverse/lego-color-text-inverse-rest, #ffffff)"
+      "var(--cars24-semantic-text-primary-inverse, #ffffff)",
+      "var(--cars24-semantic-icon-primary-inverse, #ffffff)",
+      "var(--cars24-utility-alpha-white-200, rgba(255,255,255,0.2))",
+      "var(--cars24-semantic-text-primary-inverse, #ffffff)"
     )
   },
   Transparent: {
     rest: makeSurface(
-      "var(--translucent/white/lego-color-alpha-white-20, rgba(255,255,255,0.2))",
+      "var(--cars24-utility-alpha-white-200, rgba(255,255,255,0.2))",
       "transparent",
-      "var(--lego/color/text/inverse/lego-color-text-inverse-rest, #ffffff)",
-      "var(--lego/color/icon/inverse/lego-color-icon-inverse-light-rest, #ffffff)",
-      "var(--translucent/white/lego-color-alpha-white-20, rgba(255,255,255,0.2))",
-      "var(--lego/color/text/inverse/lego-color-text-inverse-rest, #ffffff)"
+      "var(--cars24-semantic-text-primary-inverse, #ffffff)",
+      "var(--cars24-semantic-icon-primary-inverse, #ffffff)",
+      "var(--cars24-utility-alpha-white-200, rgba(255,255,255,0.2))",
+      "var(--cars24-semantic-text-primary-inverse, #ffffff)"
     ),
     hover: makeSurface(
-      "var(--translucent/white/lego-color-alpha-white-30, rgba(255,255,255,0.3))",
+      "var(--cars24-utility-alpha-white-300, rgba(255,255,255,0.3))",
       "transparent",
-      "var(--lego/color/text/inverse/lego-color-text-inverse-rest, #ffffff)",
-      "var(--lego/color/icon/inverse/lego-color-icon-inverse-light-rest, #ffffff)",
-      "var(--translucent/white/lego-color-alpha-white-20, rgba(255,255,255,0.2))",
-      "var(--lego/color/text/inverse/lego-color-text-inverse-rest, #ffffff)"
+      "var(--cars24-semantic-text-primary-inverse, #ffffff)",
+      "var(--cars24-semantic-icon-primary-inverse, #ffffff)",
+      "var(--cars24-utility-alpha-white-200, rgba(255,255,255,0.2))",
+      "var(--cars24-semantic-text-primary-inverse, #ffffff)"
     )
   },
   Destructive: {
     rest: makeSurface(
-      "var(--lego/color/surface/feedback/inverse/lego-color-feedback-surface-error-inverse-rest, #c10007)",
+      "var(--cars24-semantic-bg-danger-base, #dc2626)",
       "transparent",
-      "var(--lego/color/text/inverse/lego-color-text-inverse-rest, #ffffff)",
-      "var(--lego/color/icon/inverse/lego-color-icon-inverse-light-rest, #ffffff)",
-      "var(--translucent/white/lego-color-alpha-white-30, rgba(255,255,255,0.3))",
-      "var(--lego/color/text/inverse/lego-color-text-inverse-rest, #ffffff)"
+      "var(--cars24-semantic-text-primary-inverse, #ffffff)",
+      "var(--cars24-semantic-icon-primary-inverse, #ffffff)",
+      "var(--cars24-utility-alpha-white-300, rgba(255,255,255,0.3))",
+      "var(--cars24-semantic-text-primary-inverse, #ffffff)"
     ),
     hover: makeSurface(
-      "var(--red/950, #460809)",
+      "var(--cars24-semantic-bg-danger-bold, #991b1b)",
       "transparent",
-      "var(--lego/color/text/inverse/lego-color-text-inverse-rest, #ffffff)",
-      "var(--lego/color/icon/inverse/lego-color-icon-inverse-light-rest, #ffffff)",
-      "var(--translucent/white/lego-color-alpha-white-30, rgba(255,255,255,0.3))",
-      "var(--lego/color/text/inverse/lego-color-text-inverse-rest, #ffffff)"
+      "var(--cars24-semantic-text-primary-inverse, #ffffff)",
+      "var(--cars24-semantic-icon-primary-inverse, #ffffff)",
+      "var(--cars24-utility-alpha-white-300, rgba(255,255,255,0.3))",
+      "var(--cars24-semantic-text-primary-inverse, #ffffff)"
     )
   }
 };
 
 const LIGHT_DISABLED_SURFACE = makeSurface(
-  "var(--lego/color/surface/primary/disabled, #e2e8f0)",
-  "transparent",
-  "var(--lego/color/text/primary/disabled, #90a1b9)",
-  "var(--lego/color/icon/primary/disabled, #90a1b9)",
-  "var(--translucent/black/lego-color-alpha-black-20, rgba(10,10,10,0.04))",
-  "var(--lego/color/text/primary/disabled, #90a1b9)"
+  "var(--cars24-semantic-bg-disabled, #e2e8f0)",
+  "var(--cars24-semantic-border-disabled, transparent)",
+  "var(--cars24-semantic-text-disabled, #90a1b9)",
+  "var(--cars24-semantic-icon-disabled, #90a1b9)",
+  "var(--cars24-utility-alpha-black-200, rgba(10,10,10,0.04))",
+  "var(--cars24-semantic-text-disabled, #90a1b9)"
 );
 
 const DARK_DISABLED_SURFACE = makeSurface(
-  "var(--translucent/white/lego-color-alpha-white-10, rgba(255,255,255,0.1))",
-  "transparent",
-  "var(--translucent/white/lego-color-alpha-white-30, rgba(255,255,255,0.3))",
-  "var(--translucent/white/lego-color-alpha-white-30, rgba(255,255,255,0.3))",
-  "var(--translucent/white/lego-color-alpha-white-20, rgba(255,255,255,0.2))",
-  "var(--translucent/white/lego-color-alpha-white-30, rgba(255,255,255,0.3))"
+  "var(--cars24-semantic-bg-disabled-inverse, rgba(255,255,255,0.1))",
+  "var(--cars24-semantic-border-disabled-inverse, transparent)",
+  "var(--cars24-semantic-text-disabled-inverse, rgba(255,255,255,0.3))",
+  "var(--cars24-semantic-icon-disabled-inverse, rgba(255,255,255,0.3))",
+  "var(--cars24-utility-alpha-white-200, rgba(255,255,255,0.2))",
+  "var(--cars24-semantic-text-disabled-inverse, rgba(255,255,255,0.3))"
 );
 
 function normalizeSize(size: ButtonProps["size"]): ButtonSize {
@@ -363,7 +363,7 @@ function getSurface(styleVariant: ButtonStyleVariant, onDark: boolean, hoveredOr
 }
 
 function getRadius(metrics: SizeMetrics, shape: ButtonShape) {
-  return shape === "Pill" ? "var(--radius/full, 999px)" : metrics.radiusRegular;
+  return shape === "Pill" ? "var(--cars24-theme-radius-full, 999px)" : metrics.radiusRegular;
 }
 
 function getIconSize(size: ButtonSize) {
@@ -497,7 +497,7 @@ export function Button({
 
   const labelStyles: CSSProperties = {
     color: surface.text,
-    fontFamily: `var(--font-syle, Geist), ${fallbackFontFamily}, sans-serif`,
+    fontFamily: `var(--cars24-theme-font-family-primary, Geist), ${fallbackFontFamily}, sans-serif`,
     fontSize: metrics.typographySize,
     fontWeight: semibold,
     letterSpacing: 0,
