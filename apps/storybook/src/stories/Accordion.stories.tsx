@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
-import { Badge, Icon, Accordion, SectionHeader, type AccordionProps } from "@geist/web";
+import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog } from "@geist/tokens";
+import { Badge, Icon, Accordion, SectionHeader, Text, type AccordionProps } from "@geist/web";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 type AccordionStoryArgs = AccordionProps & {
@@ -34,6 +34,19 @@ const sampleItems = [
   }
 ] as const;
 
+const accordionSizes = [
+  { key: "sm", label: "Small", size: "sm" as const },
+  { key: "lg", label: "Large", size: "lg" as const }
+] as const;
+
+const accordionStates = [
+  { key: "default", label: "Default" },
+  { key: "hover", label: "Hover", forceState: "hover" as const },
+  { key: "focus", label: "Focus", forceState: "focus" as const },
+  { key: "active", label: "Active", forceState: "active" as const },
+  { key: "disabled", label: "Disabled", disabled: true }
+] as const;
+
 const cars24FaqItems = [
   {
     id: "inspection",
@@ -58,6 +71,87 @@ const cars24FaqItems = [
     title: "Can I sell my car if there is an active loan on it?",
     content:
       "Yes. Cars24 can guide you through the loan closure and NOC process. The outstanding amount and lender paperwork are reviewed before finalizing the transaction."
+  }
+] as const;
+
+const doGuidelines = [
+  {
+    id: "clear-labels",
+    title: "Keep labels concise and action-oriented",
+    description: "Short trigger labels help users scan quickly and decide whether the hidden content is relevant.",
+    preview: {
+      title: "Inspection checklist",
+      content: "Review inspection steps, documents, and expected timelines before booking your appointment."
+    }
+  },
+  {
+    id: "supporting-context",
+    title: "Use supporting text only when it adds context",
+    description: "Supporting text should clarify the section, not repeat the title. Use it for secondary details only.",
+    preview: {
+      title: "Loan closure support",
+      supportingText: "See how payout and lender paperwork are coordinated.",
+      content: "Cars24 can help close the active loan, collect the NOC, and align lender approval before ownership transfer."
+    }
+  },
+  {
+    id: "default-open",
+    title: "Open the most important panel by default",
+    description: "When one answer matters most, starting with it expanded reduces friction for first-time users.",
+    preview: {
+      title: "Payment timeline",
+      content: "Payout is initiated once inspection, offer acceptance, and document checks are completed."
+    }
+  },
+  {
+    id: "status-badge",
+    title: "Use badges sparingly to highlight fresh updates",
+    description: "A lightweight badge can call attention to new or beta information without overwhelming the header.",
+    preview: {
+      title: "RC transfer status",
+      content: "Track the latest ownership-transfer update and the remaining verification steps.",
+      badgeLabel: "New"
+    }
+  }
+] as const;
+
+const dontGuidelines = [
+  {
+    id: "long-labels",
+    title: "Don't use long labels that are hard to scan",
+    description: "If the trigger reads like a paragraph, users cannot quickly understand what is inside the section.",
+    preview: {
+      title: "Everything you should know before booking an inspection and sending ownership documents for review",
+      content: "Long trigger copy makes the list feel heavy and slows down comprehension."
+    }
+  },
+  {
+    id: "critical-hidden",
+    title: "Don't hide always-needed information in collapsed panels",
+    description: "If users need the information every time, keep it visible in the layout instead of locking it behind disclosure.",
+    preview: {
+      title: "Daily support hotline",
+      content: "Essential contact details should stay visible on the page, not be hidden behind an accordion."
+    }
+  },
+  {
+    id: "missing-affordance",
+    title: "Don't remove the leading affordance without a clear reason",
+    description: "Consistent icon treatment improves recognition and keeps the list visually aligned.",
+    preview: {
+      title: "Seller eligibility",
+      content: "Inconsistent headers reduce scanability across a group of related accordion items.",
+      showLeadingIcon: false
+    }
+  },
+  {
+    id: "disabled-without-context",
+    title: "Don't disable items without explaining what changed",
+    description: "If a panel is unavailable, pair that state with adjacent guidance so users know how to proceed.",
+    preview: {
+      title: "Inspection reschedule",
+      content: "Disabled items should include nearby explanation instead of silently blocking the user."
+    }
   }
 ] as const;
 
@@ -93,62 +187,119 @@ function renderAccordion(args: AccordionStoryArgs) {
   );
 }
 
-function OverviewGrid({ brand }: { brand: AccordionBrand }) {
+function AccordionDocsHeading({ brand, label }: { brand: AccordionBrand; label: string }) {
+  return (
+    <Text brand={brand} as="strong" size="sm" tone="secondary" style={{ display: "block" }}>
+      {label}
+    </Text>
+  );
+}
+
+function AccordionSizeMatrix({ brand }: { brand: AccordionBrand }) {
   return (
     <StoryPage>
-      <div style={comparisonGridStyles}>
-        <StoryCard>
-          <Column
-            title="Small / Rest"
-            items={[
-              <Accordion
-                key="small-collapsed"
-                brand={brand}
-                title="Additional Insights"
-                content={sampleItems[0].content}
-              />,
-              <Accordion
-                key="small-expanded"
-                brand={brand}
-                title="Additional Insights"
-                content="With an accordion, users can click to expand or collapse content areas, making it simple to access details without overwhelming the screen."
-                expanded
-              />
-            ]}
-          />
-        </StoryCard>
+      <StoryCard>
+        <div style={accordionMatrixTableStyles(3)}>
+          <div style={accordionMatrixCornerCellStyles} />
+          <div style={accordionMatrixHeaderCellStyles}>
+            <AccordionDocsHeading brand={brand} label="Collapsed" />
+          </div>
+          <div style={accordionMatrixHeaderCellStyles}>
+            <AccordionDocsHeading brand={brand} label="Expanded" />
+          </div>
 
-        <StoryCard>
-          <Column
-            title="Large / Rest"
-            items={[
+          {accordionSizes.flatMap((row) => [
+            <div key={`${row.key}-label`} style={accordionMatrixRowLabelCellStyles}>
+              <AccordionDocsHeading brand={brand} label={row.label} />
+            </div>,
+            <div key={`${row.key}-collapsed`} style={accordionMatrixValueCellStyles}>
               <Accordion
-                key="large-collapsed"
                 brand={brand}
-                size="lg"
+                size={row.size}
                 title="Additional Insights"
                 content={sampleItems[0].content}
-              />,
+              />
+            </div>,
+            <div key={`${row.key}-expanded`} style={accordionMatrixValueCellStyles}>
               <Accordion
-                key="large-expanded"
                 brand={brand}
-                size="lg"
+                size={row.size}
                 title="Additional Insights"
-                content="Accordions help manage space by letting users expand sections to view additional info. This keeps the layout tidy and improves user experience."
+                content={sampleItems[0].content}
                 expanded
               />
-            ]}
-          />
-        </StoryCard>
+            </div>
+          ])}
+        </div>
+      </StoryCard>
+    </StoryPage>
+  );
+}
+
+function AccordionStateMatrix({
+  brand,
+  expanded,
+  title
+}: {
+  brand: AccordionBrand;
+  expanded: boolean;
+  title: string;
+}) {
+  return (
+    <StoryCard>
+      <div style={{ display: "grid", gap: 16 }}>
+        <Text brand={brand} as="strong" size="md" style={{ display: "block" }}>
+          {title}
+        </Text>
+        <div style={accordionMatrixTableStyles(accordionStates.length + 1)}>
+          <div style={accordionMatrixCornerCellStyles} />
+          {accordionStates.map((state) => (
+            <div key={`${title}-${state.key}-header`} style={accordionMatrixHeaderCellStyles}>
+              <AccordionDocsHeading brand={brand} label={state.label} />
+            </div>
+          ))}
+
+          {accordionSizes.flatMap((row) => [
+            <div key={`${title}-${row.key}-label`} style={accordionMatrixRowLabelCellStyles}>
+              <AccordionDocsHeading brand={brand} label={row.label} />
+            </div>,
+            ...accordionStates.map((state) => (
+              <div key={`${title}-${row.key}-${state.key}`} style={accordionMatrixValueCellStyles}>
+                <Accordion
+                  brand={brand}
+                  size={row.size}
+                  title={state.label}
+                  content={sampleItems[0].content}
+                  expanded={expanded}
+                  {...("forceState" in state ? { forceState: state.forceState } : {})}
+                  {...("disabled" in state ? { disabled: true } : {})}
+                />
+              </div>
+            ))
+          ])}
+        </div>
+      </div>
+    </StoryCard>
+  );
+}
+
+function AccordionStatesDocument({ brand }: { brand: AccordionBrand }) {
+  return (
+    <StoryPage>
+      <div style={{ display: "grid", gap: 32 }}>
+        <AccordionStateMatrix brand={brand} expanded={false} title="Collapsed" />
+        <AccordionStateMatrix brand={brand} expanded title="Expanded" />
       </div>
     </StoryPage>
   );
 }
 
-function Column({ title, items }: { title: string; items: ReactNode[] }) {
+function Column({ brand, title, items }: { brand: AccordionBrand; title: string; items: ReactNode[] }) {
   return (
     <div style={{ display: "grid", gap: 16 }}>
-      <strong style={{ fontSize: 14 }}>{title}</strong>
+      <Text brand={brand} as="strong" size="sm" tone="secondary">
+        {title}
+      </Text>
       <div style={{ display: "grid", gap: 16 }}>
         {items.map((item, index) => (
           <div key={index} style={{ width: "100%" }}>
@@ -184,6 +335,110 @@ function buildAccordionKey({
     badgeLabel,
     showLeadingIcon
   });
+}
+
+function GuidelineExample({
+  brand,
+  preview,
+  forceExpanded = false,
+  disabled = false
+}: {
+  brand: AccordionBrand;
+  preview: {
+    title: string;
+    content: string;
+    supportingText?: string;
+    badgeLabel?: string;
+    showLeadingIcon?: boolean;
+  };
+  forceExpanded?: boolean;
+  disabled?: boolean;
+}) {
+  return (
+    <div style={guidelinePreviewFrameStyles}>
+      <Accordion
+        brand={brand}
+        size="lg"
+        title={preview.title}
+        content={preview.content}
+        expanded={forceExpanded}
+        disabled={disabled}
+        {...(preview.supportingText ? { supportingText: preview.supportingText } : {})}
+        {...(preview.badgeLabel ? { badge: renderBadge(preview.badgeLabel) } : {})}
+        {...(preview.showLeadingIcon === false ? { leadingIcon: false as const } : {})}
+      />
+    </div>
+  );
+}
+
+function GuidanceColumn({
+  brand,
+  tone,
+  title,
+  items
+}: {
+  brand: AccordionBrand;
+  tone: "do" | "dont";
+  title: string;
+  items: Array<{
+    id: string;
+    title: string;
+    description: string;
+    preview: {
+      title: string;
+      content: string;
+      supportingText?: string;
+      badgeLabel?: string;
+      showLeadingIcon?: boolean;
+    };
+  }>;
+}) {
+  const toneStyles = tone === "do" ? doToneStyles : dontToneStyles;
+  const iconName = tone === "do" ? "check-outline" : "close-line";
+
+  return (
+    <div style={guidanceColumnStyles}>
+      <div style={guidanceHeaderStyles}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <div style={{ ...guidanceIconWrapStyles, ...toneStyles.iconWrap }}>
+            <Icon name={iconName} decorative style={toneStyles.icon} />
+          </div>
+          <Text brand={brand} as="strong" size="lg">
+            {title}
+          </Text>
+        </div>
+      </div>
+
+      <div style={guidanceItemsStyles}>
+        {items.map((item) => (
+          <div
+            key={item.id}
+            style={{
+              ...guidanceItemStyles,
+              ...toneStyles.item
+            }}
+          >
+            <div style={{ display: "grid", gap: 12 }}>
+              <div style={{ display: "grid", gap: 6 }}>
+                <Text brand={brand} as="strong" size="md" style={guidanceItemTitleStyles}>
+                  {item.title}
+                </Text>
+                <Text brand={brand} as="p" size="sm" tone="secondary" style={guidanceItemDescriptionStyles}>
+                  {item.description}
+                </Text>
+              </div>
+              <GuidelineExample
+                brand={brand}
+                preview={item.preview}
+                forceExpanded={tone === "do" && (item.id === "supporting-context" || item.id === "default-open")}
+                disabled={tone === "dont" && item.id === "disabled-without-context"}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 function FaqStory(args: AccordionStoryArgs) {
@@ -255,7 +510,61 @@ const comparisonGridStyles: CSSProperties = {
   display: "grid",
   gap: 24,
   gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-  justifyContent: "center"
+  justifyContent: "center",
+  width: "100%"
+};
+
+function accordionMatrixTableStyles(columnCount: number): CSSProperties {
+  return {
+    display: "grid",
+    gridTemplateColumns: `180px repeat(${columnCount - 1}, minmax(220px, 1fr))`,
+    border: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+    borderRadius: 20,
+    overflow: "hidden"
+  };
+}
+
+const accordionMatrixCornerCellStyles: CSSProperties = {
+  minHeight: 68,
+  borderBottom: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+  background: String(coreTokenCatalog.color.surface.canvas)
+};
+
+const accordionMatrixHeaderCellStyles: CSSProperties = {
+  minHeight: 68,
+  padding: "16px 20px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+  background: String(coreTokenCatalog.color.surface.canvas)
+};
+
+const accordionMatrixRowLabelCellStyles: CSSProperties = {
+  minHeight: 132,
+  padding: "20px 16px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "flex-start",
+  borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+  background: String(coreTokenCatalog.color.surface.canvas)
+};
+
+const accordionMatrixValueCellStyles: CSSProperties = {
+  minHeight: 132,
+  padding: "16px 20px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+  borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+  background: String(coreTokenCatalog.color.surface.canvas)
+};
+
+const showcaseShellStyles: CSSProperties = {
+  width: "100%",
+  maxWidth: 1080,
+  margin: "0 auto"
 };
 
 const faqShellStyles: CSSProperties = {
@@ -339,69 +648,8 @@ export const Playground: Story = {
   }
 };
 
-export const Variants: Story = {
-  render: ({ brand = "Cars24" }) => (
-    <>
-      <OverviewGrid brand={brand} />
-      <StoryPage>
-        <div style={comparisonGridStyles}>
-          <StoryCard>
-            <Column
-              title="Collapsed"
-              items={[
-                <Accordion key="default" brand={brand} title="Default" content={sampleItems[0].content} />,
-                <Accordion key="hover" brand={brand} title="Hover" content={sampleItems[0].content} forceState="hover" />,
-                <Accordion key="focus" brand={brand} title="Focus" content={sampleItems[0].content} forceState="focus" />,
-                <Accordion key="active" brand={brand} title="Active" content={sampleItems[0].content} forceState="active" />,
-                <Accordion key="disabled" brand={brand} title="Disabled" content={sampleItems[0].content} disabled />
-              ]}
-            />
-          </StoryCard>
-
-          <StoryCard>
-            <Column
-              title="Expanded"
-              items={[
-                <Accordion key="expanded-default" brand={brand} title="Default" content={sampleItems[0].content} expanded />,
-                <Accordion
-                  key="expanded-hover"
-                  brand={brand}
-                  title="Hover"
-                  content={sampleItems[0].content}
-                  expanded
-                  forceState="hover"
-                />,
-                <Accordion
-                  key="expanded-focus"
-                  brand={brand}
-                  title="Focus"
-                  content={sampleItems[0].content}
-                  expanded
-                  forceState="focus"
-                />,
-                <Accordion
-                  key="expanded-active"
-                  brand={brand}
-                  title="Active"
-                  content={sampleItems[0].content}
-                  expanded
-                  forceState="active"
-                />,
-                <Accordion
-                  key="expanded-disabled"
-                  brand={brand}
-                  title="Disabled"
-                  content={sampleItems[0].content}
-                  expanded
-                  disabled
-                />
-              ]}
-            />
-          </StoryCard>
-        </div>
-      </StoryPage>
-    </>
-  ),
+export const Sizes: Story = {
+  render: ({ brand = "Cars24" }) => <AccordionSizeMatrix brand={brand} />,
   parameters: {
     controls: {
       include: ["brand"]
@@ -409,110 +657,120 @@ export const Variants: Story = {
   }
 };
 
-export const UsageGuidelines: Story = {
-  render: ({ brand = "Cars24" }) => (
-    <StoryPage>
-      <div style={comparisonGridStyles}>
-        <StoryCard>
-          <Column
-            title="Small"
-            items={[
-              <Accordion key="small-default" brand={brand} title="Additional Insights" content={sampleItems[0].content} />,
-              <Accordion
-                key="small-supporting"
-                brand={brand}
-                title="Additional Insights"
-                supportingText="Optional supporting text stays visible in the header."
-                content={sampleItems[0].content}
-                expanded
-              />,
-              <Accordion
-                key="small-badge"
-                brand={brand}
-                title="Additional Insights"
-                content={sampleItems[0].content}
-                badge={
-                  <Badge
-                    labelText="New"
-                    size="Extra Small"
-                    type="Neutral"
-                    priority="Low"
-                    pillShape="Yes"
-                    showLeadingIcon={false}
-                    showTrailingIcon={false}
-                  />
-                }
-              />,
-              <Accordion
-                key="small-no-icon"
-                brand={brand}
-                title="Additional Insights"
-                content={sampleItems[0].content}
-                leadingIcon={false}
-              />
-            ]}
-          />
-        </StoryCard>
-
-        <StoryCard>
-          <Column
-            title="Large"
-            items={[
-              <Accordion
-                key="large-default"
-                brand={brand}
-                size="lg"
-                title="Additional Insights"
-                content={sampleItems[0].content}
-              />,
-              <Accordion
-                key="large-supporting"
-                brand={brand}
-                size="lg"
-                title="Additional Insights"
-                supportingText="Optional supporting text stays visible in the header."
-                content={sampleItems[0].content}
-                expanded
-              />,
-              <Accordion
-                key="large-badge"
-                brand={brand}
-                size="lg"
-                title="Additional Insights"
-                content={sampleItems[0].content}
-                badge={
-                  <Badge
-                    labelText="Beta"
-                    size="Extra Small"
-                    type="Neutral"
-                    priority="Low"
-                    pillShape="Yes"
-                    showLeadingIcon={false}
-                    showTrailingIcon={false}
-                  />
-                }
-              />,
-              <Accordion
-                key="large-custom-icon"
-                brand={brand}
-                size="lg"
-                title="Additional Insights"
-                content={sampleItems[0].content}
-                leadingIcon={<Icon name="sparkle-line" decorative style={{ fontSize: 20, color: "#020617" }} />}
-              />
-            ]}
-          />
-        </StoryCard>
-      </div>
-    </StoryPage>
-  ),
+export const States: Story = {
+  render: ({ brand = "Cars24" }) => <AccordionStatesDocument brand={brand} />,
   parameters: {
     controls: {
       include: ["brand"]
     }
   }
+};
+
+const guidanceSectionStyles: CSSProperties = {
+  display: "grid",
+  gap: 24,
+  width: "100%",
+  maxWidth: 1120,
+  margin: "0 auto"
+};
+
+const guidanceIntroStyles: CSSProperties = {
+  margin: 0,
+  color: String(coreTokenCatalog.color.text.secondary),
+  fontSize: 16,
+  lineHeight: "24px"
+};
+
+const guidanceGridStyles: CSSProperties = {
+  display: "grid",
+  gap: 24,
+  gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))",
+  alignItems: "start"
+};
+
+const guidanceColumnStyles: CSSProperties = {
+  display: "grid",
+  gap: 16,
+  border: `1px solid ${String(coreTokenCatalog.color.border.default)}`,
+  borderRadius: coreTokenCatalog.radius.xl,
+  background: String(coreTokenCatalog.color.surface.canvas),
+  padding: coreTokenCatalog.spacing["6"]
+};
+
+const guidanceHeaderStyles: CSSProperties = {
+  display: "flex",
+  alignItems: "center"
+};
+
+const guidanceItemsStyles: CSSProperties = {
+  display: "grid",
+  gap: 16
+};
+
+const guidanceItemStyles: CSSProperties = {
+  padding: coreTokenCatalog.spacing["5"],
+  borderRadius: coreTokenCatalog.radius.lg,
+  border: `1px solid ${String(coreTokenCatalog.color.border.default)}`,
+  background: String(coreTokenCatalog.color.surface.subtle)
+};
+
+const guidanceItemTitleStyles: CSSProperties = {
+  display: "block"
+};
+
+const guidanceItemDescriptionStyles: CSSProperties = {
+  margin: 0,
+  display: "block"
+};
+
+const guidanceIconWrapStyles: CSSProperties = {
+  width: 32,
+  height: 32,
+  borderRadius: coreTokenCatalog.radius.pill,
+  display: "grid",
+  placeItems: "center",
+  flexShrink: 0,
+  border: `1px solid ${String(coreTokenCatalog.color.border.default)}`
+};
+
+const guidelinePreviewFrameStyles: CSSProperties = {
+  padding: coreTokenCatalog.spacing["2"],
+  borderRadius: coreTokenCatalog.radius.lg,
+  background: String(coreTokenCatalog.color.surface.canvas),
+  border: `1px solid ${String(coreTokenCatalog.color.border.default)}`
+};
+
+const doToneStyles = {
+  iconWrap: {
+    background: String(coreTokenCatalog.color.surface.subtle)
+  } satisfies CSSProperties,
+  icon: {
+    fontSize: 16,
+    color: String(coreTokenCatalog.color.status.success)
+  } satisfies CSSProperties,
+  item: {
+    boxShadow: `inset 3px 0 0 ${String(coreTokenCatalog.color.status.success)}`
+  } satisfies CSSProperties
+};
+
+const dontToneStyles = {
+  iconWrap: {
+    background: String(coreTokenCatalog.color.surface.subtle)
+  } satisfies CSSProperties,
+  icon: {
+    fontSize: 16,
+    color: String(coreTokenCatalog.color.status.danger)
+  } satisfies CSSProperties,
+  item: {
+    boxShadow: `inset 3px 0 0 ${String(coreTokenCatalog.color.status.danger)}`
+  } satisfies CSSProperties
 };
 
 export const UIExample: Story = {
-  render: (args) => <FaqStory {...args} />
+  render: (args) => <FaqStory {...args} />,
+  parameters: {
+    controls: {
+      include: ["brand"]
+    }
+  }
 };

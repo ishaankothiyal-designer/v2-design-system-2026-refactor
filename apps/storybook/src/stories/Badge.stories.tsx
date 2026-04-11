@@ -110,12 +110,13 @@ function StateGallery() {
   );
 }
 
-function ConfigurationsStory() {
+function ConfigurationsStory({ brand = "Cars24" }: Pick<BadgeProps, "brand">) {
   const examples: Array<{ title: string; node: ReactNode }> = [
     {
       title: "Text only",
       node: (
         <Badge
+          brand={brand}
           type="Neutral"
           priority="Low"
           size="Extra Small"
@@ -128,16 +129,17 @@ function ConfigurationsStory() {
     },
     {
       title: "Icon + text",
-      node: <Badge type="Success" priority="High" size="Small" labelText="Badge" />
+      node: <Badge brand={brand} type="Success" priority="High" size="Small" labelText="Badge" />
     },
     {
       title: "Status badge",
-      node: <Badge type="Warning" priority="Medium" size="Small" labelText="Action required" />
+      node: <Badge brand={brand} type="Warning" priority="Medium" size="Small" labelText="Action required" />
     },
     {
       title: "Dismissible",
       node: (
         <Badge
+          brand={brand}
           type="Information"
           priority="Medium"
           size="Small"
@@ -151,6 +153,7 @@ function ConfigurationsStory() {
       title: "Custom icons",
       node: (
         <Badge
+          brand={brand}
           type="Feature"
           priority="Medium"
           size="Medium"
@@ -165,10 +168,12 @@ function ConfigurationsStory() {
       node: (
         <div style={{ width: 328 }}>
           <Accordion
+            brand={brand}
             title="Additional Insights"
             content="The Accordion badge slot now consumes the same canonical Badge API exposed in Storybook."
             badge={
               <Badge
+                brand={brand}
                 type="Neutral"
                 priority="Low"
                 size="Extra Small"
@@ -333,21 +338,11 @@ export const Variants: StoryObj = {
   }
 };
 
-export const UsageGuidelines: StoryObj = {
-  render: () => (
-    <>
-      <SizesStory />
-      <StateGallery />
-    </>
-  ),
+export const UIExample: Story = {
+  render: ({ brand = "Cars24" }) => <ConfigurationsStory brand={brand} />,
   parameters: {
-    controls: { disable: true }
-  }
-};
-
-export const UIExample: StoryObj = {
-  render: () => <ConfigurationsStory />,
-  parameters: {
-    controls: { disable: true }
+    controls: {
+      include: ["brand"]
+    }
   }
 };

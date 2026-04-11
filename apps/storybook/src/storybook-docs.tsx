@@ -14,7 +14,7 @@ const centeredStageStyles: CSSProperties = {
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  padding: 24,
+  padding: 80,
   boxSizing: "border-box"
 };
 
@@ -34,42 +34,6 @@ function resolveStory(moduleExports: Record<string, unknown>, exportName?: strin
   )?.moduleExport;
 }
 
-function resolveStories(moduleExports: Record<string, unknown>, exportNames?: readonly string[]) {
-  if (!exportNames) {
-    return [];
-  }
-
-  return exportNames
-    .map((exportName) => ({
-      exportName,
-      storyExport: resolveStory(moduleExports, exportName)
-    }))
-    .filter((entry): entry is { exportName: string; storyExport: unknown } => entry.storyExport !== undefined);
-}
-
-function DocsSection({
-  title,
-  stories
-}: {
-  title: string;
-  stories: Array<{ exportName: string; storyExport: unknown }>;
-}) {
-  if (stories.length === 0) {
-    return null;
-  }
-
-  return (
-    <>
-      <h2 style={sectionHeadingStyles}>{title}</h2>
-      <div style={{ display: "grid", gap: 16 }}>
-        {stories.map(({ exportName, storyExport }) => (
-          <Canvas key={exportName} of={storyExport as never} sourceState="shown" story={{ height: "400px" }} />
-        ))}
-      </div>
-    </>
-  );
-}
-
 export function ComponentDocsPage() {
   const resolvedMeta = useOf("meta", ["meta"]);
   const preparedMeta = resolvedMeta.preparedMeta;
@@ -81,8 +45,6 @@ export function ComponentDocsPage() {
 
   const stories = resolvedMeta.csfFile.stories as Record<string, unknown>;
   const playgroundStory = resolveStory(stories, "Playground");
-  const variantStories = resolveStories(stories, ["Variants"]);
-  const usageStories = resolveStories(stories, ["UsageGuidelines"]);
 
   return (
     <>
@@ -103,9 +65,6 @@ export function ComponentDocsPage() {
           <Canvas of={playgroundStory as never} sourceState="shown" story={{ height: "400px" }} />
         </>
       ) : null}
-
-      <DocsSection title="Variants" stories={variantStories} />
-      <DocsSection title="Usage Guidelines" stories={usageStories} />
     </>
   );
 }

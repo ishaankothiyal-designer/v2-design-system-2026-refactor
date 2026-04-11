@@ -219,7 +219,6 @@ export function SectionHeader({
   subtitleIcon,
   style
 }: SectionHeaderProps) {
-  const width = Number(getRequiredNativeThemeTokenValue(brand, "component.sectionHeader.size.width"));
   const gap = Number(getRequiredNativeThemeTokenValue(brand, "component.sectionHeader.size.gap"));
   const containerPaddingBottom = Number(
     getRequiredNativeThemeTokenValue(brand, "component.sectionHeader.size.paddingBottom")
@@ -284,7 +283,8 @@ export function SectionHeader({
             gap,
             justifyContent: "center",
             maxWidth: "100%",
-            width
+            minWidth: 0,
+            width: "100%"
           },
           style
         ]}
@@ -357,7 +357,8 @@ export function SectionHeader({
           gap,
           justifyContent: "center",
           maxWidth: "100%",
-          width
+          minWidth: 0,
+          width: "100%"
         },
         style
       ]}

@@ -3,7 +3,9 @@ import { coreTokenCatalog } from "@geist/tokens";
 
 const pageStyles: CSSProperties = {
   minHeight: "auto",
-  padding: 0,
+  width: "100%",
+  padding: 80,
+  boxSizing: "border-box",
   background: "transparent",
   color: String(coreTokenCatalog.color.text.primary)
 };
@@ -11,6 +13,7 @@ const pageStyles: CSSProperties = {
 const pageInnerStyles: CSSProperties = {
   display: "grid",
   gap: 24,
+  width: "100%",
   maxWidth: "none",
   margin: 0
 };

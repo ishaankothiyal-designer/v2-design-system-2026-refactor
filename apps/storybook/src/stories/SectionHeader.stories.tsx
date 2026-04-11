@@ -28,7 +28,7 @@ function FigmaVariantsStory() {
   );
 }
 
-function ConfigurationsStory() {
+function ConfigurationsStory({ brand = "Cars24" }: Pick<SectionHeaderProps, "brand">) {
   return (
     <StoryPage>
       <div style={configGridStyles}>
@@ -36,6 +36,7 @@ function ConfigurationsStory() {
           <div style={{ display: "grid", gap: 12 }}>
             <strong>With icons</strong>
             <SectionHeader
+              brand={brand}
               titleIcon={<Icon name="sparkle-filled" decorative />}
               subtitleIcon={<Icon name="calendar-line" decorative />}
             />
@@ -46,6 +47,7 @@ function ConfigurationsStory() {
           <div style={{ display: "grid", gap: 12 }}>
             <strong>No subtitle or tag</strong>
             <SectionHeader
+              brand={brand}
               subtitle=""
               showTag={false}
               description="Description goes here upto 2 lines"
@@ -56,7 +58,7 @@ function ConfigurationsStory() {
         <StoryCard style={{ background: "#0A0A0A", width: "fit-content" }}>
           <div style={{ display: "grid", gap: 12 }}>
             <strong style={{ color: "#F8FAFC" }}>Inverse, no action</strong>
-            <SectionHeader inverse showAction={false} />
+            <SectionHeader brand={brand} inverse showAction={false} />
           </div>
         </StoryCard>
       </div>
@@ -154,16 +156,11 @@ export const Variants: StoryObj = {
   }
 };
 
-export const UsageGuidelines: StoryObj = {
-  render: () => <ConfigurationsStory />,
+export const UIExample: Story = {
+  render: ({ brand = "Cars24" }) => <ConfigurationsStory brand={brand} />,
   parameters: {
-    controls: { disable: true }
-  }
-};
-
-export const UIExample: StoryObj = {
-  render: () => <ConfigurationsStory />,
-  parameters: {
-    controls: { disable: true }
+    controls: {
+      include: ["brand"]
+    }
   }
 };

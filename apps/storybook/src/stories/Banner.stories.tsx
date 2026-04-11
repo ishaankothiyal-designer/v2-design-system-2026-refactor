@@ -1,8 +1,14 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog } from "@geist/tokens";
 import {
   Banner,
+  Button,
+  LinkButton,
+  SectionHeader,
+  Text,
+  TextInput,
+  getRequiredThemeTokenValue,
   type BannerActionType,
   type BannerProps,
   type BannerState,
@@ -15,11 +21,13 @@ const bannerThemes: BannerTheme[] = ["Light", "Dark"];
 const actionTypes: BannerActionType[] = ["Text button", "Icon button"];
 
 function VariantCell({
+  brand,
   theme,
   heading,
   actionType,
   state
 }: {
+  brand: NonNullable<BannerProps["brand"]>;
   theme: BannerTheme;
   heading: boolean;
   actionType: BannerActionType;
@@ -27,6 +35,7 @@ function VariantCell({
 }) {
   return (
     <Banner
+      brand={brand}
       theme={theme}
       state={state}
       actionType={actionType}
@@ -37,113 +46,252 @@ function VariantCell({
   );
 }
 
-function FigmaMatrixStory() {
+function HeaderCell({
+  brand,
+  label,
+  tone = "secondary"
+}: {
+  brand: NonNullable<BannerProps["brand"]>;
+  label: string;
+  tone?: "primary" | "secondary" | "inverse";
+}) {
+  return (
+    <Text brand={brand} as="strong" size="sm" tone={tone} style={{ display: "block" }}>
+      {label}
+    </Text>
+  );
+}
+
+function BannerMatrixStory({
+  brand = "Cars24",
+  heading
+}: {
+  brand?: NonNullable<BannerProps["brand"]>;
+  heading: boolean;
+}) {
   return (
     <StoryPage fullscreen>
-      {actionTypes.map((actionType) => (
-        <StoryCard key={actionType}>
-          <div style={{ display: "grid", gap: 16 }}>
-            <strong>{actionType}</strong>
-            <div style={matrixGridStyles}>
-              <HeaderCell label="Light / Heading" />
-              <HeaderCell label="Dark / Heading" />
-              <HeaderCell label="Light / Inline" />
-              <HeaderCell label="Dark / Inline" />
+      <div style={{ display: "grid", gap: 32 }}>
+        {actionTypes.map((actionType) => (
+          <StoryCard key={actionType}>
+            <div style={bannerSectionStyles}>
+              <Text brand={brand} as="strong" size="md" style={{ display: "block" }}>
+                {actionType}
+              </Text>
+              <div style={bannerMatrixTableStyles}>
+                <div style={bannerMatrixCornerCellStyles} />
+                <div style={bannerMatrixHeaderCellStyles}>
+                  <HeaderCell brand={brand} label="Light" />
+                </div>
+                <div style={bannerMatrixHeaderCellStyles}>
+                  <HeaderCell brand={brand} label="Dark" />
+                </div>
 
-              {bannerStates.flatMap((state) => [
-                <VariantCell
-                  key={`${actionType}-${state}-light-heading`}
-                  actionType={actionType}
-                  state={state}
-                  theme="Light"
-                  heading
-                />,
-                <VariantCell
-                  key={`${actionType}-${state}-dark-heading`}
-                  actionType={actionType}
-                  state={state}
-                  theme="Dark"
-                  heading
-                />,
-                <VariantCell
-                  key={`${actionType}-${state}-light-inline`}
-                  actionType={actionType}
-                  state={state}
-                  theme="Light"
-                  heading={false}
-                />,
-                <VariantCell
-                  key={`${actionType}-${state}-dark-inline`}
-                  actionType={actionType}
-                  state={state}
-                  theme="Dark"
-                  heading={false}
-                />
-              ])}
+                {bannerStates.flatMap((state) => [
+                  <div key={`${actionType}-${state}-label`} style={bannerMatrixRowLabelCellStyles}>
+                    <HeaderCell brand={brand} label={state} />
+                  </div>,
+                  <div key={`${actionType}-${state}-light`} style={bannerMatrixValueCellStyles}>
+                    <VariantCell
+                      brand={brand}
+                      actionType={actionType}
+                      state={state}
+                      theme="Light"
+                      heading={heading}
+                    />
+                  </div>,
+                  <div key={`${actionType}-${state}-dark`} style={bannerMatrixValueCellStyles}>
+                    <VariantCell
+                      brand={brand}
+                      actionType={actionType}
+                      state={state}
+                      theme="Dark"
+                      heading={heading}
+                    />
+                  </div>
+                ])}
+              </div>
             </div>
-          </div>
-        </StoryCard>
-      ))}
+          </StoryCard>
+        ))}
+      </div>
     </StoryPage>
   );
 }
 
-function HeaderCell({ label }: { label: string }) {
+function ContactChoice({
+  brand,
+  label,
+  selected = false
+}: {
+  brand: NonNullable<BannerProps["brand"]>;
+  label: string;
+  selected?: boolean;
+}) {
+  const brandPrimary = String(getRequiredThemeTokenValue(brand, "color.brand.primary.600"));
+  const borderDefault = String(getRequiredThemeTokenValue(brand, "color.border.default"));
+  const textPrimary = String(getRequiredThemeTokenValue(brand, "color.text.primary"));
+
   return (
     <div
       style={{
-        fontSize: 13,
-        lineHeight: "18px",
-        color: "#64748B",
-        fontWeight: 600
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 10,
+        minHeight: 28
       }}
     >
-      {label}
+      <div
+        aria-hidden="true"
+        style={{
+          width: 18,
+          height: 18,
+          borderRadius: 999,
+          boxSizing: "border-box",
+          border: `1.5px solid ${selected ? brandPrimary : borderDefault}`,
+          display: "grid",
+          placeItems: "center"
+        }}
+      >
+        <div
+          style={{
+            width: 8,
+            height: 8,
+            borderRadius: 999,
+            background: selected ? brandPrimary : "transparent"
+          }}
+        />
+      </div>
+      <Text brand={brand} as="span" size="md" style={{ color: textPrimary }}>
+        {label}
+      </Text>
     </div>
   );
 }
 
-function ConfigurationsStory() {
+function SignupFormStory({ brand = "Cars24" }: Pick<BannerProps, "brand">) {
+  const borderDefault = String(getRequiredThemeTokenValue(brand, "color.border.default"));
+  const surfaceCanvas = String(getRequiredThemeTokenValue(brand, "color.surface.canvas"));
+  const textPrimary = String(getRequiredThemeTokenValue(brand, "color.text.primary"));
+  const textSecondary = String(getRequiredThemeTokenValue(brand, "color.text.secondary"));
+  const radiusXl = Number(getRequiredThemeTokenValue(brand, "radius.xl"));
+  const spacing4 = Number(getRequiredThemeTokenValue(brand, "spacing.4"));
+  const spacing5 = Number(getRequiredThemeTokenValue(brand, "spacing.5"));
+  const spacing6 = Number(getRequiredThemeTokenValue(brand, "spacing.6"));
+  const spacing8 = Number(getRequiredThemeTokenValue(brand, "spacing.8"));
+
   return (
     <StoryPage>
-      <div style={configGridStyles}>
+      <div
+        style={{
+          width: "100%",
+          maxWidth: 460,
+          margin: "0 auto"
+        }}
+      >
         <StoryCard>
-          <div style={{ display: "grid", gap: 12 }}>
-            <strong>No action</strong>
-            <Banner action={false} state="Info" title="System update" description="New message received!" />
-          </div>
-        </StoryCard>
+          <div
+            style={{
+              display: "grid",
+              gap: spacing6,
+              padding: spacing8,
+              border: `1px solid ${borderDefault}`,
+              borderRadius: radiusXl,
+              background: surfaceCanvas
+            }}
+          >
+            <SectionHeader
+              brand={brand}
+              title="Sign up"
+              subtitle=""
+              description="All fields are required."
+              showTag={false}
+              showAction={false}
+            />
 
-        <StoryCard>
-          <div style={{ display: "grid", gap: 12 }}>
-            <strong>No leading icon</strong>
-            <Banner icon={false} state="Brand" theme="Dark" title="Brand notice" description="New message received!" />
-          </div>
-        </StoryCard>
-
-        <StoryCard>
-          <div style={{ display: "grid", gap: 12 }}>
-            <strong>Inline message</strong>
             <Banner
-              heading={false}
-              actionType="Icon button"
+              brand={brand}
+              theme="Light"
               state="Warning"
-              description="New message received!"
+              heading={false}
+              action={false}
+              description="Fix errors to proceed with signup"
+              style={{ width: "100%" }}
             />
-          </div>
-        </StoryCard>
 
-        <StoryCard>
-          <div style={{ display: "grid", gap: 12 }}>
-            <strong>Dark text action</strong>
-            <Banner
-              theme="Dark"
-              state="Success"
-              actionType="Text button"
-              title="Deployment complete"
-              description="New message received!"
-              actionLabel="View"
-            />
+            <div style={{ display: "grid", gap: spacing5 }}>
+              <TextInput
+                brand={brand}
+                size="Large"
+                label="First and last name"
+                required
+                validationState="Error"
+                helperTone="Error"
+                helperText="Enter a valid name: John Smith"
+                placeholder=""
+                suffixIconName="error-outline"
+              />
+
+              <TextInput
+                brand={brand}
+                size="Large"
+                label="Phone number"
+                required
+                type="tel"
+                validationState="Error"
+                helperTone="Error"
+                helperText="Enter a valid number: (555) 123-4567"
+                placeholder=""
+                suffixIconName="error-outline"
+              />
+
+              <TextInput
+                brand={brand}
+                size="Large"
+                label="Email address"
+                required
+                type="email"
+                validationState="Error"
+                helperTone="Error"
+                helperText="Enter a valid email: name@company.com"
+                placeholder=""
+                suffixIconName="error-outline"
+              />
+            </div>
+
+            <div style={{ display: "grid", gap: spacing4 }}>
+              <Text brand={brand} as="strong" size="md" style={{ color: textPrimary, display: "block" }}>
+                How can we contact you? <span style={{ color: textSecondary }}>*</span>
+              </Text>
+
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: spacing6
+                }}
+              >
+                <ContactChoice brand={brand} label="Phone" />
+                <ContactChoice brand={brand} label="Email" />
+                <ContactChoice brand={brand} label="Do not" selected />
+              </div>
+            </div>
+
+            <div
+              style={{
+                width: "100%"
+              }}
+            >
+              <Button brand={brand} styleVariant="Solid" size="Medium" style={{ width: "100%" }}>
+                Submit
+              </Button>
+            </div>
+
+            <div>
+              <LinkButton brand={brand} tone="Brand" size="Small">
+                Privacy statement
+              </LinkButton>
+            </div>
           </div>
         </StoryCard>
       </div>
@@ -151,18 +299,58 @@ function ConfigurationsStory() {
   );
 }
 
-const matrixGridStyles: CSSProperties = {
+const bannerSectionStyles: CSSProperties = {
   display: "grid",
-  gap: 16,
-  gridTemplateColumns: "repeat(4, minmax(328px, 1fr))",
-  alignItems: "start",
-  justifyItems: "center"
+  gap: 20,
+  padding: 24,
+  border: `1px solid ${String(coreTokenCatalog.color.border.default)}`,
+  borderRadius: 24,
+  background: String(coreTokenCatalog.color.surface.canvas)
 };
 
-const configGridStyles: CSSProperties = {
+const bannerMatrixTableStyles: CSSProperties = {
   display: "grid",
-  gap: 24,
-  gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))"
+  gridTemplateColumns: "180px repeat(2, minmax(320px, 1fr))",
+  border: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+  borderRadius: 20,
+  overflow: "hidden"
+};
+
+const bannerMatrixCornerCellStyles: CSSProperties = {
+  minHeight: 68,
+  borderBottom: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+  background: String(coreTokenCatalog.color.surface.canvas)
+};
+
+const bannerMatrixHeaderCellStyles: CSSProperties = {
+  minHeight: 68,
+  padding: "16px 20px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+  background: String(coreTokenCatalog.color.surface.canvas)
+};
+
+const bannerMatrixRowLabelCellStyles: CSSProperties = {
+  minHeight: 128,
+  padding: "20px 16px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "flex-start",
+  borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+  background: String(coreTokenCatalog.color.surface.canvas)
+};
+
+const bannerMatrixValueCellStyles: CSSProperties = {
+  minHeight: 128,
+  padding: "16px 20px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+  borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
+  background: String(coreTokenCatalog.color.surface.canvas)
 };
 
 const meta: Meta<BannerProps> = {
@@ -239,23 +427,29 @@ export const Playground: Story = {
   }
 };
 
-export const Variants: StoryObj = {
-  render: () => <FigmaMatrixStory />,
+export const WithHeading: Story = {
+  render: ({ brand = "Cars24" }) => <BannerMatrixStory brand={brand} heading />,
   parameters: {
-    controls: { disable: true }
+    controls: {
+      include: ["brand"]
+    }
   }
 };
 
-export const UsageGuidelines: StoryObj = {
-  render: () => <ConfigurationsStory />,
+export const NoHeading: Story = {
+  render: ({ brand = "Cars24" }) => <BannerMatrixStory brand={brand} heading={false} />,
   parameters: {
-    controls: { disable: true }
+    controls: {
+      include: ["brand"]
+    }
   }
 };
 
-export const UIExample: StoryObj = {
-  render: () => <ConfigurationsStory />,
+export const UIExample: Story = {
+  render: ({ brand = "Cars24" }) => <SignupFormStory brand={brand} />,
   parameters: {
-    controls: { disable: true }
+    controls: {
+      include: ["brand"]
+    }
   }
 };

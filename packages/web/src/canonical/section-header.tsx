@@ -277,7 +277,6 @@ export function SectionHeader({
   style,
   ...rest
 }: SectionHeaderProps) {
-  const containerWidth = toPx(resolveSectionHeaderBindingValue(brand, "container.width", "336"));
   const containerGap = toPx(resolveSectionHeaderBindingValue(brand, "container.gap", "8"));
   const containerPaddingBottom = toPx(resolveSectionHeaderBindingValue(brand, "container.paddingBottom", "0"));
   const layoutVariant = resolveSectionHeaderBindingValue(brand, "layout.variant", "split");
@@ -347,7 +346,8 @@ export function SectionHeader({
           gap: containerGap,
           justifyContent: "center",
           maxWidth: "100%",
-          width: containerWidth,
+          minWidth: 0,
+          width: "100%",
           ...style
         }}
       >
@@ -437,7 +437,8 @@ export function SectionHeader({
         gap: containerGap,
         justifyContent: "center",
         maxWidth: "100%",
-        width: containerWidth,
+        minWidth: 0,
+        width: "100%",
         ...style
       }}
     >

@@ -277,16 +277,12 @@ export const Variants: Story = {
   }
 };
 
-export const UsageGuidelines: Story = {
-  render: ThemeShowcaseStory,
-  parameters: {
-    controls: { disable: true }
-  }
-};
-
 export const UIExample: Story = {
   render: PlaygroundStory,
   parameters: {
-    layout: "centered"
+    layout: "centered",
+    controls: {
+      include: ["brand"]
+    }
   }
 };

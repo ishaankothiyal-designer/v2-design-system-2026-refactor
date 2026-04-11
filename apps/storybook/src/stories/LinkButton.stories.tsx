@@ -225,16 +225,12 @@ export const Variants: Story = {
   }
 };
 
-export const UsageGuidelines: Story = {
-  render: (args) => <ConfigurationStory {...args} />,
-  parameters: {
-    layout: "centered"
-  }
-};
-
 export const UIExample: Story = {
   render: (args) => <ConfigurationStory {...args} />,
   parameters: {
-    layout: "centered"
+    layout: "centered",
+    controls: {
+      include: ["brand"]
+    }
   }
 };
