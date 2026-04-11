@@ -12,6 +12,14 @@ const baseCssOutputPath = path.join(generatedDir, "design-tokens.tokens.css");
 const figmaTokenExportPath = path.join(storybookRoot, "token-data/Tokens-variables-full-x.json");
 const figmaCssOutputPath = path.join(generatedDir, "figma-color-tokens.tokens.css");
 const figmaDocsOutputPath = path.join(generatedDir, "ColorTokens.mdx");
+const figmaTypographyCssOutputPath = path.join(generatedDir, "figma-typography.tokens.css");
+const figmaTypographyDocsOutputPath = path.join(generatedDir, "TypographyTokens.mdx");
+const figmaTypographyDataOutputPath = path.join(generatedDir, "typographyTokenData.ts");
+const figmaGapCssOutputPath = path.join(generatedDir, "figma-gap.tokens.css");
+const figmaGapDocsOutputPath = path.join(generatedDir, "GapTokens.mdx");
+const figmaGapDataOutputPath = path.join(generatedDir, "gapTokenData.ts");
+const radiusDocsOutputPath = path.join(generatedDir, "RadiusTokens.mdx");
+const radiusDataOutputPath = path.join(generatedDir, "radiusTokenData.ts");
 
 function readJson(filePath) {
   return JSON.parse(readFileSync(filePath, "utf8"));
@@ -144,6 +152,34 @@ function serializeBaseValue(value, presenter) {
   }
 
   return String(value);
+}
+
+function serializeTypographyValue(value, presenter) {
+  if (typeof value !== "number") {
+    return String(value);
+  }
+
+  if (presenter === "LetterSpacing") {
+    return value === 0 ? "0" : `${value}em`;
+  }
+
+  if (presenter === "FontWeight" || presenter === "Opacity") {
+    return String(value);
+  }
+
+  return `${value}px`;
+}
+
+function extractCssVariableName(codeSyntax, fallbackName) {
+  if (typeof codeSyntax === "string") {
+    const match = codeSyntax.match(/var\((--[^)\s]+)\)/);
+
+    if (match) {
+      return match[1];
+    }
+  }
+
+  return fallbackName;
 }
 
 function buildCssFile(groups, headerComment) {
@@ -326,6 +362,27 @@ function createDocSection(category, heading, description) {
   ];
 }
 
+function createTypographyDocSection(category, heading, description) {
+  return [
+    `### ${escapeMdxText(heading)}`,
+    "",
+    escapeMdxText(description),
+    "",
+    `<DesignTokenDocBlock`,
+    `  categoryName="${category}"`,
+    `  maxHeight={720}`,
+    `  pageSize={Number.MAX_VALUE}`,
+    `  showSearch={false}`,
+    `  viewType="card"`,
+    `/>`,
+    ""
+  ];
+}
+
+function toJavaScriptModule(name, value) {
+  return `export const ${name} = ${JSON.stringify(value, null, 2)};\n`;
+}
+
 function generateFigmaColorDocs() {
   if (!existsSync(figmaTokenExportPath)) {
     return;
@@ -418,7 +475,408 @@ function generateFigmaColorDocs() {
   writeFileSync(figmaDocsOutputPath, mdxLines.join("\n"));
 }
 
+function buildBrandTypographyPreviews(baseTokens) {
+  const brandFiles = [
+    ["Cars24", path.join(repoRoot, "packages/tokens/tokens/brands/cars24.json")],
+    ["Team BHP", path.join(repoRoot, "packages/tokens/tokens/brands/teambhp.json")],
+    ["CarInfo", path.join(repoRoot, "packages/tokens/tokens/brands/carinfo.json")],
+    ["Vehicle Info", path.join(repoRoot, "packages/tokens/tokens/brands/vehicleinfo.json")]
+  ];
+
+  return brandFiles.map(([name, filePath]) => {
+    const brandTokens = readJson(filePath);
+    const fontFamily = brandTokens.typography?.fontFamily?.sans ?? baseTokens.typography.fontFamily.sans;
+    const baseWeights = baseTokens.typography.fontWeight;
+    const overrideWeights = brandTokens.typography?.fontWeight ?? {};
+
+    return {
+      name,
+      fontFamily,
+      fontWeights: {
+        regular: overrideWeights.regular ?? baseWeights.regular,
+        medium: overrideWeights.medium ?? baseWeights.medium,
+        semibold: overrideWeights.semibold ?? baseWeights.semibold,
+        bold: overrideWeights.bold ?? baseWeights.bold
+      }
+    };
+  });
+}
+
+function buildTypographyStyleSections(typographyCollection) {
+  const variableMap = new Map((typographyCollection.variables ?? []).map((variable) => [variable.name, variable]));
+  const groups = new Map();
+  const completeStyles = [];
+
+  for (const variable of typographyCollection.variables ?? []) {
+    if (!variable.name.startsWith("size/")) {
+      continue;
+    }
+
+    const styleKey = variable.name.slice("size/".length);
+    const lineHeightVariable = variableMap.get(`line-height/${styleKey}`);
+    const letterSpacingVariable = variableMap.get(`letter-spacing/${styleKey}`);
+    const [sectionKey, ...styleSegments] = styleKey.split("/");
+
+    if (!sectionKey || styleSegments.length === 0 || !lineHeightVariable || !letterSpacingVariable) {
+      continue;
+    }
+
+    const label = styleSegments.map(toTitleCase).join(" / ");
+    const description = variable.description || lineHeightVariable.description || letterSpacingVariable.description || "";
+    const styleEntry = {
+      key: styleKey,
+      label,
+      description,
+      fontSize: Number(variable.valuesByMode?.[typographyCollection.defaultModeId] ?? 0),
+      lineHeight: Number(lineHeightVariable.valuesByMode?.[typographyCollection.defaultModeId] ?? 0),
+      letterSpacing: Number(letterSpacingVariable.valuesByMode?.[typographyCollection.defaultModeId] ?? 0),
+      sizeToken: variable.codeSyntax?.WEB ?? "",
+      lineHeightToken: lineHeightVariable.codeSyntax?.WEB ?? "",
+      letterSpacingToken: letterSpacingVariable.codeSyntax?.WEB ?? ""
+    };
+
+    completeStyles.push(styleEntry);
+
+    const sectionEntries = groups.get(sectionKey) ?? [];
+    sectionEntries.push(styleEntry);
+    groups.set(sectionKey, sectionEntries);
+  }
+
+  const sectionMetadata = {
+    title: "Display styles for high-emphasis values such as numbers, amounts, and standout labels.",
+    headline: "Headline sizes for primary content hierarchy and structured section titles.",
+    paragraph: "Paragraph styles for readable body copy and longer-form descriptive content.",
+    utility: "Utility labels for short supporting text, metadata, and compact interface labels.",
+    caption: "Caption styles for secondary text that sits above or around primary information."
+  };
+
+  const orderedSectionKeys = ["title", "headline", "paragraph", "utility", "caption"];
+  const sections = orderedSectionKeys
+    .filter((key) => groups.has(key))
+    .map((key) => ({
+      key,
+      title: toTitleCase(key),
+      description: sectionMetadata[key],
+      styles: groups.get(key).sort((left, right) => compareNaturally(left.key, right.key))
+    }));
+
+  const extraLetterSpacingTokens = (typographyCollection.variables ?? [])
+    .filter((variable) => variable.name.startsWith("letter-spacing/"))
+    .filter((variable) => !completeStyles.some((style) => `letter-spacing/${style.key}` === variable.name))
+    .sort((left, right) => compareNaturally(left.name, right.name))
+    .map((variable) => ({
+      name: variable.name.replace("letter-spacing/", ""),
+      value: Number(variable.valuesByMode?.[typographyCollection.defaultModeId] ?? 0),
+      codeSyntax: variable.codeSyntax?.WEB ?? "",
+      description: variable.description ?? ""
+    }));
+
+  return { sections, extraLetterSpacingTokens };
+}
+
+function generateTypographyDocs() {
+  if (!existsSync(figmaTokenExportPath)) {
+    return;
+  }
+
+  const baseTokens = readJson(baseTokensPath);
+  const figmaExport = readJson(figmaTokenExportPath);
+  const typographyCollection = (figmaExport.collections ?? []).find((collection) => collection.name === "Typography");
+
+  if (!typographyCollection) {
+    return;
+  }
+
+  const brandPreviews = buildBrandTypographyPreviews(baseTokens);
+  const { sections, extraLetterSpacingTokens } = buildTypographyStyleSections(typographyCollection);
+
+  const typographyGroups = [
+    {
+      category: "Typography / Size",
+      heading: "Typography / Size",
+      description: "Named font-size tokens from the shared typography system.",
+      presenter: "FontSize",
+      prefix: "size/"
+    },
+    {
+      category: "Typography / Line Height",
+      heading: "Typography / Line Height",
+      description: "Named line-height tokens paired with the typography system.",
+      presenter: "LineHeight",
+      prefix: "line-height/"
+    },
+    {
+      category: "Typography / Letter Spacing",
+      heading: "Typography / Letter Spacing",
+      description: "Tracking tokens used by the typography system, including caption extensions.",
+      presenter: "LetterSpacing",
+      prefix: "letter-spacing/"
+    }
+  ].map((group) => ({
+    ...group,
+    tokens: (typographyCollection.variables ?? [])
+      .filter((variable) => variable.name.startsWith(group.prefix))
+      .sort((left, right) => compareNaturally(left.name, right.name))
+      .map((variable) => ({
+        cssName: extractCssVariableName(
+          variable.codeSyntax?.WEB,
+          `--typography-${variable.name.split("/").map(toKebabCase).join("-")}`
+        ),
+        path: `Typography.${variable.name.replace(/\//g, ".")}`,
+        description: variable.description,
+        codeSyntax: variable.codeSyntax?.WEB,
+        presenter: group.presenter,
+        value: serializeTypographyValue(variable.valuesByMode?.[typographyCollection.defaultModeId], group.presenter)
+      }))
+  }));
+
+  writeFileSync(
+    figmaTypographyCssOutputPath,
+    buildCssFile(typographyGroups, "Generated from apps/storybook/token-data/Tokens-variables-full-x.json")
+  );
+
+  const typeScale = [...new Set(sections.flatMap((section) => section.styles.map((style) => style.fontSize)))]
+    .sort((left, right) => left - right);
+
+  const typographyDataSource = [
+    `export const typographyBrandPreviews = ${JSON.stringify(brandPreviews, null, 2)};`,
+    "",
+    `export const typographyStyleSections = ${JSON.stringify(sections, null, 2)};`,
+    "",
+    `export const typographyExtraLetterSpacingTokens = ${JSON.stringify(extraLetterSpacingTokens, null, 2)};`,
+    ""
+  ].join("\n");
+
+  writeFileSync(figmaTypographyDataOutputPath, typographyDataSource);
+
+  const defaultFontFamily = brandPreviews[0]?.fontFamily ?? baseTokens.typography.fontFamily.sans;
+  const mdxLines = [
+    `import { Meta, Typeset } from "@storybook/addon-docs/blocks";`,
+    `import { DesignTokenDocBlock } from "storybook-design-token";`,
+    `import { TypographyBrandPreviewGrid, TypographyStyleGallery, TypographyTrackingTable } from "../storybook-typography";`,
+    `import { typographyBrandPreviews, typographyExtraLetterSpacingTokens, typographyStyleSections } from "./typographyTokenData";`,
+    "",
+    `<Meta title="Foundations/Typography Tokens" />`,
+    "",
+    "# Typography Tokens",
+    "",
+    "Structured typography documentation generated from the repo token files and the shared typography export. This page combines brand font previews, named text styles, and the raw token catalog.",
+    "",
+    "## Brand Font Families",
+    "",
+    "<TypographyBrandPreviewGrid brands={typographyBrandPreviews} />",
+    "",
+    "## Core Type Scale",
+    "",
+    "Base size progression preview using the current Cars24 type family.",
+    "",
+    `<Typeset fontFamily="${escapeMdxText(defaultFontFamily)}" fontSizes={[${typeScale.join(", ")}]} sampleText="Typography scale preview" />`,
+    "",
+    "## Weight Scale",
+    "",
+    "<Typeset fontFamily={typographyBrandPreviews[0].fontFamily} fontSizes={[16, 20, 24]} fontWeight={400} sampleText=\"Regular / 400\" />",
+    "",
+    "<Typeset fontFamily={typographyBrandPreviews[0].fontFamily} fontSizes={[16, 20, 24]} fontWeight={500} sampleText=\"Medium / 500\" />",
+    "",
+    "<Typeset fontFamily={typographyBrandPreviews[0].fontFamily} fontSizes={[16, 20, 24]} fontWeight={600} sampleText=\"Semibold / 600\" />",
+    "",
+    "<Typeset fontFamily={typographyBrandPreviews[0].fontFamily} fontSizes={[16, 20, 24]} fontWeight={700} sampleText=\"Bold / 700\" />",
+    "",
+    "## Named Text Styles",
+    "",
+    "<TypographyStyleGallery sections={typographyStyleSections} fontFamily={typographyBrandPreviews[0].fontFamily} />",
+    ""
+  ];
+
+  if (extraLetterSpacingTokens.length > 0) {
+    mdxLines.push("## Tracking Modifiers", "");
+    mdxLines.push(
+      "Additional letter-spacing tokens that extend named styles, such as the caption extended variants.",
+      "",
+      "<TypographyTrackingTable tokens={typographyExtraLetterSpacingTokens} />",
+      ""
+    );
+  }
+
+  mdxLines.push("## Raw Token Catalog", "");
+
+  for (const group of typographyGroups) {
+    mdxLines.push(...createTypographyDocSection(group.category, group.heading, group.description));
+  }
+
+  writeFileSync(figmaTypographyDocsOutputPath, mdxLines.join("\n"));
+}
+
+function generateGapDocs() {
+  if (!existsSync(figmaTokenExportPath)) {
+    return;
+  }
+
+  const figmaExport = readJson(figmaTokenExportPath);
+  const miscCollection = (figmaExport.collections ?? []).find((collection) => collection.name === "Misc");
+
+  if (!miscCollection) {
+    return;
+  }
+
+  const gapTokens = (miscCollection.variables ?? [])
+    .filter((variable) => variable.name.startsWith("gap/"))
+    .sort((left, right) => compareNaturally(left.name, right.name))
+    .map((variable) => {
+      const rawValue = Number(variable.valuesByMode?.[miscCollection.defaultModeId] ?? 0);
+
+      return {
+        name: variable.name,
+        label: variable.name.replace("gap/", ""),
+        value: rawValue,
+        codeSyntax: variable.codeSyntax?.WEB ?? "",
+        description: variable.description ?? ""
+      };
+    });
+
+  const gapGroups = [
+    {
+      category: "Gap",
+      heading: "Gap",
+      description: "Shared gap tokens for layout spacing between items, stacks, and grouped controls.",
+      tokens: gapTokens.map((token) => ({
+        cssName: extractCssVariableName(token.codeSyntax, `--misc-${token.name.split("/").map(toKebabCase).join("-")}`),
+        path: `Gap.${token.name.replace(/\//g, ".")}`,
+        description: token.description,
+        codeSyntax: token.codeSyntax,
+        presenter: "Spacing",
+        value: serializeTypographyValue(token.value, "Spacing")
+      }))
+    }
+  ];
+
+  writeFileSync(
+    figmaGapCssOutputPath,
+    buildCssFile(gapGroups, "Generated from apps/storybook/token-data/Tokens-variables-full-x.json")
+  );
+
+  writeFileSync(figmaGapDataOutputPath, toJavaScriptModule("gapTokens", gapTokens));
+
+  const mdxLines = [
+    `import { Meta } from "@storybook/addon-docs/blocks";`,
+    `import { DesignTokenDocBlock } from "storybook-design-token";`,
+    `import { GapScalePreview } from "../storybook-layout-tokens";`,
+    `import { gapTokens } from "./gapTokenData";`,
+    "",
+    `<Meta title="Foundations/Gap Tokens" />`,
+    "",
+    "# Gap Tokens",
+    "",
+    "Structured gap documentation generated from the shared layout token export. This page previews the spacing rhythm and exposes the raw gap token catalog used for layout separation.",
+    "",
+    "## Gap Scale Preview",
+    "",
+    "<GapScalePreview tokens={gapTokens} />",
+    "",
+    "## Raw Token Catalog",
+    "",
+    ...createTypographyDocSection("Gap", "Gap", "Shared gap tokens for layout spacing between items, stacks, and grouped controls.")
+  ];
+
+  writeFileSync(figmaGapDocsOutputPath, mdxLines.join("\n"));
+}
+
+function flattenRadiusTokens(radiusTree, prefix = ["radius"]) {
+  const entries = [];
+
+  for (const [key, value] of Object.entries(radiusTree ?? {})) {
+    const nextPath = [...prefix, key];
+
+    if (value && typeof value === "object" && !Array.isArray(value)) {
+      entries.push(...flattenRadiusTokens(value, nextPath));
+      continue;
+    }
+
+    entries.push({
+      path: nextPath,
+      key: nextPath.slice(1).join("."),
+      label: nextPath.slice(1).map(toTitleCase).join(" / "),
+      value: Number(value ?? 0),
+      codeSyntax: `var(--${nextPath.map(toKebabCase).join("-")})`
+    });
+  }
+
+  return entries.sort((left, right) => compareNaturally(left.key, right.key));
+}
+
+function buildRadiusBrandPreviews(baseTokens) {
+  const brandFiles = [
+    ["Cars24", path.join(repoRoot, "packages/tokens/tokens/brands/cars24.json")],
+    ["Team BHP", path.join(repoRoot, "packages/tokens/tokens/brands/teambhp.json")],
+    ["CarInfo", path.join(repoRoot, "packages/tokens/tokens/brands/carinfo.json")],
+    ["Vehicle Info", path.join(repoRoot, "packages/tokens/tokens/brands/vehicleinfo.json")]
+  ];
+
+  return brandFiles.map(([name, filePath]) => {
+    const brandTokens = readJson(filePath);
+    const mergedRadius = {
+      ...baseTokens.radius,
+      ...brandTokens.radius,
+      alt: {
+        ...(baseTokens.radius.alt ?? {}),
+        ...(brandTokens.radius?.alt ?? {})
+      }
+    };
+
+    return {
+      name,
+      tokens: flattenRadiusTokens(mergedRadius).map((token) => ({
+        key: token.key,
+        label: token.label,
+        value: token.value
+      }))
+    };
+  });
+}
+
+function generateRadiusDocs() {
+  const baseTokens = readJson(baseTokensPath);
+  const radiusTokens = flattenRadiusTokens(baseTokens.radius);
+  const radiusBrandPreviews = buildRadiusBrandPreviews(baseTokens);
+
+  writeFileSync(radiusDataOutputPath, [
+    toJavaScriptModule("radiusTokens", radiusTokens),
+    "",
+    toJavaScriptModule("radiusBrandPreviews", radiusBrandPreviews)
+  ].join("\n"));
+
+  const mdxLines = [
+    `import { Meta } from "@storybook/addon-docs/blocks";`,
+    `import { DesignTokenDocBlock } from "storybook-design-token";`,
+    `import { RadiusPreviewGrid, RadiusBrandPreviewGrid } from "../storybook-layout-tokens";`,
+    `import { radiusBrandPreviews, radiusTokens } from "./radiusTokenData";`,
+    "",
+    `<Meta title="Foundations/Radius Tokens" />`,
+    "",
+    "# Radius Tokens",
+    "",
+    "Structured radius documentation generated from the repo token files. This page previews the base radius system and shows how brand overrides adjust those values.",
+    "",
+    "## Base Radius Scale",
+    "",
+    "<RadiusPreviewGrid tokens={radiusTokens} />",
+    "",
+    "## Brand Radius Overrides",
+    "",
+    "<RadiusBrandPreviewGrid brands={radiusBrandPreviews} />",
+    "",
+    "## Raw Token Catalog",
+    "",
+    ...createTypographyDocSection("Radius", "Radius", "Base radius tokens covering standard corners, pill shapes, and alternate rounded geometry.")
+  ];
+
+  writeFileSync(radiusDocsOutputPath, mdxLines.join("\n"));
+}
+
 mkdirSync(generatedDir, { recursive: true });
 
 generateBaseTokenCss();
 generateFigmaColorDocs();
+generateTypographyDocs();
+generateGapDocs();
+generateRadiusDocs();

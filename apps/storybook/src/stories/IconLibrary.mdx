@@ -1,6 +1,6 @@
-import { Meta, IconGallery, IconItem } from "@storybook/addon-docs/blocks";
-import { Icon } from "@geist/web";
-import { iconFamilies, multicolorIconCount, totalIconCount, totalIconFamilyCount } from "./iconLibraryData";
+import { Meta } from "@storybook/addon-docs/blocks";
+import { IconLibraryGallery } from "./IconLibraryGallery";
+import { multicolorIconCount, totalIconCount, totalIconFamilyCount } from "./iconLibraryData";
 
 <Meta title="Foundations/Icon Library" />
 
@@ -10,18 +10,6 @@ Complete icon documentation generated from the `@geist/icons` registry. This pag
 
 The current library contains **{totalIconCount} icons** across **{totalIconFamilyCount} families**, including **{multicolorIconCount} multi-path icons**. Families keep related variants like line, outline, and filled states together so the library stays easier to scan.
 
-{iconFamilies.map((family) => (
-  <section key={family.key}>
-    <h2>{family.label}</h2>
-    <p>
-      {family.icons.length} variant{family.icons.length === 1 ? "" : "s"} in this family.
-    </p>
-    <IconGallery>
-      {family.icons.map((icon) => (
-        <IconItem key={icon.name} name={icon.name}>
-          <Icon name={icon.name} size="lg" decorative />
-        </IconItem>
-      ))}
-    </IconGallery>
-  </section>
-))}
+Use the filter tabs below to narrow the library to filled or outline variants while keeping the same family grouping.
+
+<IconLibraryGallery />
