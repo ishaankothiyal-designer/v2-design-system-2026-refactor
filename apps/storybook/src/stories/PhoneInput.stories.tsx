@@ -4,6 +4,7 @@ import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
 import {
   type PhoneInputCountry,
   PhoneInput,
+  Text,
   type PhoneInputHelperTone,
   type PhoneInputPreviewState,
   type PhoneInputProps,
@@ -199,8 +200,12 @@ function VariantMatrixStory() {
         <div style={{ display: "grid", gap: 24 }}>
           <div style={matrixHeaderStyles}>
             <div />
-            <strong>Small</strong>
-            <strong>Large</strong>
+            <Text brand="Cars24" as="strong" size="md">
+              Small
+            </Text>
+            <Text brand="Cars24" as="strong" size="md">
+              Large
+            </Text>
           </div>
 
           <div style={matrixStyles}>
@@ -224,10 +229,12 @@ function CountrySupportStory() {
       <StoryCard>
         <div style={{ display: "grid", gap: 20, width: 138 }}>
           <header style={{ display: "grid", gap: 6 }}>
-            <strong>Country Support</strong>
-            <span style={{ color: "#64748B", fontSize: 12, lineHeight: "18px" }}>
+            <Text brand="Cars24" as="strong" size="md">
+              Country Support
+            </Text>
+            <Text brand="Cars24" as="span" size="xs" tone="secondary">
               Prefix variants from the Figma country dial set.
-            </span>
+            </Text>
           </header>
 
           <div style={{ display: "grid", gap: 10 }}>
@@ -314,7 +321,7 @@ const PHONE_INPUT_FIGMA_URL =
   "https://www.figma.com/design/AZgWt0KHVuVeWBAcQ6Jcy4/branch/yxI5H0FhaUg0YR0uhNuqR6/%F0%9F%9A%80-v2.0-Global-Component-Library?node-id=1114-13995&t=1zgOyFpiLYMyM4XM-11";
 
 const meta: Meta<PhoneInputProps> = {
-  title: "Components/Phone Input",
+  title: "Components/Forms/Phone Number",
   component: PhoneInput,
   tags: ["autodocs"],
   parameters: {

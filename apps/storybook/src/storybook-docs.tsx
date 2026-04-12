@@ -1,11 +1,11 @@
 import type { CSSProperties } from "react";
 import type { Decorator } from "@storybook/react";
 import { Canvas, Controls, Description, DocsPage, Subtitle, Title, useOf } from "@storybook/addon-docs/blocks";
+import { coreTokenCatalog } from "@geist/tokens";
+import { Text } from "@geist/web";
 
 const sectionHeadingStyles: CSSProperties = {
-  margin: "32px 0 16px",
-  fontSize: 20,
-  lineHeight: "28px"
+  margin: "32px 0 16px"
 };
 
 const centeredStageStyles: CSSProperties = {
@@ -15,7 +15,8 @@ const centeredStageStyles: CSSProperties = {
   alignItems: "center",
   justifyContent: "center",
   padding: 80,
-  boxSizing: "border-box"
+  boxSizing: "border-box",
+  fontFamily: `var(--typography-font-family-sans, ${String(coreTokenCatalog.typography.fontFamily.sans)}), sans-serif`
 };
 
 function resolveStory(moduleExports: Record<string, unknown>, exportName?: string) {
@@ -51,7 +52,9 @@ export function ComponentDocsPage() {
       <Title />
       <Subtitle />
 
-      <h2 style={sectionHeadingStyles}>Docs</h2>
+      <Text as="strong" brand="Cars24" size="xl" tone="primary" style={{ display: "block", ...sectionHeadingStyles }}>
+        Docs
+      </Text>
       <Description of="meta" />
       {playgroundStory ? (
         <Controls of={playgroundStory as never} />
@@ -61,7 +64,9 @@ export function ComponentDocsPage() {
 
       {playgroundStory ? (
         <>
-          <h2 style={sectionHeadingStyles}>Playground</h2>
+          <Text as="strong" brand="Cars24" size="xl" tone="primary" style={{ display: "block", ...sectionHeadingStyles }}>
+            Playground
+          </Text>
           <Canvas of={playgroundStory as never} sourceState="shown" story={{ height: "400px" }} />
         </>
       ) : null}

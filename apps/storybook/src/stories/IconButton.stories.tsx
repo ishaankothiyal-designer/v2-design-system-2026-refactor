@@ -294,7 +294,7 @@ function matrixValueCellStyles(onDark: boolean): CSSProperties {
 }
 
 const meta: Meta<IconButtonStoryArgs> = {
-  title: "Components/Icon Button",
+  title: "Components/Buttons/Icon Button",
   component: StoryIconButton,
   tags: ["autodocs"],
   parameters: {

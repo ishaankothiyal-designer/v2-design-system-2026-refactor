@@ -717,6 +717,63 @@
         }
       }
     },
+    "consent": {
+      "layout": {
+        "gap": 8,
+        "paddingInline": 16,
+        "paddingBlock": 12,
+        "insideCard": {
+          "background": "#F1F5F9",
+          "sm": {
+            "padding": 8,
+            "radius": 8
+          },
+          "md": {
+            "padding": 8,
+            "radius": 8
+          },
+          "lg": {
+            "padding": 12,
+            "radius": 12
+          }
+        }
+      },
+      "content": {
+        "color": {
+          "default": "#64748B",
+          "disabled": "#94A3B8"
+        },
+        "size": {
+          "sm": {
+            "fontSize": 9,
+            "lineHeight": 13,
+            "letterSpacing": 0,
+            "paddingTop": 2,
+            "paddingBottom": 2,
+            "insideCardPaddingTop": 2,
+            "insideCardPaddingBottom": 0
+          },
+          "md": {
+            "fontSize": 12,
+            "lineHeight": 18,
+            "letterSpacing": 0,
+            "paddingTop": 0,
+            "paddingBottom": 0,
+            "insideCardPaddingTop": 0,
+            "insideCardPaddingBottom": 0
+          },
+          "lg": {
+            "fontSize": 14,
+            "lineHeight": 20,
+            "letterSpacing": 0,
+            "paddingTop": 0,
+            "paddingBottom": 0,
+            "insideCardPaddingTop": 0,
+            "insideCardPaddingBottom": 0
+          }
+        }
+      }
+    },
     "radio": {
       "color": {
         "rest": {

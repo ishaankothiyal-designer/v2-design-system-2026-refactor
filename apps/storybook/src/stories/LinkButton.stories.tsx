@@ -273,7 +273,7 @@ function matrixValueCellStyles(onDark: boolean): CSSProperties {
 }
 
 const meta: Meta<LinkButtonStoryArgs> = {
-  title: "Components/Link Button",
+  title: "Components/Buttons/Link Button",
   component: LinkButton,
   tags: ["autodocs"],
   parameters: {

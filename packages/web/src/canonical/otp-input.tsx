@@ -14,6 +14,7 @@ import type { IconName } from "@geist/icons";
 import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
 import { Icon } from "./icon";
+import { HelperText } from "./helper-text";
 import { Label } from "./label";
 import { LinkButton } from "./link-button";
 import { getRequiredThemeTokenValue } from "../theme";
@@ -25,6 +26,14 @@ export const canonicalOtpInputWebContract = designSystemRegistry.components.find
 export type OtpInputSize = "Small" | "Large";
 export type OtpInputValidationState = "Default" | "Error" | "Success";
 export type OtpInputHelperTone = "Default" | "Error" | "Success";
+export type OtpInputPreviewState =
+  | "Rest"
+  | "Hover"
+  | "Active"
+  | "Typed"
+  | "Error"
+  | "Success"
+  | "Disabled";
 
 type BoxVisualState = "rest" | "hover" | "active" | "typed" | "error" | "success" | "disabled";
 
@@ -162,6 +171,7 @@ function removeCharacter(previous: string[], index: number) {
 }
 
 function resolveBoxState({
+  forceState,
   disabled,
   focusedIndex,
   hovered,
@@ -169,6 +179,7 @@ function resolveBoxState({
   validationState,
   value
 }: {
+  forceState: OtpInputPreviewState | undefined;
   disabled: boolean;
   focusedIndex: number | null;
   hovered: boolean;
@@ -176,6 +187,34 @@ function resolveBoxState({
   validationState: OtpInputValidationState;
   value: string;
 }): BoxVisualState {
+  if (forceState === "Disabled") {
+    return "disabled";
+  }
+
+  if (forceState === "Error") {
+    return "error";
+  }
+
+  if (forceState === "Success") {
+    return "success";
+  }
+
+  if (forceState === "Hover") {
+    return "hover";
+  }
+
+  if (forceState === "Active") {
+    return focusedIndex === index ? "active" : value.length > 0 ? "typed" : "rest";
+  }
+
+  if (forceState === "Typed") {
+    return value.length > 0 ? "typed" : "rest";
+  }
+
+  if (forceState === "Rest") {
+    return "rest";
+  }
+
   if (disabled) {
     return "disabled";
   }
@@ -209,6 +248,7 @@ export interface OtpInputProps extends Omit<HTMLAttributes<HTMLDivElement>, "chi
   brand?: DisplayBrandId;
   defaultValue?: string;
   disabled?: boolean;
+  forceState?: OtpInputPreviewState;
   getInputAriaLabel?: (index: number, length: number) => string;
   helperText?: ReactNode;
   helperTone?: OtpInputHelperTone;
@@ -239,6 +279,7 @@ export function OtpInput({
   brand = "Cars24",
   defaultValue,
   disabled = false,
+  forceState,
   getInputAriaLabel,
   helperText,
   helperTone,
@@ -298,18 +339,19 @@ export function OtpInput({
   const codeTypography = getTypography(brand, `component.otpInput.typography.code.${sizeKey}`);
   const helperTypography = getTypography(brand, `component.otpInput.typography.helper.${sizeKey}`);
   const codeFontWeightPath = size === "Large" ? "typography.fontWeight.semibold" : "typography.fontWeight.medium";
-  const helperIconSize = Number(getRequiredThemeTokenValue(brand, "component.otpInput.icon.helperSize"));
   const borderWidth = Number(getRequiredThemeTokenValue(brand, "component.otpInput.border.width"));
   const fieldRadius = getFieldRadius(brand, size);
   const resolvedHelperTone =
-    validationState === "Error" ? "Error" : validationState === "Success" ? "Success" : helperTone ?? "Default";
+    forceState === "Error"
+      ? "Error"
+      : forceState === "Success"
+        ? "Success"
+        : validationState === "Error"
+          ? "Error"
+          : validationState === "Success"
+            ? "Success"
+            : helperTone ?? "Default";
   const helperColors = getHelperColors(brand, resolvedHelperTone);
-  const helperIconName =
-    resolvedHelperTone === "Error"
-      ? "error-outline"
-      : resolvedHelperTone === "Success"
-        ? "circle-check-line"
-        : "info-outline";
   const groupValue = compactCharacters(characters);
   const showLabel = label !== undefined && label !== null;
   const showTimerSupport = (timerPrompt !== undefined && timerPrompt !== null) || (timerValue !== undefined && timerValue !== null);
@@ -326,6 +368,10 @@ export function OtpInput({
   const resendLeadingIcon = resendActionLabel ? (
     <Icon decorative brand={brand} name={resendActionIconName} />
   ) : undefined;
+  const previewFocusedIndex =
+    forceState === "Active"
+      ? Math.min(groupValue.length, Math.max(length - 1, 0))
+      : focusedIndex;
 
   function commitValue(nextCharacters: string[]) {
     setCharacters(nextCharacters);
@@ -458,8 +504,9 @@ export function OtpInput({
         {Array.from({ length }, (_, index) => {
           const character = characters[index] ?? "";
           const visualState = resolveBoxState({
+            forceState,
             disabled,
-            focusedIndex,
+            focusedIndex: previewFocusedIndex,
             hovered,
             index,
             validationState,
@@ -506,7 +553,7 @@ export function OtpInput({
               ) : null}
               <input
                 aria-describedby={showHelperSupport || showResendSupport || showTimerSupport ? supportId : undefined}
-                aria-invalid={validationState === "Error" ? true : undefined}
+                aria-invalid={forceState === "Error" || validationState === "Error" ? true : undefined}
                 aria-label={getInputAriaLabel?.(index, length)}
                 autoComplete={index === 0 ? autoComplete : "off"}
                 disabled={disabled}
@@ -548,42 +595,28 @@ export function OtpInput({
       </div>
 
       {showHelperSupport ? (
-        <div
+        <HelperText
+          align="center"
+          brand={brand}
+          fullWidth
           id={supportId}
-          style={{
-            alignItems: "flex-start",
-            display: "flex",
-            gap: `${sizeTokens.helperGap}px`,
-            minWidth: 0,
-            paddingInline: `${sizeTokens.supportingPaddingInline}px`
-          }}
-        >
-          {showHelperIcon ? (
-            <Icon
-              decorative
-              brand={brand}
-              name={helperIconName}
-              style={{
-                color: helperColors.icon,
-                flex: "0 0 auto",
-                fontSize: `${helperIconSize}px`
-              }}
-            />
-          ) : null}
-          <p
-            style={{
-              ...makeTypographyStyles({
-                brand,
-                color: helperColors.text,
-                fontWeightPath: "typography.fontWeight.regular",
-                typography: helperTypography
-              }),
-              minWidth: 0
-            }}
-          >
-            {helperText}
-          </p>
-        </div>
+          helperText={helperText}
+          iconColor={helperColors.icon}
+          iconName={
+            resolvedHelperTone === "Error"
+              ? "error-outline"
+              : resolvedHelperTone === "Success"
+                ? "circle-check-line"
+                : "info-outline"
+          }
+          iconSize={Number(getRequiredThemeTokenValue(brand, "component.otpInput.icon.helperSize"))}
+          showIcon={showHelperIcon}
+          size={size}
+          style={{ paddingInline: `${sizeTokens.supportingPaddingInline}px` }}
+          textColor={helperColors.text}
+          typography={helperTypography}
+          tone={resolvedHelperTone}
+        />
       ) : null}
 
       {showResendSupport ? (

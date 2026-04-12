@@ -30,7 +30,7 @@ export function Button({
 }: PropsWithChildren<ButtonProps>) {
   const backgroundColor =
     tone === "primary"
-      ? String(getRequiredNativeThemeTokenValue(brand, "color.brand.primary.600"))
+      ? String(getRequiredNativeThemeTokenValue(brand, "color.brand.alt.500"))
       : tone === "secondary"
         ? String(getRequiredNativeThemeTokenValue(brand, "color.brand.secondary.600"))
         : String(getRequiredNativeThemeTokenValue(brand, "color.surface.subtle"));
@@ -75,9 +75,12 @@ export function Button({
       style={{
         alignItems: "center",
         backgroundColor,
-        borderColor: String(getRequiredNativeThemeTokenValue(brand, "color.border.default")),
+        borderColor:
+          tone === "primary"
+            ? "transparent"
+            : String(getRequiredNativeThemeTokenValue(brand, "color.border.default")),
         borderRadius: Number(getRequiredNativeThemeTokenValue(brand, "radius.md")),
-        borderWidth: 1,
+        borderWidth: tone === "primary" ? 0 : 1,
         flexDirection: "row",
         opacity: disabled ? 0.5 : 1,
         paddingHorizontal,

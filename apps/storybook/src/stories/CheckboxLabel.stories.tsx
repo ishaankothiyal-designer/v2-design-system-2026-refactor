@@ -252,7 +252,7 @@ const CHECKBOX_LABEL_FIGMA_URL =
   "https://www.figma.com/design/AZgWt0KHVuVeWBAcQ6Jcy4/branch/yxI5H0FhaUg0YR0uhNuqR6/%F0%9F%9A%80-v2.0-Global-Component-Library?node-id=77-139&t=1zgOyFpiLYMyM4XM-11";
 
 const meta: Meta<CheckboxLabelStoryArgs> = {
-  title: "Components/Checkbox Label",
+  title: "Components/Forms/Checkbox Label",
   component: CheckboxLabel,
   tags: ["autodocs"],
   parameters: {

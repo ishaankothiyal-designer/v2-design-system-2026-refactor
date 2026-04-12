@@ -248,7 +248,7 @@ const matrixValueCellStyles: CSSProperties = {
 };
 
 const meta: Meta<CaptionButtonStoryArgs> = {
-  title: "Components/Caption Button",
+  title: "Components/Buttons/Caption Button",
   component: CaptionButton,
   tags: ["autodocs"],
   parameters: {

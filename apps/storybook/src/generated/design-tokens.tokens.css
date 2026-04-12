@@ -430,6 +430,43 @@
   --component-switch-label-typography-description-default-letter-spacing: 0px; /* component.switchLabel.typography.description.default.letterSpacing | @presenter LetterSpacing */
 
   /**
+   * @tokens Consent Tokens
+   */
+  --component-consent-layout-gap: 8px; /* component.consent.layout.gap | @presenter Spacing */
+  --component-consent-layout-padding-inline: 16px; /* component.consent.layout.paddingInline | @presenter Spacing */
+  --component-consent-layout-padding-block: 12px; /* component.consent.layout.paddingBlock | @presenter Spacing */
+  --component-consent-layout-inside-card-background: #F1F5F9; /* component.consent.layout.insideCard.background | @presenter Color */
+  --component-consent-layout-inside-card-sm-padding: 8px; /* component.consent.layout.insideCard.sm.padding | @presenter Spacing */
+  --component-consent-layout-inside-card-sm-radius: 8px; /* component.consent.layout.insideCard.sm.radius | @presenter BorderRadius */
+  --component-consent-layout-inside-card-md-padding: 8px; /* component.consent.layout.insideCard.md.padding | @presenter Spacing */
+  --component-consent-layout-inside-card-md-radius: 8px; /* component.consent.layout.insideCard.md.radius | @presenter BorderRadius */
+  --component-consent-layout-inside-card-lg-padding: 12px; /* component.consent.layout.insideCard.lg.padding | @presenter Spacing */
+  --component-consent-layout-inside-card-lg-radius: 12px; /* component.consent.layout.insideCard.lg.radius | @presenter BorderRadius */
+  --component-consent-content-color-default: #64748B; /* component.consent.content.color.default | @presenter Color */
+  --component-consent-content-color-disabled: #94A3B8; /* component.consent.content.color.disabled | @presenter Color */
+  --component-consent-content-size-sm-font-size: 9px; /* component.consent.content.size.sm.fontSize | @presenter FontSize */
+  --component-consent-content-size-sm-line-height: 13px; /* component.consent.content.size.sm.lineHeight | @presenter LineHeight */
+  --component-consent-content-size-sm-letter-spacing: 0px; /* component.consent.content.size.sm.letterSpacing | @presenter LetterSpacing */
+  --component-consent-content-size-sm-padding-top: 2px; /* component.consent.content.size.sm.paddingTop | @presenter Spacing */
+  --component-consent-content-size-sm-padding-bottom: 2px; /* component.consent.content.size.sm.paddingBottom | @presenter Spacing */
+  --component-consent-content-size-sm-inside-card-padding-top: 2px; /* component.consent.content.size.sm.insideCardPaddingTop | @presenter Spacing */
+  --component-consent-content-size-sm-inside-card-padding-bottom: 0px; /* component.consent.content.size.sm.insideCardPaddingBottom | @presenter Spacing */
+  --component-consent-content-size-md-font-size: 12px; /* component.consent.content.size.md.fontSize | @presenter FontSize */
+  --component-consent-content-size-md-line-height: 18px; /* component.consent.content.size.md.lineHeight | @presenter LineHeight */
+  --component-consent-content-size-md-letter-spacing: 0px; /* component.consent.content.size.md.letterSpacing | @presenter LetterSpacing */
+  --component-consent-content-size-md-padding-top: 0px; /* component.consent.content.size.md.paddingTop | @presenter Spacing */
+  --component-consent-content-size-md-padding-bottom: 0px; /* component.consent.content.size.md.paddingBottom | @presenter Spacing */
+  --component-consent-content-size-md-inside-card-padding-top: 0px; /* component.consent.content.size.md.insideCardPaddingTop | @presenter Spacing */
+  --component-consent-content-size-md-inside-card-padding-bottom: 0px; /* component.consent.content.size.md.insideCardPaddingBottom | @presenter Spacing */
+  --component-consent-content-size-lg-font-size: 14px; /* component.consent.content.size.lg.fontSize | @presenter FontSize */
+  --component-consent-content-size-lg-line-height: 20px; /* component.consent.content.size.lg.lineHeight | @presenter LineHeight */
+  --component-consent-content-size-lg-letter-spacing: 0px; /* component.consent.content.size.lg.letterSpacing | @presenter LetterSpacing */
+  --component-consent-content-size-lg-padding-top: 0px; /* component.consent.content.size.lg.paddingTop | @presenter Spacing */
+  --component-consent-content-size-lg-padding-bottom: 0px; /* component.consent.content.size.lg.paddingBottom | @presenter Spacing */
+  --component-consent-content-size-lg-inside-card-padding-top: 0px; /* component.consent.content.size.lg.insideCardPaddingTop | @presenter Spacing */
+  --component-consent-content-size-lg-inside-card-padding-bottom: 0px; /* component.consent.content.size.lg.insideCardPaddingBottom | @presenter Spacing */
+
+  /**
    * @tokens Radio Tokens
    */
   --component-radio-color-rest-background: #FFFFFF; /* component.radio.color.rest.background | @presenter Color */

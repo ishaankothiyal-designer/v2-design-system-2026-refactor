@@ -322,7 +322,7 @@ const matrixValueCellStyles: CSSProperties = {
 };
 
 const meta: Meta<SocialButtonStoryArgs> = {
-  title: "Components/Social Button",
+  title: "Components/Buttons/Social Button",
   component: StorySocialButton,
   tags: ["autodocs"],
   parameters: {

@@ -353,7 +353,7 @@ export function Accordion({
             leadingIcon ?? (
               <Icon
                 brand={brand}
-                name="calendar-line"
+                name="calendar-edit-date-edit-outline"
                 decorative
                 style={leadingIconStyles}
               />

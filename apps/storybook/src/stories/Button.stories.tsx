@@ -484,7 +484,7 @@ const shapeGridStyles: CSSProperties = {
 };
 
 const meta: Meta<ButtonStoryArgs> = {
-  title: "Components/Button",
+  title: "Components/Buttons/Button",
   component: Button,
   tags: ["autodocs"],
   parameters: {

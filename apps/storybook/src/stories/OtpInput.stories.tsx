@@ -4,6 +4,8 @@ import { useArgs } from "storybook/preview-api";
 import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
 import {
   OtpInput,
+  Text,
+  type OtpInputPreviewState,
   type OtpInputHelperTone,
   type OtpInputProps,
   type OtpInputSize,
@@ -13,6 +15,7 @@ import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 const otpInputSizes: OtpInputSize[] = ["Small", "Large"];
+const previewStates: OtpInputPreviewState[] = ["Rest", "Hover", "Active", "Typed", "Error", "Success", "Disabled"];
 const validationStates: OtpInputValidationState[] = ["Default", "Error", "Success"];
 const helperTones: OtpInputHelperTone[] = ["Default", "Error", "Success"];
 
@@ -33,125 +36,32 @@ function PlaygroundStory(args: OtpInputProps) {
   );
 }
 
-function VariantMatrixStory() {
-  const common = {
-    brand: "Cars24" as const,
-    label: "Label",
-    required: true,
-    showHelperIcon: true,
-    showLabelInfoIcon: true
-  };
+const stateStoryCommon = {
+  brand: "Cars24" as const,
+  helperText: "Helper text",
+  label: "Label",
+  required: true,
+  showHelperIcon: true,
+  showLabelInfoIcon: true
+};
 
-  const rows: Array<{
-    label: string;
-    small: OtpInputProps;
-    large: OtpInputProps;
-  }> = [
-    {
-      label: "Default",
-      small: { ...common, helperText: "Helper text", size: "Small", value: "" },
-      large: { ...common, helperText: "Helper text", size: "Large", value: "" }
-    },
-    {
-      label: "Typed",
-      small: { ...common, helperText: "Helper text", size: "Small", value: "638462" },
-      large: { ...common, helperText: "Helper text", size: "Large", value: "638462" }
-    },
-    {
-      label: "Error",
-      small: {
-        ...common,
-        helperText: "Helper text",
-        helperTone: "Error",
-        size: "Small",
-        validationState: "Error",
-        value: "638460"
-      },
-      large: {
-        ...common,
-        helperText: "Helper text",
-        helperTone: "Error",
-        size: "Large",
-        validationState: "Error",
-        value: "638460"
-      }
-    },
-    {
-      label: "Success",
-      small: {
-        ...common,
-        helperText: "Helper text",
-        helperTone: "Success",
-        size: "Small",
-        validationState: "Success",
-        value: "638462"
-      },
-      large: {
-        ...common,
-        helperText: "Helper text",
-        helperTone: "Success",
-        size: "Large",
-        validationState: "Success",
-        value: "638462"
-      }
-    },
-    {
-      label: "Disabled",
-      small: { ...common, disabled: true, helperText: "Helper text", size: "Small", value: "" },
-      large: { ...common, disabled: true, helperText: "Helper text", size: "Large", value: "" }
-    },
-    {
-      label: "Resend OTP",
-      small: {
-        ...common,
-        resendActionLabel: "Resend OTP",
-        resendPrompt: "Didn’t receive OTP?",
-        size: "Small",
-        value: ""
-      },
-      large: {
-        ...common,
-        resendActionLabel: "Resend OTP",
-        resendPrompt: "Didn’t receive OTP?",
-        size: "Large",
-        value: ""
-      }
-    },
-    {
-      label: "OTP Timer",
-      small: {
-        ...common,
-        size: "Small",
-        timerPrompt: "Didn’t receive OTP? Resend in",
-        timerValue: "23 seconds ..."
-      },
-      large: {
-        ...common,
-        size: "Large",
-        timerPrompt: "Didn’t receive OTP? Resend in",
-        timerValue: "23 seconds ..."
-      }
-    }
-  ];
-
+function SizePairStory({ small, large }: { small: OtpInputProps; large: OtpInputProps }) {
   return (
     <StoryPage fullscreen>
       <StoryCard>
         <div style={{ display: "grid", gap: 24 }}>
-          <div style={matrixHeaderStyles}>
-            <div />
-            <strong>Small</strong>
-            <strong>Large</strong>
+          <div style={pairHeaderStyles}>
+            <Text brand="Cars24" as="strong" size="md">
+              Small
+            </Text>
+            <Text brand="Cars24" as="strong" size="md">
+              Large
+            </Text>
           </div>
 
-          <div style={matrixStyles}>
-            {rows.flatMap((row) => [
-              <div key={`${row.label}-label`} style={rowLabelStyles}>
-                {row.label}
-              </div>,
-              <OtpInput key={`${row.label}-small`} {...row.small} />,
-              <OtpInput key={`${row.label}-large`} {...row.large} />
-            ])}
+          <div style={pairStyles}>
+            <OtpInput {...small} />
+            <OtpInput {...large} />
           </div>
         </div>
       </StoryCard>
@@ -165,16 +75,20 @@ function ThemeShowcaseStory() {
       <StoryCard>
         <div style={{ display: "grid", gap: 20 }}>
           <header style={{ display: "grid", gap: 6 }}>
-            <strong>Theme Coverage</strong>
-            <span style={{ color: "#64748B", fontSize: 12, lineHeight: "18px" }}>
+            <Text brand="Cars24" as="strong" size="md">
+              Theme Coverage
+            </Text>
+            <Text brand="Cars24" as="span" size="xs" tone="secondary">
               Same typed state rendered across all supported brand themes.
-            </span>
+            </Text>
           </header>
 
           <div style={{ display: "grid", gap: 20 }}>
             {STORYBOOK_BRAND_OPTIONS.map((brand) => (
               <div key={brand} style={{ display: "grid", gap: 10, width: "fit-content" }}>
-                <strong style={{ fontSize: 14, lineHeight: "20px" }}>{brand}</strong>
+                <Text brand={brand} as="strong" size="sm">
+                  {brand}
+                </Text>
                 <OtpInput
                   brand={brand}
                   helperText="Helper text"
@@ -194,37 +108,26 @@ function ThemeShowcaseStory() {
   );
 }
 
-const matrixStyles: CSSProperties = {
+const pairStyles: CSSProperties = {
   alignItems: "start",
   columnGap: 24,
   display: "grid",
-  gridTemplateColumns: "120px repeat(2, minmax(328px, 1fr))",
-  rowGap: 20,
+  gridTemplateColumns: "repeat(2, minmax(328px, 1fr))",
   justifyContent: "center"
 };
 
-const matrixHeaderStyles: CSSProperties = {
+const pairHeaderStyles: CSSProperties = {
   alignItems: "center",
-  color: "#0F172A",
   columnGap: 24,
   display: "grid",
-  fontSize: 14,
-  gridTemplateColumns: "120px repeat(2, minmax(328px, 1fr))"
-};
-
-const rowLabelStyles: CSSProperties = {
-  color: "#64748B",
-  fontSize: 13,
-  fontWeight: 600,
-  lineHeight: "18px",
-  paddingTop: 10
+  gridTemplateColumns: "repeat(2, minmax(328px, 1fr))"
 };
 
 const OTP_INPUT_FIGMA_URL =
   "https://www.figma.com/design/AZgWt0KHVuVeWBAcQ6Jcy4/branch/yxI5H0FhaUg0YR0uhNuqR6/%F0%9F%9A%80-v2.0-Global-Component-Library?node-id=4744-19129&t=1zgOyFpiLYMyM4XM-11";
 
 const meta = {
-  title: "Components/OTP Input",
+  title: "Components/Forms/OTP",
   component: OtpInput,
   tags: ["autodocs"],
   parameters: {
@@ -255,6 +158,10 @@ const meta = {
     validationState: {
       control: "inline-radio",
       options: validationStates
+    },
+    forceState: {
+      control: "select",
+      options: [undefined, ...previewStates]
     },
     helperTone: {
       control: "inline-radio",
@@ -304,8 +211,113 @@ export const Playground: Story = {
   }
 };
 
-export const Variants: Story = {
-  render: VariantMatrixStory,
+export const Rest: Story = {
+  render: () => (
+    <SizePairStory
+      small={{ ...stateStoryCommon, forceState: "Rest", size: "Small", value: "" }}
+      large={{ ...stateStoryCommon, forceState: "Rest", size: "Large", value: "" }}
+    />
+  ),
+  parameters: {
+    controls: { disable: true }
+  }
+};
+
+export const Hover: Story = {
+  render: () => (
+    <SizePairStory
+      small={{ ...stateStoryCommon, forceState: "Hover", size: "Small", value: "" }}
+      large={{ ...stateStoryCommon, forceState: "Hover", size: "Large", value: "" }}
+    />
+  ),
+  parameters: {
+    controls: { disable: true }
+  }
+};
+
+export const Active: Story = {
+  render: () => (
+    <SizePairStory
+      small={{ ...stateStoryCommon, forceState: "Active", size: "Small", value: "6384" }}
+      large={{ ...stateStoryCommon, forceState: "Active", size: "Large", value: "6384" }}
+    />
+  ),
+  parameters: {
+    controls: { disable: true }
+  }
+};
+
+export const Typed: Story = {
+  render: () => (
+    <SizePairStory
+      small={{ ...stateStoryCommon, forceState: "Typed", size: "Small", value: "638462" }}
+      large={{ ...stateStoryCommon, forceState: "Typed", size: "Large", value: "638462" }}
+    />
+  ),
+  parameters: {
+    controls: { disable: true }
+  }
+};
+
+export const Error: Story = {
+  render: () => (
+    <SizePairStory
+      small={{
+        ...stateStoryCommon,
+        forceState: "Error",
+        helperTone: "Error",
+        size: "Small",
+        validationState: "Error",
+        value: "638460"
+      }}
+      large={{
+        ...stateStoryCommon,
+        forceState: "Error",
+        helperTone: "Error",
+        size: "Large",
+        validationState: "Error",
+        value: "638460"
+      }}
+    />
+  ),
+  parameters: {
+    controls: { disable: true }
+  }
+};
+
+export const Success: Story = {
+  render: () => (
+    <SizePairStory
+      small={{
+        ...stateStoryCommon,
+        forceState: "Success",
+        helperTone: "Success",
+        size: "Small",
+        validationState: "Success",
+        value: "638462"
+      }}
+      large={{
+        ...stateStoryCommon,
+        forceState: "Success",
+        helperTone: "Success",
+        size: "Large",
+        validationState: "Success",
+        value: "638462"
+      }}
+    />
+  ),
+  parameters: {
+    controls: { disable: true }
+  }
+};
+
+export const Disabled: Story = {
+  render: () => (
+    <SizePairStory
+      small={{ ...stateStoryCommon, disabled: true, forceState: "Disabled", size: "Small", value: "" }}
+      large={{ ...stateStoryCommon, disabled: true, forceState: "Disabled", size: "Large", value: "" }}
+    />
+  ),
   parameters: {
     controls: { disable: true }
   }

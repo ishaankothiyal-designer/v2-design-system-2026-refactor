@@ -164,7 +164,7 @@ const SWITCH_LABEL_FIGMA_URL =
   "https://www.figma.com/design/AZgWt0KHVuVeWBAcQ6Jcy4/branch/yxI5H0FhaUg0YR0uhNuqR6/%F0%9F%9A%80-v2.0-Global-Component-Library?node-id=20010-4475&t=1zgOyFpiLYMyM4XM-11";
 
 const meta: Meta<SwitchLabelStoryArgs> = {
-  title: "Components/Switch Label",
+  title: "Components/Forms/Switch Label",
   component: SwitchLabel,
   tags: ["autodocs"],
   parameters: {

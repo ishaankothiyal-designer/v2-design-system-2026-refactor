@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
-import { Icon, SectionHeader, type SectionHeaderProps } from "@geist/web";
+import { Icon, SectionHeader, Text, type SectionHeaderProps } from "@geist/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
@@ -35,7 +35,9 @@ function ConfigurationsStory({ brand = "Cars24" }: Pick<SectionHeaderProps, "bra
       <div style={configGridStyles}>
         <StoryCard style={{ width: "fit-content" }}>
           <div style={{ display: "grid", gap: 12 }}>
-            <strong>With icons</strong>
+            <Text brand={brand} as="strong" size="md">
+              With icons
+            </Text>
             <SectionHeader
               brand={brand}
               titleIcon={<Icon name="sparkle-filled" decorative />}
@@ -46,7 +48,9 @@ function ConfigurationsStory({ brand = "Cars24" }: Pick<SectionHeaderProps, "bra
 
         <StoryCard style={{ width: "fit-content" }}>
           <div style={{ display: "grid", gap: 12 }}>
-            <strong>No subtitle or tag</strong>
+            <Text brand={brand} as="strong" size="md">
+              No subtitle or tag
+            </Text>
             <SectionHeader
               brand={brand}
               subtitle=""
@@ -58,7 +62,9 @@ function ConfigurationsStory({ brand = "Cars24" }: Pick<SectionHeaderProps, "bra
 
         <StoryCard style={{ background: "#0A0A0A", width: "fit-content" }}>
           <div style={{ display: "grid", gap: 12 }}>
-            <strong style={{ color: "#F8FAFC" }}>Inverse, no action</strong>
+            <Text brand={brand} as="strong" size="md" tone="inverse">
+              Inverse, no action
+            </Text>
             <SectionHeader brand={brand} inverse showAction={false} />
           </div>
         </StoryCard>

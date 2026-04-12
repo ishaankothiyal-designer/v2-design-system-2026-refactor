@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "storybook/preview-api";
 import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
 import {
+  Text,
   TextInput,
   type TextInputHelperTone,
   type TextInputPreviewState,
@@ -116,8 +117,12 @@ function VariantMatrixStory() {
         <div style={{ display: "grid", gap: 24 }}>
           <div style={matrixHeaderStyles}>
             <div />
-            <strong>Small</strong>
-            <strong>Large</strong>
+            <Text brand="Cars24" as="strong" size="md">
+              Small
+            </Text>
+            <Text brand="Cars24" as="strong" size="md">
+              Large
+            </Text>
           </div>
 
           <div style={matrixStyles}>
@@ -141,16 +146,20 @@ function ThemeShowcaseStory() {
       <StoryCard>
         <div style={{ display: "grid", gap: 20 }}>
           <header style={{ display: "grid", gap: 6 }}>
-            <strong>Theme Coverage</strong>
-            <span style={{ color: "#64748B", fontSize: 12, lineHeight: "18px" }}>
+            <Text brand="Cars24" as="strong" size="md">
+              Theme Coverage
+            </Text>
+            <Text brand="Cars24" as="span" size="xs" tone="secondary">
               Same typed state rendered across all supported brand themes.
-            </span>
+            </Text>
           </header>
 
           <div style={{ display: "grid", gap: 20 }}>
             {STORYBOOK_BRAND_OPTIONS.map((brand) => (
               <div key={brand} style={{ display: "grid", gap: 10, width: 328 }}>
-                <strong style={{ fontSize: 14, lineHeight: "20px" }}>{brand}</strong>
+                <Text brand={brand} as="strong" size="sm">
+                  {brand}
+                </Text>
                 <TextInput
                   brand={brand}
                   helperText="Helper text"
@@ -183,10 +192,8 @@ const matrixStyles: CSSProperties = {
 
 const matrixHeaderStyles: CSSProperties = {
   alignItems: "center",
-  color: "#0F172A",
   columnGap: 24,
   display: "grid",
-  fontSize: 14,
   gridTemplateColumns: "120px repeat(2, minmax(328px, 1fr))"
 };
 
@@ -230,7 +237,7 @@ const TEXT_INPUT_FIGMA_URL =
   "https://www.figma.com/design/AZgWt0KHVuVeWBAcQ6Jcy4/branch/yxI5H0FhaUg0YR0uhNuqR6/%F0%9F%9A%80-v2.0-Global-Component-Library?node-id=6451-19520&t=1zgOyFpiLYMyM4XM-11";
 
 const meta = {
-  title: "Components/Text Input",
+  title: "Components/Forms/Text Input",
   component: TextInput,
   tags: ["autodocs"],
   parameters: {

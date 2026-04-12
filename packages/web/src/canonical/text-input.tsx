@@ -12,6 +12,7 @@ import type { IconName } from "@geist/icons";
 import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
 import { Icon } from "./icon";
+import { HelperText } from "./helper-text";
 import { Label } from "./label";
 import { getRequiredThemeTokenValue } from "../theme";
 
@@ -59,11 +60,6 @@ type TextInputFieldColors = {
   value: string;
 };
 
-type TextInputHelperColors = {
-  icon: string;
-  text: string;
-};
-
 function getSizeKey(size: TextInputSize) {
   return size === "Large" ? "lg" : "sm";
 }
@@ -108,16 +104,6 @@ function getFieldColors(brand: DisplayBrandId, state: FieldVisualState): TextInp
     border: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.border`)),
     placeholder: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.placeholder`)),
     value: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.value`))
-  };
-}
-
-function getHelperColors(brand: DisplayBrandId, tone: TextInputHelperTone): TextInputHelperColors {
-  const toneKey = tone === "Error" ? "error" : tone === "Success" ? "success" : "default";
-  const tokenPrefix = `component.textInput.color.helper.${toneKey}`;
-
-  return {
-    icon: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.icon`)),
-    text: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.text`))
   };
 }
 
@@ -273,7 +259,6 @@ export function TextInput({
   const sizeKey = getSizeKey(size);
   const sizeTokens = getSizeTokens(brand, size);
   const inputTypography = getTypography(brand, `component.textInput.typography.input.${sizeKey}`);
-  const helperTypography = getTypography(brand, `component.textInput.typography.helper.${sizeKey}`);
   const visualState = resolveVisualState({
     disabled,
     focused,
@@ -289,11 +274,9 @@ export function TextInput({
       : forceState === "Success"
         ? "Success"
         : helperTone ?? validationState;
-  const helperColors = getHelperColors(brand, resolvedHelperTone);
   const borderWidth = Number(getRequiredThemeTokenValue(brand, "component.textInput.border.width"));
   const fieldRadius = getFieldRadius(brand, size);
   const affixIconSize = Number(getRequiredThemeTokenValue(brand, "component.textInput.icon.affixSize"));
-  const helperIconSize = Number(getRequiredThemeTokenValue(brand, "component.textInput.icon.helperSize"));
   const caretWidth = Number(getRequiredThemeTokenValue(brand, "component.textInput.caret.width"));
   const caretGap = Number(getRequiredThemeTokenValue(brand, "component.textInput.caret.gap"));
   const labelSize = getLabelSize(size);
@@ -301,12 +284,6 @@ export function TextInput({
   const showHelper = helperText !== undefined && helperText !== null;
   const previewMode = forceState !== undefined;
   const previewShowsCaret = forceState === "Active" || forceState === "Typing";
-  const helperIconName =
-    resolvedHelperTone === "Error"
-      ? "error-outline"
-      : resolvedHelperTone === "Success"
-        ? "circle-check-line"
-        : "info-outline";
   const inputColor = hasValue ? fieldColors.value : fieldColors.placeholder;
   const inputFontWeightPath = hasValue ? "typography.fontWeight.medium" : "typography.fontWeight.regular";
   const previewTextValue = currentValue || placeholder;
@@ -356,16 +333,6 @@ export function TextInput({
     minWidth: 0,
     outline: "none",
     padding: 0
-  };
-
-  const helperTextStyles: CSSProperties = {
-    ...makeTypographyStyles({
-      brand,
-      color: helperColors.text,
-      fontWeightPath: "typography.fontWeight.regular",
-      typography: helperTypography
-    }),
-    minWidth: 0
   };
 
   const previewTextStyles: CSSProperties = {
@@ -520,30 +487,17 @@ export function TextInput({
       </div>
 
       {showHelper ? (
-        <div
+        <HelperText
+          align="center"
+          brand={brand}
+          fullWidth
           id={showHelper && !previewMode ? helperId : undefined}
-          style={{
-            alignItems: "flex-start",
-            display: "flex",
-            gap: `${sizeTokens.helperGap}px`,
-            minWidth: 0,
-            paddingInline: `${sizeTokens.labelPaddingInline}px`
-          }}
-        >
-          {showHelperIcon ? (
-            <Icon
-              decorative
-              brand={brand}
-              name={helperIconName}
-              style={{
-                color: helperColors.icon,
-                flex: "0 0 auto",
-                fontSize: `${helperIconSize}px`
-              }}
-            />
-          ) : null}
-          <span style={helperTextStyles}>{helperText}</span>
-        </div>
+          helperText={helperText}
+          showIcon={showHelperIcon}
+          size={size}
+          style={{ paddingInline: `${sizeTokens.labelPaddingInline}px` }}
+          tone={resolvedHelperTone}
+        />
       ) : null}
     </div>
   );

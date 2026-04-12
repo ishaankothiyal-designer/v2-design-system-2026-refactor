@@ -132,6 +132,36 @@ const filterTabBaseStyles: CSSProperties = {
   transition: "all 160ms ease"
 };
 
+const tableWrapperStyles: CSSProperties = {
+  overflowX: "auto",
+  borderRadius: 16,
+  border: `1px solid ${String(coreTokenCatalog.color.border.default)}`,
+  background: String(coreTokenCatalog.color.surface.canvas)
+};
+
+const tableStyles: CSSProperties = {
+  width: "100%",
+  borderCollapse: "collapse",
+  fontSize: 13
+};
+
+const tableHeaderCellStyles: CSSProperties = {
+  padding: "12px 14px",
+  borderBottom: `1px solid ${String(coreTokenCatalog.color.border.default)}`,
+  background: String(coreTokenCatalog.color.surface.subtle),
+  color: String(coreTokenCatalog.color.text.secondary),
+  fontSize: 12,
+  fontWeight: 700,
+  lineHeight: "18px",
+  verticalAlign: "top"
+};
+
+const tableBodyCellStyles: CSSProperties = {
+  padding: "14px",
+  borderBottom: `1px solid ${String(coreTokenCatalog.color.border.default)}`,
+  verticalAlign: "top"
+};
+
 function formatLetterSpacing(value: number) {
   return value === 0 ? "0" : `${value}em`;
 }
@@ -272,43 +302,83 @@ export function TypographyStyleGallery({
             </p>
           </div>
 
-          <div style={gridStyles}>
-            {section.styles.map((style) => (
-              <article key={style.key} style={cardStyles}>
-                <div style={{ display: "grid", gap: 6 }}>
-                  <strong>{style.label}</strong>
-                  <span style={{ color: String(coreTokenCatalog.color.text.secondary), fontSize: 13 }}>
-                    {style.description}
-                  </span>
-                </div>
+          <div style={tableWrapperStyles}>
+            <table style={tableStyles}>
+              <thead>
+                <tr>
+                  <th align="left" style={tableHeaderCellStyles}>
+                    Style
+                  </th>
+                  <th align="left" style={tableHeaderCellStyles}>
+                    Description
+                  </th>
+                  <th align="left" style={tableHeaderCellStyles}>
+                    Preview
+                  </th>
+                  <th align="left" style={tableHeaderCellStyles}>
+                    Size
+                  </th>
+                  <th align="left" style={tableHeaderCellStyles}>
+                    Line Height
+                  </th>
+                  <th align="left" style={tableHeaderCellStyles}>
+                    Tracking
+                  </th>
+                  <th align="left" style={tableHeaderCellStyles}>
+                    Size Token
+                  </th>
+                  <th align="left" style={tableHeaderCellStyles}>
+                    Line Height Token
+                  </th>
+                  <th align="left" style={tableHeaderCellStyles}>
+                    Letter Spacing Token
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {section.styles.map((style, index) => {
+                  const rowStyles: CSSProperties =
+                    index === section.styles.length - 1
+                      ? { ...tableBodyCellStyles, borderBottom: "none" }
+                      : tableBodyCellStyles;
 
-                <div
-                  style={{
-                    fontFamily,
-                    fontSize: style.fontSize,
-                    lineHeight: `${style.lineHeight}px`,
-                    letterSpacing: formatLetterSpacing(style.letterSpacing),
-                    padding: "8px 0",
-                    borderTop: `1px solid ${String(coreTokenCatalog.color.border.default)}`,
-                    borderBottom: `1px solid ${String(coreTokenCatalog.color.border.default)}`
-                  }}
-                >
-                  Typography Sample 123
-                </div>
-
-                <div style={chipRowStyles}>
-                  <span style={chipStyles}>{style.fontSize}px size</span>
-                  <span style={chipStyles}>{style.lineHeight}px line height</span>
-                  <span style={chipStyles}>{formatLetterSpacing(style.letterSpacing)} tracking</span>
-                </div>
-
-                <div style={{ display: "grid", gap: 8 }}>
-                  <code style={codeStyles}>{style.sizeToken}</code>
-                  <code style={codeStyles}>{style.lineHeightToken}</code>
-                  <code style={codeStyles}>{style.letterSpacingToken}</code>
-                </div>
-              </article>
-            ))}
+                  return (
+                    <tr key={style.key}>
+                      <td style={rowStyles}>
+                        <strong>{style.label}</strong>
+                      </td>
+                      <td style={{ ...rowStyles, minWidth: 280, color: String(coreTokenCatalog.color.text.secondary) }}>
+                        {style.description}
+                      </td>
+                      <td style={{ ...rowStyles, minWidth: 240 }}>
+                        <div
+                          style={{
+                            fontFamily,
+                            fontSize: style.fontSize,
+                            lineHeight: `${style.lineHeight}px`,
+                            letterSpacing: formatLetterSpacing(style.letterSpacing)
+                          }}
+                        >
+                          Typography Sample 123
+                        </div>
+                      </td>
+                      <td style={rowStyles}>{style.fontSize}px</td>
+                      <td style={rowStyles}>{style.lineHeight}px</td>
+                      <td style={rowStyles}>{formatLetterSpacing(style.letterSpacing)}</td>
+                      <td style={rowStyles}>
+                        <code>{style.sizeToken}</code>
+                      </td>
+                      <td style={rowStyles}>
+                        <code>{style.lineHeightToken}</code>
+                      </td>
+                      <td style={rowStyles}>
+                        <code>{style.letterSpacingToken}</code>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         </section>
       ))}
@@ -318,40 +388,43 @@ export function TypographyStyleGallery({
 
 export function TypographyTrackingTable({ tokens }: { tokens: TypographyTrackingToken[] }) {
   return (
-    <div style={{ overflowX: "auto" }}>
-      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+    <div style={tableWrapperStyles}>
+      <table style={tableStyles}>
         <thead>
           <tr>
-            <th align="left" style={{ padding: "10px 12px", borderBottom: `1px solid ${String(coreTokenCatalog.color.border.default)}` }}>
+            <th align="left" style={tableHeaderCellStyles}>
               Token
             </th>
-            <th align="left" style={{ padding: "10px 12px", borderBottom: `1px solid ${String(coreTokenCatalog.color.border.default)}` }}>
+            <th align="left" style={tableHeaderCellStyles}>
               Value
             </th>
-            <th align="left" style={{ padding: "10px 12px", borderBottom: `1px solid ${String(coreTokenCatalog.color.border.default)}` }}>
+            <th align="left" style={tableHeaderCellStyles}>
               Web Syntax
             </th>
           </tr>
         </thead>
         <tbody>
-          {tokens.map((token) => (
-            <tr key={token.name}>
-              <td style={{ padding: "10px 12px", borderBottom: `1px solid ${String(coreTokenCatalog.color.border.default)}` }}>
-                <strong>{token.name}</strong>
-                {token.description ? (
-                  <div style={{ marginTop: 4, color: String(coreTokenCatalog.color.text.secondary), lineHeight: "18px" }}>
-                    {token.description}
-                  </div>
-                ) : null}
-              </td>
-              <td style={{ padding: "10px 12px", borderBottom: `1px solid ${String(coreTokenCatalog.color.border.default)}` }}>
-                {formatLetterSpacing(token.value)}
-              </td>
-              <td style={{ padding: "10px 12px", borderBottom: `1px solid ${String(coreTokenCatalog.color.border.default)}` }}>
-                <code>{token.codeSyntax}</code>
-              </td>
-            </tr>
-          ))}
+          {tokens.map((token, index) => {
+            const rowStyles: CSSProperties =
+              index === tokens.length - 1 ? { ...tableBodyCellStyles, borderBottom: "none" } : tableBodyCellStyles;
+
+            return (
+              <tr key={token.name}>
+                <td style={rowStyles}>
+                  <strong>{token.name}</strong>
+                  {token.description ? (
+                    <div style={{ marginTop: 4, color: String(coreTokenCatalog.color.text.secondary), lineHeight: "18px" }}>
+                      {token.description}
+                    </div>
+                  ) : null}
+                </td>
+                <td style={rowStyles}>{formatLetterSpacing(token.value)}</td>
+                <td style={rowStyles}>
+                  <code>{token.codeSyntax}</code>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

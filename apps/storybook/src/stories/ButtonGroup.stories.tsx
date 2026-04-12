@@ -320,7 +320,7 @@ function matrixValueCellStyles(onDark: boolean): CSSProperties {
 }
 
 const meta: Meta<ButtonGroupStoryArgs> = {
-  title: "Components/Button Group",
+  title: "Components/Buttons/Button Group",
   tags: ["autodocs"],
   parameters: {
     layout: "fullscreen",

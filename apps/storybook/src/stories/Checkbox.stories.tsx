@@ -227,7 +227,7 @@ const CHECKBOX_FIGMA_URL =
   "https://www.figma.com/design/AZgWt0KHVuVeWBAcQ6Jcy4/branch/yxI5H0FhaUg0YR0uhNuqR6/%F0%9F%9A%80-v2.0-Global-Component-Library?node-id=17828-37821&t=1zgOyFpiLYMyM4XM-11";
 
 const meta: Meta<CheckboxStoryArgs> = {
-  title: "Components/Checkbox",
+  title: "Components/Forms/Checkbox",
   component: Checkbox,
   tags: ["autodocs"],
   parameters: {

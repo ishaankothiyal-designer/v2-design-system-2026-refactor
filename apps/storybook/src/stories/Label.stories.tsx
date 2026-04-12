@@ -83,7 +83,7 @@ const labelUiExampleSourceCode = `<Label
 />`;
 
 const meta: Meta<LabelStoryArgs> = {
-  title: "Components/Label",
+  title: "Components/Forms/Label",
   component: Label,
   tags: ["autodocs"],
   parameters: {

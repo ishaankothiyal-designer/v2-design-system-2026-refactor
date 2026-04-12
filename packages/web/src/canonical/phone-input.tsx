@@ -15,6 +15,7 @@ import type { IconName } from "@geist/icons";
 import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
 import { Icon } from "./icon";
+import { HelperText } from "./helper-text";
 import { Label } from "./label";
 import { getRequiredThemeTokenValue, getThemeTokenValue } from "../theme";
 
@@ -296,17 +297,11 @@ export function PhoneInput({
   });
   const sizeTokens = getSizeTokens(brand, size);
   const inputTypography = getTypography(brand, "component.phoneInput.typography.input");
-  const helperTypography = getTypography(brand, "component.phoneInput.typography.helper");
   const fieldColors = getFieldColors(brand, visualState);
   const resolvedHelperTone = helperTone ?? (destructive ? "Destructive" : "Default");
-  const helperColorPrefix =
-    resolvedHelperTone === "Destructive"
-      ? "component.phoneInput.color.helper.destructive"
-      : "component.phoneInput.color.helper.default";
   const borderWidth = Number(getRequiredThemeTokenValue(brand, "component.phoneInput.border.width"));
   const fieldRadius = Number(getRequiredThemeTokenValue(brand, "radius.alt.lg"));
   const actionRadius = Number(getRequiredThemeTokenValue(brand, "radius.pill"));
-  const helperIconSize = getIconSize(brand, "component.phoneInput.icon.helperSize");
   const flagSize = getIconSize(brand, "component.phoneInput.icon.flagSize");
   const countryChevronSize = getIconSize(brand, "component.phoneInput.icon.countryChevronSize");
   const actionIconSize = getIconSize(brand, "component.phoneInput.icon.actionSize");
@@ -429,13 +424,6 @@ export function PhoneInput({
     ),
     whiteSpace: "nowrap"
   };
-
-  const helperStyles = makeTypographyStyles(
-    brand,
-    helperTypography,
-    String(getRequiredThemeTokenValue(brand, `${helperColorPrefix}.text`)),
-    "typography.fontWeight.regular"
-  );
 
   const actionButtonStyles: CSSProperties = {
     alignItems: "center",
@@ -773,34 +761,15 @@ export function PhoneInput({
       </div>
 
       {showHelper ? (
-        <div
-          style={{
-            alignItems: "flex-start",
-            display: "flex",
-            gap: "4px",
-            minWidth: 0,
-            paddingInline: `${sizeTokens.labelPaddingInline}px`
-          }}
-        >
-          {showHelperIcon ? (
-            <Icon
-              decorative
-              name={resolvedHelperTone === "Destructive" ? "error-outline" : "info-outline"}
-              style={{
-                color: String(getRequiredThemeTokenValue(brand, `${helperColorPrefix}.icon`)),
-                fontSize: `${helperIconSize}px`
-              }}
-            />
-          ) : null}
-          <span
-            style={{
-              ...helperStyles,
-              minWidth: 0
-            }}
-          >
-            {helperText}
-          </span>
-        </div>
+        <HelperText
+          brand={brand}
+          fullWidth
+          helperText={helperText}
+          showIcon={showHelperIcon}
+          size={size}
+          style={{ paddingInline: `${sizeTokens.labelPaddingInline}px` }}
+          tone={resolvedHelperTone === "Destructive" ? "Error" : "Default"}
+        />
       ) : null}
     </div>
   );

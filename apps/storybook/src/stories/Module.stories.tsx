@@ -171,7 +171,7 @@ export function Example() {
 }`;
 
 const meta: Meta<ModuleStoryArgs> = {
-  title: "Components/Module",
+  title: "Widgets/Module",
   component: Module,
   tags: ["autodocs"],
   parameters: {

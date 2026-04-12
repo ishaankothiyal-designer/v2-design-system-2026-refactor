@@ -11,6 +11,7 @@ import {
   type BadgeSize,
   type BadgeType
 } from "@geist/web";
+import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 type BadgeStoryArgs = BadgeProps & {
@@ -45,23 +46,61 @@ function matrixBadge(type: BadgeType, priority: BadgePriority, size: BadgeSize, 
   );
 }
 
-function MatrixStory() {
+function TypeMatrixStory({ type }: { type: BadgeType }) {
+  return (
+    <StoryPage>
+      <StoryCard>
+        <div style={{ display: "grid", gap: 16 }}>
+          <strong style={{ fontSize: 16 }}>{type}</strong>
+          <div style={{ display: "grid", gap: 16 }}>
+            {badgePriorities.map((priority) => (
+              <div key={priority} style={{ display: "grid", gap: 12 }}>
+                <span style={{ fontSize: 13, color: "#64748B" }}>{priority}</span>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+                  {badgeSizes.map((size) => matrixBadge(type, priority, size, "No"))}
+                  {badgeSizes.map((size) => matrixBadge(type, priority, size, "Yes"))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </StoryCard>
+    </StoryPage>
+  );
+}
+
+function createTypeStory(type: BadgeType): StoryObj {
+  return {
+    render: () => <TypeMatrixStory type={type} />,
+    parameters: {
+      controls: { disable: true },
+      docs: {
+        source: {
+          code: badgeVariantsSourceCode
+        }
+      }
+    }
+  };
+}
+
+function TypeIndexStory() {
   return (
     <StoryPage>
       <div style={{ display: "grid", gap: 24 }}>
         {badgeTypes.map((type) => (
           <StoryCard key={type}>
-            <div style={{ display: "grid", gap: 16 }}>
+            <div style={{ display: "grid", gap: 12 }}>
               <strong style={{ fontSize: 16 }}>{type}</strong>
-              <div style={{ display: "grid", gap: 16 }}>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
                 {badgePriorities.map((priority) => (
-                  <div key={priority} style={{ display: "grid", gap: 12 }}>
-                    <span style={{ fontSize: 13, color: "#64748B" }}>{priority}</span>
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
-                      {badgeSizes.map((size) => matrixBadge(type, priority, size, "No"))}
-                      {badgeSizes.map((size) => matrixBadge(type, priority, size, "Yes"))}
-                    </div>
-                  </div>
+                  <Badge
+                    key={`${type}-${priority}`}
+                    type={type}
+                    priority={priority}
+                    size="Small"
+                    pillShape="Yes"
+                    labelText={`${priority}`}
+                  />
                 ))}
               </div>
             </div>
@@ -229,6 +268,9 @@ const configGridStyles: CSSProperties = {
   gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))"
 };
 
+const BADGE_FIGMA_URL =
+  "https://www.figma.com/design/AZgWt0KHVuVeWBAcQ6Jcy4/branch/yxI5H0FhaUg0YR0uhNuqR6/%F0%9F%9A%80-v2.0-Global-Component-Library?node-id=120-1830&t=1zgOyFpiLYMyM4XM-11";
+
 const badgeVariantsSourceCode = `<StoryPage>
   <StoryCard>
     <Badge
@@ -253,11 +295,12 @@ const badgeUiExampleSourceCode = `<Badge
 />`;
 
 const meta: Meta<BadgeStoryArgs> = {
-  title: "Components/Badge",
+  title: "Components/Badges/Badge",
   component: Badge,
   tags: ["autodocs"],
   parameters: {
-    layout: "fullscreen"
+    layout: "fullscreen",
+    design: createFigspecDesign(BADGE_FIGMA_URL)
   },
   args: {
     brand: "Cars24",
@@ -354,8 +397,8 @@ export const Playground: Story = {
   }
 };
 
-export const Variants: StoryObj = {
-  render: () => <MatrixStory />,
+export const Types: StoryObj = {
+  render: () => <TypeIndexStory />,
   parameters: {
     controls: { disable: true },
     docs: {
@@ -363,6 +406,29 @@ export const Variants: StoryObj = {
         code: badgeVariantsSourceCode
       }
     }
+  }
+};
+
+export const DrivePink: StoryObj = createTypeStory("Drive pink");
+export const Error: StoryObj = createTypeStory("Error");
+export const Feature: StoryObj = createTypeStory("Feature");
+export const Information: StoryObj = createTypeStory("Information");
+export const Neutral: StoryObj = createTypeStory("Neutral");
+export const SkySurge: StoryObj = createTypeStory("Sky surge");
+export const Success: StoryObj = createTypeStory("Success");
+export const Warning: StoryObj = createTypeStory("Warning");
+
+export const Sizes: StoryObj = {
+  render: () => <SizesStory />,
+  parameters: {
+    controls: { disable: true }
+  }
+};
+
+export const States: StoryObj = {
+  render: () => <StateGallery />,
+  parameters: {
+    controls: { disable: true }
   }
 };
 

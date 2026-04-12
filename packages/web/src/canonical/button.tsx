@@ -156,9 +156,9 @@ function getSurface(
   hoveredOrPressed: boolean,
   disabled: boolean
 ) {
-  const brandBase = String(getRequiredThemeTokenValue(brand, "color.brand.primary.600"));
-  const brandHover = String(getRequiredThemeTokenValue(brand, "color.brand.primary.700"));
-  const brandSubtle = String(getRequiredThemeTokenValue(brand, "color.brand.primary.50"));
+  const brandBase = String(getRequiredThemeTokenValue(brand, "color.brand.alt.500"));
+  const brandHover = String(getRequiredThemeTokenValue(brand, "color.brand.alt.600"));
+  const brandSubtle = String(getRequiredThemeTokenValue(brand, "color.brand.primary.100"));
   const textPrimary = String(getRequiredThemeTokenValue(brand, "color.text.primary"));
   const textInverse = String(getRequiredThemeTokenValue(brand, "color.text.inverse"));
   const surfaceCanvas = String(getRequiredThemeTokenValue(brand, "color.surface.canvas"));
@@ -219,7 +219,7 @@ function getSurface(
         : makeSurface(brandBase, "transparent", textInverse, textInverse, toAlpha(textInverse, 0.3), textInverse);
     case "Outline":
       return hoveredOrPressed
-        ? makeSurface(brandSubtle, brandHover, brandHover, brandHover, toAlpha(textPrimary, 0.16), brandHover)
+        ? makeSurface(brandSubtle, brandBase, brandBase, brandBase, toAlpha(textPrimary, 0.16), brandBase)
         : makeSurface("transparent", brandBase, brandBase, brandBase, toAlpha(textPrimary, 0.16), brandBase);
     case "Ghost":
       return hoveredOrPressed

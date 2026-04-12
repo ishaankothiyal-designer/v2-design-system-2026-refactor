@@ -219,7 +219,7 @@ const RADIO_FIGMA_URL =
   "https://www.figma.com/design/AZgWt0KHVuVeWBAcQ6Jcy4/branch/yxI5H0FhaUg0YR0uhNuqR6/%F0%9F%9A%80-v2.0-Global-Component-Library?node-id=18067-20353&t=1zgOyFpiLYMyM4XM-11";
 
 const meta: Meta<RadioStoryArgs> = {
-  title: "Components/Radio",
+  title: "Components/Forms/Radio",
   component: Radio,
   tags: ["autodocs"],
   parameters: {
