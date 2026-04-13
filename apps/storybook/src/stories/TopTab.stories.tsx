@@ -234,77 +234,27 @@ function VariantMatrix({
   );
 }
 
-function VariantsStory({ brand }: { brand: DisplayBrandId }) {
+function ConfigurationStoryPage({
+  brand,
+  configuration,
+  title,
+  description
+}: {
+  brand: DisplayBrandId;
+  configuration: TopTabConfiguration;
+  title: string;
+  description: string;
+}) {
   return (
     <StoryPage fullscreen>
       <StoryCard>
         <div style={{ display: "grid", gap: 24 }}>
           <SectionHeading
             brand={brand}
-            title="Top Tab variants"
-            description="Canonical Top Tab matrix covering count 2, 3, 4, 5, and 5+ with Label + icon and Icon only configurations across light and inverse surfaces."
+            title={title}
+            description={description}
           />
-          <div style={{ display: "grid", gap: 24 }}>
-            {topTabConfigurations.map((configuration) => (
-              <VariantMatrix key={configuration} brand={brand} configuration={configuration} />
-            ))}
-          </div>
-        </div>
-      </StoryCard>
-    </StoryPage>
-  );
-}
-
-function MediaVariantsStory({ brand }: { brand: DisplayBrandId }) {
-  return (
-    <StoryPage fullscreen>
-      <StoryCard>
-        <div style={{ display: "grid", gap: 24 }}>
-          <SectionHeading
-            brand={brand}
-            title="Media options"
-            description="The Top Tab configuration set covers icon and image media in both labeled and media-only layouts."
-          />
-          <div style={matrixTableStyles("180px repeat(2, minmax(280px, 1fr))")}>
-            <div style={matrixCornerCellStyles} />
-            <div style={matrixHeaderCellStyles}>
-              <HeaderCell brand={brand} label="Light" />
-            </div>
-            <div style={matrixHeaderCellStyles}>
-              <HeaderCell brand={brand} label="Inverse" />
-            </div>
-
-            {topTabConfigurations.flatMap((configuration) => [
-              <div key={`${configuration}-label`} style={matrixRowLabelCellStyles}>
-                <HeaderCell brand={brand} label={configuration} />
-              </div>,
-              <div key={`${configuration}-light`} style={matrixValueCellStyles}>
-                <TopTab
-                  brand={brand}
-                  configuration={configuration}
-                  items={buildItems(2, configuration)}
-                  style={{ width: 220 }}
-                  value="tab-1"
-                />
-              </div>,
-              <div
-                key={`${configuration}-dark`}
-                style={{
-                  ...matrixValueCellStyles,
-                  background: String(coreTokenCatalog.color.surface.inverse)
-                }}
-              >
-                <TopTab
-                  brand={brand}
-                  configuration={configuration}
-                  inverse
-                  items={buildItems(2, configuration)}
-                  style={{ width: 220 }}
-                  value="tab-1"
-                />
-              </div>
-            ])}
-          </div>
+          <VariantMatrix brand={brand} configuration={configuration} />
         </div>
       </StoryCard>
     </StoryPage>
@@ -478,6 +428,43 @@ export function Example() {
   );
 }`;
 
+function buildTopTabConfigurationSourceCode(configuration: TopTabConfiguration) {
+  const usesImage = configuration === "Label + image" || configuration === "Image only";
+  const includesLabel = configuration === "Label + icon" || configuration === "Label + image";
+
+  return `import { TopTab } from "@geist/web";
+
+const items = [
+  {
+    value: "tab-1",
+    ariaLabel: "Tab 1",${includesLabel ? `
+    label: "Label",` : ""}${usesImage ? `
+    imageSrc: "/path/to/image.png",
+    imageAlt: "Tab image 1"` : `
+    icon: <Icon name="sparkle-filled" decorative />`}
+  },
+  {
+    value: "tab-2",
+    ariaLabel: "Tab 2",${includesLabel ? `
+    label: "Label",` : ""}${usesImage ? `
+    imageSrc: "/path/to/image.png",
+    imageAlt: "Tab image 2"` : `
+    icon: <Icon name="sparkle-filled" decorative />`}
+  }
+];
+
+export function Example() {
+  return (
+    <TopTab
+      brand="Cars24"
+      configuration="${configuration}"
+      items={items}
+      value="tab-1"
+    />
+  );
+}`;
+}
+
 const meta: Meta<TopTabStoryArgs> = {
   title: "Components/Tabs/Top Tab",
   component: TopTabPlaygroundComponent,
@@ -540,19 +527,83 @@ export const Playground: Story = {
   }
 };
 
-export const Variants: Story = {
-  render: ({ brand = "Cars24" }) => <VariantsStory brand={brand} />,
+export const LabelIcon: Story = {
+  render: ({ brand = "Cars24" }) => (
+    <ConfigurationStoryPage
+      brand={brand}
+      configuration="Label + icon"
+      title="Label + Icon"
+      description="Canonical Top Tab matrix for the labeled icon configuration across count 2, 3, 4, 5, and 5+ on light and inverse surfaces."
+    />
+  ),
   parameters: {
-    controls: { disable: true },
-    layout: "fullscreen"
+    controls: { include: ["brand"] },
+    layout: "fullscreen",
+    docs: {
+      source: {
+        code: buildTopTabConfigurationSourceCode("Label + icon")
+      }
+    }
   }
 };
 
-export const MediaOptions: Story = {
-  render: ({ brand = "Cars24" }) => <MediaVariantsStory brand={brand} />,
+export const IconOnly: Story = {
+  render: ({ brand = "Cars24" }) => (
+    <ConfigurationStoryPage
+      brand={brand}
+      configuration="Icon only"
+      title="Icon"
+      description="Canonical Top Tab matrix for the icon-only configuration across count 2, 3, 4, 5, and 5+ on light and inverse surfaces."
+    />
+  ),
   parameters: {
-    controls: { disable: true },
-    layout: "fullscreen"
+    controls: { include: ["brand"] },
+    layout: "fullscreen",
+    docs: {
+      source: {
+        code: buildTopTabConfigurationSourceCode("Icon only")
+      }
+    }
+  }
+};
+
+export const LabelImage: Story = {
+  render: ({ brand = "Cars24" }) => (
+    <ConfigurationStoryPage
+      brand={brand}
+      configuration="Label + image"
+      title="Label + Image"
+      description="Canonical Top Tab matrix for the labeled image configuration across count 2, 3, 4, 5, and 5+ on light and inverse surfaces."
+    />
+  ),
+  parameters: {
+    controls: { include: ["brand"] },
+    layout: "fullscreen",
+    docs: {
+      source: {
+        code: buildTopTabConfigurationSourceCode("Label + image")
+      }
+    }
+  }
+};
+
+export const ImageOnly: Story = {
+  render: ({ brand = "Cars24" }) => (
+    <ConfigurationStoryPage
+      brand={brand}
+      configuration="Image only"
+      title="Image"
+      description="Canonical Top Tab matrix for the image-only configuration across count 2, 3, 4, 5, and 5+ on light and inverse surfaces."
+    />
+  ),
+  parameters: {
+    controls: { include: ["brand"] },
+    layout: "fullscreen",
+    docs: {
+      source: {
+        code: buildTopTabConfigurationSourceCode("Image only")
+      }
+    }
   }
 };
 

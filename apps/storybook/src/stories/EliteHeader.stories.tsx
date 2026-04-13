@@ -1,14 +1,30 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import {
+  Button,
+  Divider,
   EliteHeader,
+  Icon,
+  Module,
+  SearchBar,
+  Tag,
+  Text,
+  TopTab,
   type EliteBadgeName,
   type EliteHeaderBrand,
   type EliteHeaderProps,
   type EliteHeaderType,
-  type EliteHeaderVariant
+  type EliteHeaderVariant,
+  type AvatarAppearance
 } from "@geist/web";
 import { createFigspecDesign } from "../storybookFigma";
+import {
+  StoryMatrix,
+  StoryMatrixCornerCell,
+  StoryMatrixHeaderCell,
+  StoryMatrixRowLabelCell,
+  StoryMatrixValueCell
+} from "../storybook-matrix";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 const ELITE_HEADER_FIGMA_URL =
@@ -18,18 +34,8 @@ const supportedBrands: EliteHeaderBrand[] = ["Cars24"];
 const badgeNames: EliteBadgeName[] = ["Elite", "All cars"];
 const eliteTypes: EliteHeaderType[] = ["Normal", "Search"];
 const eliteVariants: EliteHeaderVariant[] = ["Light", "Dark"];
-const sampleAvatarDataUri =
-  "data:image/svg+xml;utf8," +
-  encodeURIComponent(`
-    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
-      <rect width="64" height="64" rx="32" fill="#FFE7D9"/>
-      <circle cx="32" cy="24" r="11" fill="#F5B19A"/>
-      <path d="M14 58C16.6 45.2 24 39 32 39C40 39 47.4 45.2 50 58" fill="#D7745A"/>
-      <circle cx="28" cy="22" r="1.5" fill="#6B2E1A"/>
-      <circle cx="36" cy="22" r="1.5" fill="#6B2E1A"/>
-      <path d="M28 29C29.2 30.6 30.7 31.4 32 31.4C33.3 31.4 34.8 30.6 36 29" stroke="#6B2E1A" stroke-width="2" stroke-linecap="round"/>
-    </svg>
-  `);
+const avatarAppearances: AvatarAppearance[] = ["Icon", "Image", "Initials"];
+const avatarImageSrc = new URL("./assets/avatar-image-variant.png", import.meta.url).href;
 
 function PreviewFrame({ children }: { children: ReactNode }) {
   return <div style={{ width: 360 }}>{children}</div>;
@@ -47,52 +53,208 @@ function PlaygroundStory(args: EliteHeaderProps) {
   );
 }
 
-function VariantsStory() {
+function EliteMobileScreenStory(args: EliteHeaderProps) {
   return (
     <StoryPage fullscreen>
-      <div style={{ display: "grid", gap: 28 }}>
-        {eliteTypes.map((type) => (
-          <section key={type} style={{ display: "grid", gap: 12 }}>
-            <div style={{ fontSize: 14, fontWeight: 600, lineHeight: "18px" }}>Type = {type}</div>
-            <div style={variantGridStyles}>
-              {eliteVariants.map((variant) => (
-                <div key={`${type}-${variant}`} style={variantCellStyles}>
-                  <div style={{ color: "#64748B", fontSize: 12, lineHeight: "16px" }}>{variant}</div>
-                  <PreviewFrame>
-                    <EliteHeader
-                      avatarSrc={sampleAvatarDataUri}
-                      title="Gurugram"
-                      subtitle="NCR, India"
-                      type={type}
-                      variant={variant}
-                    />
-                  </PreviewFrame>
+      <div
+        style={{
+          alignItems: "flex-start",
+          display: "flex",
+          justifyContent: "center",
+          padding: 24
+        }}
+      >
+        <div
+          style={{
+            background: "#F8FAFC",
+            borderRadius: 28,
+            boxShadow: "0 24px 60px rgba(15, 23, 42, 0.12)",
+            overflow: "hidden",
+            width: 360
+          }}
+        >
+          <EliteHeader {...args} />
+
+          <div
+            style={{
+              display: "grid",
+              gap: 16,
+              padding: 16
+            }}
+          >
+            <SearchBar
+              brand="Cars24"
+              color="Solid White"
+              defaultValue="SUV under 20 lakhs"
+              placeholder="Search elite cars"
+              size="Small"
+            />
+
+            <TopTab
+              brand="Cars24"
+              configuration="Label + icon"
+              items={[
+                {
+                  value: "featured",
+                  label: "Featured",
+                  iconName: "star-outline"
+                },
+                {
+                  value: "new",
+                  label: "New drops",
+                  iconName: "sparkle-line",
+                  showNotificationBadge: true
+                },
+                {
+                  value: "saved",
+                  label: "Saved",
+                  iconName: "bookmark-banner-flag-tag-outline"
+                }
+              ]}
+              value="featured"
+            />
+
+            <Module
+              bodyMinHeight="auto"
+              brand="Cars24"
+              description="Curated cars with inspection confidence and instant test drive support."
+              headerActionLabel="See all"
+              primaryAction={{
+                label: "Browse Elite cars"
+              }}
+              secondaryAction={{
+                label: "Save filters"
+              }}
+              showHeaderAction
+              showSectionHeader
+              showTag={false}
+              subtitle="Premium selection"
+              title="Recommended for you"
+            >
+              <div style={{ display: "grid", gap: 12 }}>
+                <div style={{ display: "grid", gap: 6 }}>
+                  <div style={{ alignItems: "center", display: "flex", gap: 8, flexWrap: "wrap" }}>
+                    <Tag brand="Cars24" color="Green" label="Inspected" priority="Low" size="Large" />
+                    <Text as="strong" brand="Cars24" size="md">
+                      2022 Hyundai Creta SX(O)
+                    </Text>
+                  </div>
+                  <Text as="p" brand="Cars24" size="sm" tone="secondary" style={{ margin: 0 }}>
+                    14,320 km • Automatic • Petrol
+                  </Text>
                 </div>
-              ))}
-            </div>
-          </section>
-        ))}
+
+                <Divider brand="Cars24" />
+
+                <div style={{ display: "grid", gap: 6 }}>
+                  <div style={{ alignItems: "center", display: "flex", gap: 8, flexWrap: "wrap" }}>
+                    <Tag brand="Cars24" color="Blue" label="Top rated" priority="Low" size="Large" />
+                    <Text as="strong" brand="Cars24" size="md">
+                      2021 Kia Seltos GTX+
+                    </Text>
+                  </div>
+                  <Text as="p" brand="Cars24" size="sm" tone="secondary" style={{ margin: 0 }}>
+                    18,980 km • Turbo petrol • 7DCT
+                  </Text>
+                </div>
+              </div>
+            </Module>
+
+            <Module
+              bodyMinHeight="auto"
+              brand="Cars24"
+              description="Benefits unlocked with your Elite membership."
+              showButtonGroup={false}
+              showHeaderAction={false}
+              showTag={false}
+              subtitle="Ownership experience"
+              title="Why Elite"
+            >
+              <div style={{ display: "grid", gap: 12 }}>
+                <div style={{ alignItems: "center", display: "flex", justifyContent: "space-between", gap: 12 }}>
+                  <div style={{ display: "grid", gap: 4 }}>
+                    <Text as="strong" brand="Cars24" size="sm">
+                      Priority test drives
+                    </Text>
+                    <Text as="p" brand="Cars24" size="xs" tone="secondary" style={{ margin: 0 }}>
+                      Book premium slots before they open publicly.
+                    </Text>
+                  </div>
+                  <Tag brand="Cars24" color="Brand blue" label="Elite" priority="Low" size="Large" />
+                </div>
+
+                <Divider brand="Cars24" />
+
+                <div style={{ alignItems: "center", display: "flex", justifyContent: "space-between", gap: 12 }}>
+                  <div style={{ display: "grid", gap: 4 }}>
+                    <Text as="strong" brand="Cars24" size="sm">
+                      Dedicated relationship manager
+                    </Text>
+                    <Text as="p" brand="Cars24" size="xs" tone="secondary" style={{ margin: 0 }}>
+                      Assistance from shortlist to delivery.
+                    </Text>
+                  </div>
+                  <Button brand="Cars24" shape="Pill" size="Small" styleVariant="Outline">
+                    Talk now
+                  </Button>
+                </div>
+              </div>
+            </Module>
+          </div>
+        </div>
       </div>
     </StoryPage>
   );
 }
 
-const variantGridStyles: CSSProperties = {
-  columnGap: 24,
-  display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(360px, max-content))",
-  rowGap: 20
-};
+function TypeStory({
+  brand,
+  type
+}: {
+  brand?: EliteHeaderBrand;
+  type: EliteHeaderType;
+}) {
+  const activeBrand = (brand ?? "Cars24") as EliteHeaderBrand;
 
-const variantCellStyles: CSSProperties = {
-  display: "grid",
-  gap: 10
-};
+  return (
+    <StoryPage fullscreen>
+      <StoryCard>
+        <StoryMatrix columns="180px repeat(2, minmax(320px, 1fr))">
+          <StoryMatrixCornerCell />
+          {eliteVariants.map((variant) => (
+            <StoryMatrixHeaderCell key={`${type}-${variant}-header`}>
+              <div style={{ color: "#64748B", fontSize: 12, lineHeight: "16px" }}>{variant}</div>
+            </StoryMatrixHeaderCell>
+          ))}
 
-const eliteHeaderVariantsSourceCode = `<StoryPage fullscreen>
+          <StoryMatrixRowLabelCell minHeight={160}>
+            <div style={{ fontSize: 14, fontWeight: 600, lineHeight: "18px" }}>{type}</div>
+          </StoryMatrixRowLabelCell>
+          {eliteVariants.map((variant) => (
+            <StoryMatrixValueCell key={`${type}-${variant}`} minHeight={160}>
+              <PreviewFrame>
+                <EliteHeader
+                  avatarSrc={avatarImageSrc}
+                  brand={activeBrand}
+                  title="Gurugram"
+                  subtitle="NCR, India"
+                  type={type}
+                  variant={variant}
+                />
+              </PreviewFrame>
+            </StoryMatrixValueCell>
+          ))}
+        </StoryMatrix>
+      </StoryCard>
+    </StoryPage>
+  );
+}
+
+function getEliteHeaderTypeSourceCode(type: EliteHeaderType) {
+  return `<StoryPage fullscreen>
   <EliteHeader
     brand="Cars24"
-    type="Normal"
+    type="${type}"
     variant="Light"
     title="Gurugram"
     subtitle="NCR, India"
@@ -100,20 +262,79 @@ const eliteHeaderVariantsSourceCode = `<StoryPage fullscreen>
 
   <EliteHeader
     brand="Cars24"
-    type="Search"
+    type="${type}"
     variant="Dark"
+    title="Gurugram"
+    subtitle="NCR, India"
     searchPlaceholder="Search"
   />
 </StoryPage>`;
+}
 
-const eliteHeaderUiExampleSourceCode = `<EliteHeader
-  brand="Cars24"
-  type="Normal"
-  variant="Dark"
-  title="Gurugram"
-  subtitle="NCR, India"
-  avatarSrc="data:image/svg+xml;utf8,..."
-/>`;
+const eliteHeaderUiExampleSourceCode = `<StoryPage fullscreen>
+  <EliteHeader
+    brand="Cars24"
+    type="Normal"
+    variant="Dark"
+    title="Gurugram"
+    subtitle="NCR, India"
+    leadingAction={{
+      icon: <Icon name="square-grid-circle-outline" decorative />,
+      label: "Open sections"
+    }}
+    action1={{
+      icon: <Icon name="heart-like-outline" decorative />,
+      label: "Saved cars"
+    }}
+    action2={{
+      icon: <Icon name="bell-outline" decorative />,
+      label: "Notifications"
+    }}
+    avatarAppearance="Image"
+    avatarSrc="/stories/assets/avatar-image-variant.png"
+  />
+
+  <SearchBar
+    brand="Cars24"
+    color="Solid White"
+    defaultValue="SUV under 20 lakhs"
+    placeholder="Search elite cars"
+    size="Small"
+  />
+
+  <TopTab
+    brand="Cars24"
+    configuration="Label + icon"
+    items={[
+      {
+        value: "featured",
+        label: "Featured",
+        iconName: "star-outline"
+      },
+      {
+        value: "new",
+        label: "New drops",
+        iconName: "sparkle-line",
+        showNotificationBadge: true
+      },
+      {
+        value: "saved",
+        label: "Saved",
+        iconName: "bookmark-banner-flag-tag-outline"
+      }
+    ]}
+    value="featured"
+  />
+
+  <Module
+    brand="Cars24"
+    title="Recommended for you"
+    subtitle="Premium selection"
+    description="Curated cars with inspection confidence and instant test drive support."
+    primaryAction={{ label: "Browse Elite cars" }}
+    secondaryAction={{ label: "Save filters" }}
+  />
+</StoryPage>`;
 
 const meta = {
   title: "Components/Headers/Elite Header",
@@ -139,7 +360,9 @@ const meta = {
     showAvatar: true,
     badgeName: "Elite",
     badgeLabel: "Elite",
-    avatarSrc: sampleAvatarDataUri,
+    avatarAppearance: "Image",
+    avatarSrc: avatarImageSrc,
+    avatarInitials: "MT",
     searchPlaceholder: "Search"
   },
   argTypes: {
@@ -185,6 +408,16 @@ const meta = {
     showAvatar: {
       control: "boolean"
     },
+    avatarAppearance: {
+      control: "inline-radio",
+      options: avatarAppearances
+    },
+    avatarAlt: {
+      control: "text"
+    },
+    avatarInitials: {
+      control: "text"
+    },
     badgeName: {
       control: "inline-radio",
       options: badgeNames
@@ -227,24 +460,48 @@ export const Playground: Story = {
   render: PlaygroundStory
 };
 
-export const Variants: Story = {
-  render: VariantsStory,
+export const Normal: Story = {
+  render: ({ brand = "Cars24" }) => <TypeStory brand={brand} type="Normal" />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: eliteHeaderVariantsSourceCode
+        code: getEliteHeaderTypeSourceCode("Normal")
+      }
+    }
+  }
+};
+
+export const Search: Story = {
+  render: ({ brand = "Cars24" }) => <TypeStory brand={brand} type="Search" />,
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: {
+      source: {
+        code: getEliteHeaderTypeSourceCode("Search")
       }
     }
   }
 };
 
 export const UiExample: Story = {
-  render: PlaygroundStory,
+  render: EliteMobileScreenStory,
   args: {
     brand: "Cars24",
     type: "Normal",
-    variant: "Dark"
+    variant: "Dark",
+    leadingAction: {
+      icon: <Icon name="square-grid-circle-outline" decorative />,
+      label: "Open sections"
+    },
+    action1: {
+      icon: <Icon name="heart-like-outline" decorative />,
+      label: "Saved cars"
+    },
+    action2: {
+      icon: <Icon name="bell-outline" decorative />,
+      label: "Notifications"
+    }
   },
   parameters: {
     docs: {

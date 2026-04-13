@@ -385,6 +385,7 @@ export function RegInput({
   const borderWidth = Number(getRequiredThemeTokenValue(brand, "component.textInput.border.width"));
   const fieldRadius = getFieldRadius(brand, size);
   const actionRadius = Number(getRequiredThemeTokenValue(brand, "radius.pill"));
+  const badgeGap = Number(getRequiredThemeTokenValue(brand, "spacing.1"));
   const actionIconSize = Number(getRequiredThemeTokenValue(brand, "component.phoneInput.icon.actionSize"));
   const captureIconSize = Number(getRequiredThemeTokenValue(brand, "component.textInput.icon.affixSize"));
   const caretWidth = Number(getRequiredThemeTokenValue(brand, "component.textInput.caret.width"));
@@ -395,6 +396,10 @@ export function RegInput({
   const showHelper = helperText !== undefined && helperText !== null;
   const labelSize = getLabelSize(size);
   const showClearAction = previewMode ? forceState === "Typing" || forceState === "Filled" : hasValue;
+  const badgeInnerWidth = 21;
+  const badgeInnerHeight = 22.52;
+  const badgePaddingInlineStart = 10;
+  const badgePaddingInlineEnd = Number(getRequiredThemeTokenValue(brand, "spacing.2"));
   const resolvedTrailingAction = trailingAction ?? (showClearAction ? "Dismiss" : "Camera");
   const showDismissAction = resolvedTrailingAction === "Dismiss";
   const showFramedTrailingAction = resolvedTrailingAction !== "Dismiss";
@@ -424,19 +429,22 @@ export function RegInput({
     alignItems: "center",
     alignSelf: "stretch",
     background: badgeBackground,
+    boxSizing: "border-box",
     display: "flex",
     flexShrink: 0,
     justifyContent: "center",
-    padding: `0 ${Number(getRequiredThemeTokenValue(brand, "spacing.2"))}px 0 ${Number(
-      getRequiredThemeTokenValue(brand, "spacing.3")
-    )}px`
+    padding: `0 ${badgePaddingInlineEnd}px 0 ${badgePaddingInlineStart}px`
   };
 
   const badgeContentStyles: CSSProperties = {
     alignItems: "center",
-    display: "grid",
-    gap: `${Number(getRequiredThemeTokenValue(brand, "spacing.1"))}px`,
-    justifyItems: "center"
+    display: "flex",
+    flexDirection: "column",
+    gap: `${badgeGap}px`,
+    height: `${badgeInnerHeight}px`,
+    justifyContent: "center",
+    lineHeight: 0,
+    width: `${badgeInnerWidth}px`
   };
 
   const badgeGlyphStyles: CSSProperties = {
@@ -458,6 +466,7 @@ export function RegInput({
       fontWeightPath: "typography.fontWeight.medium",
       typography: badgeTypography
     }),
+    lineHeight: `${badgeTypography.lineHeight}px`,
     textTransform: "uppercase"
   };
 

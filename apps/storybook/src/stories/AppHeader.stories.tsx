@@ -5,11 +5,19 @@ import {
   Icon,
   Text,
   type AppHeaderBrand,
+  type AvatarAppearance,
   type AppHeaderLevel,
   type AppHeaderProps,
   type AppHeaderVariant
 } from "@geist/web";
 import { createFigspecDesign } from "../storybookFigma";
+import {
+  StoryMatrix,
+  StoryMatrixCornerCell,
+  StoryMatrixHeaderCell,
+  StoryMatrixRowLabelCell,
+  StoryMatrixValueCell
+} from "../storybook-matrix";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 const APP_HEADER_L1_FIGMA_URL =
@@ -20,6 +28,8 @@ const APP_HEADER_L2_FIGMA_URL =
 const supportedBrands: AppHeaderBrand[] = ["Cars24", "CarInfo", "VehicleInfo", "Team BHP"];
 const headerLevels: AppHeaderLevel[] = ["Page - L1", "Page - L2"];
 const headerVariants: AppHeaderVariant[] = ["Brand", "Light", "Dark"];
+const avatarAppearances: AvatarAppearance[] = ["Icon", "Image", "Initials"];
+const avatarImageSrc = new URL("./assets/avatar-image-variant.png", import.meta.url).href;
 
 function createPillAction() {
   return {
@@ -45,67 +55,60 @@ function PlaygroundStory(args: AppHeaderProps) {
   );
 }
 
-function VariantsStory() {
+function VariantStory({
+  brand,
+  variant
+}: {
+  brand?: AppHeaderBrand;
+  variant: AppHeaderVariant;
+}) {
+  const activeBrand = (brand ?? "Cars24") as AppHeaderBrand;
+
   return (
     <StoryPage fullscreen>
-      <div style={{ display: "grid", gap: 28 }}>
-        {headerLevels.map((level) => (
-          <section key={level} style={{ display: "grid", gap: 16 }}>
-            <Text as="strong" brand="Cars24" size="md">
-              {level}
+      <StoryCard>
+        <StoryMatrix columns="180px repeat(2, minmax(320px, 1fr))">
+          <StoryMatrixCornerCell />
+          <StoryMatrixHeaderCell>
+            <Text as="strong" brand={activeBrand} size="sm" tone="secondary">
+              Without Pill
             </Text>
+          </StoryMatrixHeaderCell>
+          <StoryMatrixHeaderCell>
+            <Text as="strong" brand={activeBrand} size="sm" tone="secondary">
+              With Pill
+            </Text>
+          </StoryMatrixHeaderCell>
 
-            {headerVariants.map((variant) => (
-              <section key={`${level}-${variant}`} style={{ display: "grid", gap: 12 }}>
-                <Text as="span" brand="Cars24" size="xs" tone="secondary">
-                  {variant}
-                </Text>
-
-                <div style={variantGridStyles}>
-                  <div style={variantCellStyles}>
-                    <Text as="span" brand="Cars24" size="xs" tone="secondary">
-                      Pill Button = False
-                    </Text>
-                    <PreviewFrame>
-                      <AppHeader level={level} variant={variant} />
-                    </PreviewFrame>
-                  </div>
-
-                  <div style={variantCellStyles}>
-                    <Text as="span" brand="Cars24" size="xs" tone="secondary">
-                      Pill Button = True
-                    </Text>
-                    <PreviewFrame>
-                      <AppHeader level={level} pillAction={createPillAction()} variant={variant} />
-                    </PreviewFrame>
-                  </div>
-                </div>
-              </section>
-            ))}
-          </section>
-        ))}
-      </div>
+          {headerLevels.flatMap((level) => [
+            <StoryMatrixRowLabelCell key={`${level}-label`} minHeight={180}>
+              <Text as="strong" brand={activeBrand} size="sm" tone="secondary">
+                {level}
+              </Text>
+            </StoryMatrixRowLabelCell>,
+            <StoryMatrixValueCell key={`${level}-plain`} minHeight={180}>
+              <PreviewFrame>
+                <AppHeader brand={activeBrand} level={level} variant={variant} />
+              </PreviewFrame>
+            </StoryMatrixValueCell>,
+            <StoryMatrixValueCell key={`${level}-pill`} minHeight={180}>
+              <PreviewFrame>
+                <AppHeader brand={activeBrand} level={level} pillAction={createPillAction()} variant={variant} />
+              </PreviewFrame>
+            </StoryMatrixValueCell>
+          ])}
+        </StoryMatrix>
+      </StoryCard>
     </StoryPage>
   );
 }
 
-const variantGridStyles: CSSProperties = {
-  columnGap: 24,
-  display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(300px, max-content))",
-  rowGap: 20
-};
-
-const variantCellStyles: CSSProperties = {
-  display: "grid",
-  gap: 10
-};
-
-const appHeaderVariantsSourceCode = `<StoryPage fullscreen>
+function getAppHeaderVariantSourceCode(variant: AppHeaderVariant) {
+  return `<StoryPage fullscreen>
   <AppHeader
     brand="Cars24"
     level="Page - L1"
-    variant="Brand"
+    variant="${variant}"
     showAction1
     showAction2
     showAvatar
@@ -115,7 +118,7 @@ const appHeaderVariantsSourceCode = `<StoryPage fullscreen>
   <AppHeader
     brand="Cars24"
     level="Page - L2"
-    variant="Brand"
+    variant="${variant}"
     title="Page title"
     subtitle="Subtext"
     pillAction={{
@@ -125,6 +128,7 @@ const appHeaderVariantsSourceCode = `<StoryPage fullscreen>
     }}
   />
 </StoryPage>`;
+}
 
 const appHeaderUiExampleSourceCode = `<AppHeader
   brand="Cars24"
@@ -161,6 +165,10 @@ const meta = {
     showAction1: true,
     showAction2: true,
     showAvatar: true,
+    avatarAppearance: "Icon",
+    avatarAlt: "Profile image",
+    avatarImageSrc,
+    avatarInitials: "MT",
     showLocationChevron: true,
     pillAction: null
   },
@@ -207,6 +215,19 @@ const meta = {
     showAvatar: {
       control: "boolean"
     },
+    avatarAppearance: {
+      control: "inline-radio",
+      options: avatarAppearances
+    },
+    avatarAlt: {
+      control: "text"
+    },
+    avatarInitials: {
+      control: "text"
+    },
+    avatarImageSrc: {
+      control: false
+    },
     showLocationChevron: {
       control: "boolean"
     },
@@ -248,13 +269,37 @@ export const Playground: Story = {
   render: PlaygroundStory
 };
 
-export const Variants: Story = {
-  render: VariantsStory,
+export const Brand: Story = {
+  render: ({ brand = "Cars24" }) => <VariantStory brand={brand} variant="Brand" />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: appHeaderVariantsSourceCode
+        code: getAppHeaderVariantSourceCode("Brand")
+      }
+    }
+  }
+};
+
+export const Light: Story = {
+  render: ({ brand = "Cars24" }) => <VariantStory brand={brand} variant="Light" />,
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: {
+      source: {
+        code: getAppHeaderVariantSourceCode("Light")
+      }
+    }
+  }
+};
+
+export const Dark: Story = {
+  render: ({ brand = "Cars24" }) => <VariantStory brand={brand} variant="Dark" />,
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: {
+      source: {
+        code: getAppHeaderVariantSourceCode("Dark")
       }
     }
   }

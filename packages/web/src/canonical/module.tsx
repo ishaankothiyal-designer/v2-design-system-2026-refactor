@@ -105,7 +105,9 @@ export function Module({
           description={description}
           inverse={inverse}
           showAction={showHeaderAction}
+          showDescription={Boolean(description)}
           showTag={showTag}
+          showSubtitle={Boolean(subtitle)}
           subtitle={subtitle}
           subtitleIcon={subtitleIcon}
           tagLabel={tagLabel}

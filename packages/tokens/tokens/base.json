@@ -1338,22 +1338,22 @@
           "solid": {
             "primary": {
               "rest": {
-                "background": "#155EEF",
-                "foreground": "#FFFFFF"
+                "background": "#FFFFFF",
+                "foreground": "#020617"
               },
               "hover": {
-                "background": "#004EEB",
-                "foreground": "#FFFFFF"
+                "background": "#F1F5F9",
+                "foreground": "#020617"
               }
             },
             "black": {
               "rest": {
-                "background": "#0A0A0A",
-                "foreground": "#FFFFFF"
+                "background": "#F1F5F9",
+                "foreground": "#020617"
               },
               "hover": {
-                "background": "#171717",
-                "foreground": "#FFFFFF"
+                "background": "#E2E8F0",
+                "foreground": "#020617"
               }
             }
           },

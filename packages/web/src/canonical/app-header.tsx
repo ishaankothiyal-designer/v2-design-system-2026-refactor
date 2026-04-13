@@ -1,5 +1,6 @@
 import type { ButtonHTMLAttributes, CSSProperties, HTMLAttributes, ReactNode } from "react";
 import { getRequiredThemeTokenValue } from "../theme";
+import { Avatar, type AvatarAppearance } from "./avatar";
 import { BrandLogo, type BrandLogoBrand } from "./brand-logo";
 import { Button, type ButtonProps } from "./button";
 import { Icon, type IconProps } from "./icon";
@@ -43,6 +44,10 @@ export interface AppHeaderProps extends Omit<HTMLAttributes<HTMLDivElement>, "ti
   showAction1?: boolean;
   showAction2?: boolean;
   showAvatar?: boolean;
+  avatarAppearance?: AvatarAppearance;
+  avatarAlt?: string;
+  avatarImageSrc?: string;
+  avatarInitials?: string;
   locationIcon?: IconProps["name"];
   showLocationChevron?: boolean;
   onLocationClick?: ButtonHTMLAttributes<HTMLButtonElement>["onClick"];
@@ -162,6 +167,10 @@ export function AppHeader({
   showAction1 = true,
   showAction2 = true,
   showAvatar = true,
+  avatarAppearance = "Icon",
+  avatarAlt = "Profile image",
+  avatarImageSrc,
+  avatarInitials = "MT",
   locationIcon = "map-filled",
   showLocationChevron = true,
   onLocationClick,
@@ -198,15 +207,13 @@ export function AppHeader({
     actions ??
     [
       ...(showAction1 ? [action1] : []),
-      ...(showAction2 ? [action2] : []),
-      ...(showAvatar ? [avatarAction] : [])
+      ...(showAction2 ? [action2] : [])
     ];
   const l2ResolvedActions =
     actions ??
     [
       ...(pillAction ? (showAction2 ? [action2] : []) : showAction1 ? [action1] : []),
-      ...(pillAction ? (showAvatar ? [avatarAction] : []) : showAction2 ? [action2] : []),
-      ...(!pillAction && showAvatar ? [avatarAction] : [])
+      ...(!pillAction && showAction2 ? [action2] : [])
     ];
 
   const rootStyles: CSSProperties = {
@@ -305,6 +312,63 @@ export function AppHeader({
       ) : null}
     </span>
   );
+
+  const avatarNode = showAvatar ? (
+    (() => {
+      const avatarProps = {
+        adornment: "None" as const,
+        appearance: avatarAppearance,
+        brand,
+        icon: avatarAction.icon,
+        imageAlt: avatarAlt,
+        initials: avatarInitials,
+        onDark: variant !== "Light",
+        size: "Extra small" as const,
+        ...(avatarImageSrc ? { imageSrc: avatarImageSrc } : {})
+      };
+
+      return avatarAction.onClick ? (
+        <button
+          aria-label={avatarAction["aria-label"] ?? avatarAction.label}
+          onClick={avatarAction.onClick}
+          style={{
+            alignItems: "center",
+            appearance: "none",
+            background: "transparent",
+            border: "none",
+            borderRadius: "50%",
+            cursor: "pointer",
+            display: "inline-flex",
+            flexShrink: 0,
+            height: actionControlExtent,
+            justifyContent: "center",
+            padding: 0,
+            width: actionControlExtent,
+            ...(avatarAction.style ?? {})
+          }}
+          type="button"
+        >
+          <Avatar {...avatarProps} />
+        </button>
+      ) : (
+        <span
+          aria-label={avatarAction["aria-label"] ?? avatarAction.label}
+          role="img"
+          style={{
+            alignItems: "center",
+            display: "inline-flex",
+            flexShrink: 0,
+            height: actionControlExtent,
+            justifyContent: "center",
+            width: actionControlExtent,
+            ...(avatarAction.style ?? {})
+          }}
+        >
+          <Avatar {...avatarProps} />
+        </span>
+      );
+    })()
+  ) : null;
 
   if (level === "Page - L2") {
     const rootStyles: CSSProperties = {
@@ -443,6 +507,8 @@ export function AppHeader({
               styleVariant={variant === "Light" ? "Subtle - Black" : "Subtle - Primary"}
             />
           ))}
+
+          {avatarNode}
         </div>
       </div>
     );
@@ -491,6 +557,8 @@ export function AppHeader({
               styleVariant={variant === "Light" ? "Subtle - Black" : "Subtle - Primary"}
             />
           ))}
+
+          {avatarNode}
         </div>
       </div>
 

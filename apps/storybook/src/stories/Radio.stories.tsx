@@ -1,10 +1,17 @@
-import type { ChangeEvent, CSSProperties } from "react";
+import type { ChangeEvent } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "storybook/preview-api";
-import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
 import { Radio, Text, type RadioProps, type RadioSize } from "@geist/web";
 import { createFigspecDesign } from "../storybookFigma";
-import { StoryCard, StoryPage } from "../storybook-shell";
+import {
+  StoryMatrix,
+  StoryMatrixCornerCell,
+  StoryMatrixHeaderCell,
+  StoryMatrixRowLabelCell,
+  StoryMatrixValueCell
+} from "../storybook-matrix";
+import { StoryPage } from "../storybook-shell";
 
 const radioSizes: RadioSize[] = ["Small", "Medium"];
 const documentedStates = [
@@ -20,52 +27,14 @@ function renderPlayground(args: RadioStoryArgs) {
   const [{ checked = false }, updateArgs] = useArgs<RadioStoryArgs>();
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
-    updateArgs({
-      checked: event.currentTarget.checked
-    });
-
+    updateArgs({ checked: event.currentTarget.checked });
     args.onChange?.(event);
   }
 
-  return (
-    <Radio
-      {...args}
-      checked={checked}
-      onChange={handleChange}
-    />
-  );
+  return <Radio {...args} checked={checked} onChange={handleChange} />;
 }
 
-function SectionHeading({
-  brand,
-  title,
-  description
-}: {
-  brand: DisplayBrandId;
-  title: string;
-  description?: string;
-}) {
-  return (
-    <div style={{ display: "grid", gap: 6 }}>
-      <Text brand={brand} as="strong" size="md">
-        {title}
-      </Text>
-      {description ? (
-        <Text brand={brand} as="p" size="sm" tone="secondary">
-          {description}
-        </Text>
-      ) : null}
-    </div>
-  );
-}
-
-function HeaderCell({
-  brand,
-  label
-}: {
-  brand: DisplayBrandId;
-  label: string;
-}) {
+function HeaderCell({ brand, label }: { brand: DisplayBrandId; label: string }) {
   return (
     <Text brand={brand} as="strong" size="sm" tone="secondary" style={{ display: "block" }}>
       {label}
@@ -73,135 +42,59 @@ function HeaderCell({
   );
 }
 
-function MatrixCell({
+function StateMatrixStory({
   brand,
-  size,
   state
 }: {
   brand: DisplayBrandId;
-  size: RadioSize;
   state: (typeof documentedStates)[number];
 }) {
   return (
-    <Radio
-      aria-label={`${brand} ${size} ${state.label}`}
-      brand={brand}
-      checked={state.checked}
-      disabled={state.disabled}
-      size={size}
-    />
-  );
-}
-
-function BrandVariantMatrixStory({ brand }: { brand: DisplayBrandId }) {
-  return (
     <StoryPage fullscreen>
-      <StoryCard>
-        <div style={{ display: "grid", gap: 20 }}>
-          <SectionHeading
-            brand={brand}
-            title="Radio Variants"
-            description="Brand-specific state matrix across the supported radio sizes."
-          />
-          <div style={matrixTableStyles()}>
-            <div style={matrixCornerCellStyles} />
-            {documentedStates.map((state) => (
-              <div key={`${brand}-${state.key}-header`} style={matrixHeaderCellStyles}>
-                <HeaderCell brand={brand} label={state.label} />
-              </div>
-            ))}
+      <StoryMatrix columns="180px repeat(2, minmax(140px, 1fr))">
+        <StoryMatrixCornerCell />
+        {radioSizes.map((size) => (
+          <StoryMatrixHeaderCell key={`${state.key}-${size}-header`}>
+            <HeaderCell brand={brand} label={size} />
+          </StoryMatrixHeaderCell>
+        ))}
 
-            {radioSizes.flatMap((size) => [
-              <div key={`${brand}-${size}-label`} style={matrixRowLabelCellStyles}>
-                <HeaderCell brand={brand} label={size} />
-              </div>,
-              ...documentedStates.map((state) => (
-                <div key={`${brand}-${size}-${state.key}`} style={matrixValueCellStyles}>
-                  <MatrixCell brand={brand} size={size} state={state} />
-                </div>
-              ))
-            ])}
-          </div>
-        </div>
-      </StoryCard>
+        <StoryMatrixRowLabelCell minHeight={96}>
+          <HeaderCell brand={brand} label={state.label} />
+        </StoryMatrixRowLabelCell>
+        {radioSizes.map((size) => (
+          <StoryMatrixValueCell key={`${state.key}-${size}`} minHeight={96}>
+            <Radio
+              aria-label={`${brand} ${size} ${state.label}`}
+              brand={brand}
+              checked={state.checked}
+              disabled={state.disabled}
+              size={size}
+            />
+          </StoryMatrixValueCell>
+        ))}
+      </StoryMatrix>
     </StoryPage>
   );
 }
 
-function matrixTableStyles(): CSSProperties {
-  return {
-    border: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    borderRadius: 20,
-    display: "grid",
-    gridTemplateColumns: "180px repeat(4, minmax(140px, 1fr))",
-    overflow: "hidden"
-  };
-}
-
-const matrixHeaderCellStyles: CSSProperties = {
-  alignItems: "center",
-  background: String(coreTokenCatalog.color.surface.canvas),
-  borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  display: "flex",
-  justifyContent: "center",
-  minHeight: 68,
-  padding: "16px 20px"
-};
-
-const matrixCornerCellStyles: CSSProperties = {
-  background: String(coreTokenCatalog.color.surface.canvas),
-  borderBottom: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  minHeight: 68
-};
-
-const matrixRowLabelCellStyles: CSSProperties = {
-  alignItems: "center",
-  background: String(coreTokenCatalog.color.surface.canvas),
-  borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  display: "flex",
-  justifyContent: "flex-start",
-  minHeight: 96,
-  padding: "20px 16px"
-};
-
-const matrixValueCellStyles: CSSProperties = {
-  display: "grid",
-  alignItems: "center",
-  background: String(coreTokenCatalog.color.surface.canvas),
-  borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  justifyItems: "center",
-  minHeight: 96,
-  padding: "16px 20px"
-};
-
-function buildRadioVariantsSourceCode(brand: DisplayBrandId) {
+function buildRadioStateSourceCode(state: (typeof documentedStates)[number]) {
   return `import { Radio } from "@geist/web";
 
 const sizes = ["Small", "Medium"] as const;
-const states = [
-  { label: "Rest", checked: false, disabled: false },
-  { label: "Selected", checked: true, disabled: false },
-  { label: "Disabled Rest", checked: false, disabled: true },
-  { label: "Disabled Selected", checked: true, disabled: true }
-] as const;
 
-export function RadioVariants() {
+export function Radio${state.key.replace(/[^a-zA-Z0-9]/g, "")}() {
   return (
     <div style={{ display: "grid", gap: 16 }}>
       {sizes.map((size) => (
-        <div key={size} style={{ display: "flex", gap: 16, alignItems: "center", flexWrap: "wrap" }}>
-          {states.map((state) => (
-            <Radio
-              key={state.label}
-              aria-label={\`\${size} \${state.label}\`}
-              brand="${brand}"
-              size={size}
-              checked={state.checked}
-              disabled={state.disabled}
-            />
-          ))}
-        </div>
+        <Radio
+          key={size}
+          aria-label={\`${"${size}"} ${state.label}\`}
+          brand="Cars24"
+          size={size}
+          checked={${state.checked}}
+          disabled={${state.disabled}}
+        />
       ))}
     </div>
   );
@@ -213,7 +106,7 @@ const radioUiExampleSourceCode = `<Radio
   brand="Cars24"
   size="Medium"
   checked
-/>\n`;
+/>`;
 
 const RADIO_FIGMA_URL =
   "https://www.figma.com/design/AZgWt0KHVuVeWBAcQ6Jcy4/branch/yxI5H0FhaUg0YR0uhNuqR6/%F0%9F%9A%80-v2.0-Global-Component-Library?node-id=18067-20353&t=1zgOyFpiLYMyM4XM-11";
@@ -264,66 +157,67 @@ export const Playground: Story = {
   }
 };
 
-export const Cars24: Story = {
-  render: () => <BrandVariantMatrixStory brand="Cars24" />,
+export const Rest: Story = {
+  render: ({ brand = "Cars24" }) => <StateMatrixStory brand={brand} state={documentedStates[0]} />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: buildRadioVariantsSourceCode("Cars24")
+        code: buildRadioStateSourceCode(documentedStates[0])
       }
     }
   }
 };
 
-export const TeamBHP: Story = {
-  render: () => <BrandVariantMatrixStory brand="Team BHP" />,
+export const Selected: Story = {
+  render: ({ brand = "Cars24" }) => <StateMatrixStory brand={brand} state={documentedStates[1]} />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: buildRadioVariantsSourceCode("Team BHP")
+        code: buildRadioStateSourceCode(documentedStates[1])
       }
     }
   }
 };
 
-export const CarInfo: Story = {
-  render: () => <BrandVariantMatrixStory brand="CarInfo" />,
+export const DisabledRest: Story = {
+  render: ({ brand = "Cars24" }) => <StateMatrixStory brand={brand} state={documentedStates[2]} />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: buildRadioVariantsSourceCode("CarInfo")
+        code: buildRadioStateSourceCode(documentedStates[2])
       }
     }
   }
 };
 
-export const VehicleInfo: Story = {
-  render: () => <BrandVariantMatrixStory brand="VehicleInfo" />,
+export const DisabledSelected: Story = {
+  render: ({ brand = "Cars24" }) => <StateMatrixStory brand={brand} state={documentedStates[3]} />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: buildRadioVariantsSourceCode("VehicleInfo")
+        code: buildRadioStateSourceCode(documentedStates[3])
       }
     }
   }
 };
 
-export const UsageSnippet: Story = {
-  render: () => (
-    <div style={{ padding: 24 }}>
-      <Radio aria-label="Select financing option" brand="Cars24" checked size="Medium" />
-    </div>
-  ),
+export const UIExample: Story = {
+  args: {
+    "aria-label": "Select financing option",
+    checked: true,
+    size: "Medium"
+  },
   parameters: {
-    controls: { disable: true },
+    layout: "centered",
     docs: {
       source: {
         code: radioUiExampleSourceCode
       }
     }
-  }
+  },
+  render: (args) => <Radio {...args} />
 };

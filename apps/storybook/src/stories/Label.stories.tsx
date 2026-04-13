@@ -1,8 +1,14 @@
-import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
-import { Label, type LabelProps, type LabelSize } from "@geist/web";
-import { StoryCard, StoryPage } from "../storybook-shell";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
+import { Label, Text, type LabelProps, type LabelSize } from "@geist/web";
+import {
+  StoryMatrix,
+  StoryMatrixCornerCell,
+  StoryMatrixHeaderCell,
+  StoryMatrixRowLabelCell,
+  StoryMatrixValueCell
+} from "../storybook-matrix";
+import { StoryPage } from "../storybook-shell";
 
 type LabelStoryArgs = Omit<LabelProps, "label" | "description"> & {
   label: string;
@@ -11,9 +17,11 @@ type LabelStoryArgs = Omit<LabelProps, "label" | "description"> & {
 
 const sizes: LabelSize[] = ["Large", "Medium", "Small", "Extra Small"];
 
-function HeaderCell({ label }: { label: string }) {
+function HeaderCell({ brand, label }: { brand: DisplayBrandId; label: string }) {
   return (
-    <div style={{ color: "#64748B", fontSize: 13, fontWeight: 600, lineHeight: "18px" }}>{label}</div>
+    <Text brand={brand} as="strong" size="sm" tone="secondary" style={{ display: "block" }}>
+      {label}
+    </Text>
   );
 }
 
@@ -25,42 +33,36 @@ function PlaygroundStory(args: LabelStoryArgs) {
   );
 }
 
-function VariantMatrixStory() {
+function VariantMatrixStory({ brand }: { brand: DisplayBrandId }) {
   return (
     <StoryPage fullscreen>
-      <StoryCard>
-        <div style={{ display: "grid", gap: 16 }}>
-          <div style={matrixStyles}>
-            <HeaderCell label="Size" />
-            <HeaderCell label="Preview" />
+      <StoryMatrix columns="180px minmax(0, 376px)">
+        <StoryMatrixCornerCell />
+        <StoryMatrixHeaderCell>
+          <HeaderCell brand={brand} label="Preview" />
+        </StoryMatrixHeaderCell>
 
-            {sizes.flatMap((size) => [
-              <HeaderCell key={`${size}-label`} label={size} />,
-              <div key={`${size}-preview`} style={{ width: 328 }}>
-                <Label
-                  size={size}
-                  label="Label"
-                  description="Helpful description that could potentially wrap wrap to multiple lines"
-                  required
-                  showInfoIcon
-                />
-              </div>
-            ])}
-          </div>
-        </div>
-      </StoryCard>
+        {sizes.flatMap((size) => [
+          <StoryMatrixRowLabelCell key={`${size}-label`} minHeight={112}>
+            <HeaderCell brand={brand} label={size} />
+          </StoryMatrixRowLabelCell>,
+          <StoryMatrixValueCell key={`${size}-preview`} minHeight={112}>
+            <div style={{ width: 328 }}>
+              <Label
+                brand={brand}
+                size={size}
+                label="Label"
+                description="Helpful description that could potentially wrap wrap to multiple lines"
+                required
+                showInfoIcon
+              />
+            </div>
+          </StoryMatrixValueCell>
+        ])}
+      </StoryMatrix>
     </StoryPage>
   );
 }
-
-const matrixStyles: CSSProperties = {
-  alignItems: "start",
-  columnGap: 20,
-  display: "grid",
-  gridTemplateColumns: "180px minmax(0, 328px)",
-  rowGap: 18,
-  justifyContent: "center"
-};
 
 const labelVariantsSourceCode = `<StoryPage fullscreen>
   <Label
@@ -133,9 +135,9 @@ export const Playground: Story = {
 };
 
 export const Variants: Story = {
-  render: () => <VariantMatrixStory />,
+  render: ({ brand = "Cars24" }) => <VariantMatrixStory brand={brand} />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
     docs: {
       source: {
         code: labelVariantsSourceCode

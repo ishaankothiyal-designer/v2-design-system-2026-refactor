@@ -1,9 +1,15 @@
-import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
-import { Divider, Icon, type DividerLabelPosition, type DividerLineStyle, type DividerProps, type DividerThickness } from "@geist/web";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
+import { Divider, Icon, Text, type DividerLabelPosition, type DividerLineStyle, type DividerProps, type DividerThickness } from "@geist/web";
 import { createFigspecDesign } from "../storybookFigma";
-import { StoryCard, StoryPage } from "../storybook-shell";
+import {
+  StoryMatrix,
+  StoryMatrixCornerCell,
+  StoryMatrixHeaderCell,
+  StoryMatrixRowLabelCell,
+  StoryMatrixValueCell
+} from "../storybook-matrix";
+import { StoryPage } from "../storybook-shell";
 
 type DividerStoryArgs = Omit<DividerProps, "leadingIcon" | "trailingIcon"> & {
   showLeadingIcon: boolean;
@@ -21,40 +27,54 @@ function makeIcons(showLeadingIcon: boolean, showTrailingIcon: boolean) {
   };
 }
 
-function HeaderCell({ label }: { label: string }) {
+function HeaderCell({ brand, label }: { brand: DisplayBrandId; label: string }) {
   return (
-    <div style={{ color: "#64748B", fontSize: 13, fontWeight: 600, lineHeight: "18px" }}>{label}</div>
+    <Text brand={brand} as="strong" size="sm" tone="secondary" style={{ display: "block" }}>
+      {label}
+    </Text>
   );
 }
 
-function VariantGridStory() {
+function VariantMatrixStory({
+  brand,
+  lineStyle
+}: {
+  brand: DisplayBrandId;
+  lineStyle: DividerLineStyle;
+}) {
+  const rows = thicknesses.flatMap((thickness) =>
+    labelPositions.map((labelPosition) => ({
+      label: `${labelPosition} / ${thickness}`,
+      labelPosition,
+      thickness
+    }))
+  );
+
   return (
     <StoryPage fullscreen>
-      <div style={variantGridStyles}>
-        <HeaderCell label="Variant" />
-        <HeaderCell label="Plain" />
-        <HeaderCell label="Dash" />
+      <StoryMatrix columns="220px minmax(0, 1fr)">
+        <StoryMatrixCornerCell />
+        <StoryMatrixHeaderCell>
+          <HeaderCell brand={brand} label="Preview" />
+        </StoryMatrixHeaderCell>
 
-        {thicknesses.flatMap((thickness) =>
-          labelPositions.flatMap((labelPosition) => [
-            <HeaderCell
-              key={`${thickness}-${labelPosition}-label`}
-              label={`${labelPosition} / ${thickness}`}
-            />,
-            ...lineStyles.map((lineStyle) => (
+        {rows.flatMap(({ label, labelPosition, thickness }) => [
+          <StoryMatrixRowLabelCell key={`${thickness}-${labelPosition}-label`} minHeight={88}>
+            <HeaderCell brand={brand} label={label} />
+          </StoryMatrixRowLabelCell>,
+          <StoryMatrixValueCell key={`${thickness}-${labelPosition}-preview`} minHeight={88}>
+            <div style={{ minWidth: 320, width: "100%", maxWidth: 640 }}>
               <Divider
-                key={`${thickness}-${labelPosition}-${lineStyle}`}
+                brand={brand}
                 labelPosition={labelPosition}
                 thickness={thickness}
                 lineStyle={lineStyle}
                 label="Continue"
-                leadingIcon={labelPosition === "None" ? undefined : <Icon name="sparkle-filled" decorative />}
-                trailingIcon={labelPosition === "None" ? undefined : <Icon name="sparkle-filled" decorative />}
               />
-            ))
-          ])
-        )}
-      </div>
+            </div>
+          </StoryMatrixValueCell>
+        ])}
+      </StoryMatrix>
     </StoryPage>
   );
 }
@@ -69,27 +89,20 @@ function ConfigurationStory(args: DividerStoryArgs) {
   );
 }
 
-const variantGridStyles: CSSProperties = {
-  alignItems: "center",
-  columnGap: 20,
-  display: "grid",
-  gridTemplateColumns: "180px repeat(2, minmax(0, 1fr))",
-  rowGap: 18,
-  justifyContent: "center",
-  justifyItems: "center"
-};
-
-const dividerVariantsSourceCode = `<StoryPage fullscreen>
-  <Divider
-    brand="Cars24"
-    labelPosition="Center"
-    thickness="Regular"
-    lineStyle="Plain"
-    label="Continue"
-    leadingIcon={<Icon name="sparkle-filled" decorative />}
-    trailingIcon={<Icon name="sparkle-filled" decorative />}
-  />
+function buildDividerVariantsSourceCode(lineStyle: DividerLineStyle) {
+  return `<StoryPage fullscreen>
+  <div style={{ display: "grid", gap: 24 }}>
+    <Divider brand="Cars24" labelPosition="None" thickness="Regular" lineStyle="${lineStyle}" label="Continue" />
+    <Divider brand="Cars24" labelPosition="Left" thickness="Regular" lineStyle="${lineStyle}" label="Continue" />
+    <Divider brand="Cars24" labelPosition="Center" thickness="Regular" lineStyle="${lineStyle}" label="Continue" />
+    <Divider brand="Cars24" labelPosition="Right" thickness="Regular" lineStyle="${lineStyle}" label="Continue" />
+    <Divider brand="Cars24" labelPosition="None" thickness="Thin" lineStyle="${lineStyle}" label="Continue" />
+    <Divider brand="Cars24" labelPosition="Left" thickness="Thin" lineStyle="${lineStyle}" label="Continue" />
+    <Divider brand="Cars24" labelPosition="Center" thickness="Thin" lineStyle="${lineStyle}" label="Continue" />
+    <Divider brand="Cars24" labelPosition="Right" thickness="Thin" lineStyle="${lineStyle}" label="Continue" />
+  </div>
 </StoryPage>`;
+}
 
 const dividerUiExampleSourceCode = `<Divider
   brand="Cars24"
@@ -161,13 +174,25 @@ export const Playground: Story = {
   }
 };
 
-export const Variants: Story = {
-  render: () => <VariantGridStory />,
+export const Plain: Story = {
+  render: ({ brand = "Cars24" }) => <VariantMatrixStory brand={brand} lineStyle="Plain" />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: dividerVariantsSourceCode
+        code: buildDividerVariantsSourceCode("Plain")
+      }
+    }
+  }
+};
+
+export const Dash: Story = {
+  render: ({ brand = "Cars24" }) => <VariantMatrixStory brand={brand} lineStyle="Dash" />,
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: {
+      source: {
+        code: buildDividerVariantsSourceCode("Dash")
       }
     }
   }

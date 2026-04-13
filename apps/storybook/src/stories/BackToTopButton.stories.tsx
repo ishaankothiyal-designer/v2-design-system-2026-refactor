@@ -3,17 +3,37 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog } from "@geist/tokens";
 import {
   BackToTopButton,
+  Text,
   type BackToTopButtonPreviewState,
   type BackToTopButtonProps
 } from "@geist/web";
-import { StoryCard, StoryPage } from "../storybook-shell";
+import {
+  StoryMatrix,
+  StoryMatrixCornerCell,
+  StoryMatrixHeaderCell,
+  StoryMatrixRowLabelCell,
+  StoryMatrixValueCell
+} from "../storybook-matrix";
+import { StoryCard, StoryPage, StoryPreviewSurface } from "../storybook-shell";
 
 type BackToTopButtonStoryArgs = Omit<BackToTopButtonProps, "children"> & {
   label: string;
 };
 
-function HeaderCell({ label }: { label: string }) {
-  return <div style={headerCellStyles}>{label}</div>;
+function HeaderCell({
+  brand,
+  label,
+  tone = "secondary"
+}: {
+  brand: NonNullable<BackToTopButtonProps["brand"]>;
+  label: string;
+  tone?: "primary" | "secondary" | "inverse";
+}) {
+  return (
+    <Text brand={brand} as="strong" size="sm" tone={tone} style={{ display: "block" }}>
+      {label}
+    </Text>
+  );
 }
 
 function MatrixCell({
@@ -39,53 +59,52 @@ function MatrixCell({
   );
 }
 
-function BrandSection({
+function StateDocument({
   brand,
-  title
+  disabled,
+  forceState
 }: {
-  brand: NonNullable<BackToTopButtonProps["brand"]>;
-  title: string;
+  brand?: NonNullable<BackToTopButtonProps["brand"]>;
+  disabled?: boolean;
+  forceState?: BackToTopButtonPreviewState;
 }) {
-  const rows: Array<{
-    disabled?: boolean;
-    forceState?: BackToTopButtonPreviewState;
-    label: string;
-  }> = [
-    { label: "Rest" },
-    { label: "Hover", forceState: "Hover" },
-    { label: "Disabled", disabled: true }
-  ];
+  const activeBrand = brand ?? "Cars24";
 
   return (
-    <StoryCard>
-      <div style={{ display: "grid", gap: 20 }}>
-        <strong>{title}</strong>
+    <StoryPage fullscreen>
+      <StoryCard>
+        <StoryMatrix columns="180px repeat(2, minmax(240px, 1fr))">
+          <StoryMatrixCornerCell />
+          <StoryMatrixHeaderCell>
+            <HeaderCell brand={activeBrand} label="Light" />
+          </StoryMatrixHeaderCell>
+          <StoryMatrixHeaderCell tone="inverse">
+            <HeaderCell brand={activeBrand} label="Inverse" tone="inverse" />
+          </StoryMatrixHeaderCell>
 
-        <div style={matrixGridStyles}>
-          <HeaderCell label="State" />
-          <HeaderCell label="Light" />
-          <HeaderCell label="Inverse" />
-
-          {rows.flatMap((row) => [
-            <HeaderCell key={`${brand}-${row.label}`} label={row.label} />,
-            <MatrixCell
-              key={`${brand}-${row.label}-light`}
-              brand={brand}
-              {...(row.disabled ? { disabled: true } : {})}
-              {...(row.forceState ? { forceState: row.forceState } : {})}
-            />,
-            <div key={`${brand}-${row.label}-inverse`} style={inverseCellStyles}>
+          {[
+            <StoryMatrixRowLabelCell key={`${activeBrand}-label`} minHeight={116}>
+              <HeaderCell brand={activeBrand} label={activeBrand} />
+            </StoryMatrixRowLabelCell>,
+            <StoryMatrixValueCell key={`${activeBrand}-light`} minHeight={116}>
               <MatrixCell
-                brand={brand}
-                inverse
-                {...(row.disabled ? { disabled: true } : {})}
-                {...(row.forceState ? { forceState: row.forceState } : {})}
+                brand={activeBrand}
+                {...(disabled ? { disabled: true } : {})}
+                {...(forceState ? { forceState } : {})}
               />
-            </div>
-          ])}
-        </div>
-      </div>
-    </StoryCard>
+            </StoryMatrixValueCell>,
+            <StoryMatrixValueCell key={`${activeBrand}-inverse`} minHeight={116} tone="inverse">
+              <MatrixCell
+                brand={activeBrand}
+                inverse
+                {...(disabled ? { disabled: true } : {})}
+                {...(forceState ? { forceState } : {})}
+              />
+            </StoryMatrixValueCell>
+          ]}
+        </StoryMatrix>
+      </StoryCard>
+    </StoryPage>
   );
 }
 
@@ -93,73 +112,33 @@ function PlaygroundStory(args: BackToTopButtonStoryArgs) {
   const { label, ...rest } = args;
 
   return (
-    <div style={rest.inverse ? { background: "#0A0A0A", padding: 24, borderRadius: 16 } : undefined}>
+    <StoryPreviewSurface onDark={Boolean(rest.inverse)}>
       <BackToTopButton {...rest}>{label}</BackToTopButton>
-    </div>
+    </StoryPreviewSurface>
   );
 }
 
-function MatrixStory() {
-  return (
-    <StoryPage fullscreen>
-      <BrandSection brand="Cars24" title="Cars24" />
-      <BrandSection brand="Team BHP" title="Team BHP" />
-      <BrandSection brand="CarInfo" title="CarInfo" />
-      <BrandSection brand="VehicleInfo" title="VehicleInfo" />
-    </StoryPage>
-  );
+function buildBackToTopStateSourceCode({
+  forceState,
+  disabled = false
+}: {
+  forceState?: BackToTopButtonPreviewState;
+  disabled?: boolean;
+}) {
+  const stateProps = disabled
+    ? " disabled"
+    : forceState
+      ? ` forceState="${forceState}"`
+      : "";
+
+  return `<BackToTopButton brand="Cars24"${stateProps}>
+  Go to top
+</BackToTopButton>
+
+<BackToTopButton brand="Cars24" inverse${stateProps}>
+  Go to top
+</BackToTopButton>`;
 }
-
-const headerCellStyles: CSSProperties = {
-  color: String(coreTokenCatalog.color.text.secondary),
-  fontSize: 13,
-  fontWeight: 600,
-  lineHeight: "18px"
-};
-
-const introCopyStyles: CSSProperties = {
-  color: String(coreTokenCatalog.color.text.secondary),
-  margin: 0,
-  fontSize: 16,
-  lineHeight: "24px"
-};
-
-const sectionCopyStyles: CSSProperties = {
-  color: String(coreTokenCatalog.color.text.secondary),
-  margin: 0,
-  fontSize: 14,
-  lineHeight: "20px"
-};
-
-const matrixGridStyles: CSSProperties = {
-  alignItems: "center",
-  columnGap: 20,
-  display: "grid",
-  gridTemplateColumns: "140px repeat(2, minmax(0, 1fr))",
-  rowGap: 18,
-  justifyItems: "center"
-};
-
-const inverseCellStyles: CSSProperties = {
-  background: "#0A0A0A",
-  borderRadius: 16,
-  display: "flex",
-  justifyContent: "flex-start",
-  padding: 20
-};
-
-const playgroundGridStyles: CSSProperties = {
-  display: "grid",
-  gap: 24,
-  gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))"
-};
-
-const backToTopVariantsSourceCode = `<StoryPage fullscreen>
-  <BrandSection brand="Cars24" title="Cars24" />
-  <BrandSection brand="Team BHP" title="Team BHP" />
-  <BrandSection brand="CarInfo" title="CarInfo" />
-  <BrandSection brand="VehicleInfo" title="VehicleInfo" />
-</StoryPage>`;
 
 const backToTopUiExampleSourceCode = `<BackToTopButton brand="Cars24">
   Go to top
@@ -204,13 +183,37 @@ export const Playground: Story = {
   }
 };
 
-export const Variants: Story = {
-  render: () => <MatrixStory />,
+export const Rest: Story = {
+  render: ({ brand = "Cars24" }) => <StateDocument brand={brand} />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: backToTopVariantsSourceCode
+        code: buildBackToTopStateSourceCode({})
+      }
+    }
+  }
+};
+
+export const Hover: Story = {
+  render: ({ brand = "Cars24" }) => <StateDocument brand={brand} forceState="Hover" />,
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: {
+      source: {
+        code: buildBackToTopStateSourceCode({ forceState: "Hover" })
+      }
+    }
+  }
+};
+
+export const Disabled: Story = {
+  render: ({ brand = "Cars24" }) => <StateDocument brand={brand} disabled />,
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: {
+      source: {
+        code: buildBackToTopStateSourceCode({ disabled: true })
       }
     }
   }

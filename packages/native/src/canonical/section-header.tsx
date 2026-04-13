@@ -23,7 +23,9 @@ export interface SectionHeaderProps {
   brand?: DisplayBrandId;
   inverse?: boolean;
   title?: string;
+  showSubtitle?: boolean;
   subtitle?: string;
+  showDescription?: boolean;
   description?: string;
   tagLabel?: string;
   showTag?: boolean;
@@ -208,7 +210,9 @@ export function SectionHeader({
   brand = "Cars24",
   inverse = false,
   title = "Section title",
+  showSubtitle = true,
   subtitle = "Section title line 2",
+  showDescription = true,
   description = "Description goes here upto 2 lines",
   tagLabel = "New",
   showTag = true,
@@ -270,6 +274,8 @@ export function SectionHeader({
   const descriptionLetterSpacing = Number(
     getRequiredNativeThemeTokenValue(brand, "component.sectionHeader.typography.description.letterSpacing")
   );
+  const resolvedShowSubtitle = showSubtitle;
+  const resolvedShowDescription = showDescription;
   const resolvedShowTag = isCentered ? false : showTag;
   const resolvedShowAction = isCentered ? false : showAction;
 
@@ -321,12 +327,12 @@ export function SectionHeader({
               <HeaderLine brand={brand} centered color={titleColor} icon={titleIcon} text={title} />
               <DividerLine color={dividerColor} thickness={dividerThickness} />
             </View>
-            {subtitle ? (
+            {resolvedShowSubtitle ? (
               <HeaderLine brand={brand} centered color={titleColor} icon={subtitleIcon} text={subtitle} />
             ) : null}
           </View>
 
-          {description ? (
+          {resolvedShowDescription ? (
             <Text
               numberOfLines={2}
               style={{
@@ -378,10 +384,12 @@ export function SectionHeader({
               <HeaderLine brand={brand} color={titleColor} icon={titleIcon} text={title} />
               {resolvedShowTag ? <Tag brand={brand} label={tagLabel} /> : null}
             </View>
-            {subtitle ? <HeaderLine brand={brand} color={titleColor} icon={subtitleIcon} text={subtitle} /> : null}
+            {resolvedShowSubtitle ? (
+              <HeaderLine brand={brand} color={titleColor} icon={subtitleIcon} text={subtitle} />
+            ) : null}
           </View>
 
-          {description ? (
+          {resolvedShowDescription ? (
             <Text
               numberOfLines={2}
               style={{

@@ -146,21 +146,23 @@ function VariantMatrix({
   );
 }
 
-function SegmentedControlVariantsStory({ brand }: { brand: DisplayBrandId }) {
+function SegmentedControlTypeStory({
+  brand,
+  type
+}: {
+  brand: DisplayBrandId;
+  type: SegmentedControlType;
+}) {
   return (
     <StoryPage fullscreen>
       <StoryCard>
         <div style={{ display: "grid", gap: 24 }}>
           <SectionHeading
             brand={brand}
-            title="Segmented Control"
-            description="Full Figma matrix across Label and Icon types, Default and Large sizes, and 2 to 5 visible options."
+            title={type}
+            description={`${type} segmented control matrix across Default and Large sizes with 2 to 5 visible options.`}
           />
-          <div style={{ display: "grid", gap: 24 }}>
-            {segmentedControlTypes.map((type) => (
-              <VariantMatrix key={type} brand={brand} type={type} />
-            ))}
-          </div>
+          <VariantMatrix brand={brand} type={type} />
         </div>
       </StoryCard>
     </StoryPage>
@@ -214,44 +216,42 @@ const matrixValueCellStyles: CSSProperties = {
   padding: "16px 20px"
 };
 
-const segmentedControlVariantsSourceCode = `import { SegmentedControl } from "@geist/web";
+function buildSegmentedControlVariantsSourceCode(type: SegmentedControlType) {
+  return `import { SegmentedControl } from "@geist/web";
 
 const sizes = ["Default", "Large"] as const;
 const counts = [2, 3, 4, 5] as const;
 
-function buildItems(count: number, type: "Label" | "Icon") {
+function buildItems(count: number) {
   return Array.from({ length: count }, (_, index) => ({
     value: \`option-\${index + 1}\`,
     ariaLabel: \`Option \${index + 1}\`,
     iconName: "placeholder-generate-outline",
-    label: type === "Label" ? "Label" : undefined
+    label: ${type === "Label" ? '"Label"' : "undefined"}
   }));
 }
 
-export function SegmentedControlVariants() {
+export function SegmentedControl${type}() {
   return (
     <div style={{ display: "grid", gap: 16 }}>
-      {(["Label", "Icon"] as const).map((type) => (
-        <div key={type} style={{ display: "grid", gap: 12 }}>
-          {counts.map((count) => (
-            <div key={count} style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-              {sizes.map((size) => (
-                <SegmentedControl
-                  key={\`\${type}-\${size}-\${count}\`}
-                  brand="Cars24"
-                  items={buildItems(count, type)}
-                  size={size}
-                  type={type}
-                  value="option-1"
-                />
-              ))}
-            </div>
+      {counts.map((count) => (
+        <div key={count} style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+          {sizes.map((size) => (
+            <SegmentedControl
+              key={\`${type}-\${size}-\${count}\`}
+              brand="Cars24"
+              items={buildItems(count)}
+              size={size}
+              type="${type}"
+              value="option-1"
+            />
           ))}
         </div>
       ))}
     </div>
   );
 }`;
+}
 
 const segmentedControlUiExampleSourceCode = `<SegmentedControl
   brand="Cars24"
@@ -318,12 +318,22 @@ export const Playground: Story = {
   }
 };
 
-export const Variants: Story = {
-  render: ({ brand = "Cars24" }) => <SegmentedControlVariantsStory brand={brand} />,
+export const Label: Story = {
+  render: ({ brand = "Cars24" }) => <SegmentedControlTypeStory brand={brand} type="Label" />,
   parameters: {
     controls: {
       include: ["brand"]
     },
-    docs: { source: { code: segmentedControlVariantsSourceCode } }
+    docs: { source: { code: buildSegmentedControlVariantsSourceCode("Label") } }
+  }
+};
+
+export const Icon: Story = {
+  render: ({ brand = "Cars24" }) => <SegmentedControlTypeStory brand={brand} type="Icon" />,
+  parameters: {
+    controls: {
+      include: ["brand"]
+    },
+    docs: { source: { code: buildSegmentedControlVariantsSourceCode("Icon") } }
   }
 };

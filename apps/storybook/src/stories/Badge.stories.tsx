@@ -33,9 +33,16 @@ const badgePriorities: BadgePriority[] = ["High", "Medium", "Low"];
 const badgeSizes: BadgeSize[] = ["Extra Small", "Small", "Medium"];
 const pillShapes: BadgePillShape[] = ["No", "Yes"];
 
-function matrixBadge(type: BadgeType, priority: BadgePriority, size: BadgeSize, pillShape: BadgePillShape) {
+function matrixBadge(
+  brand: NonNullable<BadgeProps["brand"]>,
+  type: BadgeType,
+  priority: BadgePriority,
+  size: BadgeSize,
+  pillShape: BadgePillShape
+) {
   return (
     <Badge
+      brand={brand}
       key={`${type}-${priority}-${size}-${pillShape}`}
       type={type}
       priority={priority}
@@ -46,7 +53,13 @@ function matrixBadge(type: BadgeType, priority: BadgePriority, size: BadgeSize, 
   );
 }
 
-function TypeMatrixStory({ type }: { type: BadgeType }) {
+function TypeMatrixStory({
+  brand = "Cars24",
+  type
+}: {
+  brand?: NonNullable<BadgeProps["brand"]>;
+  type: BadgeType;
+}) {
   return (
     <StoryPage>
       <StoryCard>
@@ -57,8 +70,8 @@ function TypeMatrixStory({ type }: { type: BadgeType }) {
               <div key={priority} style={{ display: "grid", gap: 12 }}>
                 <span style={{ fontSize: 13, color: "#64748B" }}>{priority}</span>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
-                  {badgeSizes.map((size) => matrixBadge(type, priority, size, "No"))}
-                  {badgeSizes.map((size) => matrixBadge(type, priority, size, "Yes"))}
+                  {badgeSizes.map((size) => matrixBadge(brand, type, priority, size, "No"))}
+                  {badgeSizes.map((size) => matrixBadge(brand, type, priority, size, "Yes"))}
                 </div>
               </div>
             ))}
@@ -69,11 +82,11 @@ function TypeMatrixStory({ type }: { type: BadgeType }) {
   );
 }
 
-function createTypeStory(type: BadgeType): StoryObj {
+function createTypeStory(type: BadgeType): StoryObj<BadgeStoryArgs> {
   return {
-    render: () => <TypeMatrixStory type={type} />,
+    render: ({ brand = "Cars24" }) => <TypeMatrixStory brand={brand} type={type} />,
     parameters: {
-      controls: { disable: true },
+      controls: { include: ["brand"] },
       docs: {
         source: {
           code: badgeVariantsSourceCode
@@ -83,7 +96,7 @@ function createTypeStory(type: BadgeType): StoryObj {
   };
 }
 
-function TypeIndexStory() {
+function TypeIndexStory({ brand = "Cars24" }: Pick<BadgeProps, "brand">) {
   return (
     <StoryPage>
       <div style={{ display: "grid", gap: 24 }}>
@@ -94,6 +107,7 @@ function TypeIndexStory() {
               <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
                 {badgePriorities.map((priority) => (
                   <Badge
+                    brand={brand}
                     key={`${type}-${priority}`}
                     type={type}
                     priority={priority}
@@ -111,7 +125,7 @@ function TypeIndexStory() {
   );
 }
 
-function StateGallery() {
+function StateGallery({ brand = "Cars24" }: Pick<BadgeProps, "brand">) {
   const states: Array<BadgeProps["forceState"] | "disabled"> = [
     undefined,
     "hover",
@@ -132,6 +146,7 @@ function StateGallery() {
                   {state ?? "default"}
                 </span>
                 <Badge
+                  brand={brand}
                   type="Neutral"
                   priority="Medium"
                   size="Medium"
@@ -244,7 +259,7 @@ function ConfigurationsStory({ brand = "Cars24" }: Pick<BadgeProps, "brand">) {
   );
 }
 
-function SizesStory() {
+function SizesStory({ brand = "Cars24" }: Pick<BadgeProps, "brand">) {
   return (
     <StoryPage>
       <div style={configGridStyles}>
@@ -252,8 +267,8 @@ function SizesStory() {
           <StoryCard key={size}>
             <div style={{ display: "grid", gap: 12 }}>
               <strong>{size}</strong>
-              <Badge type="Drive pink" priority="High" size={size} labelText="Badge" />
-              <Badge type="Neutral" priority="Medium" size={size} pillShape="Yes" labelText="Badge" />
+              <Badge brand={brand} type="Drive pink" priority="High" size={size} labelText="Badge" />
+              <Badge brand={brand} type="Neutral" priority="Medium" size={size} pillShape="Yes" labelText="Badge" />
             </div>
           </StoryCard>
         ))}
@@ -397,10 +412,10 @@ export const Playground: Story = {
   }
 };
 
-export const Types: StoryObj = {
-  render: () => <TypeIndexStory />,
+export const Types: Story = {
+  render: ({ brand = "Cars24" }) => <TypeIndexStory brand={brand} />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
     docs: {
       source: {
         code: badgeVariantsSourceCode
@@ -409,26 +424,26 @@ export const Types: StoryObj = {
   }
 };
 
-export const DrivePink: StoryObj = createTypeStory("Drive pink");
-export const Error: StoryObj = createTypeStory("Error");
-export const Feature: StoryObj = createTypeStory("Feature");
-export const Information: StoryObj = createTypeStory("Information");
-export const Neutral: StoryObj = createTypeStory("Neutral");
-export const SkySurge: StoryObj = createTypeStory("Sky surge");
-export const Success: StoryObj = createTypeStory("Success");
-export const Warning: StoryObj = createTypeStory("Warning");
+export const DrivePink: Story = createTypeStory("Drive pink");
+export const Error: Story = createTypeStory("Error");
+export const Feature: Story = createTypeStory("Feature");
+export const Information: Story = createTypeStory("Information");
+export const Neutral: Story = createTypeStory("Neutral");
+export const SkySurge: Story = createTypeStory("Sky surge");
+export const Success: Story = createTypeStory("Success");
+export const Warning: Story = createTypeStory("Warning");
 
-export const Sizes: StoryObj = {
-  render: () => <SizesStory />,
+export const Sizes: Story = {
+  render: ({ brand = "Cars24" }) => <SizesStory brand={brand} />,
   parameters: {
-    controls: { disable: true }
+    controls: { include: ["brand"] }
   }
 };
 
-export const States: StoryObj = {
-  render: () => <StateGallery />,
+export const States: Story = {
+  render: ({ brand = "Cars24" }) => <StateGallery brand={brand} />,
   parameters: {
-    controls: { disable: true }
+    controls: { include: ["brand"] }
   }
 };
 

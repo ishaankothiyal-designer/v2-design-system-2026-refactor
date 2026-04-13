@@ -260,61 +260,65 @@ function ContentOptionsStory({ brand }: { brand: DisplayBrandId }) {
 
 function StateMatrix({
   brand,
-  size
+  size,
+  state
 }: {
   brand: DisplayBrandId;
   size: HorizontalTabSize;
+  state: (typeof visibleStates)[number];
 }) {
   return (
     <div style={{ display: "grid", gap: 12 }}>
       <Text brand={brand} as="strong" size="sm">
         {size}
       </Text>
-      <div style={matrixTableStyles("160px repeat(5, minmax(200px, 1fr))")}>
+      <div style={matrixTableStyles("160px repeat(2, minmax(320px, 1fr))")}>
         <div style={matrixCornerCellStyles} />
-        {visibleStates.map((state) => (
-          <div key={`${size}-${state}-header`} style={matrixHeaderCellStyles}>
-            <HeaderCell brand={brand} label={state} />
-          </div>
-        ))}
+        <div style={matrixHeaderCellStyles}>
+          <HeaderCell brand={brand} label="Light" />
+        </div>
+        <div style={matrixHeaderCellStyles}>
+          <HeaderCell brand={brand} label="Inverse" />
+        </div>
 
-        {(["Light", "Inverse"] as const).flatMap((surface) => [
-          <div key={`${size}-${surface}-label`} style={matrixRowLabelCellStyles}>
-            <HeaderCell brand={brand} label={surface} />
-          </div>,
-          ...visibleStates.map((state) => (
-            <div
-              key={`${size}-${surface}-${state}`}
-              style={{
-                ...matrixValueCellStyles,
-                background:
-                  surface === "Inverse"
-                    ? String(coreTokenCatalog.color.surface.inverse)
-                    : String(coreTokenCatalog.color.surface.canvas)
-              }}
-            >
-              {buildStateExample(size, state, surface === "Inverse")}
-            </div>
-          ))
-        ])}
+        <div key={`${size}-label`} style={matrixRowLabelCellStyles}>
+          <HeaderCell brand={brand} label={size} />
+        </div>
+        <div style={matrixValueCellStyles}>{buildStateExample(size, state, false)}</div>
+        <div
+          style={{
+            ...matrixValueCellStyles,
+            background: String(coreTokenCatalog.color.surface.inverse)
+          }}
+        >
+          {buildStateExample(size, state, true)}
+        </div>
       </div>
     </div>
   );
 }
 
-function VisibleStatesStory({ brand }: { brand: DisplayBrandId }) {
+function StateStory({
+  brand,
+  state,
+  title
+}: {
+  brand: DisplayBrandId;
+  state: (typeof visibleStates)[number];
+  title: string;
+}) {
   return (
     <StoryPage fullscreen>
       <StoryCard>
         <div style={{ display: "grid", gap: 24 }}>
           <SectionHeading
             brand={brand}
-            title="Visible states"
-            description="State previews derived from the Horizontal Tab atoms: Rest, Hover, Active, Pressed, and Disabled across both supported sizes and surfaces."
+            title={title}
+            description={`State preview for ${title.toLowerCase()} across both supported sizes and surfaces.`}
           />
           <div style={{ display: "grid", gap: 24 }}>
             {sizes.map((size) => (
-              <StateMatrix key={size} brand={brand} size={size} />
+              <StateMatrix key={`${title}-${size}`} brand={brand} size={size} state={state} />
             ))}
           </div>
         </div>
@@ -472,10 +476,42 @@ export const ContentOptions: Story = {
   }
 };
 
-export const VisibleStates: Story = {
-  render: ({ brand = "Cars24" }) => <VisibleStatesStory brand={brand} />,
+export const Default: Story = {
+  render: ({ brand = "Cars24" }) => <StateStory brand={brand} state="Rest" title="Default" />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
+    layout: "fullscreen"
+  }
+};
+
+export const Hover: Story = {
+  render: ({ brand = "Cars24" }) => <StateStory brand={brand} state="Hover" title="Hover" />,
+  parameters: {
+    controls: { include: ["brand"] },
+    layout: "fullscreen"
+  }
+};
+
+export const Active: Story = {
+  render: ({ brand = "Cars24" }) => <StateStory brand={brand} state="Active" title="Active" />,
+  parameters: {
+    controls: { include: ["brand"] },
+    layout: "fullscreen"
+  }
+};
+
+export const Pressed: Story = {
+  render: ({ brand = "Cars24" }) => <StateStory brand={brand} state="Pressed" title="Pressed" />,
+  parameters: {
+    controls: { include: ["brand"] },
+    layout: "fullscreen"
+  }
+};
+
+export const Disabled: Story = {
+  render: ({ brand = "Cars24" }) => <StateStory brand={brand} state="Disabled" title="Disabled" />,
+  parameters: {
+    controls: { include: ["brand"] },
     layout: "fullscreen"
   }
 };

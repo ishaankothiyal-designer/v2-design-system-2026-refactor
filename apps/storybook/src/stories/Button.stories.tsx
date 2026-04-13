@@ -15,7 +15,15 @@ import {
   type ButtonStyleVariant
 } from "@geist/web";
 import { createFigspecDesign } from "../storybookFigma";
-import { StoryCard, StoryPage } from "../storybook-shell";
+import {
+  StoryMatrix,
+  StoryMatrixCornerCell,
+  StoryMatrixHeaderCell,
+  StoryMatrixRowLabelCell,
+  StoryMatrixSection,
+  StoryMatrixValueCell
+} from "../storybook-matrix";
+import { StoryCard, StoryPage, StoryPreviewSurface } from "../storybook-shell";
 
 type ButtonStoryArgs = Omit<ButtonProps, "children" | "leadingIcon" | "trailingIcon"> & {
   label: string;
@@ -132,106 +140,47 @@ function HeaderCell({
   );
 }
 
-function BrandVariantMatrixStory({ brand }: { brand: DisplayBrandId }) {
-  return (
-    <StoryPage fullscreen>
-      <div style={{ display: "grid", gap: 32 }}>
-        <StoryCard>
-          <VariantDocumentSurface brand={brand} onDark={false} />
-        </StoryCard>
-
-        <StoryCard
-          style={{
-            background: String(coreTokenCatalog.color.surface.inverse),
-            borderRadius: 24,
-            padding: 32
-          }}
-        >
-          <div style={{ display: "grid", gap: 24 }}>
-            <SectionHeading
-              brand={brand}
-              title="On Dark Surface"
-              description="The same complete matrix on inverse backgrounds for contrast validation."
-              tone="inverse"
-            />
-            <VariantDocumentSurface brand={brand} onDark />
-          </div>
-        </StoryCard>
-      </div>
-    </StoryPage>
-  );
-}
-
-function VariantDocumentSurface({ brand, onDark }: { brand: DisplayBrandId; onDark: boolean }) {
-  return (
-    <div style={{ display: "grid", gap: 24 }}>
-      {buttonStyles.map((styleVariant) => (
-        <VariantDocumentSection key={`${styleVariant}-${onDark ? "dark" : "light"}`} brand={brand} styleVariant={styleVariant} onDark={onDark} />
-      ))}
-    </div>
-  );
-}
-
-function VariantDocumentSection({
+function StyleMatrix({
   brand,
+  size,
   styleVariant,
-  onDark
+  onDark = false
 }: {
   brand: DisplayBrandId;
+  size: ButtonSize;
   styleVariant: ButtonStyleVariant;
-  onDark: boolean;
-}) {
-  return (
-    <div
-      style={{
-        display: "grid",
-        gap: 20,
-        padding: 24,
-        borderRadius: 24,
-        border: `1px solid ${String(coreTokenCatalog.color.border.default)}`,
-        background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
-      }}
-    >
-      <SectionHeading brand={brand} title={styleVariant} tone={onDark ? "inverse" : "primary"} />
-      <div style={{ display: "grid", gap: 20 }}>
-        {buttonShapes.map((shape) => (
-          <StateMatrix key={`${styleVariant}-${shape}-${onDark ? "dark" : "light"}`} brand={brand} shape={shape} styleVariant={styleVariant} onDark={onDark} />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function StateMatrix({
-  brand,
-  shape,
-  styleVariant,
-  onDark
-}: {
-  brand: DisplayBrandId;
-  shape: ButtonShape;
-  styleVariant: ButtonStyleVariant;
-  onDark: boolean;
+  onDark?: boolean;
 }) {
   return (
     <div style={{ display: "grid", gap: 12 }}>
       <Text brand={brand} as="strong" size="sm" tone={onDark ? "inverse" : "primary"}>
-        {shape}
+        {size}
       </Text>
-      <div style={matrixTableStyles(onDark)}>
-        <div style={matrixCornerCellStyles(onDark)} />
+      <StoryMatrix columns="180px repeat(4, minmax(180px, 1fr))" tone={onDark ? "inverse" : "canvas"}>
+        <StoryMatrixCornerCell tone={onDark ? "inverse" : "canvas"} />
         {documentedStates.map((state) => (
-          <div key={`${shape}-${styleVariant}-${state.key}-header`} style={matrixHeaderCellStyles(onDark)}>
+          <StoryMatrixHeaderCell
+            key={`${styleVariant}-${size}-${state.key}-header-${onDark ? "dark" : "light"}`}
+            tone={onDark ? "inverse" : "canvas"}
+          >
             <HeaderCell brand={brand} label={state.label} tone={onDark ? "inverse" : "secondary"} />
-          </div>
+          </StoryMatrixHeaderCell>
         ))}
 
-        {buttonSizes.flatMap((size) => [
-          <div key={`${shape}-${styleVariant}-${size}-label`} style={matrixRowLabelCellStyles(onDark)}>
-            <HeaderCell brand={brand} label={size} tone={onDark ? "inverse" : "secondary"} />
-          </div>,
+        {buttonShapes.flatMap((shape) => [
+          <StoryMatrixRowLabelCell
+            key={`${styleVariant}-${size}-${shape}-label-${onDark ? "dark" : "light"}`}
+            minHeight={104}
+            tone={onDark ? "inverse" : "canvas"}
+          >
+            <HeaderCell brand={brand} label={shape} tone={onDark ? "inverse" : "secondary"} />
+          </StoryMatrixRowLabelCell>,
           ...documentedStates.map((state) => (
-            <div key={`${shape}-${styleVariant}-${size}-${state.key}`} style={matrixValueCellStyles(onDark)}>
+            <StoryMatrixValueCell
+              key={`${styleVariant}-${size}-${shape}-${state.key}-${onDark ? "dark" : "light"}`}
+              minHeight={104}
+              tone={onDark ? "inverse" : "canvas"}
+            >
               <MatrixCell
                 brand={brand}
                 shape={shape}
@@ -242,11 +191,88 @@ function StateMatrix({
                 {...(state.disabled ? { disabled: true } : {})}
                 {...(state.loading ? { loading: true } : {})}
               />
-            </div>
+            </StoryMatrixValueCell>
           ))
         ])}
+      </StoryMatrix>
+    </div>
+  );
+}
+
+function BrandStateDocument({
+  brand,
+  styleVariant,
+  onDark = false
+}: {
+  brand: DisplayBrandId;
+  styleVariant: ButtonStyleVariant;
+  onDark?: boolean;
+}) {
+  return (
+    <div style={{ display: "grid" }}>
+      <div style={{ display: "grid", gap: 20 }}>
+        {buttonSizes.map((size) => (
+          <StyleMatrix
+            key={`${brand}-${styleVariant}-${size}-${onDark ? "dark" : "light"}`}
+            brand={brand}
+            size={size}
+            styleVariant={styleVariant}
+            onDark={onDark}
+          />
+        ))}
       </div>
     </div>
+  );
+}
+
+function buildButtonStyleSourceCode(styleVariant: ButtonStyleVariant) {
+  return `import { Button, Icon } from "@geist/web";
+
+<Button
+  brand="Cars24"
+  styleVariant="${styleVariant}"
+  shape="Regular"
+  size="Medium"
+  leadingIcon={<Icon name="sparkle-filled" decorative />}
+  trailingIcon={<Icon name="chevron-small-right-filled" decorative />}
+>
+  Label
+</Button>
+
+<Button
+  brand="Cars24"
+  styleVariant="${styleVariant}"
+  shape="Regular"
+  size="Medium"
+  onDark
+  leadingIcon={<Icon name="sparkle-filled" decorative />}
+  trailingIcon={<Icon name="chevron-small-right-filled" decorative />}
+>
+  Label
+</Button>`;
+}
+
+function StyleDocument({
+  styleVariant,
+  brand = "Cars24"
+}: {
+  styleVariant: ButtonStyleVariant;
+  brand?: DisplayBrandId;
+}) {
+  return (
+    <StoryPage fullscreen>
+      <div style={{ display: "grid", gap: 32 }}>
+        <div style={{ display: "grid", gap: 20 }}>
+          <SectionHeading brand={brand} title="Light" />
+          <BrandStateDocument brand={brand} styleVariant={styleVariant} />
+        </div>
+
+        <div style={{ display: "grid", gap: 20 }}>
+          <SectionHeading brand={brand} title="Inverse" tone="inverse" />
+          <BrandStateDocument brand={brand} styleVariant={styleVariant} onDark />
+        </div>
+      </div>
+    </StoryPage>
   );
 }
 
@@ -366,7 +392,8 @@ function LoginActionsStory({ brand = "Cars24" }: Pick<ButtonProps, "brand">) {
             <SectionHeader
               brand={brand}
               title="Log in"
-              subtitle=""
+              showSubtitle={false}
+              showDescription
               description="Choose how you want to continue."
               showTag={false}
               showAction={false}
@@ -410,61 +437,6 @@ function LoginActionsStory({ brand = "Cars24" }: Pick<ButtonProps, "brand">) {
       </div>
     </StoryPage>
   );
-}
-
-function matrixTableStyles(onDark: boolean): CSSProperties {
-  return {
-    display: "grid",
-    gridTemplateColumns: "180px repeat(4, minmax(180px, 1fr))",
-    border: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    borderRadius: 20,
-    overflow: "hidden"
-  };
-}
-
-function matrixHeaderCellStyles(onDark: boolean): CSSProperties {
-  return {
-    minHeight: 68,
-    padding: "16px 20px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
-  };
-}
-
-function matrixCornerCellStyles(onDark: boolean): CSSProperties {
-  return {
-    minHeight: 68,
-    borderBottom: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
-  };
-}
-
-function matrixRowLabelCellStyles(onDark: boolean): CSSProperties {
-  return {
-    minHeight: 96,
-    padding: "20px 16px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
-  };
-}
-
-function matrixValueCellStyles(onDark: boolean): CSSProperties {
-  return {
-    minHeight: 96,
-    padding: "16px 20px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
-  };
 }
 
 const sizeGridStyles: CSSProperties = {
@@ -554,11 +526,11 @@ const meta: Meta<ButtonStoryArgs> = {
     const resolvedOnDark = Boolean(onDark);
 
     return (
-      <div style={resolvedOnDark ? { background: "#0F172A", padding: 24, borderRadius: 16 } : undefined}>
+      <StoryPreviewSurface onDark={resolvedOnDark}>
         <Button {...args} onDark={resolvedOnDark} {...icons}>
           {label}
         </Button>
-      </div>
+      </StoryPreviewSurface>
     );
   }
 };
@@ -567,57 +539,10 @@ export default meta;
 
 type Story = StoryObj<ButtonStoryArgs>;
 
-function buildButtonVariantsSourceCode(brand: DisplayBrandId) {
-  return `import { Button, Icon } from "@geist/web";
-
-const styles = ["Solid", "Outline", "Ghost", "Transparent", "Destructive"] as const;
-const shapes = ["Regular", "Pill"] as const;
-const sizes = ["Extra Small", "Small", "Medium", "Large", "Extra Large"] as const;
-const states = [
-  { label: "Default" },
-  { label: "Hover / Pressed", forceState: "Hover/Pressed" as const },
-  { label: "Loading", loading: true },
-  { label: "Disabled", disabled: true }
-] as const;
-
-export function ButtonVariants() {
-  return (
-    <div style={{ display: "grid", gap: 24 }}>
-      {styles.map((styleVariant) => (
-        <section key={styleVariant}>
-          {shapes.map((shape) => (
-            <div key={shape} style={{ display: "grid", gap: 16 }}>
-              {sizes.map((size) => (
-                <div key={size} style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-                  {states.map((state) => (
-                    <Button
-                      key={state.label}
-                      brand="${brand}"
-                      styleVariant={styleVariant}
-                      shape={shape}
-                      size={size}
-                      leadingIcon={<Icon name="sparkle-filled" decorative />}
-                      trailingIcon={<Icon name="chevron-small-right-filled" decorative />}
-                      {...("forceState" in state ? { forceState: state.forceState } : {})}
-                      {...("loading" in state ? { loading: true } : {})}
-                      {...("disabled" in state ? { disabled: true } : {})}
-                    >
-                      Label
-                    </Button>
-                  ))}
-                </div>
-              ))}
-            </div>
-          ))}
-        </section>
-      ))}
-    </div>
-  );
-}`;
-}
-
 const buttonUiExampleSourceCode = `<SectionHeader
   title="Log in"
+  showSubtitle={false}
+  showDescription
   description="Choose how you want to continue."
   showTag={false}
   showAction={false}
@@ -635,35 +560,43 @@ export const Playground: Story = {
   }
 };
 
-export const Cars24: Story = {
-  render: () => <BrandVariantMatrixStory brand="Cars24" />,
+export const Solid: Story = {
+  render: ({ brand = "Cars24" }) => <StyleDocument styleVariant="Solid" brand={brand} />,
   parameters: {
-    controls: { disable: true },
-    docs: { source: { code: buildButtonVariantsSourceCode("Cars24") } }
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildButtonStyleSourceCode("Solid") } }
   }
 };
 
-export const TeamBHP: Story = {
-  render: () => <BrandVariantMatrixStory brand="Team BHP" />,
+export const Outline: Story = {
+  render: ({ brand = "Cars24" }) => <StyleDocument styleVariant="Outline" brand={brand} />,
   parameters: {
-    controls: { disable: true },
-    docs: { source: { code: buildButtonVariantsSourceCode("Team BHP") } }
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildButtonStyleSourceCode("Outline") } }
   }
 };
 
-export const CarInfo: Story = {
-  render: () => <BrandVariantMatrixStory brand="CarInfo" />,
+export const Ghost: Story = {
+  render: ({ brand = "Cars24" }) => <StyleDocument styleVariant="Ghost" brand={brand} />,
   parameters: {
-    controls: { disable: true },
-    docs: { source: { code: buildButtonVariantsSourceCode("CarInfo") } }
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildButtonStyleSourceCode("Ghost") } }
   }
 };
 
-export const VehicleInfo: Story = {
-  render: () => <BrandVariantMatrixStory brand="VehicleInfo" />,
+export const Transparent: Story = {
+  render: ({ brand = "Cars24" }) => <StyleDocument styleVariant="Transparent" brand={brand} />,
   parameters: {
-    controls: { disable: true },
-    docs: { source: { code: buildButtonVariantsSourceCode("VehicleInfo") } }
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildButtonStyleSourceCode("Transparent") } }
+  }
+};
+
+export const Destructive: Story = {
+  render: ({ brand = "Cars24" }) => <StyleDocument styleVariant="Destructive" brand={brand} />,
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildButtonStyleSourceCode("Destructive") } }
   }
 };
 

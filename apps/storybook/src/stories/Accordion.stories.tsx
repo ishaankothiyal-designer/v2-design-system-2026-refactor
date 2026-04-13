@@ -3,6 +3,13 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog } from "@geist/tokens";
 import { Badge, Icon, Accordion, SectionHeader, Text, type AccordionProps } from "@geist/web";
 import { createFigspecDesign } from "../storybookFigma";
+import {
+  StoryMatrix,
+  StoryMatrixCornerCell,
+  StoryMatrixHeaderCell,
+  StoryMatrixRowLabelCell,
+  StoryMatrixValueCell
+} from "../storybook-matrix";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 type AccordionStoryArgs = AccordionProps & {
@@ -38,14 +45,6 @@ const sampleItems = [
 const accordionSizes = [
   { key: "sm", label: "Small", size: "sm" as const },
   { key: "lg", label: "Large", size: "lg" as const }
-] as const;
-
-const accordionStates = [
-  { key: "default", label: "Default" },
-  { key: "hover", label: "Hover", forceState: "hover" as const },
-  { key: "focus", label: "Focus", forceState: "focus" as const },
-  { key: "active", label: "Active", forceState: "active" as const },
-  { key: "disabled", label: "Disabled", disabled: true }
 ] as const;
 
 const ACCORDION_FIGMA_URL =
@@ -199,101 +198,55 @@ function AccordionDocsHeading({ brand, label }: { brand: AccordionBrand; label: 
   );
 }
 
-function AccordionSizeMatrix({ brand }: { brand: AccordionBrand }) {
+function AccordionStateDocument({
+  brand,
+  forceState,
+  disabled = false
+}: {
+  brand: AccordionBrand;
+  forceState?: AccordionProps["forceState"];
+  disabled?: boolean;
+}) {
   return (
     <StoryPage>
       <StoryCard>
-        <div style={accordionMatrixTableStyles(3)}>
-          <div style={accordionMatrixCornerCellStyles} />
-          <div style={accordionMatrixHeaderCellStyles}>
+        <StoryMatrix columns="180px repeat(2, minmax(280px, 1fr))">
+          <StoryMatrixCornerCell />
+          <StoryMatrixHeaderCell>
             <AccordionDocsHeading brand={brand} label="Collapsed" />
-          </div>
-          <div style={accordionMatrixHeaderCellStyles}>
+          </StoryMatrixHeaderCell>
+          <StoryMatrixHeaderCell>
             <AccordionDocsHeading brand={brand} label="Expanded" />
-          </div>
+          </StoryMatrixHeaderCell>
 
           {accordionSizes.flatMap((row) => [
-            <div key={`${row.key}-label`} style={accordionMatrixRowLabelCellStyles}>
+            <StoryMatrixRowLabelCell key={`${row.key}-label`} minHeight={152}>
               <AccordionDocsHeading brand={brand} label={row.label} />
-            </div>,
-            <div key={`${row.key}-collapsed`} style={accordionMatrixValueCellStyles}>
+            </StoryMatrixRowLabelCell>,
+            <StoryMatrixValueCell key={`${row.key}-collapsed`} minHeight={152}>
               <Accordion
                 brand={brand}
                 size={row.size}
                 title="Additional Insights"
                 content={sampleItems[0].content}
+                disabled={disabled}
+                {...(forceState ? { forceState } : {})}
               />
-            </div>,
-            <div key={`${row.key}-expanded`} style={accordionMatrixValueCellStyles}>
+            </StoryMatrixValueCell>,
+            <StoryMatrixValueCell key={`${row.key}-expanded`} minHeight={152}>
               <Accordion
                 brand={brand}
                 size={row.size}
                 title="Additional Insights"
                 content={sampleItems[0].content}
                 expanded
+                disabled={disabled}
+                {...(forceState ? { forceState } : {})}
               />
-            </div>
+            </StoryMatrixValueCell>
           ])}
-        </div>
+        </StoryMatrix>
       </StoryCard>
-    </StoryPage>
-  );
-}
-
-function AccordionStateMatrix({
-  brand,
-  expanded,
-  title
-}: {
-  brand: AccordionBrand;
-  expanded: boolean;
-  title: string;
-}) {
-  return (
-    <StoryCard>
-      <div style={{ display: "grid", gap: 16 }}>
-        <Text brand={brand} as="strong" size="md" style={{ display: "block" }}>
-          {title}
-        </Text>
-        <div style={accordionMatrixTableStyles(accordionStates.length + 1)}>
-          <div style={accordionMatrixCornerCellStyles} />
-          {accordionStates.map((state) => (
-            <div key={`${title}-${state.key}-header`} style={accordionMatrixHeaderCellStyles}>
-              <AccordionDocsHeading brand={brand} label={state.label} />
-            </div>
-          ))}
-
-          {accordionSizes.flatMap((row) => [
-            <div key={`${title}-${row.key}-label`} style={accordionMatrixRowLabelCellStyles}>
-              <AccordionDocsHeading brand={brand} label={row.label} />
-            </div>,
-            ...accordionStates.map((state) => (
-              <div key={`${title}-${row.key}-${state.key}`} style={accordionMatrixValueCellStyles}>
-                <Accordion
-                  brand={brand}
-                  size={row.size}
-                  title={state.label}
-                  content={sampleItems[0].content}
-                  expanded={expanded}
-                  {...("forceState" in state ? { forceState: state.forceState } : {})}
-                  {...("disabled" in state ? { disabled: true } : {})}
-                />
-              </div>
-            ))
-          ])}
-        </div>
-      </div>
-    </StoryCard>
-  );
-}
-
-function AccordionStatesDocument({ brand }: { brand: AccordionBrand }) {
-  return (
-    <StoryPage>
-      <div style={{ display: "grid", gap: 32 }}>
-        <AccordionStateMatrix brand={brand} expanded={false} title="Collapsed" />
-        <AccordionStateMatrix brand={brand} expanded title="Expanded" />
-      </div>
     </StoryPage>
   );
 }
@@ -477,8 +430,8 @@ function FaqStory(args: AccordionStoryArgs) {
         <SectionHeader
           brand={brand}
           title="Frequently asked questions"
-          subtitle=""
-          description=""
+          showSubtitle={false}
+          showDescription={false}
           showTag={false}
           showAction={false}
         />
@@ -509,67 +462,6 @@ function FaqStory(args: AccordionStoryArgs) {
     </StoryPage>
   );
 }
-
-const comparisonGridStyles: CSSProperties = {
-  display: "grid",
-  gap: 24,
-  gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-  justifyContent: "center",
-  width: "100%"
-};
-
-function accordionMatrixTableStyles(columnCount: number): CSSProperties {
-  return {
-    display: "grid",
-    gridTemplateColumns: `180px repeat(${columnCount - 1}, minmax(220px, 1fr))`,
-    border: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    borderRadius: 20,
-    overflow: "hidden"
-  };
-}
-
-const accordionMatrixCornerCellStyles: CSSProperties = {
-  minHeight: 68,
-  borderBottom: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  background: String(coreTokenCatalog.color.surface.canvas)
-};
-
-const accordionMatrixHeaderCellStyles: CSSProperties = {
-  minHeight: 68,
-  padding: "16px 20px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  background: String(coreTokenCatalog.color.surface.canvas)
-};
-
-const accordionMatrixRowLabelCellStyles: CSSProperties = {
-  minHeight: 132,
-  padding: "20px 16px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "flex-start",
-  borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  background: String(coreTokenCatalog.color.surface.canvas)
-};
-
-const accordionMatrixValueCellStyles: CSSProperties = {
-  minHeight: 132,
-  padding: "16px 20px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  background: String(coreTokenCatalog.color.surface.canvas)
-};
-
-const showcaseShellStyles: CSSProperties = {
-  width: "100%",
-  maxWidth: 1080,
-  margin: "0 auto"
-};
 
 const faqShellStyles: CSSProperties = {
   display: "grid",
@@ -647,19 +539,29 @@ export default meta;
 
 type Story = StoryObj<AccordionStoryArgs>;
 
-const accordionSizesSourceCode = `<Accordion size="sm" title="Additional Insights" content="..." />
-<Accordion size="sm" title="Additional Insights" content="..." expanded />
-<Accordion size="lg" title="Additional Insights" content="..." />
-<Accordion size="lg" title="Additional Insights" content="..." expanded />`;
+function getAccordionStateSourceCode({
+  forceState,
+  disabled = false
+}: {
+  forceState?: AccordionProps["forceState"];
+  disabled?: boolean;
+}) {
+  const stateProps = disabled
+    ? " disabled"
+    : forceState
+      ? ` forceState="${forceState}"`
+      : "";
 
-const accordionStatesSourceCode = `<Accordion title="Default" content="..." />
-<Accordion title="Hover" content="..." forceState="hover" />
-<Accordion title="Focus" content="..." forceState="focus" />
-<Accordion title="Active" content="..." forceState="active" />
-<Accordion title="Disabled" content="..." disabled />`;
+  return `<Accordion size="sm" title="Additional Insights" content="..."${stateProps} />
+<Accordion size="sm" title="Additional Insights" content="..." expanded${stateProps} />
+<Accordion size="lg" title="Additional Insights" content="..."${stateProps} />
+<Accordion size="lg" title="Additional Insights" content="..." expanded${stateProps} />`;
+}
 
 const accordionUiExampleSourceCode = `<SectionHeader
   title="Frequently asked questions"
+  showSubtitle={false}
+  showDescription={false}
   showTag={false}
   showAction={false}
 />
@@ -674,23 +576,43 @@ export const Playground: Story = {
   }
 };
 
-export const Sizes: Story = {
-  render: ({ brand = "Cars24" }) => <AccordionSizeMatrix brand={brand} />,
+export const Default: Story = {
+  render: ({ brand = "Cars24" }) => <AccordionStateDocument brand={brand} />,
   parameters: {
     controls: {
       include: ["brand"]
     },
-    docs: { source: { code: accordionSizesSourceCode } }
+    docs: { source: { code: getAccordionStateSourceCode({}) } }
   }
 };
 
-export const States: Story = {
-  render: ({ brand = "Cars24" }) => <AccordionStatesDocument brand={brand} />,
+export const Hover: Story = {
+  render: ({ brand = "Cars24" }) => <AccordionStateDocument brand={brand} forceState="hover" />,
   parameters: {
     controls: {
       include: ["brand"]
     },
-    docs: { source: { code: accordionStatesSourceCode } }
+    docs: { source: { code: getAccordionStateSourceCode({ forceState: "hover" }) } }
+  }
+};
+
+export const Focus: Story = {
+  render: ({ brand = "Cars24" }) => <AccordionStateDocument brand={brand} forceState="focus" />,
+  parameters: {
+    controls: {
+      include: ["brand"]
+    },
+    docs: { source: { code: getAccordionStateSourceCode({ forceState: "focus" }) } }
+  }
+};
+
+export const Disabled: Story = {
+  render: ({ brand = "Cars24" }) => <AccordionStateDocument brand={brand} disabled />,
+  parameters: {
+    controls: {
+      include: ["brand"]
+    },
+    docs: { source: { code: getAccordionStateSourceCode({ disabled: true }) } }
   }
 };
 

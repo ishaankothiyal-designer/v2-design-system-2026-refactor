@@ -43,19 +43,21 @@ function PlaygroundStory(args: PaginationProps) {
 }
 
 function SectionHeading({
+  brand,
   title,
   description
 }: {
+  brand: NonNullable<PaginationProps["brand"]>;
   title: string;
   description?: string;
 }) {
   return (
     <div style={{ display: "grid", gap: 6 }}>
-      <Text brand="Cars24" as="strong" size="md">
+      <Text brand={brand} as="strong" size="md">
         {title}
       </Text>
       {description ? (
-        <Text brand="Cars24" as="p" size="sm" tone="secondary">
+        <Text brand={brand} as="p" size="sm" tone="secondary">
           {description}
         </Text>
       ) : null}
@@ -63,63 +65,70 @@ function SectionHeading({
   );
 }
 
-function VariantMatrixStory() {
+function PlatformStory({
+  brand,
+  platform
+}: {
+  brand?: NonNullable<PaginationProps["brand"]>;
+  platform: PaginationPlatform;
+}) {
+  const activeBrand = (brand ?? "Cars24") as NonNullable<PaginationProps["brand"]>;
+
   return (
     <StoryPage fullscreen>
-      <div style={{ display: "grid", gap: 32 }}>
-        {paginationPlatforms.map((platform) => (
-          <StoryCard key={platform}>
-            <div style={{ display: "grid", gap: 24 }}>
-              <SectionHeading
-                title={`${platform} variants`}
-                description={
-                  platform === "Mobile"
-                    ? "Compact summary and numbered pagination states covering start, mid, and end movement."
-                    : "Desktop pagination with the wider page-window variant shown in the Figma canonical set."
-                }
-              />
+      <StoryCard>
+        <div style={{ display: "grid", gap: 24 }}>
+          <SectionHeading
+            brand={activeBrand}
+            title={platform}
+            description={
+              platform === "Mobile"
+                ? "Compact summary and numbered pagination states covering start, mid, and end movement."
+                : "Desktop pagination with the wider page-window variant shown in the Figma canonical set."
+            }
+          />
 
-              <div style={matrixTableStyles}>
-                <div style={matrixCornerCellStyles} />
-                <div style={matrixHeaderCellStyles}>
-                  <Text brand="Cars24" as="strong" size="sm">
-                    Type 1
-                  </Text>
-                </div>
-                <div style={matrixHeaderCellStyles}>
-                  <Text brand="Cars24" as="strong" size="sm">
-                    Type 2
-                  </Text>
-                </div>
-
-                {paginationMoves.flatMap((move) => [
-                  <div key={`${platform}-${move}-label`} style={matrixRowLabelCellStyles}>
-                    <Text brand="Cars24" as="strong" size="sm">
-                      {move}
-                    </Text>
-                  </div>,
-                  <div key={`${platform}-${move}-type1`} style={matrixValueCellStyles}>
-                    <Pagination
-                      currentPage={type1PagesByMove[move]}
-                      platform={platform}
-                      totalPages={4}
-                      type="1"
-                    />
-                  </div>,
-                  <div key={`${platform}-${move}-type2`} style={matrixValueCellStyles}>
-                    <Pagination
-                      currentPage={type2PagesByMove[platform][move]}
-                      platform={platform}
-                      totalPages={32}
-                      type="2"
-                    />
-                  </div>
-                ])}
-              </div>
+          <div style={matrixTableStyles}>
+            <div style={matrixCornerCellStyles} />
+            <div style={matrixHeaderCellStyles}>
+              <Text brand={activeBrand} as="strong" size="sm">
+                Type 1
+              </Text>
             </div>
-          </StoryCard>
-        ))}
-      </div>
+            <div style={matrixHeaderCellStyles}>
+              <Text brand={activeBrand} as="strong" size="sm">
+                Type 2
+              </Text>
+            </div>
+
+            {paginationMoves.flatMap((move) => [
+              <div key={`${platform}-${move}-label`} style={matrixRowLabelCellStyles}>
+                <Text brand={activeBrand} as="strong" size="sm">
+                  {move}
+                </Text>
+              </div>,
+              <div key={`${platform}-${move}-type1`} style={matrixValueCellStyles}>
+                <Pagination
+                  brand={activeBrand}
+                  currentPage={type1PagesByMove[move]}
+                  platform={platform}
+                  totalPages={4}
+                  type="1"
+                />
+              </div>,
+              <div key={`${platform}-${move}-type2`} style={matrixValueCellStyles}>
+                <Pagination
+                  brand={activeBrand}
+                  currentPage={type2PagesByMove[platform][move]}
+                  platform={platform}
+                  totalPages={32}
+                  type="2"
+                />
+              </div>
+            ])}
+          </div>
+        </div>
+      </StoryCard>
     </StoryPage>
   );
 }
@@ -170,18 +179,18 @@ const matrixValueCellStyles: CSSProperties = {
   padding: "16px 20px"
 };
 
-const paginationUiExampleSourceCode = `import { Pagination } from "@geist/web";
+function buildPaginationPlatformSourceCode(platform: PaginationPlatform) {
+  return `import { Pagination } from "@geist/web";
 
 export function Example() {
   return (
-    <Pagination
-      currentPage={3}
-      platform="Desktop"
-      totalPages={32}
-      type="2"
-    />
+    <div style={{ display: "grid", gap: 16 }}>
+      <Pagination currentPage={1} platform="${platform}" totalPages={4} type="1" />
+      <Pagination currentPage={${platform === "Mobile" ? 2 : 3}} platform="${platform}" totalPages={32} type="2" />
+    </div>
   );
 }`;
+}
 
 const meta = {
   title: "Components/Pagination",
@@ -234,20 +243,27 @@ export const Playground: Story = {
   render: PlaygroundStory
 };
 
-export const Variants: Story = {
-  render: VariantMatrixStory,
+export const Mobile: Story = {
+  render: ({ brand = "Cars24" }) => <PlatformStory brand={brand} platform="Mobile" />,
   parameters: {
-    controls: { disable: true },
-    layout: "fullscreen"
+    controls: { include: ["brand"] },
+    layout: "fullscreen",
+    docs: {
+      source: {
+        code: buildPaginationPlatformSourceCode("Mobile")
+      }
+    }
   }
 };
 
-export const UIExample: Story = {
-  render: PlaygroundStory,
+export const Desktop: Story = {
+  render: ({ brand = "Cars24" }) => <PlatformStory brand={brand} platform="Desktop" />,
   parameters: {
+    controls: { include: ["brand"] },
+    layout: "fullscreen",
     docs: {
       source: {
-        code: paginationUiExampleSourceCode
+        code: buildPaginationPlatformSourceCode("Desktop")
       }
     }
   }

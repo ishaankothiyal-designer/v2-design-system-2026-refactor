@@ -126,11 +126,21 @@ function getSurface(
     };
   }
 
-  if (styleVariant === "Solid - Primary") {
+  if (!onDark && styleVariant === "Solid - Primary") {
     return {
       background: active ? brandBaseHover : brandAction,
       border: "transparent",
       foreground: textInverse
+    };
+  }
+
+  if (onDark && styleVariant === "Solid - Primary") {
+    const tokenPrefix = `component.iconButton.color.${modeKey}.solid.primary.${active ? "hover" : "rest"}`;
+
+    return {
+      background: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.background`)),
+      border: "transparent",
+      foreground: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.foreground`))
     };
   }
 

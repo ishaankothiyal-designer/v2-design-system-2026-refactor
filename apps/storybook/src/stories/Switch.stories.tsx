@@ -1,10 +1,21 @@
-import type { ChangeEvent, CSSProperties } from "react";
+import type { ChangeEvent } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "storybook/preview-api";
-import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
 import { Switch, Text, type SwitchProps, type SwitchSize } from "@geist/web";
 import { createFigspecDesign } from "../storybookFigma";
-import { StoryCard, StoryPage } from "../storybook-shell";
+import {
+  NotificationSettingsMobileScreen,
+  notificationSettingsScreenSourceCode
+} from "./NotificationSettingsMobileScreenExample";
+import {
+  StoryMatrix,
+  StoryMatrixCornerCell,
+  StoryMatrixHeaderCell,
+  StoryMatrixRowLabelCell,
+  StoryMatrixValueCell
+} from "../storybook-matrix";
+import { StoryPage } from "../storybook-shell";
 
 const switchSizes: SwitchSize[] = ["Default", "Small"];
 const documentedStates = [
@@ -20,52 +31,14 @@ function renderPlayground(args: SwitchStoryArgs) {
   const [{ checked = false }, updateArgs] = useArgs<SwitchStoryArgs>();
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
-    updateArgs({
-      checked: event.currentTarget.checked
-    });
-
+    updateArgs({ checked: event.currentTarget.checked });
     args.onChange?.(event);
   }
 
-  return (
-    <Switch
-      {...args}
-      checked={checked}
-      onChange={handleChange}
-    />
-  );
+  return <Switch {...args} checked={checked} onChange={handleChange} />;
 }
 
-function SectionHeading({
-  brand,
-  title,
-  description
-}: {
-  brand: DisplayBrandId;
-  title: string;
-  description?: string;
-}) {
-  return (
-    <div style={{ display: "grid", gap: 6 }}>
-      <Text brand={brand} as="strong" size="md">
-        {title}
-      </Text>
-      {description ? (
-        <Text brand={brand} as="p" size="sm" tone="secondary">
-          {description}
-        </Text>
-      ) : null}
-    </div>
-  );
-}
-
-function HeaderCell({
-  brand,
-  label
-}: {
-  brand: DisplayBrandId;
-  label: string;
-}) {
+function HeaderCell({ brand, label }: { brand: DisplayBrandId; label: string }) {
   return (
     <Text brand={brand} as="strong" size="sm" tone="secondary" style={{ display: "block" }}>
       {label}
@@ -73,147 +46,64 @@ function HeaderCell({
   );
 }
 
-function MatrixCell({
+function StateMatrixStory({
   brand,
-  size,
   state
 }: {
   brand: DisplayBrandId;
-  size: SwitchSize;
   state: (typeof documentedStates)[number];
 }) {
   return (
-    <Switch
-      aria-label={`${brand} ${size} ${state.label}`}
-      brand={brand}
-      checked={state.checked}
-      disabled={state.disabled}
-      size={size}
-    />
-  );
-}
-
-function BrandVariantMatrixStory({ brand }: { brand: DisplayBrandId }) {
-  return (
     <StoryPage fullscreen>
-      <StoryCard>
-        <div style={{ display: "grid", gap: 20 }}>
-          <SectionHeading
-            brand={brand}
-            title="Switch Variants"
-            description="Brand-specific state matrix across the supported switch sizes."
-          />
-          <div style={matrixTableStyles()}>
-            <div style={matrixCornerCellStyles} />
-            {documentedStates.map((state) => (
-              <div key={`${brand}-${state.key}-header`} style={matrixHeaderCellStyles}>
-                <HeaderCell brand={brand} label={state.label} />
-              </div>
-            ))}
+      <StoryMatrix columns="180px repeat(2, minmax(140px, 1fr))">
+        <StoryMatrixCornerCell />
+        {switchSizes.map((size) => (
+          <StoryMatrixHeaderCell key={`${state.key}-${size}-header`}>
+            <HeaderCell brand={brand} label={size} />
+          </StoryMatrixHeaderCell>
+        ))}
 
-            {switchSizes.flatMap((size) => [
-              <div key={`${brand}-${size}-label`} style={matrixRowLabelCellStyles}>
-                <HeaderCell brand={brand} label={size} />
-              </div>,
-              ...documentedStates.map((state) => (
-                <div key={`${brand}-${size}-${state.key}`} style={matrixValueCellStyles}>
-                  <MatrixCell brand={brand} size={size} state={state} />
-                </div>
-              ))
-            ])}
-          </div>
-        </div>
-      </StoryCard>
+        <StoryMatrixRowLabelCell minHeight={96}>
+          <HeaderCell brand={brand} label={state.label} />
+        </StoryMatrixRowLabelCell>
+        {switchSizes.map((size) => (
+          <StoryMatrixValueCell key={`${state.key}-${size}`} minHeight={96}>
+            <Switch
+              aria-label={`${brand} ${size} ${state.label}`}
+              brand={brand}
+              checked={state.checked}
+              disabled={state.disabled}
+              size={size}
+            />
+          </StoryMatrixValueCell>
+        ))}
+      </StoryMatrix>
     </StoryPage>
   );
 }
 
-function matrixTableStyles(): CSSProperties {
-  return {
-    border: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    borderRadius: 20,
-    display: "grid",
-    gridTemplateColumns: "180px repeat(4, minmax(140px, 1fr))",
-    overflow: "hidden"
-  };
-}
-
-const matrixHeaderCellStyles: CSSProperties = {
-  alignItems: "center",
-  background: String(coreTokenCatalog.color.surface.canvas),
-  borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  display: "flex",
-  justifyContent: "center",
-  minHeight: 68,
-  padding: "16px 20px"
-};
-
-const matrixCornerCellStyles: CSSProperties = {
-  background: String(coreTokenCatalog.color.surface.canvas),
-  borderBottom: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  minHeight: 68
-};
-
-const matrixRowLabelCellStyles: CSSProperties = {
-  alignItems: "center",
-  background: String(coreTokenCatalog.color.surface.canvas),
-  borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  display: "flex",
-  justifyContent: "flex-start",
-  minHeight: 96,
-  padding: "20px 16px"
-};
-
-const matrixValueCellStyles: CSSProperties = {
-  display: "grid",
-  alignItems: "center",
-  background: String(coreTokenCatalog.color.surface.canvas),
-  borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  justifyItems: "center",
-  minHeight: 96,
-  padding: "16px 20px"
-};
-
-function buildSwitchVariantsSourceCode(brand: DisplayBrandId) {
+function buildSwitchStateSourceCode(state: (typeof documentedStates)[number]) {
   return `import { Switch } from "@geist/web";
 
 const sizes = ["Default", "Small"] as const;
-const states = [
-  { label: "Rest", checked: false, disabled: false },
-  { label: "Selected", checked: true, disabled: false },
-  { label: "Disabled Rest", checked: false, disabled: true },
-  { label: "Disabled Selected", checked: true, disabled: true }
-] as const;
 
-export function SwitchVariants() {
+export function Switch${state.key.replace(/[^a-zA-Z0-9]/g, "")}() {
   return (
     <div style={{ display: "grid", gap: 16 }}>
       {sizes.map((size) => (
-        <div key={size} style={{ display: "flex", gap: 16, alignItems: "center", flexWrap: "wrap" }}>
-          {states.map((state) => (
-            <Switch
-              key={state.label}
-              aria-label={\`\${size} \${state.label}\`}
-              brand="${brand}"
-              size={size}
-              checked={state.checked}
-              disabled={state.disabled}
-            />
-          ))}
-        </div>
+        <Switch
+          key={size}
+          aria-label={\`${"${size}"} ${state.label}\`}
+          brand="Cars24"
+          size={size}
+          checked={${state.checked}}
+          disabled={${state.disabled}}
+        />
       ))}
     </div>
   );
 }`;
 }
-
-const switchUiExampleSourceCode = `<Switch
-  aria-label="Enable notifications"
-  brand="Cars24"
-  size="Default"
-  checked
-/>\n`;
 
 const SWITCH_FIGMA_URL =
   "https://www.figma.com/design/AZgWt0KHVuVeWBAcQ6Jcy4/branch/yxI5H0FhaUg0YR0uhNuqR6/%F0%9F%9A%80-v2.0-Global-Component-Library?node-id=77-3690&t=1zgOyFpiLYMyM4XM-11";
@@ -264,67 +154,63 @@ export const Playground: Story = {
   }
 };
 
-export const Cars24: Story = {
-  render: () => <BrandVariantMatrixStory brand="Cars24" />,
+export const Rest: Story = {
+  render: ({ brand = "Cars24" }) => <StateMatrixStory brand={brand} state={documentedStates[0]} />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: buildSwitchVariantsSourceCode("Cars24")
+        code: buildSwitchStateSourceCode(documentedStates[0])
       }
     }
   }
 };
 
-export const TeamBHP: Story = {
-  render: () => <BrandVariantMatrixStory brand="Team BHP" />,
+export const Selected: Story = {
+  render: ({ brand = "Cars24" }) => <StateMatrixStory brand={brand} state={documentedStates[1]} />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: buildSwitchVariantsSourceCode("Team BHP")
+        code: buildSwitchStateSourceCode(documentedStates[1])
       }
     }
   }
 };
 
-export const CarInfo: Story = {
-  render: () => <BrandVariantMatrixStory brand="CarInfo" />,
+export const DisabledRest: Story = {
+  render: ({ brand = "Cars24" }) => <StateMatrixStory brand={brand} state={documentedStates[2]} />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: buildSwitchVariantsSourceCode("CarInfo")
+        code: buildSwitchStateSourceCode(documentedStates[2])
       }
     }
   }
 };
 
-export const VehicleInfo: Story = {
-  render: () => <BrandVariantMatrixStory brand="VehicleInfo" />,
+export const DisabledSelected: Story = {
+  render: ({ brand = "Cars24" }) => <StateMatrixStory brand={brand} state={documentedStates[3]} />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: buildSwitchVariantsSourceCode("VehicleInfo")
+        code: buildSwitchStateSourceCode(documentedStates[3])
       }
     }
   }
 };
 
 export const UIExample: Story = {
-  args: {
-    "aria-label": "Enable notifications",
-    checked: true,
-    size: "Default"
-  },
   parameters: {
-    layout: "centered",
+    layout: "fullscreen",
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: switchUiExampleSourceCode
+        code: notificationSettingsScreenSourceCode
       }
     }
   },
-  render: (args) => <Switch {...args} />
+  render: ({ brand = "Cars24" }) => <NotificationSettingsMobileScreen brand={brand} />
 };

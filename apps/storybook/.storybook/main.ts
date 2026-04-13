@@ -9,6 +9,7 @@ const config: StorybookConfig = {
   addons: [
     "@storybook/addon-docs",
     "@storybook/addon-designs",
+    "storybook-dark-mode",
     {
       name: "storybook-design-token",
       options: {

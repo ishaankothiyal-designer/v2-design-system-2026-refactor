@@ -10,7 +10,14 @@ import {
   type LinkButtonSize,
   type LinkButtonTone
 } from "@geist/web";
-import { StoryCard, StoryPage } from "../storybook-shell";
+import {
+  StoryMatrix,
+  StoryMatrixCornerCell,
+  StoryMatrixHeaderCell,
+  StoryMatrixRowLabelCell,
+  StoryMatrixValueCell
+} from "../storybook-matrix";
+import { StoryCard, StoryPage, StoryPreviewSurface } from "../storybook-shell";
 
 type LinkButtonStoryArgs = Omit<LinkButtonProps, "children" | "leadingIcon" | "trailingIcon"> & {
   label: string;
@@ -122,20 +129,24 @@ function ToneMatrix({
       <Text brand={brand} as="strong" size="sm" tone={onDark ? "inverse" : "primary"}>
         {tone}
       </Text>
-      <div style={matrixTableStyles(onDark)}>
-        <div style={matrixCornerCellStyles(onDark)} />
+      <StoryMatrix columns="180px repeat(3, minmax(180px, 1fr))" tone={onDark ? "inverse" : "canvas"}>
+        <StoryMatrixCornerCell tone={onDark ? "inverse" : "canvas"} />
         {documentedStates.map((state) => (
-          <div key={`${tone}-${state.key}-header`} style={matrixHeaderCellStyles(onDark)}>
+          <StoryMatrixHeaderCell key={`${tone}-${state.key}-header`} tone={onDark ? "inverse" : "canvas"}>
             <HeaderCell brand={brand} label={state.label} tone={onDark ? "inverse" : "secondary"} />
-          </div>
+          </StoryMatrixHeaderCell>
         ))}
 
         {linkButtonSizes.flatMap((size) => [
-          <div key={`${tone}-${size}-label`} style={matrixRowLabelCellStyles(onDark)}>
+          <StoryMatrixRowLabelCell key={`${tone}-${size}-label`} minHeight={96} tone={onDark ? "inverse" : "canvas"}>
             <HeaderCell brand={brand} label={size} tone={onDark ? "inverse" : "secondary"} />
-          </div>,
+          </StoryMatrixRowLabelCell>,
           ...documentedStates.map((state) => (
-            <div key={`${tone}-${size}-${state.key}`} style={matrixValueCellStyles(onDark)}>
+            <StoryMatrixValueCell
+              key={`${tone}-${size}-${state.key}`}
+              minHeight={96}
+              tone={onDark ? "inverse" : "canvas"}
+            >
               <MatrixCell
                 brand={brand}
                 tone={tone}
@@ -144,42 +155,26 @@ function ToneMatrix({
                 {...(state.forceState ? { forceState: state.forceState } : {})}
                 {...(state.disabled ? { disabled: true } : {})}
               />
-            </div>
+            </StoryMatrixValueCell>
           ))
         ])}
-      </div>
+      </StoryMatrix>
     </div>
   );
 }
 
-function VariantDocumentSurface({ brand, onDark }: { brand: DisplayBrandId; onDark: boolean }) {
-  return (
-    <div style={{ display: "grid", gap: 24 }}>
-      {(["Brand", "Black"] as const).map((tone) => (
-        <div
-          key={`${tone}-${onDark ? "dark" : "light"}`}
-          style={{
-            display: "grid",
-            gap: 20,
-            padding: 24,
-            borderRadius: 24,
-            border: `1px solid ${String(coreTokenCatalog.color.border.default)}`,
-            background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
-          }}
-        >
-          <ToneMatrix brand={brand} tone={tone} onDark={onDark} />
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function BrandVariantMatrixStory({ brand }: { brand: DisplayBrandId }) {
+function ToneVariantMatrixStory({
+  brand,
+  tone
+}: {
+  brand: DisplayBrandId;
+  tone: LinkButtonTone;
+}) {
   return (
     <StoryPage fullscreen>
       <div style={{ display: "grid", gap: 32 }}>
         <StoryCard>
-          <VariantDocumentSurface brand={brand} onDark={false} />
+          <ToneMatrix brand={brand} tone={tone} onDark={false} />
         </StoryCard>
 
         <StoryCard
@@ -196,7 +191,7 @@ function BrandVariantMatrixStory({ brand }: { brand: DisplayBrandId }) {
               description="The same complete matrix on inverse backgrounds for contrast validation."
               tone="inverse"
             />
-            <VariantDocumentSurface brand={brand} onDark />
+            <ToneMatrix brand={brand} tone={tone} onDark />
           </div>
         </StoryCard>
       </div>
@@ -209,67 +204,12 @@ function ConfigurationStory(args: LinkButtonStoryArgs) {
   const resolvedOnDark = Boolean(onDark);
 
   return (
-    <div style={resolvedOnDark ? { background: "#0B0B0C", padding: 24, borderRadius: 16 } : undefined}>
+    <StoryPreviewSurface onDark={resolvedOnDark}>
       <LinkButton {...rest} onDark={resolvedOnDark} {...makeIcons(showLeadingIcon, showTrailingIcon)}>
         {label}
       </LinkButton>
-    </div>
+    </StoryPreviewSurface>
   );
-}
-
-function matrixTableStyles(onDark: boolean): CSSProperties {
-  return {
-    display: "grid",
-    gridTemplateColumns: "180px repeat(3, minmax(180px, 1fr))",
-    border: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    borderRadius: 20,
-    overflow: "hidden"
-  };
-}
-
-function matrixHeaderCellStyles(onDark: boolean): CSSProperties {
-  return {
-    minHeight: 68,
-    padding: "16px 20px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
-  };
-}
-
-function matrixCornerCellStyles(onDark: boolean): CSSProperties {
-  return {
-    minHeight: 68,
-    borderBottom: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
-  };
-}
-
-function matrixRowLabelCellStyles(onDark: boolean): CSSProperties {
-  return {
-    minHeight: 88,
-    padding: "20px 16px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
-  };
-}
-
-function matrixValueCellStyles(onDark: boolean): CSSProperties {
-  return {
-    minHeight: 88,
-    padding: "16px 20px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
-  };
 }
 
 const meta: Meta<LinkButtonStoryArgs> = {
@@ -314,10 +254,11 @@ export default meta;
 
 type Story = StoryObj<LinkButtonStoryArgs>;
 
-const linkButtonVariantsSourceCode = `<LinkButton tone="Brand" size="Medium">Label</LinkButton>
-<LinkButton tone="Brand" size="Medium" forceState="Hover">Label</LinkButton>
-<LinkButton tone="Brand" size="Medium" disabled>Label</LinkButton>
-<LinkButton tone="Black" size="Medium">Label</LinkButton>`;
+function buildLinkButtonToneSourceCode(tone: LinkButtonTone) {
+  return `<LinkButton tone="${tone}" size="Medium">Label</LinkButton>
+<LinkButton tone="${tone}" size="Medium" forceState="Hover">Label</LinkButton>
+<LinkButton tone="${tone}" size="Medium" disabled>Label</LinkButton>`;
+}
 
 const linkButtonUiExampleSourceCode = `<LinkButton tone="Brand" size="Small">Privacy statement</LinkButton>`;
 
@@ -328,35 +269,19 @@ export const Playground: Story = {
   }
 };
 
-export const Cars24: Story = {
-  render: () => <BrandVariantMatrixStory brand="Cars24" />,
+export const Brand: Story = {
+  render: ({ brand = "Cars24" }) => <ToneVariantMatrixStory brand={brand} tone="Brand" />,
   parameters: {
-    controls: { disable: true },
-    docs: { source: { code: linkButtonVariantsSourceCode } }
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildLinkButtonToneSourceCode("Brand") } }
   }
 };
 
-export const TeamBHP: Story = {
-  render: () => <BrandVariantMatrixStory brand="Team BHP" />,
+export const Black: Story = {
+  render: ({ brand = "Cars24" }) => <ToneVariantMatrixStory brand={brand} tone="Black" />,
   parameters: {
-    controls: { disable: true },
-    docs: { source: { code: linkButtonVariantsSourceCode } }
-  }
-};
-
-export const CarInfo: Story = {
-  render: () => <BrandVariantMatrixStory brand="CarInfo" />,
-  parameters: {
-    controls: { disable: true },
-    docs: { source: { code: linkButtonVariantsSourceCode } }
-  }
-};
-
-export const VehicleInfo: Story = {
-  render: () => <BrandVariantMatrixStory brand="VehicleInfo" />,
-  parameters: {
-    controls: { disable: true },
-    docs: { source: { code: linkButtonVariantsSourceCode } }
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildLinkButtonToneSourceCode("Black") } }
   }
 };
 

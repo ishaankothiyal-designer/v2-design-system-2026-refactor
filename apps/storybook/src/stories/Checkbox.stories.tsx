@@ -1,10 +1,17 @@
-import type { ChangeEvent, CSSProperties } from "react";
+import type { ChangeEvent } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "storybook/preview-api";
-import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
 import { Checkbox, Text, type CheckboxProps, type CheckboxSize } from "@geist/web";
 import { createFigspecDesign } from "../storybookFigma";
-import { StoryCard, StoryPage } from "../storybook-shell";
+import {
+  StoryMatrix,
+  StoryMatrixCornerCell,
+  StoryMatrixHeaderCell,
+  StoryMatrixRowLabelCell,
+  StoryMatrixValueCell
+} from "../storybook-matrix";
+import { StoryPage } from "../storybook-shell";
 
 const checkboxSizes: CheckboxSize[] = ["Small", "Medium", "Large", "Extra Large"];
 const documentedStates = [
@@ -37,29 +44,6 @@ function renderPlayground(args: CheckboxStoryArgs) {
       indeterminate={indeterminate}
       onChange={handleChange}
     />
-  );
-}
-
-function SectionHeading({
-  brand,
-  title,
-  description
-}: {
-  brand: DisplayBrandId;
-  title: string;
-  description?: string;
-}) {
-  return (
-    <div style={{ display: "grid", gap: 6 }}>
-      <Text brand={brand} as="strong" size="md">
-        {title}
-      </Text>
-      {description ? (
-        <Text brand={brand} as="p" size="sm" tone="secondary">
-          {description}
-        </Text>
-      ) : null}
-    </div>
   );
 }
 
@@ -98,118 +82,52 @@ function MatrixCell({
   );
 }
 
-function BrandVariantMatrixStory({ brand }: { brand: DisplayBrandId }) {
+function StateMatrixStory({
+  brand,
+  state
+}: {
+  brand: DisplayBrandId;
+  state: (typeof documentedStates)[number];
+}) {
   return (
     <StoryPage fullscreen>
-      <StoryCard>
-        <div style={{ display: "grid", gap: 20 }}>
-          <SectionHeading
-            brand={brand}
-            title="Checkbox Variants"
-            description="Brand-specific state matrix across all supported sizes."
-          />
-          <div style={matrixTableStyles()}>
-            <div style={matrixCornerCellStyles} />
-            {documentedStates.map((state) => (
-              <div key={`${brand}-${state.key}-header`} style={matrixHeaderCellStyles}>
-                <HeaderCell brand={brand} label={state.label} />
-              </div>
-            ))}
+      <StoryMatrix columns="180px minmax(220px, 1fr)">
+        <StoryMatrixCornerCell />
+        <StoryMatrixHeaderCell>
+          <HeaderCell brand={brand} label={state.label} />
+        </StoryMatrixHeaderCell>
 
-            {checkboxSizes.flatMap((size) => [
-              <div key={`${brand}-${size}-label`} style={matrixRowLabelCellStyles}>
-                <HeaderCell brand={brand} label={size} />
-              </div>,
-              ...documentedStates.map((state) => (
-                <div key={`${brand}-${size}-${state.key}`} style={matrixValueCellStyles}>
-                  <MatrixCell brand={brand} size={size} state={state} />
-                </div>
-              ))
-            ])}
-          </div>
-        </div>
-      </StoryCard>
+        {checkboxSizes.flatMap((size) => [
+          <StoryMatrixRowLabelCell key={`${brand}-${state.key}-${size}-label`} minHeight={96}>
+            <HeaderCell brand={brand} label={size} />
+          </StoryMatrixRowLabelCell>,
+          <StoryMatrixValueCell key={`${brand}-${state.key}-${size}`} minHeight={96}>
+            <MatrixCell brand={brand} size={size} state={state} />
+          </StoryMatrixValueCell>
+        ])}
+      </StoryMatrix>
     </StoryPage>
   );
 }
 
-function matrixTableStyles(): CSSProperties {
-  return {
-    border: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    borderRadius: 20,
-    display: "grid",
-    gridTemplateColumns: "180px repeat(6, minmax(140px, 1fr))",
-    overflow: "hidden"
-  };
-}
-
-const matrixHeaderCellStyles: CSSProperties = {
-  alignItems: "center",
-  background: String(coreTokenCatalog.color.surface.canvas),
-  borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  display: "flex",
-  justifyContent: "center",
-  minHeight: 68,
-  padding: "16px 20px"
-};
-
-const matrixCornerCellStyles: CSSProperties = {
-  background: String(coreTokenCatalog.color.surface.canvas),
-  borderBottom: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  minHeight: 68
-};
-
-const matrixRowLabelCellStyles: CSSProperties = {
-  alignItems: "center",
-  background: String(coreTokenCatalog.color.surface.canvas),
-  borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  display: "flex",
-  justifyContent: "flex-start",
-  minHeight: 96,
-  padding: "20px 16px"
-};
-
-const matrixValueCellStyles: CSSProperties = {
-  display: "grid",
-  alignItems: "center",
-  background: String(coreTokenCatalog.color.surface.canvas),
-  borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  justifyItems: "center",
-  minHeight: 96,
-  padding: "16px 20px"
-};
-
-function buildCheckboxVariantsSourceCode(brand: DisplayBrandId) {
+function buildCheckboxStateSourceCode(state: (typeof documentedStates)[number]) {
   return `import { Checkbox } from "@geist/web";
 
 const sizes = ["Small", "Medium", "Large", "Extra Large"] as const;
-const states = [
-  { label: "Rest", checked: false, indeterminate: false, disabled: false },
-  { label: "Intermediate", checked: false, indeterminate: true, disabled: false },
-  { label: "Selected", checked: true, indeterminate: false, disabled: false },
-  { label: "Disabled Rest", checked: false, indeterminate: false, disabled: true },
-  { label: "Disabled Intermediate", checked: false, indeterminate: true, disabled: true },
-  { label: "Disabled Selected", checked: true, indeterminate: false, disabled: true }
-] as const;
 
-export function CheckboxVariants() {
+export function Checkbox${state.key.replace(/[^a-zA-Z0-9]/g, "")}() {
   return (
     <div style={{ display: "grid", gap: 16 }}>
       {sizes.map((size) => (
-        <div key={size} style={{ display: "flex", gap: 16, alignItems: "center", flexWrap: "wrap" }}>
-          {states.map((state) => (
-            <Checkbox
-              key={state.label}
-              aria-label={\`\${size} \${state.label}\`}
-              brand="${brand}"
-              size={size}
-              checked={state.checked}
-              indeterminate={state.indeterminate}
-              disabled={state.disabled}
-            />
-          ))}
-        </div>
+        <Checkbox
+          key={size}
+          aria-label={\`${"${size}"} ${state.label}\`}
+          brand="Cars24"
+          size={size}
+          checked={${state.checked}}
+          indeterminate={${state.indeterminate}}
+          disabled={${state.disabled}}
+        />
       ))}
     </div>
   );
@@ -276,49 +194,76 @@ export const Playground: Story = {
   }
 };
 
-export const Cars24: Story = {
-  render: () => <BrandVariantMatrixStory brand="Cars24" />,
+export const Rest: Story = {
+  render: ({ brand = "Cars24" }) => <StateMatrixStory brand={brand} state={documentedStates[0]} />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: buildCheckboxVariantsSourceCode("Cars24")
+        code: buildCheckboxStateSourceCode(documentedStates[0])
       }
     }
   }
 };
 
-export const TeamBHP: Story = {
-  render: () => <BrandVariantMatrixStory brand="Team BHP" />,
+export const Intermediate: Story = {
+  render: ({ brand = "Cars24" }) => <StateMatrixStory brand={brand} state={documentedStates[1]} />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: buildCheckboxVariantsSourceCode("Team BHP")
+        code: buildCheckboxStateSourceCode(documentedStates[1])
       }
     }
   }
 };
 
-export const CarInfo: Story = {
-  render: () => <BrandVariantMatrixStory brand="CarInfo" />,
+export const Selected: Story = {
+  render: ({ brand = "Cars24" }) => <StateMatrixStory brand={brand} state={documentedStates[2]} />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: buildCheckboxVariantsSourceCode("CarInfo")
+        code: buildCheckboxStateSourceCode(documentedStates[2])
       }
     }
   }
 };
 
-export const VehicleInfo: Story = {
-  render: () => <BrandVariantMatrixStory brand="VehicleInfo" />,
+export const DisabledRest: Story = {
+  name: "Disabled Rest",
+  render: ({ brand = "Cars24" }) => <StateMatrixStory brand={brand} state={documentedStates[3]} />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: buildCheckboxVariantsSourceCode("VehicleInfo")
+        code: buildCheckboxStateSourceCode(documentedStates[3])
+      }
+    }
+  }
+};
+
+export const DisabledIntermediate: Story = {
+  name: "Disabled Intermediate",
+  render: ({ brand = "Cars24" }) => <StateMatrixStory brand={brand} state={documentedStates[4]} />,
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: {
+      source: {
+        code: buildCheckboxStateSourceCode(documentedStates[4])
+      }
+    }
+  }
+};
+
+export const DisabledSelected: Story = {
+  name: "Disabled Selected",
+  render: ({ brand = "Cars24" }) => <StateMatrixStory brand={brand} state={documentedStates[5]} />,
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: {
+      source: {
+        code: buildCheckboxStateSourceCode(documentedStates[5])
       }
     }
   }

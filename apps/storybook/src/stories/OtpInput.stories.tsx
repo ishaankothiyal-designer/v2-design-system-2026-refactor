@@ -1,7 +1,6 @@
-import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "storybook/preview-api";
-import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
 import {
   OtpInput,
   Text,
@@ -12,6 +11,13 @@ import {
   type OtpInputValidationState
 } from "@geist/web";
 import { createFigspecDesign } from "../storybookFigma";
+import {
+  StoryMatrix,
+  StoryMatrixCornerCell,
+  StoryMatrixHeaderCell,
+  StoryMatrixRowLabelCell,
+  StoryMatrixValueCell
+} from "../storybook-matrix";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 const otpInputSizes: OtpInputSize[] = ["Small", "Large"];
@@ -19,8 +25,10 @@ const previewStates: OtpInputPreviewState[] = ["Rest", "Hover", "Active", "Typed
 const validationStates: OtpInputValidationState[] = ["Default", "Error", "Success"];
 const helperTones: OtpInputHelperTone[] = ["Default", "Error", "Success"];
 
-function PlaygroundStory(args: OtpInputProps) {
-  const [{ value }, updateArgs] = useArgs<OtpInputProps>();
+type OtpInputStoryArgs = OtpInputProps;
+
+function PlaygroundStory(args: OtpInputStoryArgs) {
+  const [{ value }, updateArgs] = useArgs<OtpInputStoryArgs>();
 
   return (
     <div style={{ width: "fit-content" }}>
@@ -45,28 +53,107 @@ const stateStoryCommon = {
   showLabelInfoIcon: true
 };
 
-function SizePairStory({ small, large }: { small: OtpInputProps; large: OtpInputProps }) {
+function HeaderCell({ brand, label }: { brand: DisplayBrandId; label: string }) {
+  return (
+    <Text brand={brand} as="strong" size="sm" tone="secondary" style={{ display: "block" }}>
+      {label}
+    </Text>
+  );
+}
+
+function StateMatrixStory({
+  brand,
+  disabled = false,
+  forceState,
+  helperTone,
+  stateLabel,
+  validationState,
+  value
+}: {
+  brand: DisplayBrandId;
+  disabled?: boolean;
+  forceState?: OtpInputPreviewState;
+  helperTone?: OtpInputHelperTone;
+  stateLabel: string;
+  validationState?: OtpInputValidationState;
+  value?: string;
+}) {
+  const common = {
+    ...stateStoryCommon,
+    brand,
+    disabled,
+    ...(forceState ? { forceState } : {}),
+    ...(helperTone ? { helperTone } : {}),
+    ...(validationState ? { validationState } : {}),
+    ...(value !== undefined ? { value } : {})
+  } satisfies OtpInputProps;
+
   return (
     <StoryPage fullscreen>
-      <StoryCard>
-        <div style={{ display: "grid", gap: 24 }}>
-          <div style={pairHeaderStyles}>
-            <Text brand="Cars24" as="strong" size="md">
-              Small
-            </Text>
-            <Text brand="Cars24" as="strong" size="md">
-              Large
-            </Text>
-          </div>
+      <StoryMatrix columns="180px repeat(2, minmax(328px, 1fr))">
+        <StoryMatrixCornerCell />
+        {otpInputSizes.map((size) => (
+          <StoryMatrixHeaderCell key={`${stateLabel}-${size}-header`}>
+            <HeaderCell brand={brand} label={size} />
+          </StoryMatrixHeaderCell>
+        ))}
 
-          <div style={pairStyles}>
-            <OtpInput {...small} />
-            <OtpInput {...large} />
-          </div>
-        </div>
-      </StoryCard>
+        <StoryMatrixRowLabelCell minHeight={148}>
+          <HeaderCell brand={brand} label={stateLabel} />
+        </StoryMatrixRowLabelCell>
+        {otpInputSizes.map((size) => (
+          <StoryMatrixValueCell key={`${stateLabel}-${size}`} minHeight={148}>
+            <OtpInput {...common} size={size} />
+          </StoryMatrixValueCell>
+        ))}
+      </StoryMatrix>
     </StoryPage>
   );
+}
+
+function buildOtpInputStateSourceCode({
+  disabled = false,
+  forceState,
+  helperTone,
+  label,
+  validationState,
+  value
+}: {
+  disabled?: boolean;
+  forceState?: OtpInputPreviewState;
+  helperTone?: OtpInputHelperTone;
+  label: string;
+  validationState?: OtpInputValidationState;
+  value?: string;
+}) {
+  return `import { OtpInput } from "@geist/web";
+
+export function OtpInput${label.replace(/[^a-zA-Z0-9]/g, "")}() {
+  return (
+    <div style={{ display: "grid", gap: 24 }}>
+      <OtpInput
+        brand="Cars24"
+        size="Small"
+        label="Label"
+        helperText="Helper text"
+        length={6}
+        required
+        showHelperIcon
+        showLabelInfoIcon
+${disabled ? `        disabled\n` : ""}${forceState ? `        forceState="${forceState}"\n` : ""}${helperTone ? `        helperTone="${helperTone}"\n` : ""}${validationState ? `        validationState="${validationState}"\n` : ""}${value !== undefined ? `        value="${value}"\n` : ""}      />
+      <OtpInput
+        brand="Cars24"
+        size="Large"
+        label="Label"
+        helperText="Helper text"
+        length={6}
+        required
+        showHelperIcon
+        showLabelInfoIcon
+${disabled ? `        disabled\n` : ""}${forceState ? `        forceState="${forceState}"\n` : ""}${helperTone ? `        helperTone="${helperTone}"\n` : ""}${validationState ? `        validationState="${validationState}"\n` : ""}${value !== undefined ? `        value="${value}"\n` : ""}      />
+    </div>
+  );
+}`;
 }
 
 function ThemeShowcaseStory() {
@@ -107,21 +194,6 @@ function ThemeShowcaseStory() {
     </StoryPage>
   );
 }
-
-const pairStyles: CSSProperties = {
-  alignItems: "start",
-  columnGap: 24,
-  display: "grid",
-  gridTemplateColumns: "repeat(2, minmax(328px, 1fr))",
-  justifyContent: "center"
-};
-
-const pairHeaderStyles: CSSProperties = {
-  alignItems: "center",
-  columnGap: 24,
-  display: "grid",
-  gridTemplateColumns: "repeat(2, minmax(328px, 1fr))"
-};
 
 const OTP_INPUT_FIGMA_URL =
   "https://www.figma.com/design/AZgWt0KHVuVeWBAcQ6Jcy4/branch/yxI5H0FhaUg0YR0uhNuqR6/%F0%9F%9A%80-v2.0-Global-Component-Library?node-id=4744-19129&t=1zgOyFpiLYMyM4XM-11";
@@ -197,129 +269,121 @@ const meta = {
     onResendActionClick: {
       action: "resend clicked"
     }
-  }
+  },
+  render: PlaygroundStory
 } satisfies Meta<typeof OtpInput>;
 
 export default meta;
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<OtpInputStoryArgs>;
 
 export const Playground: Story = {
-  render: PlaygroundStory,
   parameters: {
     layout: "centered"
   }
 };
 
 export const Rest: Story = {
-  render: () => (
-    <SizePairStory
-      small={{ ...stateStoryCommon, forceState: "Rest", size: "Small", value: "" }}
-      large={{ ...stateStoryCommon, forceState: "Rest", size: "Large", value: "" }}
-    />
-  ),
+  render: ({ brand = "Cars24" }) => <StateMatrixStory brand={brand} forceState="Rest" stateLabel="Rest" value="" />,
   parameters: {
-    controls: { disable: true }
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildOtpInputStateSourceCode({ forceState: "Rest", label: "Rest", value: "" }) } }
   }
 };
 
 export const Hover: Story = {
-  render: () => (
-    <SizePairStory
-      small={{ ...stateStoryCommon, forceState: "Hover", size: "Small", value: "" }}
-      large={{ ...stateStoryCommon, forceState: "Hover", size: "Large", value: "" }}
-    />
-  ),
+  render: ({ brand = "Cars24" }) => <StateMatrixStory brand={brand} forceState="Hover" stateLabel="Hover" value="" />,
   parameters: {
-    controls: { disable: true }
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildOtpInputStateSourceCode({ forceState: "Hover", label: "Hover", value: "" }) } }
   }
 };
 
 export const Active: Story = {
-  render: () => (
-    <SizePairStory
-      small={{ ...stateStoryCommon, forceState: "Active", size: "Small", value: "6384" }}
-      large={{ ...stateStoryCommon, forceState: "Active", size: "Large", value: "6384" }}
-    />
+  render: ({ brand = "Cars24" }) => (
+    <StateMatrixStory brand={brand} forceState="Active" stateLabel="Active" value="6384" />
   ),
   parameters: {
-    controls: { disable: true }
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildOtpInputStateSourceCode({ forceState: "Active", label: "Active", value: "6384" }) } }
   }
 };
 
 export const Typed: Story = {
-  render: () => (
-    <SizePairStory
-      small={{ ...stateStoryCommon, forceState: "Typed", size: "Small", value: "638462" }}
-      large={{ ...stateStoryCommon, forceState: "Typed", size: "Large", value: "638462" }}
-    />
+  render: ({ brand = "Cars24" }) => (
+    <StateMatrixStory brand={brand} forceState="Typed" stateLabel="Typed" value="638462" />
   ),
   parameters: {
-    controls: { disable: true }
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildOtpInputStateSourceCode({ forceState: "Typed", label: "Typed", value: "638462" }) } }
   }
 };
 
 export const Error: Story = {
-  render: () => (
-    <SizePairStory
-      small={{
-        ...stateStoryCommon,
-        forceState: "Error",
-        helperTone: "Error",
-        size: "Small",
-        validationState: "Error",
-        value: "638460"
-      }}
-      large={{
-        ...stateStoryCommon,
-        forceState: "Error",
-        helperTone: "Error",
-        size: "Large",
-        validationState: "Error",
-        value: "638460"
-      }}
+  render: ({ brand = "Cars24" }) => (
+    <StateMatrixStory
+      brand={brand}
+      forceState="Error"
+      helperTone="Error"
+      stateLabel="Error"
+      validationState="Error"
+      value="638460"
     />
   ),
   parameters: {
-    controls: { disable: true }
+    controls: { include: ["brand"] },
+    docs: {
+      source: {
+        code: buildOtpInputStateSourceCode({
+          forceState: "Error",
+          helperTone: "Error",
+          label: "Error",
+          validationState: "Error",
+          value: "638460"
+        })
+      }
+    }
   }
 };
 
 export const Success: Story = {
-  render: () => (
-    <SizePairStory
-      small={{
-        ...stateStoryCommon,
-        forceState: "Success",
-        helperTone: "Success",
-        size: "Small",
-        validationState: "Success",
-        value: "638462"
-      }}
-      large={{
-        ...stateStoryCommon,
-        forceState: "Success",
-        helperTone: "Success",
-        size: "Large",
-        validationState: "Success",
-        value: "638462"
-      }}
+  render: ({ brand = "Cars24" }) => (
+    <StateMatrixStory
+      brand={brand}
+      forceState="Success"
+      helperTone="Success"
+      stateLabel="Success"
+      validationState="Success"
+      value="638462"
     />
   ),
   parameters: {
-    controls: { disable: true }
+    controls: { include: ["brand"] },
+    docs: {
+      source: {
+        code: buildOtpInputStateSourceCode({
+          forceState: "Success",
+          helperTone: "Success",
+          label: "Success",
+          validationState: "Success",
+          value: "638462"
+        })
+      }
+    }
   }
 };
 
 export const Disabled: Story = {
-  render: () => (
-    <SizePairStory
-      small={{ ...stateStoryCommon, disabled: true, forceState: "Disabled", size: "Small", value: "" }}
-      large={{ ...stateStoryCommon, disabled: true, forceState: "Disabled", size: "Large", value: "" }}
-    />
+  render: ({ brand = "Cars24" }) => (
+    <StateMatrixStory brand={brand} disabled forceState="Disabled" stateLabel="Disabled" value="" />
   ),
   parameters: {
-    controls: { disable: true }
+    controls: { include: ["brand"] },
+    docs: {
+      source: {
+        code: buildOtpInputStateSourceCode({ disabled: true, forceState: "Disabled", label: "Disabled", value: "" })
+      }
+    }
   }
 };
 

@@ -1,6 +1,7 @@
 import type { Preview } from "@storybook/react";
 import performancePreview from "@github-ui/storybook-addon-performance-panel/preview";
 import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
+import { themes } from "storybook/theming";
 import "./fonts.css";
 import "@geist/icons/style.css";
 
@@ -79,6 +80,15 @@ const preview: Preview = {
     designToken: {
       defaultTab: "Colors",
       pageSize: Number.MAX_VALUE
+    },
+    darkMode: {
+      current: "light",
+      dark: {
+        ...themes.dark
+      },
+      light: {
+        ...themes.light
+      }
     }
   }
 };

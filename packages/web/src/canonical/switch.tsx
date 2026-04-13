@@ -42,6 +42,10 @@ const VISUALLY_HIDDEN_INPUT_STYLES: CSSProperties = {
   width: 1
 };
 
+const SWITCH_TRACK_TRANSITION = "background-color 180ms cubic-bezier(0.2, 0, 0, 1)";
+const SWITCH_THUMB_TRANSITION =
+  "transform 220ms cubic-bezier(0.22, 1, 0.36, 1), background-color 180ms cubic-bezier(0.2, 0, 0, 1), box-shadow 180ms cubic-bezier(0.2, 0, 0, 1)";
+
 function getSizeKey(size: SwitchSize) {
   return size === "Small" ? "sm" : "default";
 }
@@ -123,6 +127,7 @@ export function Switch({
     getRequiredThemeTokenValue(brand, "component.switch.focus.outlineOffset")
   );
   const focusColor = String(getRequiredThemeTokenValue(brand, "color.border.focus"));
+  const thumbTransform = `translate3d(${resolvedChecked ? sizeTokens.thumbTranslateX : 0}px, 0, 0)`;
 
   function handleFocus(event: FocusEvent<HTMLInputElement>) {
     setFocused(true);
@@ -180,6 +185,7 @@ export function Switch({
           outline: focused ? `${focusOutlineWidth}px solid ${focusColor}` : undefined,
           outlineOffset: focused ? `${focusOutlineOffset}px` : undefined,
           padding: sizeTokens.padding,
+          transition: SWITCH_TRACK_TRANSITION,
           width: sizeTokens.trackWidth
         }}
       >
@@ -191,9 +197,9 @@ export function Switch({
             display: "block",
             flexShrink: 0,
             height: sizeTokens.thumbSize,
-            transform: resolvedChecked
-              ? `translateX(${sizeTokens.thumbTranslateX}px)`
-              : undefined,
+            transform: thumbTransform,
+            transition: SWITCH_THUMB_TRANSITION,
+            willChange: disabled ? undefined : "transform",
             width: sizeTokens.thumbSize
           }}
         />

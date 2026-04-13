@@ -19,6 +19,12 @@ const centeredStageStyles: CSSProperties = {
   fontFamily: `var(--typography-font-family-sans, ${String(coreTokenCatalog.typography.fontFamily.sans)}), sans-serif`
 };
 
+const fullscreenStageStyles: CSSProperties = {
+  width: "100%",
+  minHeight: "100%",
+  boxSizing: "border-box"
+};
+
 function resolveStory(moduleExports: Record<string, unknown>, exportName?: string) {
   if (!exportName) {
     return undefined;
@@ -75,13 +81,53 @@ export function ComponentDocsPage() {
 }
 
 export const centeredCanvasDecorator: Decorator = (Story, context) => {
+  const useDarkCanvas = context.args?.onDark === true || context.args?.inverse === true;
+  const stageBackground = useDarkCanvas ? String(coreTokenCatalog.color.surface.inverse) : "transparent";
+  const canvasBackgroundCss = useDarkCanvas
+    ? `html, body, #storybook-root,
+       .sbdocs, .sbdocs-wrapper, .sbdocs-preview,
+       .docs-story, .docblock-story,
+       .innerZoomElementWrapper,
+       .innerZoomElementWrapper > div,
+       .innerZoomElementWrapper > div > div {
+         background: ${stageBackground} !important;
+       }
+       .sbdocs-preview,
+       .docs-story,
+       .docblock-story,
+       .innerZoomElementWrapper,
+       .innerZoomElementWrapper > div,
+       .innerZoomElementWrapper > div > div {
+         width: 100% !important;
+         max-width: 100% !important;
+       }`
+    : "html, body, #storybook-root { background: transparent !important; }";
+  const fluidDarkStageStyles: CSSProperties = useDarkCanvas
+    ? {
+        width: "100vw",
+        maxWidth: "100vw",
+        marginLeft: "calc(50% - 50vw)",
+        marginRight: "calc(50% - 50vw)"
+      }
+    : {};
+
   if (context.parameters.layout === "fullscreen") {
-    return <Story />;
+    return (
+      <>
+        <style>{canvasBackgroundCss}</style>
+        <div style={{ ...fullscreenStageStyles, ...fluidDarkStageStyles, background: stageBackground }}>
+          <Story />
+        </div>
+      </>
+    );
   }
 
   return (
-    <div style={centeredStageStyles}>
-      <Story />
-    </div>
+    <>
+      <style>{canvasBackgroundCss}</style>
+      <div style={{ ...centeredStageStyles, ...fluidDarkStageStyles, background: stageBackground }}>
+        <Story />
+      </div>
+    </>
   );
 };

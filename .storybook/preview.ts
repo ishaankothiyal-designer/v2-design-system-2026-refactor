@@ -3,14 +3,13 @@ import performancePreview from "@github-ui/storybook-addon-performance-panel/pre
 import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
 import "@geist/icons/style.css";
 import { centeredCanvasDecorator, ComponentDocsPage } from "../apps/storybook/src/storybook-docs";
+import type { StorybookBrandGlobal } from "../apps/storybook/src/storybook-brand";
 
 const performanceDecorators = Array.isArray(performancePreview.decorators)
   ? performancePreview.decorators
   : performancePreview.decorators
     ? [performancePreview.decorators]
     : [];
-
-type StorybookBrandGlobal = "auto" | DisplayBrandId;
 
 const brandToolbarItems = [
   {
@@ -28,10 +27,7 @@ const preview: Preview = {
     ...performanceDecorators,
     (Story, context) => {
       const globalBrand = context.globals.brand as StorybookBrandGlobal | undefined;
-      const shouldInjectBrand =
-        Boolean(globalBrand) &&
-        globalBrand !== "auto" &&
-        (Boolean(context.argTypes?.brand) || "brand" in context.args);
+      const shouldInjectBrand = Boolean(globalBrand) && globalBrand !== "auto";
 
       if (!shouldInjectBrand) {
         return Story();

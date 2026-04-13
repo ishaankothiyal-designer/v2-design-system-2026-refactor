@@ -26,19 +26,21 @@ function PlaygroundStory(args: RatingsProps) {
 }
 
 function SectionHeading({
+  brand,
   title,
   description
 }: {
+  brand: NonNullable<RatingsProps["brand"]>;
   title: string;
   description?: string;
 }) {
   return (
     <div style={{ display: "grid", gap: 6 }}>
-      <Text brand="Cars24" as="strong" size="md">
+      <Text brand={brand} as="strong" size="md">
         {title}
       </Text>
       {description ? (
-        <Text brand="Cars24" as="p" size="sm" tone="secondary">
+        <Text brand={brand} as="p" size="sm" tone="secondary">
           {description}
         </Text>
       ) : null}
@@ -46,12 +48,15 @@ function SectionHeading({
   );
 }
 
-function LockupMatrixStory() {
+function LockupMatrixStory({ brand }: { brand?: NonNullable<RatingsProps["brand"]> }) {
+  const activeBrand = (brand ?? "Cars24") as NonNullable<RatingsProps["brand"]>;
+
   return (
     <StoryPage fullscreen>
       <StoryCard>
         <div style={{ display: "grid", gap: 24 }}>
           <SectionHeading
+            brand={activeBrand}
             title="Lockup Matrix"
             description="The visible canonical lockup variants cover Small and Medium sizes across the full 0.0 to 5.0 scale in 0.5 steps."
           />
@@ -59,7 +64,7 @@ function LockupMatrixStory() {
             <div style={matrixCornerCellStyles} />
             {ratingSizes.map((size) => (
               <div key={`ratings-size-${size}`} style={matrixHeaderCellStyles}>
-                <Text brand="Cars24" as="strong" size="sm">
+                <Text brand={activeBrand} as="strong" size="sm">
                   {size}
                 </Text>
               </div>
@@ -67,13 +72,13 @@ function LockupMatrixStory() {
 
             {ratingValues.flatMap((value) => [
               <div key={`rating-label-${value}`} style={matrixRowLabelCellStyles}>
-                <Text brand="Cars24" as="strong" size="sm">
+                <Text brand={activeBrand} as="strong" size="sm">
                   {value.toFixed(1)}
                 </Text>
               </div>,
               ...ratingSizes.map((size) => (
                 <div key={`rating-cell-${size}-${value}`} style={matrixValueCellStyles}>
-                  <Ratings rating={value} size={size} />
+                  <Ratings brand={activeBrand} rating={value} size={size} />
                 </div>
               ))
             ])}
@@ -84,12 +89,15 @@ function LockupMatrixStory() {
   );
 }
 
-function StateMatrixStory() {
+function StateMatrixStory({ brand }: { brand?: NonNullable<RatingsProps["brand"]> }) {
+  const activeBrand = (brand ?? "Cars24") as NonNullable<RatingsProps["brand"]>;
+
   return (
     <StoryPage fullscreen>
       <StoryCard>
         <div style={{ display: "grid", gap: 24 }}>
           <SectionHeading
+            brand={activeBrand}
             title="Visible States"
             description="The underlying star-state master exposes Small, Medium, and Large glyphs for Default, Half Star, and Full Star."
           />
@@ -97,7 +105,7 @@ function StateMatrixStory() {
             <div style={matrixCornerCellStyles} />
             {ratingStates.map((state) => (
               <div key={`rating-state-header-${state}`} style={matrixHeaderCellStyles}>
-                <Text brand="Cars24" as="strong" size="sm">
+                <Text brand={activeBrand} as="strong" size="sm">
                   {state}
                 </Text>
               </div>
@@ -105,7 +113,7 @@ function StateMatrixStory() {
 
             {ratingStateSizes.flatMap((size) => [
               <div key={`rating-state-size-${size}`} style={matrixRowLabelCellStyles}>
-                <Text brand="Cars24" as="strong" size="sm">
+                <Text brand={activeBrand} as="strong" size="sm">
                   {size}
                 </Text>
               </div>,
@@ -236,16 +244,16 @@ export const Playground: Story = {
 
 export const AllRatings: Story = {
   name: "All Ratings",
-  render: () => <LockupMatrixStory />,
+  render: ({ brand = "Cars24" }) => <LockupMatrixStory brand={brand} />,
   parameters: {
-    controls: { disable: true }
+    controls: { include: ["brand"] }
   }
 };
 
 export const StateMatrix: Story = {
   name: "State Matrix",
-  render: () => <StateMatrixStory />,
+  render: ({ brand = "Cars24" }) => <StateMatrixStory brand={brand} />,
   parameters: {
-    controls: { disable: true }
+    controls: { include: ["brand"] }
   }
 };

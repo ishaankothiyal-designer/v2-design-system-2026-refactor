@@ -1,7 +1,6 @@
-import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "storybook/preview-api";
-import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
 import {
   Dropdown,
   Text,
@@ -12,7 +11,14 @@ import {
   type DropdownValidationState
 } from "@geist/web";
 import { createFigspecDesign } from "../storybookFigma";
-import { StoryCard, StoryPage } from "../storybook-shell";
+import {
+  StoryMatrix,
+  StoryMatrixCornerCell,
+  StoryMatrixHeaderCell,
+  StoryMatrixRowLabelCell,
+  StoryMatrixValueCell
+} from "../storybook-matrix";
+import { StoryPage } from "../storybook-shell";
 
 const dropdownSizes: DropdownSize[] = ["Small", "Large"];
 const previewStates: DropdownPreviewState[] = ["Rest", "Active", "Selected", "Error", "Disabled"];
@@ -38,169 +44,114 @@ function PlaygroundStory(args: DropdownProps) {
   );
 }
 
-function VariantMatrixStory() {
+function HeaderCell({
+  brand,
+  label
+}: {
+  brand: DisplayBrandId;
+  label: string;
+}) {
+  return (
+    <Text brand={brand} as="strong" size="sm" tone="secondary" style={{ display: "block" }}>
+      {label}
+    </Text>
+  );
+}
+
+function StateMatrixStory({
+  brand,
+  forceState,
+  helperTone,
+  stateLabel,
+  value
+}: {
+  brand: DisplayBrandId;
+  forceState: DropdownPreviewState;
+  helperTone?: DropdownHelperTone;
+  stateLabel: string;
+  value?: string;
+}) {
   const common = {
-    brand: "Cars24" as const,
+    brand,
+    forceState,
     helperText: "Helper text",
     label: "Label",
     placeholder: "Input text",
     prefixIconName: "placeholder-generate-outline" as const,
     required: true,
     showHelperIcon: true,
-    showLabelInfoIcon: true
+    showLabelInfoIcon: true,
+    ...(helperTone ? { helperTone } : {}),
+    ...(value ? { value } : {})
   };
-
-  const rows: Array<{
-    label: string;
-    small: DropdownProps;
-    large: DropdownProps;
-  }> = [
-    {
-      label: "Rest",
-      small: { ...common, forceState: "Rest", size: "Small" },
-      large: { ...common, forceState: "Rest", size: "Large" }
-    },
-    {
-      label: "Active",
-      small: { ...common, forceState: "Active", size: "Small" },
-      large: { ...common, forceState: "Active", size: "Large" }
-    },
-    {
-      label: "Selected",
-      small: { ...common, forceState: "Selected", size: "Small", value: "Input text" },
-      large: { ...common, forceState: "Selected", size: "Large", value: "Input text" }
-    },
-    {
-      label: "Error",
-      small: {
-        ...common,
-        forceState: "Error",
-        helperTone: "Error",
-        size: "Small",
-        value: "Input text"
-      },
-      large: {
-        ...common,
-        forceState: "Error",
-        helperTone: "Default",
-        size: "Large",
-        value: "Input text"
-      }
-    },
-    {
-      label: "Disabled",
-      small: { ...common, forceState: "Disabled", size: "Small" },
-      large: { ...common, forceState: "Disabled", size: "Large" }
-    }
-  ];
 
   return (
     <StoryPage fullscreen>
-      <StoryCard>
-        <div style={{ display: "grid", gap: 24 }}>
-          <div style={matrixHeaderStyles}>
-            <div />
-            <Text brand="Cars24" as="strong" size="md">
-              Small
-            </Text>
-            <Text brand="Cars24" as="strong" size="md">
-              Large
-            </Text>
-          </div>
+      <StoryMatrix columns="180px repeat(2, minmax(328px, 1fr))">
+        <StoryMatrixCornerCell />
+        {dropdownSizes.map((size) => (
+          <StoryMatrixHeaderCell key={`${stateLabel}-${size}-header`}>
+            <HeaderCell brand={brand} label={size} />
+          </StoryMatrixHeaderCell>
+        ))}
 
-          <div style={matrixStyles}>
-            {rows.flatMap((row) => [
-              <div key={`${row.label}-label`} style={rowLabelStyles}>
-                {row.label}
-              </div>,
-              <Dropdown key={`${row.label}-small`} {...row.small} />,
-              <Dropdown key={`${row.label}-large`} {...row.large} />
-            ])}
-          </div>
-        </div>
-      </StoryCard>
+        <StoryMatrixRowLabelCell minHeight={112}>
+          <HeaderCell brand={brand} label={stateLabel} />
+        </StoryMatrixRowLabelCell>
+        {dropdownSizes.map((size) => (
+          <StoryMatrixValueCell key={`${stateLabel}-${size}`} minHeight={112}>
+            <Dropdown {...common} size={size} />
+          </StoryMatrixValueCell>
+        ))}
+      </StoryMatrix>
     </StoryPage>
   );
 }
 
-function ThemeShowcaseStory() {
+function buildDropdownStateSourceCode({
+  forceState,
+  helperTone,
+  label,
+  value
+}: {
+  forceState: DropdownPreviewState;
+  helperTone?: DropdownHelperTone;
+  label: string;
+  value?: string;
+}) {
+  return `import { Dropdown } from "@geist/web";
+
+export function Dropdown${label.replace(/[^a-zA-Z0-9]/g, "")}() {
   return (
-    <StoryPage>
-      <StoryCard>
-        <div style={{ display: "grid", gap: 20 }}>
-          <header style={{ display: "grid", gap: 6 }}>
-            <Text brand="Cars24" as="strong" size="md">
-              Theme Coverage
-            </Text>
-            <Text brand="Cars24" as="span" size="xs" tone="secondary">
-              Selected dropdown state rendered across all supported brand themes.
-            </Text>
-          </header>
-
-          <div style={{ display: "grid", gap: 20 }}>
-            {STORYBOOK_BRAND_OPTIONS.map((brand) => (
-              <div key={brand} style={{ display: "grid", gap: 10, width: 328 }}>
-                <Text brand={brand} as="strong" size="sm">
-                  {brand}
-                </Text>
-                <Dropdown
-                  brand={brand}
-                  helperText="Helper text"
-                  label="Label"
-                  placeholder="Input text"
-                  prefixIconName="placeholder-generate-outline"
-                  required
-                  showHelperIcon
-                  showLabelInfoIcon
-                  size="Large"
-                  value="Input text"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </StoryCard>
-    </StoryPage>
+    <div style={{ display: "grid", gap: 24 }}>
+      <Dropdown
+        brand="Cars24"
+        size="Small"
+        forceState="${forceState}"
+        label="Label"
+        placeholder="Input text"
+        helperText="Helper text"
+        prefixIconName="placeholder-generate-outline"
+        required
+        showHelperIcon
+        showLabelInfoIcon
+${helperTone ? `        helperTone="${helperTone}"\n` : ""}${value ? `        value="${value}"\n` : ""}      />
+      <Dropdown
+        brand="Cars24"
+        size="Large"
+        forceState="${forceState}"
+        label="Label"
+        placeholder="Input text"
+        helperText="Helper text"
+        prefixIconName="placeholder-generate-outline"
+        required
+        showHelperIcon
+        showLabelInfoIcon
+${helperTone ? `        helperTone="${helperTone}"\n` : ""}${value ? `        value="${value}"\n` : ""}      />
+    </div>
   );
+}`;
 }
-
-const matrixStyles: CSSProperties = {
-  alignItems: "start",
-  columnGap: 24,
-  display: "grid",
-  gridTemplateColumns: "120px repeat(2, minmax(328px, 1fr))",
-  justifyContent: "center",
-  rowGap: 20
-};
-
-const matrixHeaderStyles: CSSProperties = {
-  alignItems: "center",
-  columnGap: 24,
-  display: "grid",
-  gridTemplateColumns: "120px repeat(2, minmax(328px, 1fr))"
-};
-
-const rowLabelStyles: CSSProperties = {
-  color: "#64748B",
-  fontSize: 13,
-  fontWeight: 600,
-  lineHeight: "18px",
-  paddingTop: 10
-};
-
-const dropdownVariantsSourceCode = `<StoryPage fullscreen>
-  <Dropdown
-    brand="Cars24"
-    size="Small"
-    label="Label"
-    placeholder="Input text"
-    helperText="Helper text"
-    prefixIconName="placeholder-generate-outline"
-    required
-    showHelperIcon
-    showLabelInfoIcon
-  />
-</StoryPage>`;
 
 const dropdownUiExampleSourceCode = `<Dropdown
   brand="Cars24"
@@ -287,13 +238,82 @@ export const Playground: Story = {
   }
 };
 
-export const Variants: Story = {
-  render: VariantMatrixStory,
+export const Rest: Story = {
+  render: ({ brand = "Cars24" }) => (
+    <StateMatrixStory brand={brand} forceState="Rest" stateLabel="Rest" />
+  ),
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: dropdownVariantsSourceCode
+        code: buildDropdownStateSourceCode({ forceState: "Rest", label: "Rest" })
+      }
+    }
+  }
+};
+
+export const Active: Story = {
+  render: ({ brand = "Cars24" }) => (
+    <StateMatrixStory brand={brand} forceState="Active" stateLabel="Active" />
+  ),
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: {
+      source: {
+        code: buildDropdownStateSourceCode({ forceState: "Active", label: "Active" })
+      }
+    }
+  }
+};
+
+export const Selected: Story = {
+  render: ({ brand = "Cars24" }) => (
+    <StateMatrixStory brand={brand} forceState="Selected" stateLabel="Selected" value="Input text" />
+  ),
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: {
+      source: {
+        code: buildDropdownStateSourceCode({ forceState: "Selected", label: "Selected", value: "Input text" })
+      }
+    }
+  }
+};
+
+export const Error: Story = {
+  render: ({ brand = "Cars24" }) => (
+    <StateMatrixStory
+      brand={brand}
+      forceState="Error"
+      helperTone="Error"
+      stateLabel="Error"
+      value="Input text"
+    />
+  ),
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: {
+      source: {
+        code: buildDropdownStateSourceCode({
+          forceState: "Error",
+          helperTone: "Error",
+          label: "Error",
+          value: "Input text"
+        })
+      }
+    }
+  }
+};
+
+export const Disabled: Story = {
+  render: ({ brand = "Cars24" }) => (
+    <StateMatrixStory brand={brand} forceState="Disabled" stateLabel="Disabled" />
+  ),
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: {
+      source: {
+        code: buildDropdownStateSourceCode({ forceState: "Disabled", label: "Disabled" })
       }
     }
   }
@@ -311,12 +331,5 @@ export const UIExample: Story = {
         code: dropdownUiExampleSourceCode
       }
     }
-  }
-};
-
-export const ThemeCoverage: Story = {
-  render: ThemeShowcaseStory,
-  parameters: {
-    controls: { disable: true }
   }
 };

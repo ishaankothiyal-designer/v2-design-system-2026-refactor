@@ -1,8 +1,14 @@
-import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
 import { HelperText, Text, type HelperTextProps, type HelperTextSize, type HelperTextTone } from "@geist/web";
 import { createFigspecDesign } from "../storybookFigma";
+import {
+  StoryMatrix,
+  StoryMatrixCornerCell,
+  StoryMatrixHeaderCell,
+  StoryMatrixRowLabelCell,
+  StoryMatrixValueCell
+} from "../storybook-matrix";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 const helperTextSizes: HelperTextSize[] = ["Small", "Large"];
@@ -25,9 +31,9 @@ function PlaygroundStory(args: HelperTextStoryArgs) {
   );
 }
 
-function HeaderCell({ label }: { label: string }) {
+function HeaderCell({ brand, label }: { brand: DisplayBrandId; label: string }) {
   return (
-    <Text brand="Cars24" as="strong" size="sm" tone="secondary" style={{ display: "block" }}>
+    <Text brand={brand} as="strong" size="sm" tone="secondary" style={{ display: "block" }}>
       {label}
     </Text>
   );
@@ -54,29 +60,32 @@ function VariantCell({
   );
 }
 
-function VariantMatrixStory({ brand }: { brand: DisplayBrandId }) {
+function ToneMatrixStory({
+  brand,
+  tone
+}: {
+  brand: DisplayBrandId;
+  tone: HelperTextTone;
+}) {
   return (
     <StoryPage fullscreen>
-      <StoryCard>
-        <div style={matrixStyles}>
-          <div />
-          {helperTextSizes.map((size) => (
-            <HeaderCell key={`${brand}-${size}-header`} label={size} />
-          ))}
+      <StoryMatrix columns="160px repeat(2, minmax(328px, 1fr))">
+        <StoryMatrixCornerCell />
+        {helperTextSizes.map((size) => (
+          <StoryMatrixHeaderCell key={`${brand}-${tone}-${size}-header`}>
+            <HeaderCell brand={brand} label={size} />
+          </StoryMatrixHeaderCell>
+        ))}
 
-          {helperTextTones.flatMap((tone) => [
-            <HeaderCell key={`${brand}-${tone}-label`} label={tone} />,
-            ...helperTextSizes.map((size) => (
-              <VariantCell
-                key={`${brand}-${tone}-${size}`}
-                brand={brand}
-                size={size}
-                tone={tone}
-              />
-            ))
-          ])}
-        </div>
-      </StoryCard>
+        <StoryMatrixRowLabelCell minHeight={104}>
+          <HeaderCell brand={brand} label={tone} />
+        </StoryMatrixRowLabelCell>
+        {helperTextSizes.map((size) => (
+          <StoryMatrixValueCell key={`${brand}-${tone}-${size}`} minHeight={104}>
+            <VariantCell brand={brand} size={size} tone={tone} />
+          </StoryMatrixValueCell>
+        ))}
+      </StoryMatrix>
     </StoryPage>
   );
 }
@@ -89,9 +98,9 @@ function CounterStory({ brand }: { brand: DisplayBrandId }) {
           <div style={counterMatrixStyles}>
             <div />
             {helperTextSizes.map((size) => (
-              <HeaderCell key={`${brand}-${size}-counter-header`} label={size} />
+              <HeaderCell brand={brand} key={`${brand}-${size}-counter-header`} label={size} />
             ))}
-            <HeaderCell label="With Counter" />
+            <HeaderCell brand={brand} label="With Counter" />
             {helperTextSizes.map((size) => (
               <div key={`${brand}-${size}-counter`} style={{ width: 328 }}>
                 <HelperText
@@ -108,9 +117,9 @@ function CounterStory({ brand }: { brand: DisplayBrandId }) {
           <div style={counterMatrixStyles}>
             <div />
             {helperTextSizes.map((size) => (
-              <HeaderCell key={`${brand}-${size}-text-only-header`} label={size} />
+              <HeaderCell brand={brand} key={`${brand}-${size}-text-only-header`} label={size} />
             ))}
-            <HeaderCell label="Without Icon" />
+            <HeaderCell brand={brand} label="Without Icon" />
             {helperTextSizes.map((size) => (
               <div key={`${brand}-${size}-text-only`} style={{ width: 328 }}>
                 <HelperText
@@ -129,27 +138,37 @@ function CounterStory({ brand }: { brand: DisplayBrandId }) {
   );
 }
 
-const matrixStyles: CSSProperties = {
-  alignItems: "start",
-  columnGap: 24,
-  display: "grid",
-  gridTemplateColumns: "140px repeat(2, minmax(328px, 1fr))",
-  rowGap: 20,
-  justifyContent: "center"
-};
-
-const counterMatrixStyles: CSSProperties = {
+const counterMatrixStyles = {
   alignItems: "start",
   columnGap: 24,
   display: "grid",
   gridTemplateColumns: "140px repeat(2, minmax(328px, 1fr))",
   rowGap: 16,
   justifyContent: "center"
-};
+} as const;
 
-const helperTextVariantsSourceCode = `<StoryPage fullscreen>
-  <HelperText brand="Cars24" size="Small" tone="Default" helperText="Helper text" />
-</StoryPage>`;
+function buildHelperTextToneSourceCode(tone: HelperTextTone) {
+  return `import { HelperText } from "@geist/web";
+
+export function HelperText${tone}() {
+  return (
+    <div style={{ display: "grid", gap: 24 }}>
+      <HelperText
+        brand="Cars24"
+        size="Small"
+        tone="${tone}"
+        helperText="Helper text"
+      />
+      <HelperText
+        brand="Cars24"
+        size="Large"
+        tone="${tone}"
+        helperText="Helper text"
+      />
+    </div>
+  );
+}`;
+}
 
 const helperTextCounterSourceCode = `<HelperText
   brand="Cars24"
@@ -214,58 +233,46 @@ export const Playground: Story = {
   }
 };
 
-export const Cars24: Story = {
-  render: () => <VariantMatrixStory brand="Cars24" />,
+export const Default: Story = {
+  render: ({ brand = "Cars24" }) => <ToneMatrixStory brand={brand} tone="Default" />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: helperTextVariantsSourceCode
+        code: buildHelperTextToneSourceCode("Default")
       }
     }
   }
 };
 
-export const TeamBHP: Story = {
-  render: () => <VariantMatrixStory brand="Team BHP" />,
+export const Error: Story = {
+  render: ({ brand = "Cars24" }) => <ToneMatrixStory brand={brand} tone="Error" />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: helperTextVariantsSourceCode.replaceAll('"Cars24"', '"Team BHP"')
+        code: buildHelperTextToneSourceCode("Error")
       }
     }
   }
 };
 
-export const CarInfo: Story = {
-  render: () => <VariantMatrixStory brand="CarInfo" />,
+export const Success: Story = {
+  render: ({ brand = "Cars24" }) => <ToneMatrixStory brand={brand} tone="Success" />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: helperTextVariantsSourceCode.replaceAll('"Cars24"', '"CarInfo"')
-      }
-    }
-  }
-};
-
-export const VehicleInfo: Story = {
-  render: () => <VariantMatrixStory brand="VehicleInfo" />,
-  parameters: {
-    controls: { disable: true },
-    docs: {
-      source: {
-        code: helperTextVariantsSourceCode.replaceAll('"Cars24"', '"VehicleInfo"')
+        code: buildHelperTextToneSourceCode("Success")
       }
     }
   }
 };
 
 export const OptionalVariants: Story = {
-  render: () => <CounterStory brand="Cars24" />,
+  render: ({ brand = "Cars24" }) => <CounterStory brand={brand} />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
     docs: {
       source: {
         code: helperTextCounterSourceCode

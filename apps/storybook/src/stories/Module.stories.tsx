@@ -93,13 +93,13 @@ function PlaygroundStory({
   );
 }
 
-function SlotCompositionStory() {
+function SlotCompositionStory({ brand = "Cars24" }: Pick<ModuleProps, "brand">) {
   return (
     <StoryPage>
       <div style={slotGridStyles}>
         <StoryCard style={{ width: "fit-content" }}>
           <PlaygroundStory
-            brand="Cars24"
+            brand={brand}
             description="A slot can host form controls, banners, accordions, or any other approved component."
             inverse={false}
             slotVariant="Text input"
@@ -110,7 +110,7 @@ function SlotCompositionStory() {
 
         <StoryCard style={{ width: "fit-content" }}>
           <PlaygroundStory
-            brand="Cars24"
+            brand={brand}
             description="The same module shell can frame collapsible content while preserving header and footer structure."
             inverse={false}
             primaryAction={{
@@ -125,7 +125,7 @@ function SlotCompositionStory() {
 
         <StoryCard style={{ background: "#0A0A0A", width: "fit-content" }}>
           <PlaygroundStory
-            brand="Cars24"
+            brand={brand}
             description="Inverse styling keeps the exact same composition pattern while swapping the surface and action treatment."
             headerActionLabel="See all"
             inverse
@@ -268,10 +268,10 @@ export const Playground: Story = {
   }
 };
 
-export const SlotCompositions: StoryObj = {
-  render: () => <SlotCompositionStory />,
+export const SlotCompositions: Story = {
+  render: ({ brand = "Cars24" }) => <SlotCompositionStory brand={brand} />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
     docs: {
       source: {
         code: moduleSourceCode

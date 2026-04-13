@@ -1,111 +1,129 @@
-import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
 import { Icon, SectionHeader, Text, type SectionHeaderProps } from "@geist/web";
 import { createFigspecDesign } from "../storybookFigma";
-import { StoryCard, StoryPage } from "../storybook-shell";
+import {
+  StoryMatrix,
+  StoryMatrixCornerCell,
+  StoryMatrixHeaderCell,
+  StoryMatrixRowLabelCell,
+  StoryMatrixValueCell
+} from "../storybook-matrix";
+import { StoryPage } from "../storybook-shell";
 
-function FigmaVariantsStory() {
+function HeaderCell({
+  brand,
+  label,
+  tone = "secondary"
+}: {
+  brand: DisplayBrandId;
+  label: string;
+  tone?: "primary" | "secondary" | "inverse";
+}) {
+  return (
+    <Text brand={brand} as="strong" size="sm" tone={tone} style={{ display: "block" }}>
+      {label}
+    </Text>
+  );
+}
+
+function LeftVariantStory({ brand }: { brand?: DisplayBrandId }) {
+  const activeBrand = brand ?? "Cars24";
+
   return (
     <StoryPage>
-      <div style={variantGridStyles}>
-        <StoryCard style={{ width: "fit-content" }}>
-          <SectionHeader />
-        </StoryCard>
+      <StoryMatrix columns="160px minmax(0, 520px)">
+        <StoryMatrixCornerCell />
+        <StoryMatrixHeaderCell>
+          <HeaderCell brand={activeBrand} label="Preview" />
+        </StoryMatrixHeaderCell>
 
-        <StoryCard style={{ background: "#0A0A0A", width: "fit-content" }}>
-          <SectionHeader inverse />
-        </StoryCard>
+        <StoryMatrixRowLabelCell minHeight={180}>
+          <HeaderCell brand={activeBrand} label="Light" />
+        </StoryMatrixRowLabelCell>
+        <StoryMatrixValueCell minHeight={180}>
+          <div style={{ width: "100%" }}>
+            <SectionHeader brand={activeBrand} />
+          </div>
+        </StoryMatrixValueCell>
 
-        <StoryCard style={{ width: "fit-content" }}>
-          <SectionHeader brand="VehicleInfo" />
-        </StoryCard>
-
-        <StoryCard style={{ background: "#0A0A0A", width: "fit-content" }}>
-          <SectionHeader brand="VehicleInfo" inverse />
-        </StoryCard>
-      </div>
+        <StoryMatrixRowLabelCell minHeight={180}>
+          <HeaderCell brand={activeBrand} label="Inverse" />
+        </StoryMatrixRowLabelCell>
+        <StoryMatrixValueCell minHeight={180} tone="inverse">
+          <div style={{ width: "100%" }}>
+            <SectionHeader brand={activeBrand} inverse />
+          </div>
+        </StoryMatrixValueCell>
+      </StoryMatrix>
     </StoryPage>
   );
 }
 
-function ConfigurationsStory({ brand = "Cars24" }: Pick<SectionHeaderProps, "brand">) {
+function CenterVariantStory({ brand }: { brand?: DisplayBrandId }) {
+  const activeBrand = brand ?? "Cars24";
+
   return (
     <StoryPage>
-      <div style={configGridStyles}>
-        <StoryCard style={{ width: "fit-content" }}>
-          <div style={{ display: "grid", gap: 12 }}>
-            <Text brand={brand} as="strong" size="md">
-              With icons
-            </Text>
+      <StoryMatrix columns="160px minmax(0, 520px)">
+        <StoryMatrixCornerCell />
+        <StoryMatrixHeaderCell>
+          <HeaderCell brand={activeBrand} label="Preview" />
+        </StoryMatrixHeaderCell>
+
+        <StoryMatrixRowLabelCell minHeight={180}>
+          <HeaderCell brand={activeBrand} label="Light" />
+        </StoryMatrixRowLabelCell>
+        <StoryMatrixValueCell minHeight={180}>
+          <div style={{ width: "100%" }}>
             <SectionHeader
-              brand={brand}
+              brand={activeBrand}
               titleIcon={<Icon name="sparkle-filled" decorative />}
               subtitleIcon={<Icon name="calendar-line" decorative />}
             />
           </div>
-        </StoryCard>
+        </StoryMatrixValueCell>
 
-        <StoryCard style={{ width: "fit-content" }}>
-          <div style={{ display: "grid", gap: 12 }}>
-            <Text brand={brand} as="strong" size="md">
-              No subtitle or tag
-            </Text>
+        <StoryMatrixRowLabelCell minHeight={180}>
+          <HeaderCell brand={activeBrand} label="Inverse" />
+        </StoryMatrixRowLabelCell>
+        <StoryMatrixValueCell minHeight={180} tone="inverse">
+          <div style={{ width: "100%" }}>
             <SectionHeader
-              brand={brand}
-              subtitle=""
-              showTag={false}
-              description="Description goes here upto 2 lines"
+              brand={activeBrand}
+              inverse
+              titleIcon={<Icon name="sparkle-filled" decorative />}
+              subtitleIcon={<Icon name="calendar-line" decorative />}
             />
           </div>
-        </StoryCard>
-
-        <StoryCard style={{ background: "#0A0A0A", width: "fit-content" }}>
-          <div style={{ display: "grid", gap: 12 }}>
-            <Text brand={brand} as="strong" size="md" tone="inverse">
-              Inverse, no action
-            </Text>
-            <SectionHeader brand={brand} inverse showAction={false} />
-          </div>
-        </StoryCard>
-      </div>
+        </StoryMatrixValueCell>
+      </StoryMatrix>
     </StoryPage>
   );
 }
 
-const variantGridStyles: CSSProperties = {
-  display: "grid",
-  gap: 24,
-  gridTemplateColumns: "repeat(auto-fit, minmax(360px, max-content))",
-  justifyContent: "center"
-};
-
-const configGridStyles: CSSProperties = {
-  display: "grid",
-  gap: 24,
-  gridTemplateColumns: "repeat(auto-fit, minmax(360px, max-content))"
-};
-
-const sectionHeaderVariantsSourceCode = `<StoryPage>
-  <SectionHeader
-    brand="Cars24"
-    title="Section title"
-    subtitle="Section title line 2"
-    description="Description goes here upto 2 lines"
-    tagLabel="New"
-    showTag
-    showAction
-    actionLabel="View all"
-  />
-</StoryPage>`;
-
-const sectionHeaderUiExampleSourceCode = `<SectionHeader
+const sectionHeaderLeftSourceCode = `<SectionHeader
   brand="Cars24"
   title="Section title"
+  showSubtitle
   subtitle="Section title line 2"
+  showDescription
   description="Description goes here upto 2 lines"
-  showTag={false}
-  showAction={false}
+  tagLabel="New"
+  showTag
+  showAction
+  actionLabel="View all"
+/>`;
+
+const sectionHeaderCenterSourceCode = `<SectionHeader
+  brand="VehicleInfo"
+  title="Section title"
+  showSubtitle
+  subtitle="Section title line 2"
+  showDescription
+  description="Description goes here upto 2 lines"
+  titleIcon={<Icon name="sparkle-filled" decorative />}
+  subtitleIcon={<Icon name="calendar-line" decorative />}
 />`;
 
 const SECTION_HEADER_FIGMA_URL =
@@ -123,7 +141,9 @@ const meta: Meta<SectionHeaderProps> = {
     brand: "Cars24",
     inverse: false,
     title: "Section title",
+    showSubtitle: true,
     subtitle: "Section title line 2",
+    showDescription: true,
     description: "Description goes here upto 2 lines",
     tagLabel: "New",
     showTag: true,
@@ -141,8 +161,14 @@ const meta: Meta<SectionHeaderProps> = {
     title: {
       control: "text"
     },
+    showSubtitle: {
+      control: "boolean"
+    },
     subtitle: {
       control: "text"
+    },
+    showDescription: {
+      control: "boolean"
     },
     description: {
       control: "text"
@@ -182,27 +208,25 @@ export const Playground: Story = {
   }
 };
 
-export const Variants: StoryObj = {
-  render: () => <FigmaVariantsStory />,
+export const Left: Story = {
+  render: ({ brand = "Cars24" }) => <LeftVariantStory brand={brand} />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: sectionHeaderVariantsSourceCode
+        code: sectionHeaderLeftSourceCode
       }
     }
   }
 };
 
-export const UIExample: Story = {
-  render: ({ brand = "Cars24" }) => <ConfigurationsStory brand={brand} />,
+export const Center: Story = {
+  render: ({ brand = "Cars24" }) => <CenterVariantStory brand={brand} />,
   parameters: {
-    controls: {
-      include: ["brand"]
-    },
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: sectionHeaderUiExampleSourceCode
+        code: sectionHeaderCenterSourceCode
       }
     }
   }

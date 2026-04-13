@@ -1,22 +1,25 @@
-import type { ChangeEvent, CSSProperties } from "react";
+import type { ChangeEvent } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "storybook/preview-api";
-import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
-import {
-  Text,
-  Textarea,
-  type TextareaPreviewState,
-  type TextareaProps,
-  type TextareaSize
-} from "@geist/web";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
+import { Text, Textarea, type TextareaPreviewState, type TextareaProps, type TextareaSize } from "@geist/web";
 import { createFigspecDesign } from "../storybookFigma";
-import { StoryCard, StoryPage } from "../storybook-shell";
+import {
+  StoryMatrix,
+  StoryMatrixCornerCell,
+  StoryMatrixHeaderCell,
+  StoryMatrixRowLabelCell,
+  StoryMatrixValueCell
+} from "../storybook-matrix";
+import { StoryPage } from "../storybook-shell";
 
 const textareaSizes: TextareaSize[] = ["Small", "Large"];
 const previewStates: TextareaPreviewState[] = ["Rest", "Hover", "Typing", "Typed", "Disabled"];
 
-function PlaygroundStory(args: TextareaProps) {
-  const [{ value }, updateArgs] = useArgs<TextareaProps>();
+type TextareaStoryArgs = TextareaProps;
+
+function PlaygroundStory(args: TextareaStoryArgs) {
+  const [{ value }, updateArgs] = useArgs<TextareaStoryArgs>();
   const isControlled = value !== undefined;
 
   function handleChange(event: ChangeEvent<HTMLTextAreaElement>) {
@@ -29,118 +32,105 @@ function PlaygroundStory(args: TextareaProps) {
 
   return (
     <div style={{ width: 328 }}>
-      <Textarea
-        {...args}
-        {...(isControlled ? { value } : {})}
-        onChange={handleChange}
-      />
+      <Textarea {...args} {...(isControlled ? { value } : {})} onChange={handleChange} />
     </div>
   );
 }
 
-function VariantMatrixStory() {
+function HeaderCell({ brand, label }: { brand: DisplayBrandId; label: string }) {
+  return (
+    <Text brand={brand} as="strong" size="sm" tone="secondary" style={{ display: "block" }}>
+      {label}
+    </Text>
+  );
+}
+
+function StateMatrixStory({
+  brand,
+  forceState,
+  stateLabel,
+  value
+}: {
+  brand: DisplayBrandId;
+  forceState: TextareaPreviewState;
+  stateLabel: string;
+  value?: string;
+}) {
   const common = {
-    brand: "Cars24" as const,
+    brand,
+    forceState,
     helperText: "Helper text",
     label: "Label",
     maxLength: 250,
     placeholder: "Input text",
     showCharacterCounter: true,
-    showHelperIcon: true
+    showHelperIcon: true,
+    ...(value !== undefined ? { value } : {})
   } satisfies TextareaProps;
-
-  const rows: Array<{
-    label: string;
-    small: TextareaProps;
-    large: TextareaProps;
-  }> = [
-    {
-      label: "Rest",
-      small: { ...common, forceState: "Rest", size: "Small" },
-      large: { ...common, forceState: "Rest", size: "Large" }
-    },
-    {
-      label: "Hover",
-      small: { ...common, forceState: "Hover", size: "Small", value: "" },
-      large: { ...common, forceState: "Hover", size: "Large", value: "" }
-    },
-    {
-      label: "Typing",
-      small: { ...common, forceState: "Typing", size: "Small", value: "Input text" },
-      large: { ...common, forceState: "Typing", size: "Large", value: "Input text" }
-    },
-    {
-      label: "Typed",
-      small: { ...common, forceState: "Typed", size: "Small", value: "Input text" },
-      large: { ...common, forceState: "Typed", size: "Large", value: "Input text" }
-    }
-  ];
 
   return (
     <StoryPage fullscreen>
-      <StoryCard>
-        <div style={{ display: "grid", gap: 24 }}>
-          <div style={matrixHeaderStyles}>
-            <div />
-            <Text brand="Cars24" as="strong" size="md">
-              Small
-            </Text>
-            <Text brand="Cars24" as="strong" size="md">
-              Large
-            </Text>
-          </div>
+      <StoryMatrix columns="180px repeat(2, minmax(328px, 1fr))">
+        <StoryMatrixCornerCell />
+        {textareaSizes.map((size) => (
+          <StoryMatrixHeaderCell key={`${stateLabel}-${size}-header`}>
+            <HeaderCell brand={brand} label={size} />
+          </StoryMatrixHeaderCell>
+        ))}
 
-          <div style={matrixStyles}>
-            {rows.flatMap((row) => [
-              <div key={`${row.label}-label`} style={rowLabelStyles}>
-                {row.label}
-              </div>,
-              <Textarea key={`${row.label}-small`} {...row.small} />,
-              <Textarea key={`${row.label}-large`} {...row.large} />
-            ])}
-          </div>
-        </div>
-      </StoryCard>
+        <StoryMatrixRowLabelCell minHeight={112}>
+          <HeaderCell brand={brand} label={stateLabel} />
+        </StoryMatrixRowLabelCell>
+        {textareaSizes.map((size) => (
+          <StoryMatrixValueCell key={`${stateLabel}-${size}`} minHeight={112}>
+            <Textarea {...common} size={size} />
+          </StoryMatrixValueCell>
+        ))}
+      </StoryMatrix>
     </StoryPage>
   );
 }
 
-const matrixStyles: CSSProperties = {
-  alignItems: "start",
-  columnGap: 24,
-  display: "grid",
-  gridTemplateColumns: "120px repeat(2, minmax(328px, 1fr))",
-  justifyContent: "center",
-  rowGap: 20
-};
+function buildTextareaStateSourceCode({
+  forceState,
+  label,
+  value
+}: {
+  forceState: TextareaPreviewState;
+  label: string;
+  value?: string;
+}) {
+  return `import { Textarea } from "@geist/web";
 
-const matrixHeaderStyles: CSSProperties = {
-  alignItems: "center",
-  columnGap: 24,
-  display: "grid",
-  gridTemplateColumns: "120px repeat(2, minmax(328px, 1fr))"
-};
-
-const rowLabelStyles: CSSProperties = {
-  color: "#64748B",
-  fontSize: 13,
-  fontWeight: 600,
-  lineHeight: "18px",
-  paddingTop: 10
-};
-
-const textareaVariantsSourceCode = `<StoryPage fullscreen>
-  <Textarea
-    brand="Cars24"
-    size="Small"
-    label="Label"
-    placeholder="Input text"
-    helperText="Helper text"
-    maxLength={250}
-    showCharacterCounter
-    showHelperIcon
-  />
-</StoryPage>`;
+export function Textarea${label.replace(/[^a-zA-Z0-9]/g, "")}() {
+  return (
+    <div style={{ display: "grid", gap: 24 }}>
+      <Textarea
+        brand="Cars24"
+        size="Small"
+        forceState="${forceState}"
+        label="Label"
+        placeholder="Input text"
+        helperText="Helper text"
+        maxLength={250}
+        showCharacterCounter
+        showHelperIcon
+${value !== undefined ? `        value="${value}"\n` : ""}      />
+      <Textarea
+        brand="Cars24"
+        size="Large"
+        forceState="${forceState}"
+        label="Label"
+        placeholder="Input text"
+        helperText="Helper text"
+        maxLength={250}
+        showCharacterCounter
+        showHelperIcon
+${value !== undefined ? `        value="${value}"\n` : ""}      />
+    </div>
+  );
+}`;
+}
 
 const textareaUiExampleSourceCode = `<Textarea
   brand="Cars24"
@@ -156,7 +146,7 @@ const textareaUiExampleSourceCode = `<Textarea
 const TEXTAREA_FIGMA_URL =
   "https://www.figma.com/design/AZgWt0KHVuVeWBAcQ6Jcy4/branch/yxI5H0FhaUg0YR0uhNuqR6/%F0%9F%9A%80-v2.0-Global-Component-Library?node-id=1117-27231&t=1zgOyFpiLYMyM4XM-11";
 
-const meta = {
+const meta: Meta<TextareaStoryArgs> = {
   title: "Components/Forms/Textarea",
   component: Textarea,
   tags: ["autodocs"],
@@ -202,34 +192,61 @@ const meta = {
     maxLength: {
       control: { type: "number", min: 0 }
     }
-  }
-} satisfies Meta<typeof Textarea>;
+  },
+  render: PlaygroundStory
+};
 
 export default meta;
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<TextareaStoryArgs>;
 
 export const Playground: Story = {
-  render: PlaygroundStory,
   parameters: {
     layout: "centered"
   }
 };
 
-export const Variants: Story = {
-  render: VariantMatrixStory,
+export const Rest: Story = {
+  render: ({ brand = "Cars24" }) => <StateMatrixStory brand={brand} forceState="Rest" stateLabel="Rest" />,
   parameters: {
-    controls: { disable: true },
-    docs: {
-      source: {
-        code: textareaVariantsSourceCode
-      }
-    }
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildTextareaStateSourceCode({ forceState: "Rest", label: "Rest" }) } }
+  }
+};
+
+export const Hover: Story = {
+  render: ({ brand = "Cars24" }) => <StateMatrixStory brand={brand} forceState="Hover" stateLabel="Hover" value="" />,
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildTextareaStateSourceCode({ forceState: "Hover", label: "Hover", value: "" }) } }
+  }
+};
+
+export const Typing: Story = {
+  render: ({ brand = "Cars24" }) => <StateMatrixStory brand={brand} forceState="Typing" stateLabel="Typing" value="Input text" />,
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildTextareaStateSourceCode({ forceState: "Typing", label: "Typing", value: "Input text" }) } }
+  }
+};
+
+export const Typed: Story = {
+  render: ({ brand = "Cars24" }) => <StateMatrixStory brand={brand} forceState="Typed" stateLabel="Typed" value="Input text" />,
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildTextareaStateSourceCode({ forceState: "Typed", label: "Typed", value: "Input text" }) } }
+  }
+};
+
+export const Disabled: Story = {
+  render: ({ brand = "Cars24" }) => <StateMatrixStory brand={brand} forceState="Disabled" stateLabel="Disabled" />,
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildTextareaStateSourceCode({ forceState: "Disabled", label: "Disabled" }) } }
   }
 };
 
 export const UIExample: Story = {
-  render: PlaygroundStory,
   parameters: {
     controls: {
       include: ["brand"]

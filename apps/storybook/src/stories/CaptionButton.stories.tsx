@@ -1,6 +1,5 @@
-import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
 import {
   CaptionButton,
   Text,
@@ -10,6 +9,14 @@ import {
   type CaptionButtonSize,
   type CaptionButtonStyleVariant
 } from "@geist/web";
+import {
+  StoryMatrix,
+  StoryMatrixCornerCell,
+  StoryMatrixHeaderCell,
+  StoryMatrixRowLabelCell,
+  StoryMatrixSection,
+  StoryMatrixValueCell
+} from "../storybook-matrix";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 type CaptionButtonStoryArgs = Omit<CaptionButtonProps, "caption" | "children"> & {
@@ -112,20 +119,20 @@ function VariantMatrix({
       <Text brand={brand} as="strong" size="sm">
         {styleVariant}
       </Text>
-      <div style={matrixTableStyles()}>
-        <div style={matrixCornerCellStyles} />
+      <StoryMatrix columns="180px repeat(3, minmax(220px, 1fr))">
+        <StoryMatrixCornerCell />
         {documentedStates.map((state) => (
-          <div key={`${captionPosition}-${styleVariant}-${state.key}-header`} style={matrixHeaderCellStyles}>
+          <StoryMatrixHeaderCell key={`${captionPosition}-${styleVariant}-${state.key}-header`}>
             <HeaderCell brand={brand} label={state.label} />
-          </div>
+          </StoryMatrixHeaderCell>
         ))}
 
         {captionButtonSizes.flatMap((size) => [
-          <div key={`${captionPosition}-${styleVariant}-${size}-label`} style={matrixRowLabelCellStyles}>
+          <StoryMatrixRowLabelCell key={`${captionPosition}-${styleVariant}-${size}-label`} minHeight={116}>
             <HeaderCell brand={brand} label={size} />
-          </div>,
+          </StoryMatrixRowLabelCell>,
           ...documentedStates.map((state) => (
-            <div key={`${captionPosition}-${styleVariant}-${size}-${state.key}`} style={matrixValueCellStyles}>
+            <StoryMatrixValueCell key={`${captionPosition}-${styleVariant}-${size}-${state.key}`} minHeight={116}>
               <MatrixCell
                 brand={brand}
                 captionPosition={captionPosition}
@@ -134,56 +141,48 @@ function VariantMatrix({
                 {...(state.forceState ? { forceState: state.forceState } : {})}
                 {...(state.disabled ? { disabled: true } : {})}
               />
-            </div>
+            </StoryMatrixValueCell>
           ))
         ])}
-      </div>
+      </StoryMatrix>
     </div>
   );
 }
 
 function CaptionPositionSection({
   brand,
-  captionPosition
+  captionPosition,
+  styleVariant
 }: {
   brand: DisplayBrandId;
   captionPosition: CaptionButtonCaptionPosition;
+  styleVariant: CaptionButtonStyleVariant;
 }) {
   return (
-    <div
-      style={{
-        display: "grid",
-        gap: 20,
-        padding: 24,
-        borderRadius: 24,
-        border: `1px solid ${String(coreTokenCatalog.color.border.default)}`,
-        background: String(coreTokenCatalog.color.surface.canvas)
-      }}
-    >
+    <StoryMatrixSection>
       <SectionHeading brand={brand} title={`Caption ${captionPosition}`} />
       <div style={{ display: "grid", gap: 20 }}>
-        {(["Primary", "Secondary"] as const).map((styleVariant) => (
-          <VariantMatrix
-            key={`${captionPosition}-${styleVariant}`}
-            brand={brand}
-            captionPosition={captionPosition}
-            styleVariant={styleVariant}
-          />
-        ))}
+        <VariantMatrix brand={brand} captionPosition={captionPosition} styleVariant={styleVariant} />
       </div>
-    </div>
+    </StoryMatrixSection>
   );
 }
 
-function BrandVariantMatrixStory({ brand }: { brand: DisplayBrandId }) {
+function StyleVariantMatrixStory({
+  brand,
+  styleVariant
+}: {
+  brand: DisplayBrandId;
+  styleVariant: CaptionButtonStyleVariant;
+}) {
   return (
     <StoryPage fullscreen>
       <div style={{ display: "grid", gap: 32 }}>
         <StoryCard>
-          <CaptionPositionSection brand={brand} captionPosition="Up" />
+          <CaptionPositionSection brand={brand} captionPosition="Up" styleVariant={styleVariant} />
         </StoryCard>
         <StoryCard>
-          <CaptionPositionSection brand={brand} captionPosition="Down" />
+          <CaptionPositionSection brand={brand} captionPosition="Down" styleVariant={styleVariant} />
         </StoryCard>
       </div>
     </StoryPage>
@@ -199,53 +198,6 @@ function PlaygroundStory(args: CaptionButtonStoryArgs) {
     </CaptionButton>
   );
 }
-
-function matrixTableStyles(): CSSProperties {
-  return {
-    display: "grid",
-    gridTemplateColumns: "180px repeat(3, minmax(220px, 1fr))",
-    border: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    borderRadius: 20,
-    overflow: "hidden"
-  };
-}
-
-const matrixCornerCellStyles: CSSProperties = {
-  minHeight: 68,
-  borderBottom: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  background: String(coreTokenCatalog.color.surface.canvas)
-};
-
-const matrixHeaderCellStyles: CSSProperties = {
-  minHeight: 68,
-  padding: "16px 20px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  background: String(coreTokenCatalog.color.surface.canvas)
-};
-
-const matrixRowLabelCellStyles: CSSProperties = {
-  minHeight: 108,
-  padding: "20px 16px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "flex-start",
-  borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  background: String(coreTokenCatalog.color.surface.canvas)
-};
-
-const matrixValueCellStyles: CSSProperties = {
-  minHeight: 108,
-  padding: "16px 20px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  background: String(coreTokenCatalog.color.surface.canvas)
-};
 
 const meta: Meta<CaptionButtonStoryArgs> = {
   title: "Components/Buttons/Caption Button",
@@ -291,15 +243,43 @@ export default meta;
 
 type Story = StoryObj<CaptionButtonStoryArgs>;
 
-const captionButtonVariantsSourceCode = `<CaptionButton caption="Caption" captionPosition="Up" size="Medium" styleVariant="Primary">
+function buildCaptionButtonStyleSourceCode(styleVariant: CaptionButtonStyleVariant) {
+  return `import { CaptionButton } from "@geist/web";
+
+<CaptionButton brand="Cars24" caption="Caption" captionPosition="Up" size="Medium" styleVariant="${styleVariant}">
   Primary Button
 </CaptionButton>
-<CaptionButton caption="Caption" captionPosition="Up" size="Medium" styleVariant="Primary" forceState="Hover/Pressed">
+<CaptionButton
+  brand="Cars24"
+  caption="Caption"
+  captionPosition="Up"
+  size="Medium"
+  styleVariant="${styleVariant}"
+  forceState="Hover/Pressed"
+>
   Primary Button
 </CaptionButton>
-<CaptionButton caption="Caption" captionPosition="Up" size="Medium" styleVariant="Primary" disabled>
+<CaptionButton brand="Cars24" caption="Caption" captionPosition="Up" size="Medium" styleVariant="${styleVariant}" disabled>
+  Primary Button
+</CaptionButton>
+
+<CaptionButton brand="Cars24" caption="Caption" captionPosition="Down" size="Large" styleVariant="${styleVariant}">
+  Primary Button
+</CaptionButton>
+<CaptionButton
+  brand="Cars24"
+  caption="Caption"
+  captionPosition="Down"
+  size="Large"
+  styleVariant="${styleVariant}"
+  forceState="Hover/Pressed"
+>
+  Primary Button
+</CaptionButton>
+<CaptionButton brand="Cars24" caption="Caption" captionPosition="Down" size="Large" styleVariant="${styleVariant}" disabled>
   Primary Button
 </CaptionButton>`;
+}
 
 export const Playground: Story = {
   render: (args) => <PlaygroundStory {...args} />,
@@ -308,35 +288,19 @@ export const Playground: Story = {
   }
 };
 
-export const Cars24: Story = {
-  render: () => <BrandVariantMatrixStory brand="Cars24" />,
+export const Primary: Story = {
+  render: ({ brand = "Cars24" }) => <StyleVariantMatrixStory brand={brand} styleVariant="Primary" />,
   parameters: {
-    controls: { disable: true },
-    docs: { source: { code: captionButtonVariantsSourceCode } }
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildCaptionButtonStyleSourceCode("Primary") } }
   }
 };
 
-export const TeamBHP: Story = {
-  render: () => <BrandVariantMatrixStory brand="Team BHP" />,
+export const Secondary: Story = {
+  render: ({ brand = "Cars24" }) => <StyleVariantMatrixStory brand={brand} styleVariant="Secondary" />,
   parameters: {
-    controls: { disable: true },
-    docs: { source: { code: captionButtonVariantsSourceCode } }
-  }
-};
-
-export const CarInfo: Story = {
-  render: () => <BrandVariantMatrixStory brand="CarInfo" />,
-  parameters: {
-    controls: { disable: true },
-    docs: { source: { code: captionButtonVariantsSourceCode } }
-  }
-};
-
-export const VehicleInfo: Story = {
-  render: () => <BrandVariantMatrixStory brand="VehicleInfo" />,
-  parameters: {
-    controls: { disable: true },
-    docs: { source: { code: captionButtonVariantsSourceCode } }
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildCaptionButtonStyleSourceCode("Secondary") } }
   }
 };
 

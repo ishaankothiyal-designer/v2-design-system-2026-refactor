@@ -1,9 +1,8 @@
-import type { ChangeEvent, CSSProperties } from "react";
+import type { ChangeEvent } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "storybook/preview-api";
-import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
 import {
-  Text,
   TextInput,
   type TextInputHelperTone,
   type TextInputPreviewState,
@@ -12,7 +11,18 @@ import {
   type TextInputValidationState
 } from "@geist/web";
 import { createFigspecDesign } from "../storybookFigma";
-import { StoryCard, StoryPage } from "../storybook-shell";
+import {
+  EditProfileMobileScreen,
+  editProfileScreenSourceCode
+} from "./EditProfileMobileScreenExample";
+import {
+  StoryMatrix,
+  StoryMatrixCornerCell,
+  StoryMatrixHeaderCell,
+  StoryMatrixRowLabelCell,
+  StoryMatrixValueCell
+} from "../storybook-matrix";
+import { StoryPage } from "../storybook-shell";
 
 const textInputSizes: TextInputSize[] = ["Small", "Large"];
 const previewStates: TextInputPreviewState[] = [
@@ -28,8 +38,10 @@ const previewStates: TextInputPreviewState[] = [
 const validationStates: TextInputValidationState[] = ["Default", "Error", "Success"];
 const helperTones: TextInputHelperTone[] = ["Default", "Error", "Success"];
 
-function PlaygroundStory(args: TextInputProps) {
-  const [{ value }, updateArgs] = useArgs<TextInputProps>();
+type TextInputStoryArgs = TextInputProps;
+
+function PlaygroundStory(args: TextInputStoryArgs) {
+  const [{ value }, updateArgs] = useArgs<TextInputStoryArgs>();
   const isControlled = value !== undefined;
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
@@ -42,18 +54,31 @@ function PlaygroundStory(args: TextInputProps) {
 
   return (
     <div style={{ width: 328 }}>
-      <TextInput
-        {...args}
-        {...(isControlled ? { value } : {})}
-        onChange={handleChange}
-      />
+      <TextInput {...args} {...(isControlled ? { value } : {})} onChange={handleChange} />
     </div>
   );
 }
 
-function VariantMatrixStory() {
+function HeaderCell({ label }: { brand: DisplayBrandId; label: string }) {
+  return <span>{label}</span>;
+}
+
+function StateMatrixStory({
+  brand,
+  forceState,
+  helperTone,
+  stateLabel,
+  value
+}: {
+  brand: DisplayBrandId;
+  forceState: TextInputPreviewState;
+  helperTone?: TextInputHelperTone;
+  stateLabel: string;
+  value?: string;
+}) {
   const common = {
-    brand: "Cars24" as const,
+    brand,
+    forceState,
     helperText: "Helper text",
     label: "Label",
     placeholder: "Placeholder text",
@@ -61,182 +86,85 @@ function VariantMatrixStory() {
     required: true,
     showHelperIcon: true,
     showLabelInfoIcon: true,
-    suffixIconName: "placeholder-generate-outline" as const
-  };
-
-  const rows: Array<{
-    label: string;
-    small: TextInputProps;
-    large: TextInputProps;
-  }> = [
-    {
-      label: "Rest",
-      small: { ...common, forceState: "Rest", size: "Small" },
-      large: { ...common, forceState: "Rest", size: "Large" }
-    },
-    {
-      label: "Hover",
-      small: { ...common, forceState: "Hover", size: "Small", value: "Input text" },
-      large: { ...common, forceState: "Hover", size: "Large", value: "Input text" }
-    },
-    {
-      label: "Active",
-      small: { ...common, forceState: "Active", size: "Small", value: "" },
-      large: { ...common, forceState: "Active", size: "Large", value: "" }
-    },
-    {
-      label: "Typing",
-      small: { ...common, forceState: "Typing", size: "Small", value: "Typing" },
-      large: { ...common, forceState: "Typing", size: "Large", value: "Typing" }
-    },
-    {
-      label: "Typed",
-      small: { ...common, forceState: "Typed", size: "Small", value: "Typed text" },
-      large: { ...common, forceState: "Typed", size: "Large", value: "Typed text" }
-    },
-    {
-      label: "Error",
-      small: { ...common, forceState: "Error", helperTone: "Error", size: "Small", value: "Invalid text" },
-      large: { ...common, forceState: "Error", helperTone: "Error", size: "Large", value: "Input text" }
-    },
-    {
-      label: "Success",
-      small: { ...common, forceState: "Success", helperTone: "Success", size: "Small", value: "Input text" },
-      large: { ...common, forceState: "Success", helperTone: "Success", size: "Large", value: "Input text" }
-    },
-    {
-      label: "Disabled",
-      small: { ...common, forceState: "Disabled", size: "Small", value: "Input text" },
-      large: { ...common, forceState: "Disabled", size: "Large", value: "Input text" }
-    }
-  ];
+    suffixIconName: "placeholder-generate-outline" as const,
+    ...(helperTone ? { helperTone } : {}),
+    ...(value !== undefined ? { value } : {})
+  } satisfies TextInputProps;
 
   return (
     <StoryPage fullscreen>
-      <StoryCard>
-        <div style={{ display: "grid", gap: 24 }}>
-          <div style={matrixHeaderStyles}>
-            <div />
-            <Text brand="Cars24" as="strong" size="md">
-              Small
-            </Text>
-            <Text brand="Cars24" as="strong" size="md">
-              Large
-            </Text>
-          </div>
+      <StoryMatrix columns="180px repeat(2, minmax(328px, 1fr))">
+        <StoryMatrixCornerCell />
+        {textInputSizes.map((size) => (
+          <StoryMatrixHeaderCell key={`${stateLabel}-${size}-header`}>
+            <HeaderCell brand={brand} label={size} />
+          </StoryMatrixHeaderCell>
+        ))}
 
-          <div style={matrixStyles}>
-            {rows.flatMap((row) => [
-              <div key={`${row.label}-label`} style={rowLabelStyles}>
-                {row.label}
-              </div>,
-              <TextInput key={`${row.label}-small`} {...row.small} />,
-              <TextInput key={`${row.label}-large`} {...row.large} />
-            ])}
-          </div>
-        </div>
-      </StoryCard>
+        <StoryMatrixRowLabelCell minHeight={112}>
+          <HeaderCell brand={brand} label={stateLabel} />
+        </StoryMatrixRowLabelCell>
+        {textInputSizes.map((size) => (
+          <StoryMatrixValueCell key={`${stateLabel}-${size}`} minHeight={112}>
+            <TextInput {...common} size={size} />
+          </StoryMatrixValueCell>
+        ))}
+      </StoryMatrix>
     </StoryPage>
   );
 }
 
-function ThemeShowcaseStory() {
+function buildTextInputStateSourceCode({
+  forceState,
+  helperTone,
+  label,
+  value
+}: {
+  forceState: TextInputPreviewState;
+  helperTone?: TextInputHelperTone;
+  label: string;
+  value?: string;
+}) {
+  return `import { TextInput } from "@geist/web";
+
+export function TextInput${label.replace(/[^a-zA-Z0-9]/g, "")}() {
   return (
-    <StoryPage>
-      <StoryCard>
-        <div style={{ display: "grid", gap: 20 }}>
-          <header style={{ display: "grid", gap: 6 }}>
-            <Text brand="Cars24" as="strong" size="md">
-              Theme Coverage
-            </Text>
-            <Text brand="Cars24" as="span" size="xs" tone="secondary">
-              Same typed state rendered across all supported brand themes.
-            </Text>
-          </header>
-
-          <div style={{ display: "grid", gap: 20 }}>
-            {STORYBOOK_BRAND_OPTIONS.map((brand) => (
-              <div key={brand} style={{ display: "grid", gap: 10, width: 328 }}>
-                <Text brand={brand} as="strong" size="sm">
-                  {brand}
-                </Text>
-                <TextInput
-                  brand={brand}
-                  helperText="Helper text"
-                  label="Label"
-                  prefixIconName="placeholder-generate-outline"
-                  required
-                  showHelperIcon
-                  showLabelInfoIcon
-                  size="Large"
-                  suffixIconName="placeholder-generate-outline"
-                  value="Input text"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </StoryCard>
-    </StoryPage>
+    <div style={{ display: "grid", gap: 24 }}>
+      <TextInput
+        brand="Cars24"
+        size="Small"
+        forceState="${forceState}"
+        label="Label"
+        placeholder="Placeholder text"
+        helperText="Helper text"
+        prefixIconName="placeholder-generate-outline"
+        suffixIconName="placeholder-generate-outline"
+        required
+        showHelperIcon
+        showLabelInfoIcon
+${helperTone ? `        helperTone="${helperTone}"\n` : ""}${value !== undefined ? `        value="${value}"\n` : ""}      />
+      <TextInput
+        brand="Cars24"
+        size="Large"
+        forceState="${forceState}"
+        label="Label"
+        placeholder="Placeholder text"
+        helperText="Helper text"
+        prefixIconName="placeholder-generate-outline"
+        suffixIconName="placeholder-generate-outline"
+        required
+        showHelperIcon
+        showLabelInfoIcon
+${helperTone ? `        helperTone="${helperTone}"\n` : ""}${value !== undefined ? `        value="${value}"\n` : ""}      />
+    </div>
   );
+}`;
 }
-
-const matrixStyles: CSSProperties = {
-  alignItems: "start",
-  columnGap: 24,
-  display: "grid",
-  gridTemplateColumns: "120px repeat(2, minmax(328px, 1fr))",
-  rowGap: 20,
-  justifyContent: "center"
-};
-
-const matrixHeaderStyles: CSSProperties = {
-  alignItems: "center",
-  columnGap: 24,
-  display: "grid",
-  gridTemplateColumns: "120px repeat(2, minmax(328px, 1fr))"
-};
-
-const rowLabelStyles: CSSProperties = {
-  color: "#64748B",
-  fontSize: 13,
-  fontWeight: 600,
-  lineHeight: "18px",
-  paddingTop: 10
-};
-
-const textInputVariantsSourceCode = `<StoryPage fullscreen>
-  <TextInput
-    brand="Cars24"
-    size="Small"
-    label="Label"
-    placeholder="Placeholder text"
-    helperText="Helper text"
-    prefixIconName="placeholder-generate-outline"
-    suffixIconName="placeholder-generate-outline"
-    required
-    showHelperIcon
-    showLabelInfoIcon
-  />
-</StoryPage>`;
-
-const textInputUiExampleSourceCode = `<TextInput
-  brand="Cars24"
-  size="Small"
-  label="Label"
-  placeholder="Placeholder text"
-  helperText="Helper text"
-  prefixIconName="placeholder-generate-outline"
-  suffixIconName="placeholder-generate-outline"
-  required
-  showHelperIcon
-  showLabelInfoIcon
-/>`;
 
 const TEXT_INPUT_FIGMA_URL =
   "https://www.figma.com/design/AZgWt0KHVuVeWBAcQ6Jcy4/branch/yxI5H0FhaUg0YR0uhNuqR6/%F0%9F%9A%80-v2.0-Global-Component-Library?node-id=6451-19520&t=1zgOyFpiLYMyM4XM-11";
 
-const meta = {
+const meta: Meta<TextInputStoryArgs> = {
   title: "Components/Forms/Text Input",
   component: TextInput,
   tags: ["autodocs"],
@@ -296,42 +224,126 @@ const meta = {
     suffixIconName: {
       control: "text"
     }
-  }
-} satisfies Meta<typeof TextInput>;
+  },
+  render: PlaygroundStory
+};
 
 export default meta;
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<TextInputStoryArgs>;
 
 export const Playground: Story = {
-  render: PlaygroundStory,
   parameters: {
     layout: "centered"
   }
 };
 
-export const Variants: Story = {
-  render: VariantMatrixStory,
+export const Rest: Story = {
+  render: ({ brand = "Cars24" }) => <StateMatrixStory brand={brand} forceState="Rest" stateLabel="Rest" />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildTextInputStateSourceCode({ forceState: "Rest", label: "Rest" }) } }
+  }
+};
+
+export const Hover: Story = {
+  render: ({ brand = "Cars24" }) => (
+    <StateMatrixStory brand={brand} forceState="Hover" stateLabel="Hover" value="Input text" />
+  ),
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildTextInputStateSourceCode({ forceState: "Hover", label: "Hover", value: "Input text" }) } }
+  }
+};
+
+export const Active: Story = {
+  render: ({ brand = "Cars24" }) => (
+    <StateMatrixStory brand={brand} forceState="Active" stateLabel="Active" value="" />
+  ),
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildTextInputStateSourceCode({ forceState: "Active", label: "Active", value: "" }) } }
+  }
+};
+
+export const Typing: Story = {
+  render: ({ brand = "Cars24" }) => (
+    <StateMatrixStory brand={brand} forceState="Typing" stateLabel="Typing" value="Typing" />
+  ),
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildTextInputStateSourceCode({ forceState: "Typing", label: "Typing", value: "Typing" }) } }
+  }
+};
+
+export const Typed: Story = {
+  render: ({ brand = "Cars24" }) => (
+    <StateMatrixStory brand={brand} forceState="Typed" stateLabel="Typed" value="Typed text" />
+  ),
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildTextInputStateSourceCode({ forceState: "Typed", label: "Typed", value: "Typed text" }) } }
+  }
+};
+
+export const Error: Story = {
+  render: ({ brand = "Cars24" }) => (
+    <StateMatrixStory brand={brand} forceState="Error" helperTone="Error" stateLabel="Error" value="Invalid text" />
+  ),
+  parameters: {
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: textInputVariantsSourceCode
+        code: buildTextInputStateSourceCode({
+          forceState: "Error",
+          helperTone: "Error",
+          label: "Error",
+          value: "Invalid text"
+        })
       }
     }
   }
 };
 
-export const UIExample: Story = {
-  render: PlaygroundStory,
+export const Success: Story = {
+  render: ({ brand = "Cars24" }) => (
+    <StateMatrixStory brand={brand} forceState="Success" helperTone="Success" stateLabel="Success" value="Input text" />
+  ),
   parameters: {
-    layout: "centered",
+    controls: { include: ["brand"] },
+    docs: {
+      source: {
+        code: buildTextInputStateSourceCode({
+          forceState: "Success",
+          helperTone: "Success",
+          label: "Success",
+          value: "Input text"
+        })
+      }
+    }
+  }
+};
+
+export const Disabled: Story = {
+  render: ({ brand = "Cars24" }) => (
+    <StateMatrixStory brand={brand} forceState="Disabled" stateLabel="Disabled" value="Input text" />
+  ),
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildTextInputStateSourceCode({ forceState: "Disabled", label: "Disabled", value: "Input text" }) } }
+  }
+};
+
+export const UIExample: Story = {
+  render: ({ brand = "Cars24" }) => <EditProfileMobileScreen brand={brand} />,
+  parameters: {
+    layout: "fullscreen",
     controls: {
       include: ["brand"]
     },
     docs: {
       source: {
-        code: textInputUiExampleSourceCode
+        code: editProfileScreenSourceCode
       }
     }
   }

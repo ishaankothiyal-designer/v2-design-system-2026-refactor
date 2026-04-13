@@ -1,5 +1,6 @@
 import type { ButtonHTMLAttributes, CSSProperties, HTMLAttributes, ReactNode } from "react";
 import { getRequiredThemeTokenValue } from "../theme";
+import { Avatar, type AvatarAppearance } from "./avatar";
 import { EliteBadge, type EliteBadgeName } from "./elite-badge";
 import { Icon } from "./icon";
 import { IconButton, type IconButtonProps } from "./icon-button";
@@ -31,7 +32,9 @@ export interface EliteHeaderProps extends Omit<HTMLAttributes<HTMLDivElement>, "
   showAvatar?: boolean;
   badgeName?: EliteBadgeName;
   badgeLabel?: string;
+  avatarAppearance?: AvatarAppearance;
   avatarAlt?: string;
+  avatarInitials?: string;
   avatarSrc?: string;
   leadingAction?: EliteHeaderIconAction;
   action1?: EliteHeaderIconAction;
@@ -123,7 +126,9 @@ export function EliteHeader({
   showAvatar = true,
   badgeName = "Elite",
   badgeLabel = "Elite",
+  avatarAppearance = "Image",
   avatarAlt = "Profile",
+  avatarInitials = "MT",
   avatarSrc,
   leadingAction = defaultLeadingAction,
   action1 = defaultAction1,
@@ -218,56 +223,60 @@ export function EliteHeader({
   );
 
   const avatarNode = showAvatar ? (
-    avatarSrc ? (
-      <button
-        aria-label={avatarAction["aria-label"] ?? avatarAction.label}
-        onClick={avatarAction.onClick}
-        style={{
-          alignItems: "center",
-          appearance: "none",
-          background: "transparent",
-          border: "none",
-          borderRadius: "50%",
-          cursor: avatarAction.onClick ? "pointer" : "default",
-          display: "inline-flex",
-          flexShrink: 0,
-          height: actionControlExtent,
-          justifyContent: "center",
-          overflow: "hidden",
-          padding: 0,
-          width: actionControlExtent
-        }}
-        type="button"
-      >
-        <img
-          alt={avatarAlt}
-          src={avatarSrc}
+    (() => {
+      const avatarProps = {
+        adornment: "None" as const,
+        appearance: avatarAppearance,
+        brand,
+        icon: avatarAction.icon,
+        imageAlt: avatarAlt,
+        initials: avatarInitials,
+        onDark: inverse,
+        size: "Extra small" as const,
+        ...(avatarSrc ? { imageSrc: avatarSrc } : {})
+      };
+
+      return avatarAction.onClick ? (
+        <button
+          aria-label={avatarAction["aria-label"] ?? avatarAction.label}
+          onClick={avatarAction.onClick}
           style={{
+            alignItems: "center",
+            appearance: "none",
+            background: "transparent",
+            border: "none",
             borderRadius: "50%",
-            display: "block",
-            height: "100%",
-            objectFit: "cover",
-            width: "100%"
+            cursor: "pointer",
+            display: "inline-flex",
+            flexShrink: 0,
+            height: actionControlExtent,
+            justifyContent: "center",
+            padding: 0,
+            width: actionControlExtent,
+            ...(avatarAction.style ?? {})
           }}
-        />
-      </button>
-    ) : (
-      <IconButton
-        {...avatarAction}
-        aria-label={avatarAction["aria-label"] ?? avatarAction.label}
-        brand={brand}
-        icon={avatarAction.icon}
-        onDark={inverse}
-        shape="Round"
-        size="Small"
-        style={{
-          height: actionControlExtent,
-          width: actionControlExtent,
-          ...(avatarAction.style ?? {})
-        }}
-        styleVariant="Subtle - Black"
-      />
-    )
+          type="button"
+        >
+          <Avatar {...avatarProps} />
+        </button>
+      ) : (
+        <span
+          aria-label={avatarAction["aria-label"] ?? avatarAction.label}
+          role="img"
+          style={{
+            alignItems: "center",
+            display: "inline-flex",
+            flexShrink: 0,
+            height: actionControlExtent,
+            justifyContent: "center",
+            width: actionControlExtent,
+            ...(avatarAction.style ?? {})
+          }}
+        >
+          <Avatar {...avatarProps} />
+        </span>
+      );
+    })()
   ) : null;
 
   return (

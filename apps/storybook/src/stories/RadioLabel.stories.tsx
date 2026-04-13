@@ -1,10 +1,17 @@
-import type { ChangeEvent, CSSProperties } from "react";
+import type { ChangeEvent } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "storybook/preview-api";
 import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
-import { RadioLabel, type RadioLabelProps, type RadioLabelSize } from "@geist/web";
+import { RadioLabel, Text, type RadioLabelProps, type RadioLabelSize } from "@geist/web";
 import { createFigspecDesign } from "../storybookFigma";
-import { StoryCard, StoryPage } from "../storybook-shell";
+import {
+  StoryMatrix,
+  StoryMatrixCornerCell,
+  StoryMatrixHeaderCell,
+  StoryMatrixRowLabelCell,
+  StoryMatrixValueCell
+} from "../storybook-matrix";
+import { StoryPage } from "../storybook-shell";
 
 const radioLabelSizes: RadioLabelSize[] = ["Small", "Medium"];
 const documentedStates = [
@@ -23,10 +30,7 @@ function renderPlayground(args: RadioLabelStoryArgs) {
   const [{ checked = false }, updateArgs] = useArgs<RadioLabelStoryArgs>();
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
-    updateArgs({
-      checked: event.currentTarget.checked
-    });
-
+    updateArgs({ checked: event.currentTarget.checked });
     args.onChange?.(event);
   }
 
@@ -41,116 +45,78 @@ function renderPlayground(args: RadioLabelStoryArgs) {
   );
 }
 
-function VariantCell({
+function HeaderCell({ brand, label }: { brand: DisplayBrandId; label: string }) {
+  return (
+    <Text brand={brand} as="strong" size="sm" tone="secondary" style={{ display: "block" }}>
+      {label}
+    </Text>
+  );
+}
+
+function StateMatrixStory({
   brand,
   description,
   label,
-  size,
   state
 }: {
   brand: DisplayBrandId;
   description: string;
   label: string;
-  size: RadioLabelSize;
   state: (typeof documentedStates)[number];
 }) {
   return (
-    <RadioLabel
-      brand={brand}
-      checked={state.checked}
-      description={description}
-      disabled={state.disabled}
-      label={label}
-      size={size}
-    />
-  );
-}
-
-function VariantMatrixStory({
-  brand,
-  description,
-  label
-}: {
-  brand: DisplayBrandId;
-  description: string;
-  label: string;
-}) {
-  return (
     <StoryPage fullscreen>
-      <StoryCard>
-        <div style={matrixGridStyles}>
-          {radioLabelSizes.map((size) => (
-            <div key={`${brand}-${size}`} style={sizeColumnStyles}>
-              <div style={sizeHeadingStyles}>{size}</div>
-              {documentedStates.map((state) => (
-                <VariantCell
-                  key={`${brand}-${size}-${state.key}`}
-                  brand={brand}
-                  description={description}
-                  label={label}
-                  size={size}
-                  state={state}
-                />
-              ))}
-            </div>
-          ))}
-        </div>
-      </StoryCard>
+      <StoryMatrix columns="180px repeat(2, minmax(328px, 1fr))">
+        <StoryMatrixCornerCell />
+        {radioLabelSizes.map((size) => (
+          <StoryMatrixHeaderCell key={`${state.key}-${size}-header`}>
+            <HeaderCell brand={brand} label={size} />
+          </StoryMatrixHeaderCell>
+        ))}
+
+        <StoryMatrixRowLabelCell minHeight={112}>
+          <HeaderCell brand={brand} label={state.label} />
+        </StoryMatrixRowLabelCell>
+        {radioLabelSizes.map((size) => (
+          <StoryMatrixValueCell key={`${state.key}-${size}`} minHeight={112}>
+            <RadioLabel
+              brand={brand}
+              checked={state.checked}
+              description={description}
+              disabled={state.disabled}
+              label={label}
+              size={size}
+            />
+          </StoryMatrixValueCell>
+        ))}
+      </StoryMatrix>
     </StoryPage>
   );
 }
 
-function buildRadioLabelVariantsSourceCode(brand: DisplayBrandId) {
+function buildRadioLabelStateSourceCode(state: (typeof documentedStates)[number]) {
   return `import { RadioLabel } from "@geist/web";
 
 const sizes = ["Small", "Medium"] as const;
-const states = [
-  { label: "Rest", checked: false, disabled: false },
-  { label: "Selected", checked: true, disabled: false },
-  { label: "Disabled Rest", checked: false, disabled: true },
-  { label: "Disabled Selected", checked: true, disabled: true }
-] as const;
 
-export function RadioLabelVariants() {
+export function RadioLabel${state.key.replace(/[^a-zA-Z0-9]/g, "")}() {
   return (
-    <div style={{ display: "grid", gap: 32 }}>
+    <div style={{ display: "grid", gap: 16 }}>
       {sizes.map((size) => (
-        <div key={size} style={{ display: "grid", gap: 16 }}>
-          {states.map((state) => (
-            <RadioLabel
-              key={state.label}
-              brand="${brand}"
-              size={size}
-              label="Label"
-              description="Helpful description that could potentially wrap to multiple lines"
-              checked={state.checked}
-              disabled={state.disabled}
-            />
-          ))}
-        </div>
+        <RadioLabel
+          key={size}
+          brand="Cars24"
+          size={size}
+          label="Label"
+          description="Helpful description that could potentially wrap to multiple lines"
+          checked={${state.checked}}
+          disabled={${state.disabled}}
+        />
       ))}
     </div>
   );
 }`;
 }
-
-const matrixGridStyles: CSSProperties = {
-  display: "grid",
-  gap: 32,
-  gridTemplateColumns: "repeat(auto-fit, minmax(328px, 1fr))"
-};
-
-const sizeColumnStyles: CSSProperties = {
-  display: "grid",
-  gap: 24
-};
-
-const sizeHeadingStyles: CSSProperties = {
-  color: "#64748B",
-  fontSize: 13,
-  fontWeight: 600,
-  lineHeight: "18px"
-};
 
 const radioLabelUiExampleSourceCode = `<RadioLabel
   brand="Cars24"
@@ -214,81 +180,77 @@ export const Playground: Story = {
   }
 };
 
-export const Cars24: Story = {
-  render: () => (
-    <VariantMatrixStory
-      brand="Cars24"
+export const Rest: Story = {
+  render: ({ brand = "Cars24" }) => (
+    <StateMatrixStory
+      brand={brand}
       description="Helpful description that could potentially wrap to multiple lines"
       label="Label"
+      state={documentedStates[0]}
     />
   ),
   parameters: {
-    controls: {
-      disable: true
-    },
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: buildRadioLabelVariantsSourceCode("Cars24")
+        code: buildRadioLabelStateSourceCode(documentedStates[0])
       }
     }
   }
 };
 
-export const TeamBHP: Story = {
-  render: () => (
-    <VariantMatrixStory
-      brand="Team BHP"
+export const Selected: Story = {
+  render: ({ brand = "Cars24" }) => (
+    <StateMatrixStory
+      brand={brand}
       description="Helpful description that could potentially wrap to multiple lines"
       label="Label"
+      state={documentedStates[1]}
     />
   ),
   parameters: {
-    controls: {
-      disable: true
-    },
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: buildRadioLabelVariantsSourceCode("Team BHP")
+        code: buildRadioLabelStateSourceCode(documentedStates[1])
       }
     }
   }
 };
 
-export const CarInfo: Story = {
-  render: () => (
-    <VariantMatrixStory
-      brand="CarInfo"
+export const DisabledRest: Story = {
+  render: ({ brand = "Cars24" }) => (
+    <StateMatrixStory
+      brand={brand}
       description="Helpful description that could potentially wrap to multiple lines"
       label="Label"
+      state={documentedStates[2]}
     />
   ),
   parameters: {
-    controls: {
-      disable: true
-    },
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: buildRadioLabelVariantsSourceCode("CarInfo")
+        code: buildRadioLabelStateSourceCode(documentedStates[2])
       }
     }
   }
 };
 
-export const VehicleInfo: Story = {
-  render: () => (
-    <VariantMatrixStory
-      brand="VehicleInfo"
+export const DisabledSelected: Story = {
+  render: ({ brand = "Cars24" }) => (
+    <StateMatrixStory
+      brand={brand}
       description="Helpful description that could potentially wrap to multiple lines"
       label="Label"
+      state={documentedStates[3]}
     />
   ),
   parameters: {
-    controls: {
-      disable: true
-    },
+    controls: { include: ["brand"] },
     docs: {
       source: {
-        code: buildRadioLabelVariantsSourceCode("VehicleInfo")
+        code: buildRadioLabelStateSourceCode(documentedStates[3])
       }
     }
   }
@@ -307,11 +269,5 @@ export const UIExample: Story = {
       }
     }
   },
-  render: (args) => (
-    <RadioLabel
-      {...args}
-      description={args.description || undefined}
-      label={args.label}
-    />
-  )
+  render: (args) => <RadioLabel {...args} description={args.description || undefined} label={args.label} />
 };

@@ -1,9 +1,16 @@
-import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
 import { Text, Tooltip, type TooltipProps, type TooltipTip } from "@geist/web";
 import { createFigspecDesign } from "../storybookFigma";
-import { StoryCard, StoryPage } from "../storybook-shell";
+import {
+  StoryMatrix,
+  StoryMatrixCornerCell,
+  StoryMatrixHeaderCell,
+  StoryMatrixRowLabelCell,
+  StoryMatrixSection,
+  StoryMatrixValueCell
+} from "../storybook-matrix";
+import { StoryPage } from "../storybook-shell";
 
 const TOOLTIP_FIGMA_URL =
   "https://www.figma.com/design/AZgWt0KHVuVeWBAcQ6Jcy4/branch/yxI5H0FhaUg0YR0uhNuqR6/%F0%9F%9A%80-v2.0-Global-Component-Library?node-id=358-3600&t=1zgOyFpiLYMyM4XM-11";
@@ -23,13 +30,6 @@ const tooltipTips: TooltipTip[] = [
   "Right Bottom"
 ];
 
-const tooltipColumns: Array<{ tips: TooltipTip[]; title: string }> = [
-  { title: "Top", tips: ["Top", "Top Left", "Top Right"] },
-  { title: "Bottom", tips: ["Bottom", "Bottom Left", "Bottom Right"] },
-  { title: "Left", tips: ["Left", "Left Top", "Left Bottom"] },
-  { title: "Right", tips: ["Right", "Right Top", "Right Bottom"] }
-];
-
 type TooltipStoryArgs = Omit<TooltipProps, "children"> & {
   label: string;
 };
@@ -37,8 +37,21 @@ type TooltipStoryArgs = Omit<TooltipProps, "children"> & {
 function PlaygroundStory(args: TooltipStoryArgs) {
   return (
     <div style={{ display: "grid", minHeight: 180, placeItems: "center", padding: 24 }}>
-      <Tooltip {...args} label={args.label} />
+      <Tooltip
+        label={args.label}
+        {...(args.brand !== undefined ? { brand: args.brand } : {})}
+        {...(args.maxWidth !== undefined ? { maxWidth: args.maxWidth } : {})}
+        {...(args.tip !== undefined ? { tip: args.tip } : {})}
+      />
     </div>
+  );
+}
+
+function HeaderCell({ brand, label }: { brand: DisplayBrandId; label: string }) {
+  return (
+    <Text brand={brand} as="strong" size="sm" tone="secondary" style={{ display: "block" }}>
+      {label}
+    </Text>
   );
 }
 
@@ -53,45 +66,44 @@ function TipMatrixStory({
 }) {
   return (
     <StoryPage fullscreen>
-      <div style={columnGridStyles}>
-        {tooltipColumns.map((column) => (
-          <StoryCard key={column.title}>
-            <div style={{ display: "grid", gap: 20 }}>
-              <div style={{ display: "grid", gap: 6 }}>
-                <Text brand={brand} as="strong" size="sm">
-                  {column.title} tips
-                </Text>
-                <Text brand={brand} as="p" size="sm" tone="secondary">
-                  Canonical tooltip surfaces with the visible directional variants from the Figma node.
-                </Text>
-              </div>
+      <StoryMatrixSection>
+        <div style={{ display: "grid", gap: 6 }}>
+          <Text brand={brand} as="strong" size="sm">
+            Tip variants
+          </Text>
+          <Text brand={brand} as="p" size="sm" tone="secondary">
+            Canonical tooltip surfaces across all visible Figma tip placements.
+          </Text>
+        </div>
 
-              <div style={{ display: "grid", gap: 16 }}>
-                {column.tips.map((tip) => (
-                  <div key={tip} style={previewRowStyles}>
-                    <Text brand={brand} as="strong" size="sm">
-                      {tip}
-                    </Text>
-                    <div style={previewFrameStyles}>
-                      <Tooltip
-                        brand={brand}
-                        label={label}
-                        tip={tip}
-                        {...(maxWidth !== undefined ? { maxWidth } : {})}
-                      />
-                    </div>
-                  </div>
-                ))}
+        <StoryMatrix columns="180px minmax(0, 1fr)">
+          <StoryMatrixCornerCell minHeight={64} />
+          <StoryMatrixHeaderCell minHeight={64}>
+            <HeaderCell brand={brand} label="Preview" />
+          </StoryMatrixHeaderCell>
+
+          {tooltipTips.flatMap((tip) => [
+            <StoryMatrixRowLabelCell key={`${tip}-label`} minHeight={132}>
+              <HeaderCell brand={brand} label={tip} />
+            </StoryMatrixRowLabelCell>,
+            <StoryMatrixValueCell key={`${tip}-preview`} minHeight={132}>
+              <div style={{ display: "grid", minHeight: 92, placeItems: "center", width: "100%" }}>
+                <Tooltip
+                  brand={brand}
+                  label={label}
+                  tip={tip}
+                  {...(maxWidth !== undefined ? { maxWidth } : {})}
+                />
               </div>
-            </div>
-          </StoryCard>
-        ))}
-      </div>
+            </StoryMatrixValueCell>
+          ])}
+        </StoryMatrix>
+      </StoryMatrixSection>
     </StoryPage>
   );
 }
 
-function buildVariantsSourceCode(brand: DisplayBrandId) {
+function buildTipsSourceCode(brand: DisplayBrandId) {
   return `import { Tooltip } from "@geist/web";
 
 const tips = [
@@ -109,7 +121,7 @@ const tips = [
   "Right Bottom"
 ] as const;
 
-export function TooltipVariants() {
+export function TooltipTipsMatrix() {
   return (
     <div style={{ display: "grid", gap: 16 }}>
       {tips.map((tip) => (
@@ -125,28 +137,6 @@ export function TooltipVariants() {
   );
 }`;
 }
-
-const columnGridStyles: CSSProperties = {
-  display: "grid",
-  gap: 24,
-  gridTemplateColumns: "repeat(2, minmax(320px, 1fr))"
-};
-
-const previewRowStyles: CSSProperties = {
-  alignItems: "center",
-  display: "grid",
-  gap: 10
-};
-
-const previewFrameStyles: CSSProperties = {
-  alignItems: "center",
-  background: "#FFFFFF",
-  borderRadius: 16,
-  display: "grid",
-  justifyItems: "start",
-  minHeight: 96,
-  padding: 16
-};
 
 const meta: Meta<TooltipStoryArgs> = {
   title: "Components/Tooltip",
@@ -178,7 +168,7 @@ const meta: Meta<TooltipStoryArgs> = {
       options: tooltipTips
     }
   },
-  render: PlaygroundStory
+  render: (args) => <PlaygroundStory {...args} />
 };
 
 export default meta;
@@ -191,13 +181,9 @@ export const Playground: Story = {
   }
 };
 
-export const Variants: Story = {
-  render: (args) => (
-    <TipMatrixStory
-      brand={args.brand ?? "Cars24"}
-      label={args.label}
-      maxWidth={args.maxWidth}
-    />
+export const Tips: Story = {
+  render: ({ brand = "Cars24", label, maxWidth }) => (
+    <TipMatrixStory brand={brand} label={label} maxWidth={maxWidth} />
   ),
   parameters: {
     controls: {
@@ -205,7 +191,7 @@ export const Variants: Story = {
     },
     docs: {
       source: {
-        code: buildVariantsSourceCode("Cars24")
+        code: buildTipsSourceCode("Cars24")
       }
     }
   }

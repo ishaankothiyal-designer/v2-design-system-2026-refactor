@@ -1,4 +1,3 @@
-import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@geist/tokens";
 import {
@@ -11,7 +10,14 @@ import {
   type IconButtonSize,
   type IconButtonStyleVariant
 } from "@geist/web";
-import { StoryCard, StoryPage } from "../storybook-shell";
+import {
+  StoryMatrix,
+  StoryMatrixCornerCell,
+  StoryMatrixHeaderCell,
+  StoryMatrixRowLabelCell,
+  StoryMatrixValueCell
+} from "../storybook-matrix";
+import { StoryPage, StoryPreviewSurface } from "../storybook-shell";
 
 type IconButtonStoryArgs = Omit<IconButtonProps, "icon"> & {
   iconName: "plus-large-filled";
@@ -61,28 +67,19 @@ function HeaderCell({
   );
 }
 
-function SectionHeading({
+function SurfaceHeading({
   brand = "Cars24",
-  title,
-  description,
+  label,
   tone = "primary"
 }: {
   brand?: DisplayBrandId;
-  title: string;
-  description?: string;
+  label: string;
   tone?: "primary" | "secondary" | "inverse";
 }) {
   return (
-    <div style={{ display: "grid", gap: 6 }}>
-      <Text brand={brand} as="strong" size="md" tone={tone}>
-        {title}
-      </Text>
-      {description ? (
-        <Text brand={brand} as="p" size="sm" tone={tone === "inverse" ? "inverse" : "secondary"}>
-          {description}
-        </Text>
-      ) : null}
-    </div>
+    <Text brand={brand} as="strong" size="md" tone={tone}>
+      {label}
+    </Text>
   );
 }
 
@@ -134,20 +131,31 @@ function ShapeMatrix({
       <Text brand={brand} as="strong" size="sm" tone={onDark ? "inverse" : "primary"}>
         {shape}
       </Text>
-      <div style={matrixTableStyles(onDark)}>
-        <div style={matrixCornerCellStyles(onDark)} />
+      <StoryMatrix columns="180px repeat(3, minmax(180px, 1fr))" tone={onDark ? "inverse" : "canvas"}>
+        <StoryMatrixCornerCell tone={onDark ? "inverse" : "canvas"} />
         {documentedStates.map((state) => (
-          <div key={`${shape}-${styleVariant}-${state.key}-header`} style={matrixHeaderCellStyles(onDark)}>
+          <StoryMatrixHeaderCell
+            key={`${shape}-${styleVariant}-${state.key}-header`}
+            tone={onDark ? "inverse" : "canvas"}
+          >
             <HeaderCell brand={brand} label={state.label} tone={onDark ? "inverse" : "secondary"} />
-          </div>
+          </StoryMatrixHeaderCell>
         ))}
 
         {iconButtonSizes.flatMap((size) => [
-          <div key={`${shape}-${styleVariant}-${size}-label`} style={matrixRowLabelCellStyles(onDark)}>
+          <StoryMatrixRowLabelCell
+            key={`${shape}-${styleVariant}-${size}-label`}
+            minHeight={104}
+            tone={onDark ? "inverse" : "canvas"}
+          >
             <HeaderCell brand={brand} label={size} tone={onDark ? "inverse" : "secondary"} />
-          </div>,
+          </StoryMatrixRowLabelCell>,
           ...documentedStates.map((state) => (
-            <div key={`${shape}-${styleVariant}-${size}-${state.key}`} style={matrixValueCellStyles(onDark)}>
+            <StoryMatrixValueCell
+              key={`${shape}-${styleVariant}-${size}-${state.key}`}
+              minHeight={104}
+              tone={onDark ? "inverse" : "canvas"}
+            >
               <MatrixCell
                 brand={brand}
                 onDark={onDark}
@@ -157,72 +165,57 @@ function ShapeMatrix({
                 {...(state.forceState ? { forceState: state.forceState } : {})}
                 {...(state.disabled ? { disabled: true } : {})}
               />
-            </div>
+            </StoryMatrixValueCell>
           ))
         ])}
-      </div>
+      </StoryMatrix>
     </div>
   );
 }
 
-function VariantDocumentSurface({ brand, onDark }: { brand: DisplayBrandId; onDark: boolean }) {
+function StyleVariantMatrixStory({
+  brand,
+  styleVariant
+}: {
+  brand: DisplayBrandId;
+  styleVariant: IconButtonStyleVariant;
+}) {
   return (
-    <div style={{ display: "grid", gap: 24 }}>
-      {styleVariants.map((styleVariant) => (
+    <StoryPage fullscreen>
+      <div style={{ display: "grid", gap: 32 }}>
+        <div style={{ display: "grid", gap: 20 }}>
+          <SurfaceHeading brand={brand} label="Light" />
+          {iconButtonShapes.map((shape) => (
+            <ShapeMatrix
+              key={`${styleVariant}-${shape}-light`}
+              brand={brand}
+              onDark={false}
+              shape={shape}
+              styleVariant={styleVariant}
+            />
+          ))}
+        </div>
+
         <div
-          key={`${styleVariant}-${onDark ? "dark" : "light"}`}
           style={{
             display: "grid",
             gap: 20,
             padding: 24,
             borderRadius: 24,
-            border: `1px solid ${String(coreTokenCatalog.color.border.default)}`,
-            background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
+            background: String(coreTokenCatalog.color.surface.inverse)
           }}
         >
-          <SectionHeading brand={brand} title={styleVariant} tone={onDark ? "inverse" : "primary"} />
-          <div style={{ display: "grid", gap: 20 }}>
-            {iconButtonShapes.map((shape) => (
-              <ShapeMatrix
-                key={`${styleVariant}-${shape}-${onDark ? "dark" : "light"}`}
-                brand={brand}
-                onDark={onDark}
-                shape={shape}
-                styleVariant={styleVariant}
-              />
-            ))}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function BrandVariantMatrixStory({ brand }: { brand: DisplayBrandId }) {
-  return (
-    <StoryPage fullscreen>
-      <div style={{ display: "grid", gap: 32 }}>
-        <StoryCard>
-          <VariantDocumentSurface brand={brand} onDark={false} />
-        </StoryCard>
-
-        <StoryCard
-          style={{
-            background: String(coreTokenCatalog.color.surface.inverse),
-            borderRadius: 24,
-            padding: 32
-          }}
-        >
-          <div style={{ display: "grid", gap: 24 }}>
-            <SectionHeading
+          <SurfaceHeading brand={brand} label="Inverse" tone="inverse" />
+          {iconButtonShapes.map((shape) => (
+            <ShapeMatrix
+              key={`${styleVariant}-${shape}-dark`}
               brand={brand}
-              title="On Dark Surface"
-              description="The same complete matrix on inverse backgrounds for contrast validation."
-              tone="inverse"
+              onDark
+              shape={shape}
+              styleVariant={styleVariant}
             />
-            <VariantDocumentSurface brand={brand} onDark />
-          </div>
-        </StoryCard>
+          ))}
+        </div>
       </div>
     </StoryPage>
   );
@@ -232,65 +225,10 @@ function PlaygroundStory(args: IconButtonStoryArgs) {
   const { iconName, ...rest } = args;
 
   return (
-    <div style={rest.onDark ? { background: "#0A0A0A", padding: 24, borderRadius: 16 } : undefined}>
+    <StoryPreviewSurface onDark={Boolean(rest.onDark)}>
       <IconButton {...rest} icon={<Icon name={iconName} decorative />} />
-    </div>
+    </StoryPreviewSurface>
   );
-}
-
-function matrixTableStyles(onDark: boolean): CSSProperties {
-  return {
-    display: "grid",
-    gridTemplateColumns: "180px repeat(3, minmax(180px, 1fr))",
-    border: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    borderRadius: 20,
-    overflow: "hidden"
-  };
-}
-
-function matrixHeaderCellStyles(onDark: boolean): CSSProperties {
-  return {
-    minHeight: 68,
-    padding: "16px 20px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
-  };
-}
-
-function matrixCornerCellStyles(onDark: boolean): CSSProperties {
-  return {
-    minHeight: 68,
-    borderBottom: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
-  };
-}
-
-function matrixRowLabelCellStyles(onDark: boolean): CSSProperties {
-  return {
-    minHeight: 96,
-    padding: "20px 16px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
-  };
-}
-
-function matrixValueCellStyles(onDark: boolean): CSSProperties {
-  return {
-    minHeight: 96,
-    padding: "16px 20px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
-  };
 }
 
 const meta: Meta<IconButtonStoryArgs> = {
@@ -338,9 +276,36 @@ export default meta;
 
 type Story = StoryObj<IconButtonStoryArgs>;
 
-const iconButtonVariantsSourceCode = `<IconButton aria-label="Add item" icon={<Icon name="plus-large-filled" decorative />} size="Medium" styleVariant="Solid - Primary" />
-<IconButton aria-label="Add item" icon={<Icon name="plus-large-filled" decorative />} size="Medium" styleVariant="Solid - Primary" forceState="Hover/Pressed" />
-<IconButton aria-label="Add item" icon={<Icon name="plus-large-filled" decorative />} size="Medium" styleVariant="Solid - Primary" disabled />`;
+function buildIconButtonVariantSourceCode(styleVariant: IconButtonStyleVariant) {
+  return `import { Icon, IconButton } from "@geist/web";
+
+<IconButton
+  aria-label="Add item"
+  brand="Cars24"
+  icon={<Icon name="plus-large-filled" decorative />}
+  shape="Regular"
+  size="Medium"
+  styleVariant="${styleVariant}"
+/>
+<IconButton
+  aria-label="Add item"
+  brand="Cars24"
+  icon={<Icon name="plus-large-filled" decorative />}
+  shape="Round"
+  size="Large"
+  styleVariant="${styleVariant}"
+  forceState="Hover/Pressed"
+/>
+<IconButton
+  aria-label="Add item"
+  brand="Cars24"
+  icon={<Icon name="plus-large-filled" decorative />}
+  shape="Regular"
+  size="Small"
+  styleVariant="${styleVariant}"
+  disabled
+/>`;
+}
 
 export const Playground: Story = {
   render: (args) => <PlaygroundStory {...args} />,
@@ -349,35 +314,83 @@ export const Playground: Story = {
   }
 };
 
-export const Cars24: Story = {
-  render: () => <BrandVariantMatrixStory brand="Cars24" />,
+export const SolidPrimary: Story = {
+  name: "Solid - Primary",
+  render: ({ brand = "Cars24" }) => <StyleVariantMatrixStory brand={brand} styleVariant="Solid - Primary" />,
   parameters: {
-    controls: { disable: true },
-    docs: { source: { code: iconButtonVariantsSourceCode } }
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildIconButtonVariantSourceCode("Solid - Primary") } }
   }
 };
 
-export const TeamBHP: Story = {
-  render: () => <BrandVariantMatrixStory brand="Team BHP" />,
+export const SolidBlack: Story = {
+  name: "Solid - Black",
+  render: ({ brand = "Cars24" }) => <StyleVariantMatrixStory brand={brand} styleVariant="Solid - Black" />,
   parameters: {
-    controls: { disable: true },
-    docs: { source: { code: iconButtonVariantsSourceCode } }
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildIconButtonVariantSourceCode("Solid - Black") } }
   }
 };
 
-export const CarInfo: Story = {
-  render: () => <BrandVariantMatrixStory brand="CarInfo" />,
+export const OutlinePrimary: Story = {
+  name: "Outline - Primary",
+  render: ({ brand = "Cars24" }) => <StyleVariantMatrixStory brand={brand} styleVariant="Outline - Primary" />,
   parameters: {
-    controls: { disable: true },
-    docs: { source: { code: iconButtonVariantsSourceCode } }
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildIconButtonVariantSourceCode("Outline - Primary") } }
   }
 };
 
-export const VehicleInfo: Story = {
-  render: () => <BrandVariantMatrixStory brand="VehicleInfo" />,
+export const OutlineBlack: Story = {
+  name: "Outline - Black",
+  render: ({ brand = "Cars24" }) => <StyleVariantMatrixStory brand={brand} styleVariant="Outline - Black" />,
   parameters: {
-    controls: { disable: true },
-    docs: { source: { code: iconButtonVariantsSourceCode } }
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildIconButtonVariantSourceCode("Outline - Black") } }
+  }
+};
+
+export const SubtlePrimary: Story = {
+  name: "Subtle - Primary",
+  render: ({ brand = "Cars24" }) => <StyleVariantMatrixStory brand={brand} styleVariant="Subtle - Primary" />,
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildIconButtonVariantSourceCode("Subtle - Primary") } }
+  }
+};
+
+export const SubtleBlack: Story = {
+  name: "Subtle - Black",
+  render: ({ brand = "Cars24" }) => <StyleVariantMatrixStory brand={brand} styleVariant="Subtle - Black" />,
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildIconButtonVariantSourceCode("Subtle - Black") } }
+  }
+};
+
+export const GhostBrand: Story = {
+  name: "Ghost - Brand",
+  render: ({ brand = "Cars24" }) => <StyleVariantMatrixStory brand={brand} styleVariant="Ghost - Brand" />,
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildIconButtonVariantSourceCode("Ghost - Brand") } }
+  }
+};
+
+export const GhostBlack: Story = {
+  name: "Ghost - Black",
+  render: ({ brand = "Cars24" }) => <StyleVariantMatrixStory brand={brand} styleVariant="Ghost - Black" />,
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildIconButtonVariantSourceCode("Ghost - Black") } }
+  }
+};
+
+export const Transparent: Story = {
+  render: ({ brand = "Cars24" }) => <StyleVariantMatrixStory brand={brand} styleVariant="Transparent" />,
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: { source: { code: buildIconButtonVariantSourceCode("Transparent") } }
   }
 };
 

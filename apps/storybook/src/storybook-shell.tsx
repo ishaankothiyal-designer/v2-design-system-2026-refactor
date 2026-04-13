@@ -48,6 +48,21 @@ const badgeStyles: CSSProperties = {
   fontFamily: storySansFontFamily
 };
 
+const previewSurfaceStyles: CSSProperties = {
+  width: "100%",
+  maxWidth: "100%",
+  minWidth: "100%",
+  height: "100%",
+  minHeight: "100%",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  alignSelf: "stretch",
+  justifySelf: "stretch",
+  padding: 40,
+  boxSizing: "border-box"
+};
+
 export function StoryPage({ children, fullscreen = false }: { children: ReactNode; fullscreen?: boolean }) {
   return (
     <div style={pageStyles}>
@@ -62,6 +77,25 @@ export function StoryCard({ children, style }: { children: ReactNode; style?: CS
 
 export function StoryBadge({ children }: { children: ReactNode }) {
   return <div style={badgeStyles}>{children}</div>;
+}
+
+export function StoryPreviewSurface({
+  children,
+  onDark = false
+}: {
+  children: ReactNode;
+  onDark?: boolean;
+}) {
+  return (
+    <div
+      style={{
+        ...previewSurfaceStyles,
+        background: onDark ? String(coreTokenCatalog.color.surface.inverse) : "transparent"
+      }}
+    >
+      {children}
+    </div>
+  );
 }
 
 export function StoryHeading({

@@ -19,7 +19,9 @@ export interface SectionHeaderProps extends Omit<HTMLAttributes<HTMLDivElement>,
   brand?: DisplayBrandId;
   inverse?: boolean;
   title?: string;
+  showSubtitle?: boolean;
   subtitle?: string;
+  showDescription?: boolean;
   description?: string;
   tagLabel?: string;
   showTag?: boolean;
@@ -264,7 +266,9 @@ export function SectionHeader({
   brand = "Cars24",
   inverse = false,
   title = "Section title",
+  showSubtitle = true,
   subtitle = "Section title line 2",
+  showDescription = true,
   description = "Description goes here upto 2 lines",
   tagLabel = "New",
   showTag = true,
@@ -331,6 +335,8 @@ export function SectionHeader({
   const descriptionLetterSpacing = toPx(
     resolveSectionHeaderBindingValue(brand, "typography.description.letterSpacing", "0")
   );
+  const resolvedShowSubtitle = showSubtitle;
+  const resolvedShowDescription = showDescription;
   const resolvedShowTag = isCentered ? false : showTag;
   const resolvedShowAction = isCentered ? false : showAction;
 
@@ -395,12 +401,12 @@ export function SectionHeader({
                 transparentColor={dividerTransparentColor}
               />
             </div>
-            {subtitle ? (
+            {resolvedShowSubtitle ? (
               <HeaderLine brand={brand} centered color={titleColor} icon={subtitleIcon} text={subtitle} />
             ) : null}
           </div>
 
-          {description ? (
+          {resolvedShowDescription ? (
             <p
               style={{
                 color: descriptionColor,
@@ -482,12 +488,12 @@ export function SectionHeader({
               <HeaderLine brand={brand} color={titleColor} icon={titleIcon} inline text={title} />
               {resolvedShowTag ? <Tag brand={brand} label={tagLabel} /> : null}
             </div>
-            {subtitle ? (
+            {resolvedShowSubtitle ? (
               <HeaderLine brand={brand} color={titleColor} icon={subtitleIcon} text={subtitle} />
             ) : null}
           </div>
 
-          {description ? (
+          {resolvedShowDescription ? (
             <p
               style={{
                 color: descriptionColor,

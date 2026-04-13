@@ -11,7 +11,14 @@ import {
   type ButtonShape
 } from "@geist/web";
 import { createFigspecDesign } from "../storybookFigma";
-import { StoryCard, StoryPage } from "../storybook-shell";
+import {
+  StoryMatrix,
+  StoryMatrixCornerCell,
+  StoryMatrixHeaderCell,
+  StoryMatrixRowLabelCell,
+  StoryMatrixValueCell
+} from "../storybook-matrix";
+import { StoryCard, StoryPage, StoryPreviewSurface } from "../storybook-shell";
 
 type ButtonGroupStoryArgs = Omit<ButtonGroupProps, "primaryAction" | "secondaryAction" | "contextualAction"> & {
   primaryLabel: string;
@@ -28,7 +35,7 @@ const BUTTON_GROUP_FIGMA_URL =
   "https://www.figma.com/design/AZgWt0KHVuVeWBAcQ6Jcy4/branch/yxI5H0FhaUg0YR0uhNuqR6/%F0%9F%9A%80-v2.0-Global-Component-Library?node-id=14353-33927&t=1zgOyFpiLYMyM4XM-11";
 
 const buttonGroupTypes: ButtonGroupType[] = ["Vertical", "Horizontal", "Contextual Action"];
-const buttonGroupSizes: ButtonGroupSize[] = ["Large", "Medium", "Small"];
+const buttonGroupSizes: ButtonGroupSize[] = ["Small", "Medium", "Large"];
 const buttonShapes: ButtonShape[] = ["Regular", "Pill"];
 
 function makeButtonIcons(showLeadingIcon: boolean, showTrailingIcon: boolean) {
@@ -71,29 +78,23 @@ function PlaygroundStory({
       : undefined;
 
   return (
-    <div
-      style={{
-        background: onDark ? "#0F172A" : undefined,
-        borderRadius: 20,
-        padding: 24,
-        width: "100%",
-        maxWidth: 408
-      }}
-    >
-      <ButtonGroup
-        brand={brand}
-        onDark={onDark}
-        shape={shape}
-        size={size}
-        type={type}
-        primaryAction={{
-          label: primaryLabel,
-          ...buttonIcons
-        }}
-        {...(secondaryAction ? { secondaryAction } : {})}
-        {...(contextualAction ? { contextualAction } : {})}
-      />
-    </div>
+    <StoryPreviewSurface onDark={onDark}>
+      <div style={{ width: "100%", maxWidth: 408 }}>
+        <ButtonGroup
+          brand={brand}
+          onDark={onDark}
+          shape={shape}
+          size={size}
+          type={type}
+          primaryAction={{
+            label: primaryLabel,
+            ...buttonIcons
+          }}
+          {...(secondaryAction ? { secondaryAction } : {})}
+          {...(contextualAction ? { contextualAction } : {})}
+        />
+      </div>
+    </StoryPreviewSurface>
   );
 }
 
@@ -140,10 +141,12 @@ function SectionHeading({
 
 function GroupMatrix({
   brand,
+  size,
   type,
   onDark
 }: {
   brand: DisplayBrandId;
+  size: ButtonGroupSize;
   type: ButtonGroupType;
   onDark: boolean;
 }) {
@@ -166,22 +169,26 @@ function GroupMatrix({
   return (
     <div style={{ display: "grid", gap: 12 }}>
       <Text brand={brand} as="strong" size="sm" tone={onDark ? "inverse" : "primary"}>
-        {type}
+        {size}
       </Text>
-      <div style={matrixTableStyles(onDark)}>
-        <div style={matrixCornerCellStyles(onDark)} />
+      <StoryMatrix columns="180px repeat(2, minmax(320px, 1fr))" tone={onDark ? "inverse" : "canvas"}>
+        <StoryMatrixCornerCell tone={onDark ? "inverse" : "canvas"} />
         {buttonShapes.map((shape) => (
-          <div key={`${type}-${shape}-header`} style={matrixHeaderCellStyles(onDark)}>
+          <StoryMatrixHeaderCell key={`${type}-${size}-${shape}-header`} tone={onDark ? "inverse" : "canvas"}>
             <HeaderCell brand={brand} label={shape} tone={onDark ? "inverse" : "secondary"} />
-          </div>
+          </StoryMatrixHeaderCell>
         ))}
 
-        {buttonGroupSizes.flatMap((size) => [
-          <div key={`${type}-${size}-label`} style={matrixRowLabelCellStyles(onDark)}>
+        {[
+          <StoryMatrixRowLabelCell key={`${type}-${size}-label`} minHeight={120} tone={onDark ? "inverse" : "canvas"}>
             <HeaderCell brand={brand} label={size} tone={onDark ? "inverse" : "secondary"} />
-          </div>,
+          </StoryMatrixRowLabelCell>,
           ...buttonShapes.map((shape) => (
-            <div key={`${type}-${size}-${shape}`} style={matrixValueCellStyles(onDark)}>
+            <StoryMatrixValueCell
+              key={`${type}-${size}-${shape}-${onDark ? "dark" : "light"}`}
+              minHeight={120}
+              tone={onDark ? "inverse" : "canvas"}
+            >
               <div style={{ width: "100%", maxWidth: 360 }}>
                 <ButtonGroup
                   brand={brand}
@@ -197,126 +204,56 @@ function GroupMatrix({
                   {...(contextualAction ? { contextualAction } : {})}
                 />
               </div>
-            </div>
+            </StoryMatrixValueCell>
           ))
-        ])}
-      </div>
+        ]}
+      </StoryMatrix>
     </div>
   );
 }
 
-function VariantDocumentSurface({ brand, onDark }: { brand: DisplayBrandId; onDark: boolean }) {
+function VariantDocumentSurface({
+  brand,
+  type,
+  onDark
+}: {
+  brand: DisplayBrandId;
+  type: ButtonGroupType;
+  onDark: boolean;
+}) {
   return (
     <div style={{ display: "grid", gap: 24 }}>
-      {buttonGroupTypes.map((type) => (
+      {buttonGroupSizes.map((size) => (
         <div
-          key={`${type}-${onDark ? "dark" : "light"}`}
+          key={`${type}-${size}-${onDark ? "dark" : "light"}`}
           style={{
             display: "grid",
-            gap: 20,
-            padding: 24,
-            borderRadius: 24,
-            border: `1px solid ${String(coreTokenCatalog.color.border.default)}`,
-            background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
+            gap: 20
           }}
         >
-          <GroupMatrix brand={brand} type={type} onDark={onDark} />
+          <GroupMatrix brand={brand} size={size} type={type} onDark={onDark} />
         </div>
       ))}
     </div>
   );
 }
 
-function BrandVariantMatrixStory({ brand }: { brand: DisplayBrandId }) {
+function TypeDocument({
+  brand,
+  type,
+  onDark = false
+}: {
+  brand: DisplayBrandId;
+  type: ButtonGroupType;
+  onDark?: boolean;
+}) {
   return (
     <StoryPage fullscreen>
-      <div style={{ display: "grid", gap: 32 }}>
-        <StoryCard>
-          <div style={{ display: "grid", gap: 24 }}>
-            <SectionHeading
-              brand={brand}
-              title="Button Group"
-              description="Token-driven layouts composed from the existing Button and Link Button primitives."
-            />
-            <VariantDocumentSurface brand={brand} onDark={false} />
-          </div>
-        </StoryCard>
-
-        <StoryCard
-          style={{
-            background: String(coreTokenCatalog.color.surface.inverse),
-            borderRadius: 24,
-            padding: 32
-          }}
-        >
-          <div style={{ display: "grid", gap: 24 }}>
-            <SectionHeading
-              brand={brand}
-              title="On Dark Surface"
-              description="The same full matrix rendered on inverse backgrounds for brand validation."
-              tone="inverse"
-            />
-            <VariantDocumentSurface brand={brand} onDark />
-          </div>
-        </StoryCard>
-      </div>
+      <StoryCard>
+        <VariantDocumentSurface brand={brand} type={type} onDark={onDark} />
+      </StoryCard>
     </StoryPage>
   );
-}
-
-function matrixTableStyles(onDark: boolean): CSSProperties {
-  return {
-    display: "grid",
-    gridTemplateColumns: "180px repeat(2, minmax(320px, 1fr))",
-    border: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    borderRadius: 20,
-    overflow: "hidden"
-  };
-}
-
-function matrixHeaderCellStyles(onDark: boolean): CSSProperties {
-  return {
-    minHeight: 68,
-    padding: "16px 20px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
-  };
-}
-
-function matrixCornerCellStyles(onDark: boolean): CSSProperties {
-  return {
-    minHeight: 68,
-    borderBottom: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
-  };
-}
-
-function matrixRowLabelCellStyles(onDark: boolean): CSSProperties {
-  return {
-    minHeight: 120,
-    padding: "20px 16px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
-  };
-}
-
-function matrixValueCellStyles(onDark: boolean): CSSProperties {
-  return {
-    minHeight: 120,
-    padding: "16px 20px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-    background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
-  };
 }
 
 const meta: Meta<ButtonGroupStoryArgs> = {
@@ -393,108 +330,86 @@ export default meta;
 
 type Story = StoryObj<ButtonGroupStoryArgs>;
 
-const buttonGroupSourceCode = `import { ButtonGroup, Icon } from "@geist/web";
-
-export function Example() {
-  return (
-    <ButtonGroup
-      type="Horizontal"
-      size="Large"
-      shape="Regular"
-      primaryAction={{
-        label: "Label",
-        leadingIcon: <Icon name="sparkle-filled" decorative />,
-        trailingIcon: <Icon name="arrow-right-outline" decorative />
-      }}
-      secondaryAction={{
-        label: "Label",
-        leadingIcon: <Icon name="sparkle-filled" decorative />,
-        trailingIcon: <Icon name="arrow-right-outline" decorative />
-      }}
-    />
-  );
-}`;
-
-const contextualActionSourceCode = `import { ButtonGroup, Icon } from "@geist/web";
-
-export function Example() {
-  return (
-    <ButtonGroup
-      type="Contextual Action"
-      size="Large"
-      primaryAction={{
-        label: "Label",
-        leadingIcon: <Icon name="sparkle-filled" decorative />,
-        trailingIcon: <Icon name="arrow-right-outline" decorative />
-      }}
-      contextualAction={{
-        prompt: "Already a car owner?",
-        label: "Add vehicle",
-        trailingIcon: <Icon name="arrow-right-outline" decorative />
-      }}
-    />
-  );
-}`;
-
 export const Playground: Story = {
   parameters: {
     layout: "centered"
   }
 };
 
-export const Cars24: Story = {
-  render: () => <BrandVariantMatrixStory brand="Cars24" />,
+function buildButtonGroupTypeSourceCode(type: ButtonGroupType) {
+  const secondaryAction =
+    type === "Contextual Action"
+      ? ""
+      : `
+  secondaryAction={{
+    label: "Label",
+    leadingIcon: <Icon name="sparkle-filled" decorative />,
+    trailingIcon: <Icon name="arrow-right-outline" decorative />
+  }}`;
+
+  const contextualAction =
+    type === "Contextual Action"
+      ? `
+  contextualAction={{
+    prompt: "Already a car owner?",
+    label: "Add vehicle",
+    trailingIcon: <Icon name="arrow-right-outline" decorative />
+  }}`
+      : "";
+
+  return `import { ButtonGroup, Icon } from "@geist/web";
+
+<ButtonGroup
+  brand="Cars24"
+  type="${type}"
+  size="Large"
+  shape="Regular"
+  primaryAction={{
+    label: "Label",
+    leadingIcon: <Icon name="sparkle-filled" decorative />,
+    trailingIcon: <Icon name="arrow-right-outline" decorative />
+  }}
+${secondaryAction}${contextualAction}
+/>
+
+<ButtonGroup
+  brand="Cars24"
+  type="${type}"
+  size="Large"
+  shape="Regular"
+  onDark
+  primaryAction={{
+    label: "Label",
+    leadingIcon: <Icon name="sparkle-filled" decorative />,
+    trailingIcon: <Icon name="arrow-right-outline" decorative />
+  }}
+${secondaryAction}${contextualAction}
+/>`;
+}
+
+export const Vertical: Story = {
+  render: ({ brand = "Cars24", onDark = false }) => <TypeDocument brand={brand} type="Vertical" onDark={onDark} />,
   parameters: {
-    controls: { disable: true },
-    docs: { source: { code: buttonGroupSourceCode } }
+    controls: { include: ["brand", "onDark"] },
+    docs: { source: { code: buildButtonGroupTypeSourceCode("Vertical") } }
   }
 };
 
-export const TeamBHP: Story = {
-  render: () => <BrandVariantMatrixStory brand="Team BHP" />,
+export const Horizontal: Story = {
+  render: ({ brand = "Cars24", onDark = false }) => <TypeDocument brand={brand} type="Horizontal" onDark={onDark} />,
   parameters: {
-    controls: { disable: true },
-    docs: { source: { code: buttonGroupSourceCode } }
+    controls: { include: ["brand", "onDark"] },
+    docs: { source: { code: buildButtonGroupTypeSourceCode("Horizontal") } }
   }
 };
 
-export const CarInfo: Story = {
-  render: () => <BrandVariantMatrixStory brand="CarInfo" />,
-  parameters: {
-    controls: { disable: true },
-    docs: { source: { code: buttonGroupSourceCode } }
-  }
-};
-
-export const VehicleInfo: Story = {
-  render: () => <BrandVariantMatrixStory brand="VehicleInfo" />,
-  parameters: {
-    controls: { disable: true },
-    docs: { source: { code: buttonGroupSourceCode } }
-  }
-};
-
-export const ContextualActionExample: Story = {
-  render: () => (
-    <PlaygroundStory
-      brand="Cars24"
-      type="Contextual Action"
-      size="Large"
-      shape="Regular"
-      onDark={false}
-      primaryLabel="Label"
-      secondaryLabel="Label"
-      contextualPrompt="Already a car owner?"
-      contextualLabel="Add vehicle"
-      showLeadingIcon
-      showTrailingIcon
-      showSecondaryAction={false}
-      showContextualAction
-    />
+export const ContextualAction: Story = {
+  name: "Contextual Action",
+  render: ({ brand = "Cars24", onDark = false }) => (
+    <TypeDocument brand={brand} type="Contextual Action" onDark={onDark} />
   ),
   parameters: {
-    layout: "centered",
-    controls: { disable: true },
-    docs: { source: { code: contextualActionSourceCode } }
+    controls: { include: ["brand", "onDark"] },
+    docs: { source: { code: buildButtonGroupTypeSourceCode("Contextual Action") } }
   }
 };

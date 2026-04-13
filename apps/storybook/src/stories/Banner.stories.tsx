@@ -15,6 +15,14 @@ import {
   type BannerTheme
 } from "@geist/web";
 import { createFigspecDesign } from "../storybookFigma";
+import {
+  StoryMatrix,
+  StoryMatrixCornerCell,
+  StoryMatrixHeaderCell,
+  StoryMatrixRowLabelCell,
+  StoryMatrixSection,
+  StoryMatrixValueCell
+} from "../storybook-matrix";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 const bannerStates: BannerState[] = ["Warning", "Success", "Error", "Info", "Brand"];
@@ -78,24 +86,24 @@ function BannerMatrixStory({
       <div style={{ display: "grid", gap: 32 }}>
         {actionTypes.map((actionType) => (
           <StoryCard key={actionType}>
-            <div style={bannerSectionStyles}>
+            <StoryMatrixSection>
               <Text brand={brand} as="strong" size="md" style={{ display: "block" }}>
                 {actionType}
               </Text>
-              <div style={bannerMatrixTableStyles}>
-                <div style={bannerMatrixCornerCellStyles} />
-                <div style={bannerMatrixHeaderCellStyles}>
+              <StoryMatrix columns="180px repeat(2, minmax(320px, 1fr))">
+                <StoryMatrixCornerCell />
+                <StoryMatrixHeaderCell>
                   <HeaderCell brand={brand} label="Light" />
-                </div>
-                <div style={bannerMatrixHeaderCellStyles}>
+                </StoryMatrixHeaderCell>
+                <StoryMatrixHeaderCell>
                   <HeaderCell brand={brand} label="Dark" />
-                </div>
+                </StoryMatrixHeaderCell>
 
                 {bannerStates.flatMap((state) => [
-                  <div key={`${actionType}-${state}-label`} style={bannerMatrixRowLabelCellStyles}>
+                  <StoryMatrixRowLabelCell key={`${actionType}-${state}-label`} minHeight={148}>
                     <HeaderCell brand={brand} label={state} />
-                  </div>,
-                  <div key={`${actionType}-${state}-light`} style={bannerMatrixValueCellStyles}>
+                  </StoryMatrixRowLabelCell>,
+                  <StoryMatrixValueCell key={`${actionType}-${state}-light`} minHeight={148}>
                     <VariantCell
                       brand={brand}
                       actionType={actionType}
@@ -103,8 +111,8 @@ function BannerMatrixStory({
                       theme="Light"
                       heading={heading}
                     />
-                  </div>,
-                  <div key={`${actionType}-${state}-dark`} style={bannerMatrixValueCellStyles}>
+                  </StoryMatrixValueCell>,
+                  <StoryMatrixValueCell key={`${actionType}-${state}-dark`} minHeight={148}>
                     <VariantCell
                       brand={brand}
                       actionType={actionType}
@@ -112,10 +120,10 @@ function BannerMatrixStory({
                       theme="Dark"
                       heading={heading}
                     />
-                  </div>
+                  </StoryMatrixValueCell>
                 ])}
-              </div>
-            </div>
+              </StoryMatrix>
+            </StoryMatrixSection>
           </StoryCard>
         ))}
       </div>
@@ -207,7 +215,8 @@ function SignupFormStory({ brand = "Cars24" }: Pick<BannerProps, "brand">) {
             <SectionHeader
               brand={brand}
               title="Sign up"
-              subtitle=""
+              showSubtitle={false}
+              showDescription
               description="All fields are required."
               showTag={false}
               showAction={false}
@@ -303,60 +312,6 @@ function SignupFormStory({ brand = "Cars24" }: Pick<BannerProps, "brand">) {
   );
 }
 
-const bannerSectionStyles: CSSProperties = {
-  display: "grid",
-  gap: 20,
-  padding: 24,
-  border: `1px solid ${String(coreTokenCatalog.color.border.default)}`,
-  borderRadius: 24,
-  background: String(coreTokenCatalog.color.surface.canvas)
-};
-
-const bannerMatrixTableStyles: CSSProperties = {
-  display: "grid",
-  gridTemplateColumns: "180px repeat(2, minmax(320px, 1fr))",
-  border: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  borderRadius: 20,
-  overflow: "hidden"
-};
-
-const bannerMatrixCornerCellStyles: CSSProperties = {
-  minHeight: 68,
-  borderBottom: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  background: String(coreTokenCatalog.color.surface.canvas)
-};
-
-const bannerMatrixHeaderCellStyles: CSSProperties = {
-  minHeight: 68,
-  padding: "16px 20px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  background: String(coreTokenCatalog.color.surface.canvas)
-};
-
-const bannerMatrixRowLabelCellStyles: CSSProperties = {
-  minHeight: 128,
-  padding: "20px 16px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "flex-start",
-  borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  background: String(coreTokenCatalog.color.surface.canvas)
-};
-
-const bannerMatrixValueCellStyles: CSSProperties = {
-  minHeight: 128,
-  padding: "16px 20px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  borderTop: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  borderLeft: `1px dashed ${String(coreTokenCatalog.color.border.default)}`,
-  background: String(coreTokenCatalog.color.surface.canvas)
-};
-
 const meta: Meta<BannerProps> = {
   title: "Components/Banner",
   component: Banner,
@@ -445,6 +400,8 @@ const bannerNoHeadingSourceCode = `<Banner
 
 const bannerUiExampleSourceCode = `<SectionHeader
   title="Sign up"
+  showSubtitle={false}
+  showDescription
   description="All fields are required."
   showTag={false}
   showAction={false}

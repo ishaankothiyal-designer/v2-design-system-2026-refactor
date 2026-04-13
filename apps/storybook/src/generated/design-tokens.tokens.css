@@ -773,14 +773,14 @@
   --component-icon-button-color-light-disabled-background: #F1F5F9; /* component.iconButton.color.light.disabled.background | @presenter Color */
   --component-icon-button-color-light-disabled-border: transparent; /* component.iconButton.color.light.disabled.border */
   --component-icon-button-color-light-disabled-foreground: #94A3B8; /* component.iconButton.color.light.disabled.foreground | @presenter Color */
-  --component-icon-button-color-dark-solid-primary-rest-background: #155EEF; /* component.iconButton.color.dark.solid.primary.rest.background | @presenter Color */
-  --component-icon-button-color-dark-solid-primary-rest-foreground: #FFFFFF; /* component.iconButton.color.dark.solid.primary.rest.foreground | @presenter Color */
-  --component-icon-button-color-dark-solid-primary-hover-background: #004EEB; /* component.iconButton.color.dark.solid.primary.hover.background | @presenter Color */
-  --component-icon-button-color-dark-solid-primary-hover-foreground: #FFFFFF; /* component.iconButton.color.dark.solid.primary.hover.foreground | @presenter Color */
-  --component-icon-button-color-dark-solid-black-rest-background: #0A0A0A; /* component.iconButton.color.dark.solid.black.rest.background | @presenter Color */
-  --component-icon-button-color-dark-solid-black-rest-foreground: #FFFFFF; /* component.iconButton.color.dark.solid.black.rest.foreground | @presenter Color */
-  --component-icon-button-color-dark-solid-black-hover-background: #171717; /* component.iconButton.color.dark.solid.black.hover.background | @presenter Color */
-  --component-icon-button-color-dark-solid-black-hover-foreground: #FFFFFF; /* component.iconButton.color.dark.solid.black.hover.foreground | @presenter Color */
+  --component-icon-button-color-dark-solid-primary-rest-background: #FFFFFF; /* component.iconButton.color.dark.solid.primary.rest.background | @presenter Color */
+  --component-icon-button-color-dark-solid-primary-rest-foreground: #020617; /* component.iconButton.color.dark.solid.primary.rest.foreground | @presenter Color */
+  --component-icon-button-color-dark-solid-primary-hover-background: #F1F5F9; /* component.iconButton.color.dark.solid.primary.hover.background | @presenter Color */
+  --component-icon-button-color-dark-solid-primary-hover-foreground: #020617; /* component.iconButton.color.dark.solid.primary.hover.foreground | @presenter Color */
+  --component-icon-button-color-dark-solid-black-rest-background: #F1F5F9; /* component.iconButton.color.dark.solid.black.rest.background | @presenter Color */
+  --component-icon-button-color-dark-solid-black-rest-foreground: #020617; /* component.iconButton.color.dark.solid.black.rest.foreground | @presenter Color */
+  --component-icon-button-color-dark-solid-black-hover-background: #E2E8F0; /* component.iconButton.color.dark.solid.black.hover.background | @presenter Color */
+  --component-icon-button-color-dark-solid-black-hover-foreground: #020617; /* component.iconButton.color.dark.solid.black.hover.foreground | @presenter Color */
   --component-icon-button-color-dark-outline-primary-rest-background: transparent; /* component.iconButton.color.dark.outline.primary.rest.background */
   --component-icon-button-color-dark-outline-primary-rest-border: #FFFFFF4D; /* component.iconButton.color.dark.outline.primary.rest.border | @presenter Color */
   --component-icon-button-color-dark-outline-primary-rest-foreground: #FFFFFF; /* component.iconButton.color.dark.outline.primary.rest.foreground | @presenter Color */

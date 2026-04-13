@@ -59,51 +59,53 @@ function SectionHeading({
   );
 }
 
-function VariantMatrixStory({ brand = "Cars24" }: { brand?: DisplayBrandId }) {
+function StateStory({
+  brand = "Cars24",
+  state,
+  title
+}: {
+  brand?: DisplayBrandId;
+  state: ProgressStepperStepState;
+  title: string;
+}) {
   return (
     <StoryPage fullscreen>
-      <div style={{ display: "grid", gap: 40 }}>
-        <StoryCard>
-          <div style={{ display: "grid", gap: 24 }}>
-            <SectionHeading
-              title="Step States"
-              description="All six visible indicator states from the canonical Figma node."
-            />
-            <div style={stepStateGridStyles}>
-              {stepStates.map((state) => (
-                <div key={state} style={surfaceCardStyles}>
-                  <ProgressStepper brand={brand} steps={[{ label: "Step 1", state }]} />
-                </div>
-              ))}
-            </div>
+      <StoryCard>
+        <div style={{ display: "grid", gap: 24 }}>
+          <SectionHeading
+            title={title}
+            description={`Progress Stepper preview for the ${title.toLowerCase()} state from the canonical Figma node.`}
+          />
+          <div style={surfaceCardStyles}>
+            <ProgressStepper brand={brand} steps={[{ label: "Step 1", state }]} />
           </div>
-        </StoryCard>
-
-        <StoryCard>
-          <div style={{ display: "grid", gap: 24 }}>
-            <SectionHeading
-              title="Count Variants"
-              description="The updated Figma node shows the underline progress track baked into the component, with the first step active across the count variants."
-            />
-            <div style={{ display: "grid", gap: 16 }}>
-              {stepCounts.map((stepCount) => (
-                <div key={`count-${stepCount}`} style={surfaceCardStyles}>
-                  <ProgressStepper brand={brand} steps={buildSteps(stepCount, "Active")} />
-                </div>
-              ))}
-            </div>
-          </div>
-        </StoryCard>
-      </div>
+        </div>
+      </StoryCard>
     </StoryPage>
   );
 }
 
-const stepStateGridStyles: CSSProperties = {
-  display: "grid",
-  gap: 16,
-  gridTemplateColumns: "repeat(3, minmax(140px, 1fr))"
-};
+function CountVariantsStory({ brand = "Cars24" }: { brand?: DisplayBrandId }) {
+  return (
+    <StoryPage fullscreen>
+      <StoryCard>
+        <div style={{ display: "grid", gap: 24 }}>
+          <SectionHeading
+            title="Count Variants"
+            description="The updated Figma node shows the underline progress track baked into the component, with the first step active across the count variants."
+          />
+          <div style={{ display: "grid", gap: 16 }}>
+            {stepCounts.map((stepCount) => (
+              <div key={`count-${stepCount}`} style={surfaceCardStyles}>
+                <ProgressStepper brand={brand} steps={buildSteps(stepCount, "Active")} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </StoryCard>
+    </StoryPage>
+  );
+}
 
 const surfaceCardStyles: CSSProperties = {
   alignItems: "center",
@@ -166,31 +168,93 @@ export const Playground: Story = {
   render: PlaygroundStory
 };
 
-export const Variants: Story = {
+export const Rest: Story = {
   args: {
     brand: "Cars24",
-    previewState: "Active",
+    previewState: "Rest",
     stepCount: 4
   },
-  render: VariantMatrixStory,
+  render: ({ brand = "Cars24" }) => <StateStory brand={brand} state="Rest" title="Rest" />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
     layout: "fullscreen"
   }
 };
 
-export const UIExample: Story = {
+export const Active: Story = {
   args: {
     brand: "Cars24",
     previewState: "Active",
     stepCount: 4
   },
-  render: PlaygroundStory,
+  render: ({ brand = "Cars24" }) => <StateStory brand={brand} state="Active" title="Active" />,
   parameters: {
-    docs: {
-      source: {
-        code: progressStepperUiExampleSourceCode
-      }
-    }
+    controls: { include: ["brand"] },
+    layout: "fullscreen"
+  }
+};
+
+export const Loading: Story = {
+  args: {
+    brand: "Cars24",
+    previewState: "Loading",
+    stepCount: 4
+  },
+  render: ({ brand = "Cars24" }) => <StateStory brand={brand} state="Loading" title="Loading" />,
+  parameters: {
+    controls: { include: ["brand"] },
+    layout: "fullscreen"
+  }
+};
+
+export const Success: Story = {
+  args: {
+    brand: "Cars24",
+    previewState: "Success",
+    stepCount: 4
+  },
+  render: ({ brand = "Cars24" }) => <StateStory brand={brand} state="Success" title="Success" />,
+  parameters: {
+    controls: { include: ["brand"] },
+    layout: "fullscreen"
+  }
+};
+
+export const Error: Story = {
+  args: {
+    brand: "Cars24",
+    previewState: "Error",
+    stepCount: 4
+  },
+  render: ({ brand = "Cars24" }) => <StateStory brand={brand} state="Error" title="Error" />,
+  parameters: {
+    controls: { include: ["brand"] },
+    layout: "fullscreen"
+  }
+};
+
+export const Disabled: Story = {
+  args: {
+    brand: "Cars24",
+    previewState: "Disabled",
+    stepCount: 4
+  },
+  render: ({ brand = "Cars24" }) => <StateStory brand={brand} state="Disabled" title="Disabled" />,
+  parameters: {
+    controls: { include: ["brand"] },
+    layout: "fullscreen"
+  }
+};
+
+export const CountVariants: Story = {
+  args: {
+    brand: "Cars24",
+    previewState: "Active",
+    stepCount: 4
+  },
+  render: CountVariantsStory,
+  parameters: {
+    controls: { include: ["brand"] },
+    layout: "fullscreen"
   }
 };

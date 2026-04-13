@@ -1,5 +1,6 @@
 export * from "./theme";
 export * from "./canonical/icon";
+export * from "./canonical/avatar";
 export * from "./canonical/button";
 export * from "./canonical/button-group";
 export * from "./canonical/back-to-top-button";

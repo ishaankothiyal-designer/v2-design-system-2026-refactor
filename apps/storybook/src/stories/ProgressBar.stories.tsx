@@ -11,9 +11,11 @@ const PROGRESS_BAR_FIGMA_URL =
 const documentedPercentages = [10, 40, 100] as const;
 
 function VariantCard({
+  brand,
   percentage,
   showPercentage = true
 }: {
+  brand: NonNullable<ProgressBarProps["brand"]>;
   percentage: (typeof documentedPercentages)[number];
   showPercentage?: boolean;
 }) {
@@ -21,7 +23,7 @@ function VariantCard({
     <div style={surfaceCardStyles}>
       <div style={{ display: "grid", gap: 12 }}>
         <div style={variantHeadingStyles}>{`${percentage}%`}</div>
-        <ProgressBar percentage={percentage} showPercentage={showPercentage} />
+        <ProgressBar brand={brand} percentage={percentage} showPercentage={showPercentage} />
       </div>
     </div>
   );
@@ -35,7 +37,7 @@ function PlaygroundStory(args: ProgressBarProps) {
   );
 }
 
-function VariantsStory() {
+function VariantsStory({ brand = "Cars24" }: Pick<ProgressBarProps, "brand">) {
   return (
     <StoryPage fullscreen>
       <StoryCard>
@@ -49,7 +51,7 @@ function VariantsStory() {
 
           <div style={variantGridStyles}>
             {documentedPercentages.map((percentage) => (
-              <VariantCard key={`progress-bar-${percentage}`} percentage={percentage} />
+              <VariantCard brand={brand} key={`progress-bar-${percentage}`} percentage={percentage} />
             ))}
           </div>
         </div>
@@ -135,9 +137,9 @@ type Story = StoryObj<typeof meta>;
 export const Playground: Story = {};
 
 export const Variants: Story = {
-  render: () => <VariantsStory />,
+  render: ({ brand = "Cars24" }) => <VariantsStory brand={brand} />,
   parameters: {
-    controls: { disable: true },
+    controls: { include: ["brand"] },
     layout: "fullscreen"
   }
 };

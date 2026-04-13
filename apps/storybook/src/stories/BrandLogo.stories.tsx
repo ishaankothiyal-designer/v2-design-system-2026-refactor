@@ -1,38 +1,22 @@
-import type { CSSProperties, ReactNode } from "react";
+import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { BrandLogo, Text, type BrandLogoProps, type BrandLogoType } from "@geist/web";
 import { coreTokenCatalog } from "@geist/tokens";
 import { createFigspecDesign } from "../storybookFigma";
-import { StoryCard, StoryCopy, StoryHeading, StoryPage } from "../storybook-shell";
+import {
+  StoryMatrix,
+  StoryMatrixCornerCell,
+  StoryMatrixHeaderCell,
+  StoryMatrixRowLabelCell,
+  StoryMatrixValueCell
+} from "../storybook-matrix";
+import { StoryPage, StoryPreviewSurface } from "../storybook-shell";
 
 const BRAND_LOGO_FIGMA_URL =
   "https://www.figma.com/design/AZgWt0KHVuVeWBAcQ6Jcy4/branch/yxI5H0FhaUg0YR0uhNuqR6/%F0%9F%9A%80-v2.0-Global-Component-Library?node-id=12125-23339&p=f&t=1zgOyFpiLYMyM4XM-11";
 
-const brands: BrandLogoProps["brand"][] = ["Cars24", "VehicleInfo", "CarInfo", "Team BHP"];
+const brands: NonNullable<BrandLogoProps["brand"]>[] = ["Cars24", "VehicleInfo", "CarInfo", "Team BHP"];
 const types: BrandLogoType[] = ["Logo", "Symbol"];
-
-function Surface({
-  children,
-  onDark
-}: {
-  children: ReactNode;
-  onDark: boolean;
-}) {
-  return (
-    <div
-      style={{
-        display: "grid",
-        gap: 24,
-        padding: 24,
-        borderRadius: 24,
-        border: `1px solid ${String(coreTokenCatalog.color.border.default)}`,
-        background: String(onDark ? coreTokenCatalog.color.surface.inverse : coreTokenCatalog.color.surface.canvas)
-      }}
-    >
-      {children}
-    </div>
-  );
-}
 
 function CellLabel({
   label,
@@ -56,23 +40,58 @@ function CellLabel({
 
 function Matrix({ onDark }: { onDark: boolean }) {
   return (
-    <Surface onDark={onDark}>
-      <div style={matrixStyles}>
-        <div />
-        {types.map((type) => (
-          <CellLabel key={`head-${type}`} label={type} onDark={onDark} />
-        ))}
+    <StoryMatrix columns="minmax(140px, 180px) minmax(260px, 1fr) minmax(120px, 180px)" tone={onDark ? "inverse" : "canvas"}>
+      <StoryMatrixCornerCell tone={onDark ? "inverse" : "canvas"} />
+      {types.map((type) => (
+        <StoryMatrixHeaderCell key={`head-${type}`} tone={onDark ? "inverse" : "canvas"}>
+          <CellLabel label={type} onDark={onDark} />
+        </StoryMatrixHeaderCell>
+      ))}
 
-        {brands.flatMap((brand) => [
-          <CellLabel key={`${brand}-label`} label={brand} onDark={onDark} />,
-          ...types.map((type) => (
-            <div key={`${brand}-${type}`} style={valueCellStyles}>
+      {brands.flatMap((brand) => [
+        <StoryMatrixRowLabelCell key={`${brand}-label`} minHeight={88} tone={onDark ? "inverse" : "canvas"}>
+          <CellLabel label={brand} onDark={onDark} />
+        </StoryMatrixRowLabelCell>,
+        ...types.map((type) => (
+          <StoryMatrixValueCell key={`${brand}-${type}`} minHeight={88} tone={onDark ? "inverse" : "canvas"}>
+            <div style={valueCellStyles}>
               <BrandLogo brand={brand} type={type} onDark={onDark} decorative />
             </div>
-          ))
-        ])}
-      </div>
-    </Surface>
+          </StoryMatrixValueCell>
+        ))
+      ])}
+    </StoryMatrix>
+  );
+}
+
+function DocsMatrix({
+  brand,
+  onDark
+}: {
+  brand: NonNullable<BrandLogoProps["brand"]>;
+  onDark: boolean;
+}) {
+  return (
+    <StoryMatrix columns="minmax(140px, 180px) repeat(2, minmax(180px, 1fr))" tone={onDark ? "inverse" : "canvas"}>
+      <StoryMatrixCornerCell tone={onDark ? "inverse" : "canvas"} />
+      <StoryMatrixHeaderCell tone={onDark ? "inverse" : "canvas"}>
+        <CellLabel label="Logo" onDark={onDark} />
+      </StoryMatrixHeaderCell>
+      <StoryMatrixHeaderCell tone={onDark ? "inverse" : "canvas"}>
+        <CellLabel label="Symbol" onDark={onDark} />
+      </StoryMatrixHeaderCell>
+
+      <StoryMatrixRowLabelCell minHeight={88} tone={onDark ? "inverse" : "canvas"}>
+        <CellLabel label={brand} onDark={onDark} />
+      </StoryMatrixRowLabelCell>
+      {types.map((type) => (
+        <StoryMatrixValueCell key={`${brand}-${type}-${onDark ? "dark" : "light"}`} minHeight={88} tone={onDark ? "inverse" : "canvas"}>
+          <div style={valueCellStyles}>
+            <BrandLogo brand={brand} type={type} onDark={onDark} decorative />
+          </div>
+        </StoryMatrixValueCell>
+      ))}
+    </StoryMatrix>
   );
 }
 
@@ -108,72 +127,49 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
+export const Docs: Story = {
+  render: ({ brand = "Cars24" }) => (
+    <StoryPage fullscreen>
+      <div style={{ display: "grid", gap: 32 }}>
+        <DocsMatrix brand={brand} onDark={false} />
+        <DocsMatrix brand={brand} onDark />
+      </div>
+    </StoryPage>
+  ),
+  parameters: {
+    controls: { include: ["brand"] }
+  }
+};
+
 export const Playground: Story = {
   render: (args) => (
     <StoryPage>
-      <div style={args.onDark ? darkPreviewStyles : undefined}>
+      <StoryPreviewSurface onDark={Boolean(args.onDark)}>
         <BrandLogo {...args} />
-      </div>
+      </StoryPreviewSurface>
     </StoryPage>
   )
 };
 
 export const BrandMatrix: Story = {
+  name: "All Brands",
   render: () => (
     <StoryPage fullscreen>
       <div style={{ display: "grid", gap: 32 }}>
-        <StoryCard>
-          <div style={{ display: "grid", gap: 16 }}>
-            <StoryHeading>Brand Logo</StoryHeading>
-            <StoryCopy>
-              Canonical logo and symbol variants for the Cars24, VehicleInfo, CarInfo, and Team BHP brands.
-            </StoryCopy>
-            <Matrix onDark={false} />
-          </div>
-        </StoryCard>
-
-        <StoryCard
-          style={{
-            background: String(coreTokenCatalog.color.surface.inverse),
-            borderRadius: 24,
-            padding: 32
-          }}
-        >
-          <div style={{ display: "grid", gap: 16 }}>
-            <StoryHeading tone="inverse" style={{ color: String(coreTokenCatalog.color.text.inverse) }}>
-              On Dark Surface
-            </StoryHeading>
-            <StoryCopy
-              tone="inverse"
-              style={{ color: String(coreTokenCatalog.color.text.inverse), opacity: 0.82 }}
-            >
-              Inverse variants aligned with the Figma identity matrix.
-            </StoryCopy>
-            <Matrix onDark />
-          </div>
-        </StoryCard>
+        <Matrix onDark={false} />
+        <Matrix onDark />
       </div>
     </StoryPage>
-  )
-};
-
-const matrixStyles: CSSProperties = {
-  display: "grid",
-  gridTemplateColumns: "minmax(120px, 140px) minmax(180px, 1fr) 80px",
-  gap: 20,
-  alignItems: "center"
+  ),
+  parameters: {
+    controls: { disable: true }
+  }
 };
 
 const valueCellStyles: CSSProperties = {
   display: "flex",
   alignItems: "center",
   justifyContent: "flex-start",
+  width: "100%",
   minHeight: 56
-};
-
-const darkPreviewStyles: CSSProperties = {
-  display: "inline-flex",
-  padding: 24,
-  borderRadius: 16,
-  background: String(coreTokenCatalog.color.surface.inverse)
 };
