@@ -1,9 +1,9 @@
 import type { HTMLAttributes, ReactNode } from "react";
-import type { BrandId } from "@geist/tokens";
+import type { DisplayBrandId } from "@geist/tokens";
 import { getRequiredThemeTokenValue } from "../theme";
 
 export interface TextProps extends HTMLAttributes<HTMLSpanElement> {
-  brand?: BrandId;
+  brand?: DisplayBrandId;
   tone?: "primary" | "secondary" | "muted" | "inverse";
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   as?: "span" | "p" | "label" | "strong";
@@ -11,7 +11,7 @@ export interface TextProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 export function Text({
-  brand = "core",
+  brand = "Cars24",
   tone = "primary",
   size = "md",
   as: Element = "span",
@@ -60,7 +60,7 @@ export function Text({
       {...rest}
       style={{
         color: String(getRequiredThemeTokenValue(brand, colorToken)),
-        fontFamily: String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans")),
+        fontFamily: `${String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"))}, sans-serif`,
         fontSize,
         fontWeight,
         lineHeight: `${lineHeight}px`,

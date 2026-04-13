@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
+import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
 import {
   Accordion,
   Badge,
@@ -10,6 +11,7 @@ import {
   type BadgeSize,
   type BadgeType
 } from "@geist/web";
+import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 type BadgeStoryArgs = BadgeProps & {
@@ -31,9 +33,16 @@ const badgePriorities: BadgePriority[] = ["High", "Medium", "Low"];
 const badgeSizes: BadgeSize[] = ["Extra Small", "Small", "Medium"];
 const pillShapes: BadgePillShape[] = ["No", "Yes"];
 
-function matrixBadge(type: BadgeType, priority: BadgePriority, size: BadgeSize, pillShape: BadgePillShape) {
+function matrixBadge(
+  brand: NonNullable<BadgeProps["brand"]>,
+  type: BadgeType,
+  priority: BadgePriority,
+  size: BadgeSize,
+  pillShape: BadgePillShape
+) {
   return (
     <Badge
+      brand={brand}
       key={`${type}-${priority}-${size}-${pillShape}`}
       type={type}
       priority={priority}
@@ -44,30 +53,68 @@ function matrixBadge(type: BadgeType, priority: BadgePriority, size: BadgeSize, 
   );
 }
 
-function MatrixStory() {
+function TypeMatrixStory({
+  brand = "Cars24",
+  type
+}: {
+  brand?: NonNullable<BadgeProps["brand"]>;
+  type: BadgeType;
+}) {
   return (
     <StoryPage>
-      <header style={{ display: "grid", gap: 12, maxWidth: 760 }}>
-        <h1 style={{ margin: 0, fontSize: 40, lineHeight: "48px" }}>Badge</h1>
-        <p style={{ margin: 0, fontSize: 16, lineHeight: "24px", color: "#64748B" }}>
-          Exact Figma property matrix for `Size`, `Type`, `Priority`, and `Pill shape`.
-        </p>
-      </header>
+      <StoryCard>
+        <div style={{ display: "grid", gap: 16 }}>
+          <strong style={{ fontSize: 16 }}>{type}</strong>
+          <div style={{ display: "grid", gap: 16 }}>
+            {badgePriorities.map((priority) => (
+              <div key={priority} style={{ display: "grid", gap: 12 }}>
+                <span style={{ fontSize: 13, color: "#64748B" }}>{priority}</span>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+                  {badgeSizes.map((size) => matrixBadge(brand, type, priority, size, "No"))}
+                  {badgeSizes.map((size) => matrixBadge(brand, type, priority, size, "Yes"))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </StoryCard>
+    </StoryPage>
+  );
+}
 
+function createTypeStory(type: BadgeType): StoryObj<BadgeStoryArgs> {
+  return {
+    render: ({ brand = "Cars24" }) => <TypeMatrixStory brand={brand} type={type} />,
+    parameters: {
+      controls: { include: ["brand"] },
+      docs: {
+        source: {
+          code: badgeVariantsSourceCode
+        }
+      }
+    }
+  };
+}
+
+function TypeIndexStory({ brand = "Cars24" }: Pick<BadgeProps, "brand">) {
+  return (
+    <StoryPage>
       <div style={{ display: "grid", gap: 24 }}>
         {badgeTypes.map((type) => (
           <StoryCard key={type}>
-            <div style={{ display: "grid", gap: 16 }}>
+            <div style={{ display: "grid", gap: 12 }}>
               <strong style={{ fontSize: 16 }}>{type}</strong>
-              <div style={{ display: "grid", gap: 16 }}>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
                 {badgePriorities.map((priority) => (
-                  <div key={priority} style={{ display: "grid", gap: 12 }}>
-                    <span style={{ fontSize: 13, color: "#64748B" }}>{priority}</span>
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
-                      {badgeSizes.map((size) => matrixBadge(type, priority, size, "No"))}
-                      {badgeSizes.map((size) => matrixBadge(type, priority, size, "Yes"))}
-                    </div>
-                  </div>
+                  <Badge
+                    brand={brand}
+                    key={`${type}-${priority}`}
+                    type={type}
+                    priority={priority}
+                    size="Small"
+                    pillShape="Yes"
+                    labelText={`${priority}`}
+                  />
                 ))}
               </div>
             </div>
@@ -78,7 +125,7 @@ function MatrixStory() {
   );
 }
 
-function StateGallery() {
+function StateGallery({ brand = "Cars24" }: Pick<BadgeProps, "brand">) {
   const states: Array<BadgeProps["forceState"] | "disabled"> = [
     undefined,
     "hover",
@@ -92,13 +139,14 @@ function StateGallery() {
       <StoryCard>
         <div style={{ display: "grid", gap: 16 }}>
           <strong>Relevant states</strong>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center" }}>
             {states.map((state) => (
               <div key={String(state ?? "default")} style={{ display: "grid", gap: 8, justifyItems: "start" }}>
                 <span style={{ fontSize: 13, color: "#64748B", textTransform: "capitalize" }}>
                   {state ?? "default"}
                 </span>
                 <Badge
+                  brand={brand}
                   type="Neutral"
                   priority="Medium"
                   size="Medium"
@@ -116,34 +164,36 @@ function StateGallery() {
   );
 }
 
-function ConfigurationsStory() {
+function ConfigurationsStory({ brand = "Cars24" }: Pick<BadgeProps, "brand">) {
   const examples: Array<{ title: string; node: ReactNode }> = [
     {
       title: "Text only",
       node: (
         <Badge
+          brand={brand}
           type="Neutral"
           priority="Low"
           size="Extra Small"
           pillShape="Yes"
           labelText="Badge"
-          iconLeft={false}
-          iconRight={false}
+          showLeadingIcon={false}
+          showTrailingIcon={false}
         />
       )
     },
     {
       title: "Icon + text",
-      node: <Badge type="Success" priority="High" size="Small" labelText="Badge" />
+      node: <Badge brand={brand} type="Success" priority="High" size="Small" labelText="Badge" />
     },
     {
       title: "Status badge",
-      node: <Badge type="Warning" priority="Medium" size="Small" labelText="Action required" />
+      node: <Badge brand={brand} type="Warning" priority="Medium" size="Small" labelText="Action required" />
     },
     {
       title: "Dismissible",
       node: (
         <Badge
+          brand={brand}
           type="Information"
           priority="Medium"
           size="Small"
@@ -157,12 +207,13 @@ function ConfigurationsStory() {
       title: "Custom icons",
       node: (
         <Badge
+          brand={brand}
           type="Feature"
           priority="Medium"
           size="Medium"
           labelText="Custom"
-          changeLeftIcon={<Icon name="calendar-line" decorative style={{ fontSize: 18, color: "#D300F4" }} />}
-          changeRightIcon={<Icon name="check-outline" decorative style={{ fontSize: 18, color: "#D300F4" }} />}
+          leadingIcon={<Icon name="calendar-line" decorative />}
+          trailingIcon={<Icon name="check-outline" decorative />}
         />
       )
     },
@@ -171,17 +222,19 @@ function ConfigurationsStory() {
       node: (
         <div style={{ width: 328 }}>
           <Accordion
+            brand={brand}
             title="Additional Insights"
             content="The Accordion badge slot now consumes the same canonical Badge API exposed in Storybook."
             badge={
               <Badge
+                brand={brand}
                 type="Neutral"
                 priority="Low"
                 size="Extra Small"
                 pillShape="Yes"
                 labelText="New"
-                iconLeft={false}
-                iconRight={false}
+                showLeadingIcon={false}
+                showTrailingIcon={false}
               />
             }
           />
@@ -206,7 +259,7 @@ function ConfigurationsStory() {
   );
 }
 
-function SizesStory() {
+function SizesStory({ brand = "Cars24" }: Pick<BadgeProps, "brand">) {
   return (
     <StoryPage>
       <div style={configGridStyles}>
@@ -214,8 +267,8 @@ function SizesStory() {
           <StoryCard key={size}>
             <div style={{ display: "grid", gap: 12 }}>
               <strong>{size}</strong>
-              <Badge type="Drive pink" priority="High" size={size} labelText="Badge" />
-              <Badge type="Neutral" priority="Medium" size={size} pillShape="Yes" labelText="Badge" />
+              <Badge brand={brand} type="Drive pink" priority="High" size={size} labelText="Badge" />
+              <Badge brand={brand} type="Neutral" priority="Medium" size={size} pillShape="Yes" labelText="Badge" />
             </div>
           </StoryCard>
         ))}
@@ -230,30 +283,58 @@ const configGridStyles: CSSProperties = {
   gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))"
 };
 
+const BADGE_FIGMA_URL =
+  "https://www.figma.com/design/AZgWt0KHVuVeWBAcQ6Jcy4/branch/yxI5H0FhaUg0YR0uhNuqR6/%F0%9F%9A%80-v2.0-Global-Component-Library?node-id=120-1830&t=1zgOyFpiLYMyM4XM-11";
+
+const badgeVariantsSourceCode = `<StoryPage>
+  <StoryCard>
+    <Badge
+      brand="Cars24"
+      type="Neutral"
+      priority="Medium"
+      size="Extra Small"
+      pillShape="No"
+      labelText="Badge"
+    />
+  </StoryCard>
+</StoryPage>`;
+
+const badgeUiExampleSourceCode = `<Badge
+  brand="Cars24"
+  type="Information"
+  priority="Medium"
+  size="Small"
+  pillShape="Yes"
+  labelText="Dismiss me"
+  onDismiss={() => undefined}
+/>`;
+
 const meta: Meta<BadgeStoryArgs> = {
-  title: "Components/Badge",
+  title: "Components/Badges/Badge",
   component: Badge,
   tags: ["autodocs"],
   parameters: {
-    layout: "fullscreen"
+    layout: "fullscreen",
+    design: createFigspecDesign(BADGE_FIGMA_URL)
   },
   args: {
+    brand: "Cars24",
     labelText: "Badge",
     size: "Extra Small",
     type: "Neutral",
     priority: "Medium",
     pillShape: "No",
-    iconLeft: true,
-    iconRight: true,
-    changeLeftIcon: null,
-    changeRightIcon: null,
+    showLeadingIcon: true,
+    showTrailingIcon: true,
+    leadingIcon: null,
+    trailingIcon: null,
     disabled: false,
     dismissible: false
   },
   argTypes: {
     brand: {
       control: "radio",
-      options: ["core", "acme"]
+      options: STORYBOOK_BRAND_OPTIONS
     },
     size: {
       control: "inline-radio",
@@ -271,10 +352,10 @@ const meta: Meta<BadgeStoryArgs> = {
       control: "inline-radio",
       options: pillShapes
     },
-    iconLeft: {
+    showLeadingIcon: {
       control: "boolean"
     },
-    iconRight: {
+    showTrailingIcon: {
       control: "boolean"
     },
     forceState: {
@@ -284,11 +365,31 @@ const meta: Meta<BadgeStoryArgs> = {
     dismissible: {
       control: "boolean"
     },
-    changeLeftIcon: {
+    leadingIcon: {
       control: false
     },
-    changeRightIcon: {
+    trailingIcon: {
       control: false
+    },
+    iconLeft: {
+      table: {
+        disable: true
+      }
+    },
+    iconRight: {
+      table: {
+        disable: true
+      }
+    },
+    changeLeftIcon: {
+      table: {
+        disable: true
+      }
+    },
+    changeRightIcon: {
+      table: {
+        disable: true
+      }
     }
   },
   render: (args) => {
@@ -297,13 +398,7 @@ const meta: Meta<BadgeStoryArgs> = {
       ...(dismissible ? { onDismiss: () => undefined } : {})
     };
 
-    return (
-      <StoryPage>
-        <StoryCard style={{ width: "fit-content" }}>
-          <Badge {...rest} {...optionalProps} />
-        </StoryCard>
-      </StoryPage>
-    );
+    return <Badge {...rest} {...optionalProps} />;
   }
 };
 
@@ -311,20 +406,57 @@ export default meta;
 
 type Story = StoryObj<BadgeStoryArgs>;
 
-export const Playground: Story = {};
-
-export const FigmaMatrix: StoryObj = {
-  render: () => <MatrixStory />
+export const Playground: Story = {
+  parameters: {
+    layout: "centered"
+  }
 };
 
-export const Sizes: StoryObj = {
-  render: () => <SizesStory />
+export const Types: Story = {
+  render: ({ brand = "Cars24" }) => <TypeIndexStory brand={brand} />,
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: {
+      source: {
+        code: badgeVariantsSourceCode
+      }
+    }
+  }
 };
 
-export const Configurations: StoryObj = {
-  render: () => <ConfigurationsStory />
+export const DrivePink: Story = createTypeStory("Drive pink");
+export const Error: Story = createTypeStory("Error");
+export const Feature: Story = createTypeStory("Feature");
+export const Information: Story = createTypeStory("Information");
+export const Neutral: Story = createTypeStory("Neutral");
+export const SkySurge: Story = createTypeStory("Sky surge");
+export const Success: Story = createTypeStory("Success");
+export const Warning: Story = createTypeStory("Warning");
+
+export const Sizes: Story = {
+  render: ({ brand = "Cars24" }) => <SizesStory brand={brand} />,
+  parameters: {
+    controls: { include: ["brand"] }
+  }
 };
 
-export const States: StoryObj = {
-  render: () => <StateGallery />
+export const States: Story = {
+  render: ({ brand = "Cars24" }) => <StateGallery brand={brand} />,
+  parameters: {
+    controls: { include: ["brand"] }
+  }
+};
+
+export const UIExample: Story = {
+  render: ({ brand = "Cars24" }) => <ConfigurationsStory brand={brand} />,
+  parameters: {
+    controls: {
+      include: ["brand"]
+    },
+    docs: {
+      source: {
+        code: badgeUiExampleSourceCode
+      }
+    }
+  }
 };

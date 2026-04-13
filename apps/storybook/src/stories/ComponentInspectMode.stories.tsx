@@ -8,7 +8,18 @@ import {
 } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { designSystemRegistry } from "@geist/contracts";
-import { Accordion, Badge, Button, Icon, Text } from "@geist/web";
+import {
+  Accordion,
+  BackToTopButton,
+  Badge,
+  Banner,
+  Button,
+  Divider,
+  Icon,
+  LinkButton,
+  SectionHeader,
+  Text
+} from "@geist/web";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 type Measurement = {
@@ -82,9 +93,26 @@ function manualBindings(
 const inspectItems = [
   {
     title: "Button",
-    preview: <Button tone="primary" size="md">Continue</Button>,
+    preview: (
+      <Button
+        styleVariant="Solid"
+        size="Medium"
+        shape="Regular"
+        leadingIcon={<Icon name="sparkle-filled" decorative />}
+        trailingIcon={<Icon name="chevron-small-right-filled" decorative />}
+      >
+        Label
+      </Button>
+    ),
     bindings:
       designSystemRegistry.components.find((component) => component.canonicalId === "component.button")
+        ?.tokenBindings ?? []
+  },
+  {
+    title: "Back To Top Button",
+    preview: <BackToTopButton>Go to top</BackToTopButton>,
+    bindings:
+      designSystemRegistry.components.find((component) => component.canonicalId === "component.backToTopButton")
         ?.tokenBindings ?? []
   },
   {
@@ -103,6 +131,22 @@ const inspectItems = [
         ?.tokenBindings ?? []
   },
   {
+    title: "Link Button",
+    preview: (
+      <LinkButton
+        tone="Brand"
+        size="Medium"
+        leadingIcon={<Icon name="sparkle-filled" decorative />}
+        trailingIcon={<Icon name="arrow-right-outline" decorative />}
+      >
+        Label
+      </LinkButton>
+    ),
+    bindings:
+      designSystemRegistry.components.find((component) => component.canonicalId === "component.linkButton")
+        ?.tokenBindings ?? []
+  },
+  {
     title: "Accordion",
     preview: (
       <div style={{ width: 328 }}>
@@ -116,8 +160,8 @@ const inspectItems = [
               type="Neutral"
               priority="Low"
               pillShape="Yes"
-              iconLeft={false}
-              iconRight={false}
+              showLeadingIcon={false}
+              showTrailingIcon={false}
             />
           }
         />
@@ -125,6 +169,56 @@ const inspectItems = [
     ),
     bindings:
       designSystemRegistry.components.find((component) => component.canonicalId === "component.accordion")
+        ?.tokenBindings ?? []
+  },
+  {
+    title: "Banner",
+    preview: (
+      <Banner
+        theme="Light"
+        state="Warning"
+        heading
+        icon
+        action
+        actionType="Text button"
+        title="New Message Alert"
+        description="New message received!"
+        actionLabel="Label"
+      />
+    ),
+    bindings:
+      designSystemRegistry.components.find((component) => component.canonicalId === "component.banner")
+        ?.tokenBindings ?? []
+  },
+  {
+    title: "Section Header",
+    preview: (
+      <SectionHeader
+        title="Section title"
+        subtitle="Section title line 2"
+        description="Description goes here upto 2 lines"
+        tagLabel="New"
+        actionLabel="View all"
+      />
+    ),
+    bindings:
+      designSystemRegistry.components.find((component) => component.canonicalId === "component.sectionHeader")
+        ?.tokenBindings ?? []
+  },
+  {
+    title: "Divider",
+    preview: (
+      <Divider
+        labelPosition="Center"
+        thickness="Regular"
+        lineStyle="Plain"
+        label="Continue"
+        leadingIcon={<Icon name="sparkle-filled" decorative />}
+        trailingIcon={<Icon name="sparkle-filled" decorative />}
+      />
+    ),
+    bindings:
+      designSystemRegistry.components.find((component) => component.canonicalId === "component.divider")
         ?.tokenBindings ?? []
   },
   {

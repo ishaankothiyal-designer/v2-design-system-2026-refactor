@@ -2,6 +2,7 @@ import { coreTokenCatalog } from "./base-tokens";
 import { flattenTokens } from "./figma-bridge";
 import { getBrandTokenSet } from "./brand-overrides";
 import { deepMergeTokenTrees } from "./lookup";
+import { REPO_BRAND_IDS } from "./types";
 
 const requiredCollections = ["color", "typography", "spacing", "radius", "icon"];
 
@@ -12,7 +13,7 @@ for (const collection of requiredCollections) {
   }
 }
 
-for (const brandId of ["core", "acme"] as const) {
+for (const brandId of REPO_BRAND_IDS) {
   const set = getBrandTokenSet(brandId);
   const flattened = flattenTokens(deepMergeTokenTrees(coreTokenCatalog, set.tokens));
   if (flattened.length === 0) {
@@ -21,4 +22,3 @@ for (const brandId of ["core", "acme"] as const) {
 }
 
 console.log("Token catalog validation passed.");
-

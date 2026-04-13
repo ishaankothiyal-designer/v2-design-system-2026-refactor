@@ -1,6 +1,6 @@
 import type { PropsWithChildren, ReactNode } from "react";
-import { Pressable, Text, View } from "react-native";
-import type { BrandId } from "@geist/tokens";
+import { Pressable, Text, View, type TextStyle } from "react-native";
+import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
 import { getRequiredNativeThemeTokenValue } from "../theme";
 
@@ -9,7 +9,7 @@ export const canonicalButtonNativeContract = designSystemRegistry.components.fin
 );
 
 export interface ButtonProps {
-  brand?: BrandId;
+  brand?: DisplayBrandId;
   tone?: "primary" | "secondary" | "ghost";
   size?: "sm" | "md" | "lg";
   leadingIcon?: ReactNode;
@@ -19,7 +19,7 @@ export interface ButtonProps {
 }
 
 export function Button({
-  brand = "core",
+  brand = "Cars24",
   tone = "primary",
   size = "md",
   leadingIcon,
@@ -30,7 +30,7 @@ export function Button({
 }: PropsWithChildren<ButtonProps>) {
   const backgroundColor =
     tone === "primary"
-      ? String(getRequiredNativeThemeTokenValue(brand, "color.brand.primary.600"))
+      ? String(getRequiredNativeThemeTokenValue(brand, "color.brand.alt.500"))
       : tone === "secondary"
         ? String(getRequiredNativeThemeTokenValue(brand, "color.brand.secondary.600"))
         : String(getRequiredNativeThemeTokenValue(brand, "color.surface.subtle"));
@@ -63,6 +63,10 @@ export function Button({
         ? Number(getRequiredNativeThemeTokenValue(brand, "typography.lineHeight.lg"))
         : Number(getRequiredNativeThemeTokenValue(brand, "typography.lineHeight.md"));
 
+  const fontWeight = String(
+    getRequiredNativeThemeTokenValue(brand, "typography.fontWeight.semibold")
+  ) as TextStyle["fontWeight"];
+
   return (
     <Pressable
       accessibilityRole="button"
@@ -71,9 +75,12 @@ export function Button({
       style={{
         alignItems: "center",
         backgroundColor,
-        borderColor: String(getRequiredNativeThemeTokenValue(brand, "color.border.default")),
+        borderColor:
+          tone === "primary"
+            ? "transparent"
+            : String(getRequiredNativeThemeTokenValue(brand, "color.border.default")),
         borderRadius: Number(getRequiredNativeThemeTokenValue(brand, "radius.md")),
-        borderWidth: 1,
+        borderWidth: tone === "primary" ? 0 : 1,
         flexDirection: "row",
         opacity: disabled ? 0.5 : 1,
         paddingHorizontal,
@@ -87,7 +94,7 @@ export function Button({
             color,
             fontFamily: String(getRequiredNativeThemeTokenValue(brand, "typography.fontFamily.sans")),
             fontSize,
-            fontWeight: String(getRequiredNativeThemeTokenValue(brand, "typography.fontWeight.semibold")),
+            fontWeight,
             lineHeight
           }}
         >

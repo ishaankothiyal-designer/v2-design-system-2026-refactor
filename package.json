@@ -7,6 +7,7 @@
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "storybook": "pnpm --filter @geist/storybook storybook",
+    "storybook:add": "corepack pnpm --filter @geist/storybook exec storybook add --config-dir .storybook",
     "typecheck": "turbo run typecheck",
     "validate:registry": "pnpm --filter @geist/contracts validate:registry"
   },

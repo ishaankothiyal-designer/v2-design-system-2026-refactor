@@ -1,16 +1,16 @@
 import type { PropsWithChildren } from "react";
 import { Text as RNText } from "react-native";
-import type { BrandId } from "@geist/tokens";
+import type { DisplayBrandId } from "@geist/tokens";
 import { getRequiredNativeThemeTokenValue } from "../theme";
 
 export interface TextProps {
-  brand?: BrandId;
+  brand?: DisplayBrandId;
   tone?: "primary" | "secondary" | "muted" | "inverse";
   size?: "xs" | "sm" | "md" | "lg" | "xl";
 }
 
 export function Text({
-  brand = "core",
+  brand = "Cars24",
   tone = "primary",
   size = "md",
   children
