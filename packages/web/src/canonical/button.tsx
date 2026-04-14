@@ -358,7 +358,6 @@ export function Button({
 }: ButtonProps) {
   const [hovered, setHovered] = useState(false);
   const [pressed, setPressed] = useState(false);
-  const [focused, setFocused] = useState(false);
 
   const normalizedSize = normalizeSize(size);
   const normalizedVariant = normalizeVariant(styleVariant, tone);
@@ -368,7 +367,6 @@ export function Button({
   const surface = getSurface(brand, normalizedVariant, onDark, hoveredOrPressed, disabled);
   const medium = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.medium"));
   const fontFamily = String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"));
-  const focusColor = String(getRequiredThemeTokenValue(brand, "color.border.focus"));
   const iconSize = getIconSize(normalizedSize);
   const isDisabled = disabled || loading;
   const labelFontSize = Number(getRequiredThemeTokenValue(brand, `${typographyTokenPrefix}.fontSize`));
@@ -391,7 +389,7 @@ export function Button({
     position: "relative",
     transition:
       "background-color 180ms cubic-bezier(0.2, 0, 0, 1), border-color 180ms cubic-bezier(0.2, 0, 0, 1), box-shadow 180ms cubic-bezier(0.2, 0, 0, 1), color 180ms cubic-bezier(0.2, 0, 0, 1)",
-    boxShadow: focused ? `0 0 0 3px ${focusColor}40` : "none",
+    boxShadow: "none",
     ...style,
     ...getTapFeedbackStyles({
       disabled: isDisabled,
@@ -463,11 +461,9 @@ export function Button({
         aria-busy={loading || undefined}
         disabled={isDisabled}
         onBlur={(event) => {
-          setFocused(false);
           onBlur?.(event);
         }}
         onFocus={(event) => {
-          setFocused(true);
           onFocus?.(event);
         }}
         onMouseDown={handleMouseDown}

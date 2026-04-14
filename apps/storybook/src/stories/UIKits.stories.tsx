@@ -5,6 +5,7 @@ import { UIExample as BannerUIExample } from "./Banner.stories";
 import { UIExample as ButtonUIExample } from "./Button.stories";
 import { UIExample as CarListingUIExample } from "./CarListingMobileScreenExample";
 import { UIExample as DogInventoryUIExample } from "./DogInventoryShopLandingMobileScreenExample";
+import { UIExample as FoodDeliveryUIExample } from "./FoodDeliveryMobileScreenExample";
 import { UIExample as FlightSearchUIExample } from "./FlightSearchMobileScreenExample";
 import { UIExample as MyOrdersUIExample } from "./MyOrdersMobileScreenExample";
 import { UiExample as EliteHeaderUiExample } from "./EliteHeader.stories";
@@ -46,6 +47,10 @@ export const CarListing = {
 
 export const DogInventory = {
   ...DogInventoryUIExample
+};
+
+export const FoodDelivery = {
+  ...FoodDeliveryUIExample
 };
 
 export const Flights = {

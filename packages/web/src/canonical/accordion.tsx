@@ -31,22 +31,6 @@ const FIGMA_ACCORDION_TOKENS = {
   }
 } as const;
 
-function hexToRgba(hex: string, alpha: number) {
-  const normalized = hex.replace("#", "");
-  const value =
-    normalized.length === 3
-      ? normalized
-          .split("")
-          .map((segment) => `${segment}${segment}`)
-          .join("")
-      : normalized;
-  const red = Number.parseInt(value.slice(0, 2), 16);
-  const green = Number.parseInt(value.slice(2, 4), 16);
-  const blue = Number.parseInt(value.slice(4, 6), 16);
-
-  return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
-}
-
 function getAccordionToken(slot: string) {
   return canonicalAccordionWebContract?.tokenBindings.find((binding) => binding.slot === slot)?.token;
 }
@@ -215,7 +199,6 @@ export function Accordion({
   const fontFamily = String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"));
   const semibold = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.semibold"));
   const regular = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.regular"));
-  const focusColor = String(getRequiredThemeTokenValue(brand, "color.border.focus"));
   const transition = `${FIGMA_ACCORDION_TOKENS.transition.duration}ms ${FIGMA_ACCORDION_TOKENS.transition.timing}`;
   const resolvedContent = children ?? content;
   const usesLeadingIcon = leadingIcon !== false;
@@ -268,8 +251,7 @@ export function Accordion({
       activeState === "hover" || activeState === "active"
         ? metrics.backgroundHover
         : metrics.background,
-    boxShadow:
-      activeState === "focus" ? `0 0 0 3px ${hexToRgba(focusColor, 0.28)}` : "none",
+    boxShadow: "none",
     opacity: disabled ? 0.52 : 1,
     padding: metrics.padding,
     transition: `background-color ${transition}, box-shadow ${transition}, opacity ${transition}`,

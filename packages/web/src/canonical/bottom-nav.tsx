@@ -361,7 +361,7 @@ export function BottomNav({
   const focusOutlineColor = resolveBottomNavBindingValue(
     brand,
     "item.focus.outlineColor",
-    "var(--cars24-semantic-border-focus, #3B82F6)"
+    "transparent"
   );
   const homeIndicatorColor = resolveBottomNavBindingValue(
     brand,

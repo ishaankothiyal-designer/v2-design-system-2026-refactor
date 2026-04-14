@@ -1,0 +1,139 @@
+{
+  "color": {
+    "brand": {
+      "primary": {
+        "50": "#F6F6FF",
+        "100": "#E1E3FD",
+        "500": "#4736FE",
+        "600": "#351ED8",
+        "700": "#2A15AA"
+      },
+      "alt": {
+        "50": "#F6F6FF",
+        "100": "#E1E3FD",
+        "500": "#4736FE",
+        "600": "#351ED8",
+        "700": "#2A15AA"
+      }
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "sans": "Geist"
+    }
+  },
+  "component": {
+    "captionButton": {
+      "color": {
+        "light": {
+          "primary": {
+            "rest": {
+              "background": "#4736FE"
+            },
+            "hover": {
+              "background": "#351ED8"
+            }
+          },
+          "secondary": {
+            "rest": {
+              "border": "#4736FE",
+              "foreground": "#4736FE"
+            },
+            "hover": {
+              "border": "#4736FE",
+              "foreground": "#4736FE"
+            }
+          },
+          "disabled": {
+            "background": "#F1F5F9"
+          }
+        }
+      }
+    },
+    "linkButton": {
+      "color": {
+        "light": {
+          "brand": {
+            "rest": "#4736FE",
+            "hover": "#351ED8"
+          }
+        }
+      }
+    },
+    "backToTopButton": {
+      "color": {
+        "light": {
+          "rest": {
+            "border": "#C8CCFB"
+          },
+          "hover": {
+            "border": "#C8CCFB"
+          }
+        }
+      }
+    },
+    "phoneInput": {
+      "color": {
+        "field": {
+          "active": {
+            "border": "#4736FE"
+          }
+        }
+      }
+    },
+    "textInput": {
+      "color": {
+        "field": {
+          "hover": {
+            "background": "#F6F6FF",
+            "border": "#C8CCFB"
+          },
+          "active": {
+            "border": "#4736FE"
+          }
+        }
+      }
+    },
+    "checkbox": {
+      "color": {
+        "checked": {
+          "background": "#4736FE",
+          "border": "#4736FE"
+        }
+      }
+    },
+    "radio": {
+      "color": {
+        "selected": {
+          "background": "#4736FE",
+          "border": "#4736FE"
+        }
+      }
+    },
+    "switch": {
+      "color": {
+        "selected": {
+          "track": "#4736FE"
+        },
+        "disabled": {
+          "selected": {
+            "track": "#E1E3FD"
+          }
+        }
+      }
+    }
+  },
+  "radius": {
+    "md": 12,
+    "lg": 14,
+    "xl": 16,
+    "pill": 999,
+    "alt": {
+      "xs": 6,
+      "sm": 8,
+      "md": 12,
+      "lg": 14,
+      "xl": 16
+    }
+  }
+}

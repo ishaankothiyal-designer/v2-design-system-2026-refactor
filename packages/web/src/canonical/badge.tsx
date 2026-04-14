@@ -241,21 +241,6 @@ function toPx(value: number) {
   return `${value}px`;
 }
 
-function hexToRgba(hex: string, alpha: number) {
-  const normalized = hex.replace("#", "");
-  const value =
-    normalized.length === 3
-      ? normalized
-          .split("")
-          .map((segment) => `${segment}${segment}`)
-          .join("")
-      : normalized;
-  const red = Number.parseInt(value.slice(0, 2), 16);
-  const green = Number.parseInt(value.slice(2, 4), 16);
-  const blue = Number.parseInt(value.slice(4, 6), 16);
-
-  return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
-}
 
 function resolveBadgeState({
   disabled,
@@ -388,7 +373,6 @@ export function Badge({
     pressed
   });
 
-  const focusColor = String(getRequiredThemeTokenValue(brand, "color.border.focus"));
   const fontFamily = String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"));
   const fontWeight = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.medium"));
   const isPill = pillShape === "Yes";
@@ -413,8 +397,7 @@ export function Badge({
     backgroundColor: toneConfig.background,
     border: `1px solid ${toneConfig.borderColor ?? "transparent"}`,
     borderRadius,
-    boxShadow:
-      activeState === "focus" ? `0 0 0 3px ${hexToRgba(focusColor, 0.26)}` : "none",
+    boxShadow: "none",
     boxSizing: "border-box",
     color: toneConfig.foreground,
     display: "inline-flex",

@@ -15,7 +15,7 @@ export type FlightSearchMobileScreenProps = {
   brand?: DisplayBrandId;
 };
 
-type SortMode = "Best Match" | "Cheapest" | "Fastest" | "Departure";
+type SortMode = "Best Match" | "Cheapest" | "Fastest";
 
 type Amenity = {
   iconName?: Parameters<typeof Icon>[0]["name"];
@@ -89,7 +89,7 @@ type FlightTypography = {
   semibold: number;
 };
 
-const SORT_OPTIONS: SortMode[] = ["Best Match", "Cheapest", "Fastest", "Departure"];
+const SORT_OPTIONS: SortMode[] = ["Best Match", "Cheapest", "Fastest"];
 
 const FLIGHTS: FlightRecord[] = [
   {
@@ -455,11 +455,9 @@ function FilterBar({
     >
       <div
         style={{
-          display: "flex",
+          display: "grid",
           gap: tokens.gap2,
-          overflowX: "auto",
-          paddingBottom: tokens.gap2 / 2,
-          scrollbarWidth: "none"
+          gridTemplateColumns: "repeat(3, minmax(0, 1fr))"
         }}
       >
         {SORT_OPTIONS.map((option) => (
@@ -469,7 +467,9 @@ function FilterBar({
             label={option}
             size="Small"
             state={sortMode === option ? "Active" : "Rest"}
-            style={{ minWidth: "fit-content" }}
+            showLeadingIcon={false}
+            showTrailingIcon={false}
+            style={{ minWidth: 0, width: "100%" }}
             type="Regular"
             variant="Horizontal"
             onClick={() => setSortMode(option)}

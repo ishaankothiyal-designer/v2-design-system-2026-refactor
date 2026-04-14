@@ -28,7 +28,7 @@
   --color-text-disabled-inverse: rgba(255, 255, 255, 0.3); /* color.text.disabledInverse | @presenter Color */
   --color-border-default: #D0D5DD; /* color.border.default | @presenter Color */
   --color-border-strong: #98A2B3; /* color.border.strong | @presenter Color */
-  --color-border-focus: #84CAFF; /* color.border.focus | @presenter Color */
+  --color-border-focus: transparent; /* color.border.focus | @presenter Color */
   --color-status-success: #12B76A; /* color.status.success | @presenter Color */
   --color-status-warning: #F79009; /* color.status.warning | @presenter Color */
   --color-status-danger: #F04438; /* color.status.danger | @presenter Color */

@@ -20,7 +20,7 @@ export type ChoiceChipVariant = "Horizontal" | "Vertical";
 
 type ChoiceChipMetrics = {
   gap: string;
-  minWidth: string;
+  minWidth?: string;
   minHeight?: string;
   paddingBlock: string;
   paddingInline: string;
@@ -53,7 +53,6 @@ const LABEL_4_LETTER_SPACING = "var(--cars24-typography-letter-spacing-utility-l
 const HORIZONTAL_DEFAULT_METRICS: ChoiceChipMetrics = {
   gap: "var(--cars24-misc-gap-6, 6px)",
   minHeight: "var(--cars24-misc-size-36, 36px)",
-  minWidth: "130px",
   paddingBlock: "var(--cars24-misc-gap-8, 8px)",
   paddingInline: "var(--cars24-misc-gap-10, 10px)",
   radius: "var(--cars24-theme-radius-alt-sm, 8px)",
@@ -65,7 +64,6 @@ const HORIZONTAL_DEFAULT_METRICS: ChoiceChipMetrics = {
 const HORIZONTAL_SMALL_METRICS: ChoiceChipMetrics = {
   gap: "var(--cars24-misc-gap-6, 6px)",
   minHeight: "var(--cars24-misc-size-28, 28px)",
-  minWidth: "117px",
   paddingBlock: "var(--cars24-misc-gap-8, 8px)",
   paddingInline: "var(--cars24-misc-gap-8, 8px)",
   radius: "var(--cars24-theme-radius-alt-sm, 8px)",
@@ -314,7 +312,6 @@ export const ChoiceChip = forwardRef<HTMLButtonElement, ChoiceChipProps>(functio
   },
   ref
 ) {
-  const [focused, setFocused] = useState(false);
   const [pressed, setPressed] = useState(false);
 
   const resolvedVariant = variant;
@@ -332,11 +329,6 @@ export const ChoiceChip = forwardRef<HTMLButtonElement, ChoiceChipProps>(functio
   const fontFamily = `${String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"))}, sans-serif`;
   const mediumWeight = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.medium"));
   const regularWeight = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.regular"));
-  const focusOutlineWidth = Number(getRequiredThemeTokenValue(brand, "component.radio.focus.outlineWidth"));
-  const focusOutlineOffset = Number(
-    getRequiredThemeTokenValue(brand, "component.radio.focus.outlineOffset")
-  );
-  const focusColor = String(getRequiredThemeTokenValue(brand, "color.border.focus"));
   const resolvedDescription = resolvedVariant === "Vertical" ? description ?? "Description" : description;
 
   const resolvedLeadingIconName =
@@ -360,12 +352,10 @@ export const ChoiceChip = forwardRef<HTMLButtonElement, ChoiceChipProps>(functio
       : Boolean(resolvedTrailingIconName) && !iconSwap);
 
   function handleFocus(event: FocusEvent<HTMLButtonElement>) {
-    setFocused(true);
     onFocus?.(event);
   }
 
   function handleBlur(event: FocusEvent<HTMLButtonElement>) {
-    setFocused(false);
     setPressed(false);
     onBlur?.(event);
   }
@@ -403,8 +393,6 @@ export const ChoiceChip = forwardRef<HTMLButtonElement, ChoiceChipProps>(functio
     justifyContent: "center",
     minHeight: metrics.minHeight,
     minWidth: metrics.minWidth,
-    outline: focused ? `${focusOutlineWidth}px solid ${focusColor}` : undefined,
-    outlineOffset: focused ? `${focusOutlineOffset}px` : undefined,
     overflow: "clip",
     paddingBlock: metrics.paddingBlock,
     paddingInline: metrics.paddingInline,
@@ -471,7 +459,6 @@ export const ChoiceChip = forwardRef<HTMLButtonElement, ChoiceChipProps>(functio
         style={{
           alignItems: "center",
           display: "flex",
-          flex: resolvedVariant === "Horizontal" ? "1 1 auto" : undefined,
           flexDirection: resolvedVariant === "Vertical" ? "column" : "row",
           gap: "var(--cars24-misc-gap-none, 0px)",
           justifyContent: "center",
