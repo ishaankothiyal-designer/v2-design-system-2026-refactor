@@ -244,12 +244,12 @@ export const radiusBrandPreviews = [
       {
         "key": "alt.lg",
         "label": "Alt / Lg",
-        "value": 12
+        "value": 8
       },
       {
         "key": "alt.md",
         "label": "Alt / Md",
-        "value": 8
+        "value": 4
       },
       {
         "key": "alt.sm",
@@ -259,7 +259,7 @@ export const radiusBrandPreviews = [
       {
         "key": "alt.xl",
         "label": "Alt / Xl",
-        "value": 12
+        "value": 8
       },
       {
         "key": "alt.xs",
@@ -269,12 +269,12 @@ export const radiusBrandPreviews = [
       {
         "key": "lg",
         "label": "Lg",
-        "value": 12
+        "value": 4
       },
       {
         "key": "md",
         "label": "Md",
-        "value": 8
+        "value": 4
       },
       {
         "key": "none",
@@ -294,7 +294,7 @@ export const radiusBrandPreviews = [
       {
         "key": "xl",
         "label": "Xl",
-        "value": 12
+        "value": 8
       }
     ]
   },
