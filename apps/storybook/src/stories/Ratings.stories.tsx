@@ -119,7 +119,7 @@ function StateMatrixStory({ brand }: { brand?: NonNullable<RatingsProps["brand"]
               </div>,
               ...ratingStates.map((state) => (
                 <div key={`rating-state-cell-${size}-${state}`} style={stateValueCellStyles}>
-                  <RatingState size={size} state={state} />
+                  <RatingState brand={activeBrand} size={size} state={state} />
                 </div>
               ))
             ])}

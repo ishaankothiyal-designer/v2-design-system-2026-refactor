@@ -1,6 +1,7 @@
 import type { Meta } from "@storybook/react";
 import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
 import { UIExample as AccordionUIExample } from "./Accordion.stories";
+import { UIExample as AIChatUIExample } from "./AIChatMobileScreenExample";
 import { UIExample as BannerUIExample } from "./Banner.stories";
 import { UIExample as ButtonUIExample } from "./Button.stories";
 import { UIExample as CarListingUIExample } from "./CarListingMobileScreenExample";
@@ -11,6 +12,7 @@ import { UIExample as MyOrdersUIExample } from "./MyOrdersMobileScreenExample";
 import { UiExample as EliteHeaderUiExample } from "./EliteHeader.stories";
 import { UIExample as PhoneInputUIExample } from "./PhoneInput.stories";
 import { UIExample as RegInputUIExample } from "./RegInput.stories";
+import { UIExample as ServiceBookingUIExample } from "./ServiceBookingMobileScreenExample";
 import { UIExample as SwitchUIExample } from "./Switch.stories";
 import { UIExample as TextInputUIExample } from "./TextInput.stories";
 
@@ -31,6 +33,10 @@ export default meta;
 
 export const FAQs = {
   ...AccordionUIExample
+};
+
+export const AIChat = {
+  ...AIChatUIExample
 };
 
 export const Banner = {
@@ -67,6 +73,10 @@ export const Orders = {
 
 export const PhoneInput = {
   ...PhoneInputUIExample
+};
+
+export const Booking = {
+  ...ServiceBookingUIExample
 };
 
 export const RegInput = {

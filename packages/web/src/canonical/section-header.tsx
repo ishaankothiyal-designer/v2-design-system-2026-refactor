@@ -214,6 +214,7 @@ function HeaderLine({
       <span
         style={{
           color,
+          display: "-webkit-box",
           flex: centered || inline ? "0 1 auto" : 1,
           fontFamily: `${fontFamily}, sans-serif`,
           fontSize,
@@ -223,9 +224,12 @@ function HeaderLine({
           maxWidth: "100%",
           minWidth: 0,
           overflow: "hidden",
+          overflowWrap: "anywhere",
           textAlign: centered ? "center" : undefined,
           textOverflow: "ellipsis",
-          whiteSpace: "nowrap"
+          WebkitBoxOrient: "vertical",
+          WebkitLineClamp: 2,
+          whiteSpace: "normal"
         }}
       >
         {text}
@@ -450,9 +454,10 @@ export function SectionHeader({
     >
       <div
         style={{
-          alignItems: "center",
+          alignItems: "flex-start",
           display: "flex",
           gap: rowGap,
+          flexWrap: "wrap",
           justifyContent: "space-between",
           minWidth: 0,
           width: "100%"
@@ -480,6 +485,7 @@ export function SectionHeader({
               style={{
                 alignItems: "center",
                 display: "flex",
+                flexWrap: "wrap",
                 gap: toPx(resolveSectionHeaderBindingValue(brand, "layout.titleRowGap", "8")),
                 maxWidth: "100%",
                 minWidth: 0
@@ -525,6 +531,8 @@ export function SectionHeader({
               flexShrink: 0,
               gap: actionGap,
               justifyContent: "center",
+              marginLeft: "auto",
+              maxWidth: "100%",
               minHeight: actionHeight
             }}
           >
@@ -533,7 +541,8 @@ export function SectionHeader({
                 display: "flex",
                 flexDirection: "column",
                 gap: actionStackGap,
-                justifyContent: "center"
+                justifyContent: "center",
+                maxWidth: "100%"
               }}
             >
               <LinkButton

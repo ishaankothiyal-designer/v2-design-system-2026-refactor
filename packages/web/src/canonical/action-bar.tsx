@@ -5,7 +5,7 @@ import { designSystemRegistry } from "@geist/contracts";
 import { getRequiredThemeTokenValue, getThemeTokenValue } from "../theme";
 import { Button, type ButtonProps } from "./button";
 import { ButtonGroup } from "./button-group";
-import { ChatBar } from "./chat-bar";
+import { ChatBar, type ChatBarProps } from "./chat-bar";
 import { Checkbox } from "./checkbox";
 import { Icon } from "./icon";
 import { ProgressBar } from "./progress-bar";
@@ -18,7 +18,7 @@ export type ActionBarInfoTone = "General" | "Brand" | "Positive" | "Negative" | 
 export type ActionBarOfferTone = "Brand" | "Success" | "Danger" | "Warning";
 export type ActionBarOfferAlign = "Center" | "Start";
 export type ActionBarAddressState = "Saved" | "Empty";
-export type ActionBarChatState = "Default" | "Message Typed";
+export type ActionBarChatState = NonNullable<ChatBarProps["state"]>;
 export type ActionBarActionVariant =
   | "Button Group"
   | "Loader"
@@ -100,6 +100,21 @@ export interface ActionBarSecureStrip {
   text?: ReactNode;
 }
 
+type ActionBarChatBarActionProps = Pick<
+  ChatBarProps,
+  | "attachmentAriaLabel"
+  | "attachmentIconName"
+  | "defaultValue"
+  | "disabled"
+  | "onAttachmentClick"
+  | "onChange"
+  | "onSendClick"
+  | "placeholder"
+  | "sendAriaLabel"
+  | "sendIconName"
+  | "value"
+>;
+
 export type ActionBarAction =
   | {
       variant?: "Button Group";
@@ -113,10 +128,18 @@ export type ActionBarAction =
     }
   | {
       variant: "Chat Bar";
-      attachmentIconName?: IconName;
+      attachmentAriaLabel?: ActionBarChatBarActionProps["attachmentAriaLabel"];
+      attachmentIconName?: ActionBarChatBarActionProps["attachmentIconName"];
+      defaultValue?: ActionBarChatBarActionProps["defaultValue"];
+      disabled?: ActionBarChatBarActionProps["disabled"];
+      onAttachmentClick?: ActionBarChatBarActionProps["onAttachmentClick"];
+      onChange?: ActionBarChatBarActionProps["onChange"];
+      onSendClick?: ActionBarChatBarActionProps["onSendClick"];
+      placeholder?: ActionBarChatBarActionProps["placeholder"];
+      sendAriaLabel?: ActionBarChatBarActionProps["sendAriaLabel"];
       sendIconName?: IconName;
       state?: ActionBarChatState;
-      value?: ReactNode;
+      value?: ActionBarChatBarActionProps["value"];
     }
   | {
       variant: "Payment Strip";
@@ -944,11 +967,25 @@ function ActionBarActionRow({
         }}
       >
         <ChatBar
-          attachmentIconName={resolvedAction.attachmentIconName ?? "circle-plus-outline"}
           brand={brand}
-          forceState={resolvedAction.state ?? "Default"}
-          sendIconName={resolvedAction.sendIconName ?? "send-line"}
-          value={typeof resolvedAction.value === "string" ? resolvedAction.value : ""}
+          {...(resolvedAction.attachmentAriaLabel !== undefined
+            ? { attachmentAriaLabel: resolvedAction.attachmentAriaLabel }
+            : {})}
+          {...(resolvedAction.attachmentIconName !== undefined
+            ? { attachmentIconName: resolvedAction.attachmentIconName }
+            : {})}
+          {...(resolvedAction.defaultValue !== undefined ? { defaultValue: resolvedAction.defaultValue } : {})}
+          {...(resolvedAction.disabled !== undefined ? { disabled: resolvedAction.disabled } : {})}
+          {...(resolvedAction.state !== undefined ? { forceState: resolvedAction.state } : {})}
+          {...(resolvedAction.onAttachmentClick !== undefined
+            ? { onAttachmentClick: resolvedAction.onAttachmentClick }
+            : {})}
+          {...(resolvedAction.onChange !== undefined ? { onChange: resolvedAction.onChange } : {})}
+          {...(resolvedAction.onSendClick !== undefined ? { onSendClick: resolvedAction.onSendClick } : {})}
+          {...(resolvedAction.placeholder !== undefined ? { placeholder: resolvedAction.placeholder } : {})}
+          {...(resolvedAction.sendAriaLabel !== undefined ? { sendAriaLabel: resolvedAction.sendAriaLabel } : {})}
+          {...(resolvedAction.sendIconName !== undefined ? { sendIconName: resolvedAction.sendIconName } : {})}
+          {...(resolvedAction.value !== undefined ? { value: resolvedAction.value } : {})}
         />
       </div>
     );
@@ -1236,8 +1273,9 @@ function ActionBarActionRow({
       <ChatBar
         attachmentIconName="circle-plus-outline"
         brand={brand}
+        forceState="Default"
         sendIconName="send-line"
-        state="Default"
+        value=""
       />
       <div
         style={{

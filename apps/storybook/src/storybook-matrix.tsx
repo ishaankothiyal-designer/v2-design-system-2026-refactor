@@ -21,15 +21,26 @@ export function StoryMatrix({
   return (
     <div
       style={{
-        display: "grid",
-        gridTemplateColumns: columns,
-        border: `1px dashed ${matrixBorderColor}`,
-        borderRadius: 28,
-        overflow: "hidden",
-        background: resolveSurface(tone)
+        maxWidth: "100%",
+        overflowX: "auto",
+        overflowY: "hidden",
+        WebkitOverflowScrolling: "touch"
       }}
     >
-      {children}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: columns,
+          width: "max-content",
+          minWidth: "100%",
+          border: `1px dashed ${matrixBorderColor}`,
+          borderRadius: 28,
+          overflow: "hidden",
+          background: resolveSurface(tone)
+        }}
+      >
+        {children}
+      </div>
     </div>
   );
 }
@@ -48,7 +59,7 @@ export function StoryMatrixSection({
       style={{
         display: "grid",
         gap: 20,
-        padding: 24,
+        padding: "clamp(16px, 3vw, 24px)",
         borderRadius: 24,
         border: `1px solid ${matrixBorderColor}`,
         background: resolveSurface(tone),
@@ -91,7 +102,7 @@ export function StoryMatrixHeaderCell({
     <div
       style={{
         minHeight,
-        padding: "16px 20px",
+        padding: "clamp(12px, 2vw, 16px) clamp(16px, 3vw, 20px)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -118,7 +129,7 @@ export function StoryMatrixRowLabelCell({
     <div
       style={{
         minHeight,
-        padding: "20px 24px",
+        padding: "clamp(16px, 3vw, 20px) clamp(16px, 3vw, 24px)",
         display: "flex",
         alignItems: "center",
         justifyContent: "flex-start",
@@ -144,7 +155,7 @@ export function StoryMatrixValueCell({
     <div
       style={{
         minHeight,
-        padding: "20px 24px",
+        padding: "clamp(16px, 3vw, 20px) clamp(16px, 3vw, 24px)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
