@@ -47,7 +47,8 @@ jobs:
         run: pnpm --filter v2-design-system-cli build
 
       - name: Pack CLI tarball
-        run: npm pack ./packages/cli
+        working-directory: packages/cli
+        run: npm pack
 
       - name: Check published version
         id: version_check
@@ -67,6 +68,7 @@ jobs:
 
       - name: Publish CLI to npm
         if: steps.version_check.outputs.should_publish == 'true'
+        working-directory: packages/cli
         run: npm publish ./v2-design-system-cli-${{ steps.version_check.outputs.local_version }}.tgz --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
