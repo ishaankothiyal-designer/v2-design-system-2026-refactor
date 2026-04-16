@@ -2324,6 +2324,49 @@ export const designSystemRegistry: DesignSystemRegistry = {
         { slot: "bar.error", token: "component.textInput.color.helper.error.text" }
       ],
       themeScopes: ["cars24", "teambhp", "carinfo", "vehicleinfo"]
+    },
+    {
+      canonicalId: "component.ratings",
+      canonicalName: "Ratings",
+      layer: "component",
+      status: "approved",
+      platform: "web",
+      figmaComponentName: "Ratings",
+      description:
+        "Canonical ratings lockup with Small and Medium sizes, plus the underlying star-state glyph system for default, half, and full stars.",
+      webExport: "@geist/web/canonical/ratings",
+      nativeExport: "",
+      variants: [
+        { name: "size", values: ["Small", "Medium"] },
+        { name: "rating", values: ["0.0", "0.5", "1.0", "1.5", "2.0", "2.5", "3.0", "3.5", "4.0", "4.5", "5.0"] }
+      ],
+      states: ["rest"],
+      tokenBindings: [
+        { slot: "star.size.sm", token: "icon.size.sm" },
+        { slot: "star.size.md", token: "icon.size.lg" },
+        { slot: "star.size.lg", token: "32px" },
+        { slot: "star.foreground.default", token: "var(--cars24-semantic-icon-disabled-subtle)" },
+        { slot: "star.foreground.filled", token: "var(--cars24-primitive-amber-500)" },
+        { slot: "layout.gap.sm", token: "var(--cars24-misc-gap-6)" },
+        { slot: "layout.gap.md", token: "var(--cars24-misc-gap-8)" },
+        { slot: "badge.height.sm", token: "var(--cars24-misc-size-16)" },
+        { slot: "badge.height.md", token: "var(--cars24-misc-size-20)" },
+        { slot: "badge.paddingInline.sm", token: "var(--cars24-misc-gap-6)" },
+        { slot: "badge.paddingInline.md", token: "var(--cars24-misc-gap-8)" },
+        { slot: "badge.paddingBlock.sm", token: "0px" },
+        { slot: "badge.paddingBlock.md", token: "var(--cars24-misc-gap-2)" },
+        { slot: "badge.radius", token: "var(--cars24-theme-radius-full)" },
+        { slot: "badge.color.danger.background", token: "var(--cars24-semantic-bg-danger-base)" },
+        { slot: "badge.color.warning.background", token: "var(--cars24-semantic-bg-warning-base)" },
+        { slot: "badge.color.success.background", token: "var(--cars24-semantic-bg-success-base)" },
+        { slot: "badge.color.foreground", token: "var(--cars24-semantic-text-primary-inverse)" },
+        { slot: "badge.typography.fontFamily", token: "typography.fontFamily.sans" },
+        { slot: "badge.typography.fontWeight", token: "typography.fontWeight.medium" },
+        { slot: "badge.typography.fontSize", token: "var(--cars24-typography-size-utility-label-4)" },
+        { slot: "badge.typography.lineHeight", token: "var(--cars24-typography-line-height-utility-label-4)" },
+        { slot: "badge.typography.letterSpacing", token: "var(--cars24-typography-letter-spacing-utility-label-4)" }
+      ],
+      themeScopes: ["cars24", "teambhp", "carinfo", "vehicleinfo"]
     }
   ],
   widgets: [

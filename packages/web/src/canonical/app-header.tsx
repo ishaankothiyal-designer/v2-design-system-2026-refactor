@@ -230,14 +230,15 @@ export function AppHeader({
     boxSizing: "border-box",
     columnGap: topRowGap,
     display: "flex",
-    height: "48px",
+    flexWrap: "wrap",
+    minHeight: "48px",
     padding: `${verticalPadding} ${horizontalPadding}`
   };
 
   const logoContainerStyles: CSSProperties = {
     alignItems: "center",
     display: "flex",
-    flex: 1,
+    flex: "1 1 160px",
     height: logoMinHeight,
     minWidth: 0
   };
@@ -245,15 +246,18 @@ export function AppHeader({
   const actionsRowStyles: CSSProperties = {
     alignItems: "center",
     display: "flex",
+    flexWrap: "wrap",
     flexShrink: 0,
     gap: clusterGap,
-    justifyContent: "flex-end"
+    justifyContent: "flex-end",
+    maxWidth: "100%"
   };
 
   const locationRowStyles: CSSProperties = {
     alignItems: "center",
     display: "flex",
     gap: locationGap,
+    minWidth: 0,
     padding: `0 ${horizontalPadding} ${verticalPadding}`,
     width: "100%"
   };
@@ -261,22 +265,27 @@ export function AppHeader({
   const locationContentStyles: CSSProperties = {
     alignItems: "center",
     color: locationTextColor,
-    display: "inline-flex",
-    gap: locationGap,
+    columnGap: locationGap,
+    display: "flex",
+    flexWrap: "wrap",
+    rowGap: "2px",
     maxWidth: "100%",
     minWidth: 0
   };
 
   const locationLabelStyles: CSSProperties = {
     color: locationTextColor,
+    display: "-webkit-box",
     fontFamily: `${locationFontFamily}, sans-serif`,
     fontSize: locationFontSize,
     fontWeight: locationFontWeight,
     letterSpacing: 0,
     lineHeight: locationLineHeight,
     overflow: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap"
+    overflowWrap: "anywhere",
+    WebkitBoxOrient: "vertical",
+    WebkitLineClamp: 2,
+    whiteSpace: "normal"
   };
 
   const locationControl = (
@@ -376,6 +385,8 @@ export function AppHeader({
       background,
       boxSizing: "border-box",
       display: "flex",
+      flexWrap: "wrap",
+      gap: topRowGap,
       minHeight: "56px",
       padding: `${toPx(getRequiredThemeTokenValue(brand, "spacing.1"))} ${horizontalPadding}`,
       width: "100%",
@@ -385,7 +396,7 @@ export function AppHeader({
     const contentGroupStyles: CSSProperties = {
       alignItems: "center",
       display: "flex",
-      flex: 1,
+      flex: "1 1 220px",
       gap: horizontalPadding,
       minWidth: 0
     };
@@ -412,6 +423,7 @@ export function AppHeader({
 
     const titleStyles: CSSProperties = {
       color: titleColor,
+      display: "-webkit-box",
       fontFamily: `${titleFontFamily}, sans-serif`,
       fontSize: l2TitleFontSize,
       fontWeight: l2TitleFontWeight,
@@ -419,12 +431,15 @@ export function AppHeader({
       lineHeight: l2TitleLineHeight,
       margin: 0,
       overflow: "hidden",
-      textOverflow: "ellipsis",
-      whiteSpace: "nowrap"
+      overflowWrap: "anywhere",
+      WebkitBoxOrient: "vertical",
+      WebkitLineClamp: 2,
+      whiteSpace: "normal"
     };
 
     const subtitleStyles: CSSProperties = {
       color: subtitleColor,
+      display: "-webkit-box",
       fontFamily: `${titleFontFamily}, sans-serif`,
       fontSize: l2SubtitleFontSize,
       fontWeight: l2SubtitleFontWeight,
@@ -432,16 +447,20 @@ export function AppHeader({
       lineHeight: l2SubtitleLineHeight,
       margin: 0,
       overflow: "hidden",
-      textOverflow: "ellipsis",
-      whiteSpace: "nowrap"
+      overflowWrap: "anywhere",
+      WebkitBoxOrient: "vertical",
+      WebkitLineClamp: 2,
+      whiteSpace: "normal"
     };
 
     const actionsRowStyles: CSSProperties = {
       alignItems: "center",
       display: "flex",
+      flexWrap: "wrap",
       flexShrink: 0,
       gap: clusterGap,
-      justifyContent: "flex-end"
+      justifyContent: "flex-end",
+      maxWidth: "100%"
     };
 
     const backNode = showBackButton ? (

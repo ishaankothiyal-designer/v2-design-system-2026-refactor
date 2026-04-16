@@ -1,0 +1,28 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import { DesignTokenDocBlock } from "storybook-design-token";
+import { GapScalePreview } from "../storybook-layout-tokens";
+import { gapTokens } from "./gapTokenData";
+
+<Meta title="Foundations/Gap Tokens" />
+
+# Gap Tokens
+
+Structured gap documentation generated from the shared layout token export. This page previews the spacing rhythm and exposes the raw gap token catalog used for layout separation.
+
+## Gap Scale Preview
+
+<GapScalePreview tokens={gapTokens} />
+
+## Raw Token Catalog
+
+### Gap
+
+Shared gap tokens for layout spacing between items, stacks, and grouped controls.
+
+<DesignTokenDocBlock
+  categoryName="Gap"
+  maxHeight={720}
+  pageSize={Number.MAX_VALUE}
+  showSearch={false}
+  viewType="card"
+/>

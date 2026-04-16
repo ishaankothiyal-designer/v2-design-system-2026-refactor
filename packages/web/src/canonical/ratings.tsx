@@ -41,7 +41,6 @@ const RATING_BADGE_FONT_SIZE = "var(--cars24-typography-size-utility-label-4, 11
 const RATING_BADGE_LINE_HEIGHT = "var(--cars24-typography-line-height-utility-label-4, 14px)";
 const RATING_BADGE_LETTER_SPACING = "var(--cars24-typography-letter-spacing-utility-label-4, 0px)";
 const LARGE_RATING_STATE_SIZE = 32;
-const RATING_STATE_GLYPH_SCALE = 0.6814;
 const DEFAULT_RATING = 0;
 const DEFAULT_MAX = 5;
 const RATING_STEP = 0.5;
@@ -134,7 +133,6 @@ export function RatingState({
   ...rest
 }: RatingStateProps) {
   const stateSize = getRatingStateSizePx(brand, size);
-  const iconSize = stateSize * RATING_STATE_GLYPH_SCALE;
 
   return (
     <span
@@ -155,7 +153,7 @@ export function RatingState({
       <Icon
         decorative
         name={getRatingStateIconName(state)}
-        style={{ color: getRatingStateColor(state), fontSize: `${iconSize}px` }}
+        style={{ color: getRatingStateColor(state), fontSize: `${stateSize}px` }}
       />
     </span>
   );
@@ -227,7 +225,7 @@ export function Ratings({
           gap: RATING_LOCKUP_GAP[size]
         }}
       >
-        <div style={{ display: "inline-flex" }}>
+        <div style={{ display: "inline-flex", gap: 0 }}>
           {Array.from({ length: resolvedMax }, (_, index) => (
             <RatingState
               key={`rating-star-${index + 1}`}

@@ -1,6 +1,7 @@
 import {
   type ButtonHTMLAttributes,
   type CSSProperties,
+  type MouseEventHandler,
   type MouseEvent,
   type ReactNode,
   useState
@@ -18,9 +19,15 @@ export type ButtonShape = "Regular" | "Pill";
 export type ButtonStyleVariant = "Solid" | "Outline" | "Ghost" | "Transparent" | "Destructive";
 export type ButtonSize = "Extra Small" | "Small" | "Medium" | "Large" | "Extra Large";
 export type ButtonPreviewState = "Rest" | "Hover/Pressed";
+export type ButtonCTAVariant = "primary" | "secondary" | "ghost" | "transparent" | "destructive";
 
 type ButtonToneAlias = "primary" | "secondary" | "ghost";
 type LegacyButtonSize = "xs" | "sm" | "md" | "lg" | "xl";
+
+export interface ButtonCTA {
+  text: ReactNode;
+  variant?: ButtonCTAVariant;
+}
 
 type SizeMetrics = {
   minWidth: string;
@@ -138,6 +145,10 @@ function normalizeVariant(styleVariant: ButtonProps["styleVariant"], tone: Butto
     return styleVariant;
   }
 
+  if (tone === undefined) {
+    return "Solid";
+  }
+
   if (tone === "ghost") {
     return "Ghost";
   }
@@ -147,6 +158,30 @@ function normalizeVariant(styleVariant: ButtonProps["styleVariant"], tone: Butto
   }
 
   return "Solid";
+}
+
+function mapCtaVariant(variant: ButtonCTAVariant | undefined): ButtonStyleVariant | undefined {
+  if (!variant) {
+    return undefined;
+  }
+
+  if (variant === "primary") {
+    return "Solid";
+  }
+
+  if (variant === "secondary") {
+    return "Outline";
+  }
+
+  if (variant === "ghost") {
+    return "Ghost";
+  }
+
+  if (variant === "transparent") {
+    return "Transparent";
+  }
+
+  return "Destructive";
 }
 
 function getSurface(
@@ -321,8 +356,10 @@ function renderSlot(content: ReactNode, color: string, size: string) {
   );
 }
 
-export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "size"> {
+export interface ButtonProps
+  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "size" | "onClick" | "tabIndex"> {
   brand?: DisplayBrandId;
+  cta?: ButtonCTA | undefined;
   shape?: ButtonShape;
   styleVariant?: ButtonStyleVariant;
   size?: ButtonSize | LegacyButtonSize;
@@ -332,10 +369,13 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
   tone?: ButtonToneAlias;
   leadingIcon?: ReactNode;
   trailingIcon?: ReactNode;
+  onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
+  tabIndex?: number | undefined;
 }
 
 export function Button({
   brand = "Cars24",
+  cta,
   shape = "Regular",
   styleVariant,
   size = "Medium",
@@ -347,6 +387,8 @@ export function Button({
   leadingIcon,
   trailingIcon,
   children,
+  onClick,
+  tabIndex,
   style,
   onMouseDown,
   onMouseEnter,
@@ -358,19 +400,18 @@ export function Button({
 }: ButtonProps) {
   const [hovered, setHovered] = useState(false);
   const [pressed, setPressed] = useState(false);
-  const [focused, setFocused] = useState(false);
 
   const normalizedSize = normalizeSize(size);
-  const normalizedVariant = normalizeVariant(styleVariant, tone);
+  const normalizedVariant = normalizeVariant(styleVariant ?? mapCtaVariant(cta?.variant), tone);
   const metrics = BUTTON_SIZE_METRICS[normalizedSize];
   const typographyTokenPrefix = getTypographyTokenPrefix(normalizedSize);
   const hoveredOrPressed = forceState === "Hover/Pressed" || pressed || hovered;
   const surface = getSurface(brand, normalizedVariant, onDark, hoveredOrPressed, disabled);
   const medium = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.medium"));
   const fontFamily = String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"));
-  const focusColor = String(getRequiredThemeTokenValue(brand, "color.border.focus"));
   const iconSize = getIconSize(normalizedSize);
   const isDisabled = disabled || loading;
+  const labelContent = children ?? cta?.text;
   const labelFontSize = Number(getRequiredThemeTokenValue(brand, `${typographyTokenPrefix}.fontSize`));
   const labelLineHeight = Number(getRequiredThemeTokenValue(brand, `${typographyTokenPrefix}.lineHeight`));
   const labelLetterSpacing = Number(getRequiredThemeTokenValue(brand, `${typographyTokenPrefix}.letterSpacing`));
@@ -391,7 +432,7 @@ export function Button({
     position: "relative",
     transition:
       "background-color 180ms cubic-bezier(0.2, 0, 0, 1), border-color 180ms cubic-bezier(0.2, 0, 0, 1), box-shadow 180ms cubic-bezier(0.2, 0, 0, 1), color 180ms cubic-bezier(0.2, 0, 0, 1)",
-    boxShadow: focused ? `0 0 0 3px ${focusColor}40` : "none",
+    boxShadow: "none",
     ...style,
     ...getTapFeedbackStyles({
       disabled: isDisabled,
@@ -462,18 +503,18 @@ export function Button({
         {...rest}
         aria-busy={loading || undefined}
         disabled={isDisabled}
+        onClick={onClick}
         onBlur={(event) => {
-          setFocused(false);
           onBlur?.(event);
         }}
         onFocus={(event) => {
-          setFocused(true);
           onFocus?.(event);
         }}
         onMouseDown={handleMouseDown}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onMouseUp={handleMouseUp}
+        tabIndex={tabIndex}
         style={rootStyles}
       >
         {loading ? (
@@ -481,7 +522,7 @@ export function Button({
         ) : (
           <span style={contentStyles}>
             {renderSlot(leadingIcon, surface.icon, iconSize)}
-            {children ? <span style={labelStyles}>{children}</span> : null}
+            {labelContent ? <span style={labelStyles}>{labelContent}</span> : null}
             {renderSlot(trailingIcon, surface.icon, iconSize)}
           </span>
         )}

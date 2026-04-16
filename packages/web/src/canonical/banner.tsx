@@ -197,17 +197,11 @@ export function Banner({
   className,
   style
 }: BannerProps) {
-  const [actionFocused, setActionFocused] = useState(false);
   const tone = getBannerTone(brand, theme, state);
   const medium = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.medium"));
   const regular = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.regular"));
   const fontFamily = String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"));
   const isDark = theme === "Dark";
-  const focusColor = resolveBannerBindingValue(
-    brand,
-    "action.focusRing",
-    String(getRequiredThemeTokenValue(brand, "color.border.focus"))
-  );
   const rootWidth = resolveBannerBindingValue(brand, "container.width", "328px");
   const rootGap = resolveBannerBindingValue(brand, "container.gap", "0px");
   const rootRadius = `${Number(getRequiredThemeTokenValue(brand, "radius.alt.lg"))}px`;
@@ -298,7 +292,7 @@ export function Banner({
     fontSize: "12px",
     lineHeight: "16px",
     fontWeight: medium,
-    boxShadow: actionFocused ? `0 0 0 3px ${focusColor}40` : "none"
+    boxShadow: "none"
   };
 
   const iconButtonStyles: CSSProperties = {
@@ -311,7 +305,7 @@ export function Banner({
     color: tone.actionIcon,
     cursor: "pointer",
     borderRadius: `${Number(getRequiredThemeTokenValue(brand, "radius.alt.md"))}px`,
-    boxShadow: actionFocused ? `0 0 0 3px ${focusColor}40` : "none"
+    boxShadow: "none"
   };
 
   return (
@@ -382,8 +376,6 @@ export function Banner({
             <button
               type="button"
               onClick={onActionClick}
-              onFocus={() => setActionFocused(true)}
-              onBlur={() => setActionFocused(false)}
               style={actionButtonStyles}
             >
               {actionLabel}
@@ -393,8 +385,6 @@ export function Banner({
               type="button"
               aria-label="Dismiss banner"
               onClick={onDismiss ?? onActionClick}
-              onFocus={() => setActionFocused(true)}
-              onBlur={() => setActionFocused(false)}
               style={iconButtonStyles}
             >
               <Icon

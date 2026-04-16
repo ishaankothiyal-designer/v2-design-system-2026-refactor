@@ -61,9 +61,9 @@ function getLayoutMetrics(brand: DisplayBrandId, size: ButtonGroupSize) {
 function getButtonLayoutStyle(type: ButtonGroupType): CSSProperties {
   if (type === "Horizontal") {
     return {
-      flex: "1 1 0",
+      flex: "1 1 180px",
       minWidth: 0,
-      width: "100%"
+      width: "auto"
     };
   }
 
@@ -103,6 +103,7 @@ export function ButtonGroup({
     alignItems: "stretch",
     display: "flex",
     flexDirection: isHorizontal ? "row" : "column",
+    flexWrap: isHorizontal ? "wrap" : "nowrap",
     gap: `${metrics.stackGap}px`,
     width: "100%",
     ...style
@@ -110,10 +111,12 @@ export function ButtonGroup({
 
   const contextualRowStyles: CSSProperties = {
     alignItems: "center",
-    display: "inline-flex",
+    display: "flex",
+    flexWrap: "wrap",
     gap: `${metrics.inlineGap}px`,
     justifyContent: "center",
     padding: `${metrics.contextualPaddingBlock}px 0`,
+    textAlign: "center",
     width: "100%"
   };
 
@@ -124,7 +127,8 @@ export function ButtonGroup({
     fontWeight,
     letterSpacing: `${metrics.promptLetterSpacing}px`,
     lineHeight: `${metrics.promptLineHeight}px`,
-    whiteSpace: "nowrap"
+    overflowWrap: "anywhere",
+    whiteSpace: "normal"
   };
 
   const {

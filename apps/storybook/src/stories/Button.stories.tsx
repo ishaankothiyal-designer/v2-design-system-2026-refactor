@@ -8,6 +8,7 @@ import {
   SocialButton,
   Text,
   getRequiredThemeTokenValue,
+  type ButtonCTA,
   type ButtonPreviewState,
   type ButtonProps,
   type ButtonShape,
@@ -50,6 +51,20 @@ const documentedStates: Array<{
 
 const BUTTON_FIGMA_URL =
   "https://www.figma.com/design/AZgWt0KHVuVeWBAcQ6Jcy4/branch/yxI5H0FhaUg0YR0uhNuqR6/%F0%9F%9A%80-v2.0-Global-Component-Library?node-id=215-254&t=1zgOyFpiLYMyM4XM-11";
+
+// Figma node 215:254 exposes these top-level variant axes on the Button component.
+const figmaBackedButtonControls = new Set<keyof ButtonStoryArgs>([
+  "shape",
+  "styleVariant",
+  "size",
+  "onDark",
+  "loading",
+  "disabled"
+]);
+
+function getButtonControlRemark(name: keyof ButtonStoryArgs | "brand" | "onClick") {
+  return figmaBackedButtonControls.has(name as keyof ButtonStoryArgs) ? undefined : "Dev only";
+}
 
 function makeIcons(showLeadingIcon: boolean, showTrailingIcon: boolean) {
   return {
@@ -465,12 +480,17 @@ const meta: Meta<ButtonStoryArgs> = {
   },
   args: {
     brand: "Cars24",
+    cta: {
+      variant: "primary",
+      text: "Primary Button"
+    } satisfies ButtonCTA,
     shape: "Regular",
     styleVariant: "Solid",
     size: "Medium",
     onDark: false,
     loading: false,
     disabled: false,
+    tabIndex: 0,
     forceState: "Rest",
     label: "Label",
     showLeadingIcon: true,
@@ -479,41 +499,95 @@ const meta: Meta<ButtonStoryArgs> = {
   argTypes: {
     brand: {
       control: "radio",
-      options: STORYBOOK_BRAND_OPTIONS
+      options: STORYBOOK_BRAND_OPTIONS,
+      table: {
+        remark: getButtonControlRemark("brand")
+      }
+    },
+    cta: {
+      control: "object",
+      description: "Call-to-action configuration containing visual and content properties.",
+      table: {
+        remark: getButtonControlRemark("cta")
+      }
     },
     shape: {
       control: "inline-radio",
-      options: buttonShapes
+      options: buttonShapes,
+      table: {
+        remark: getButtonControlRemark("shape")
+      }
     },
     styleVariant: {
       control: "inline-radio",
-      options: buttonStyles
+      options: buttonStyles,
+      table: {
+        remark: getButtonControlRemark("styleVariant")
+      }
     },
     size: {
       control: "select",
-      options: buttonSizes
+      options: buttonSizes,
+      table: {
+        remark: getButtonControlRemark("size")
+      }
     },
     onDark: {
-      control: "boolean"
+      control: "boolean",
+      table: {
+        remark: getButtonControlRemark("onDark")
+      }
     },
     loading: {
-      control: "boolean"
+      control: "boolean",
+      table: {
+        remark: getButtonControlRemark("loading")
+      }
     },
     disabled: {
-      control: "boolean"
+      control: "boolean",
+      table: {
+        remark: getButtonControlRemark("disabled")
+      }
+    },
+    onClick: {
+      action: "clicked",
+      description: "Click handler - receives DOM event as first parameter.",
+      table: {
+        remark: getButtonControlRemark("onClick")
+      }
+    },
+    tabIndex: {
+      control: { type: "number" },
+      description: "Tab index",
+      table: {
+        remark: getButtonControlRemark("tabIndex")
+      }
     },
     forceState: {
       control: "inline-radio",
-      options: previewStates
+      options: previewStates,
+      table: {
+        remark: getButtonControlRemark("forceState")
+      }
     },
     label: {
-      control: "text"
+      control: "text",
+      table: {
+        remark: getButtonControlRemark("label")
+      }
     },
     showLeadingIcon: {
-      control: "boolean"
+      control: "boolean",
+      table: {
+        remark: getButtonControlRemark("showLeadingIcon")
+      }
     },
     showTrailingIcon: {
-      control: "boolean"
+      control: "boolean",
+      table: {
+        remark: getButtonControlRemark("showTrailingIcon")
+      }
     },
     tone: {
       table: {
@@ -521,14 +595,15 @@ const meta: Meta<ButtonStoryArgs> = {
       }
     }
   },
-  render: ({ label, showLeadingIcon, showTrailingIcon, onDark, ...args }) => {
+  render: ({ label, showLeadingIcon, showTrailingIcon, onDark, cta, ...args }) => {
     const icons = makeIcons(showLeadingIcon && !args.loading, showTrailingIcon && !args.loading);
     const resolvedOnDark = Boolean(onDark);
+    const resolvedCta = cta ? { ...cta, text: cta.text ?? label } : undefined;
 
     return (
       <StoryPreviewSurface onDark={resolvedOnDark}>
-        <Button {...args} onDark={resolvedOnDark} {...icons}>
-          {label}
+        <Button {...args} cta={resolvedCta} onDark={resolvedOnDark} {...icons}>
+          {resolvedCta ? undefined : label}
         </Button>
       </StoryPreviewSurface>
     );

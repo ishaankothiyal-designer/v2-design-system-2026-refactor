@@ -1,0 +1,15 @@
+interface:
+  display_name: "Figma Storybook Connect"
+  short_description: "Map DLS Figma nodes to Storybook and canonical code"
+  default_prompt: "Use $figma-storybook-connect to map a DLS Figma component node to the closest approved Geist Storybook story and canonical code component, then fix or add the Storybook Figma link and coverage without inventing new patterns."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "figma"
+      description: "Figma MCP server"
+      transport: "streamable_http"
+      url: "https://mcp.figma.com/mcp"
+
+policy:
+  allow_implicit_invocation: true

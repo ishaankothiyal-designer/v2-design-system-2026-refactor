@@ -36,6 +36,10 @@ const FONT_SIZE = "var(--cars24-typography-size-utility-label-4, 11px)";
 const LETTER_SPACING = "var(--cars24-typography-letter-spacing-utility-label-4, 0px)";
 const LINE_HEIGHT = "17px";
 
+const PRIME_WORDMARK_URL = "https://www.figma.com/api/mcp/asset/72addd99-1fae-4140-a423-308ffe2ff65d";
+const LITE_WORDMARK_URL = "https://www.figma.com/api/mcp/asset/42d5a854-2fad-4085-9796-88735811084d";
+const LUXE_WORDMARK_URL = "https://www.figma.com/api/mcp/asset/1195b34b-3635-4361-acbe-33b511440804";
+
 const BRAND_BLUE = "#4736FE";
 const BRAND_BORDER = "#D8D3FF";
 const BRAND_SURFACE = "linear-gradient(180deg, #FFFFFF 0%, #F6F3FF 100%)";
@@ -99,14 +103,14 @@ const OWNERSHIP_BADGE_VARIANTS: Record<OwnershipBadgeSeller, OwnershipBadgeVaria
     borderRadius: 46.667,
     borderWidth: 0.583,
     color: BRAND_BLUE,
-    gap: 8,
+    gap: 3.5,
     height: 21,
     paddingBlock: 2.333,
-    paddingInlineStart: 14,
-    paddingInlineEnd: 4,
-    segmentedPillHeight: 19,
-    segmentedPillMinWidth: 92,
-    segmentedPillPaddingInline: 18
+    paddingInlineStart: 4.667,
+    paddingInlineEnd: 2.333,
+    segmentedPillHeight: 16.333,
+    segmentedPillMinWidth: 39.333,
+    segmentedPillPaddingInline: 4.667
   },
   Lite: {
     background: MINT_SURFACE,
@@ -114,14 +118,14 @@ const OWNERSHIP_BADGE_VARIANTS: Record<OwnershipBadgeSeller, OwnershipBadgeVaria
     borderRadius: 46.667,
     borderWidth: 0.583,
     color: "#0F91A0",
-    gap: 8,
+    gap: 3.5,
     height: 21,
     paddingBlock: 2.333,
-    paddingInlineStart: 14,
-    paddingInlineEnd: 4,
-    segmentedPillHeight: 19,
-    segmentedPillMinWidth: 72,
-    segmentedPillPaddingInline: 14
+    paddingInlineStart: 4.667,
+    paddingInlineEnd: 2.333,
+    segmentedPillHeight: 16.333,
+    segmentedPillMinWidth: 29.333,
+    segmentedPillPaddingInline: 4.667
   },
   Luxe: {
     background: BEIGE_SURFACE,
@@ -129,14 +133,14 @@ const OWNERSHIP_BADGE_VARIANTS: Record<OwnershipBadgeSeller, OwnershipBadgeVaria
     borderRadius: 46.667,
     borderWidth: 0.583,
     color: BEIGE_TEXT,
-    gap: 8,
+    gap: 3.5,
     height: 21,
     paddingBlock: 2.333,
-    paddingInlineStart: 14,
-    paddingInlineEnd: 4,
-    segmentedPillHeight: 19,
-    segmentedPillMinWidth: 82,
-    segmentedPillPaddingInline: 15
+    paddingInlineStart: 4.667,
+    paddingInlineEnd: 2.333,
+    segmentedPillHeight: 16.333,
+    segmentedPillMinWidth: 34.333,
+    segmentedPillPaddingInline: 4.667
   },
   "Private Seller": {
     background: RED_SURFACE,
@@ -271,15 +275,13 @@ function BadgeText({
 }
 
 function SegmentedPill({
-  brand,
   label,
   background,
   borderColor,
-  height = 18,
+  height = 16.333,
   minWidth,
-  paddingInline = 10
+  paddingInline = 4.667
 }: {
-  brand: DisplayBrandId;
   label: string;
   background: string;
   borderColor: string;
@@ -287,9 +289,6 @@ function SegmentedPill({
   minWidth?: number;
   paddingInline?: number;
 }) {
-  const fontFamily = String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"));
-  const fontWeight = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.bold"));
-
   return (
     <span
       style={{
@@ -311,9 +310,9 @@ function SegmentedPill({
       <span
         style={{
           color: "#FFFFFF",
-          fontFamily: `${fontFamily}, sans-serif`,
+          fontFamily: "Geist, sans-serif",
           fontSize: "10.5px",
-          fontWeight,
+          fontWeight: 700,
           letterSpacing: "0px",
           lineHeight: "1"
         }}
@@ -339,6 +338,32 @@ function GlyphFrame({ children, size = 12 }: { children: ReactNode; size?: numbe
     >
       {children}
     </span>
+  );
+}
+
+function WordmarkImage({
+  alt,
+  height,
+  src,
+  width
+}: {
+  alt: string;
+  height: number;
+  src: string;
+  width: number;
+}) {
+  return (
+    <img
+      alt={alt}
+      aria-hidden="true"
+      src={src}
+      style={{
+        display: "block",
+        flexShrink: 0,
+        height: `${height}px`,
+        width: `${width}px`
+      }}
+    />
   );
 }
 
@@ -484,51 +509,42 @@ function renderSellerContent(brand: DisplayBrandId, seller: OwnershipBadgeSeller
     case "Prime":
       return (
         <>
-          <BadgeText brand={brand} color={BRAND_BLUE}>
-            Cars24
-          </BadgeText>
+          <WordmarkImage alt="" height={7.791} src={PRIME_WORDMARK_URL} width={35.492} />
           <SegmentedPill
-            brand={brand}
             label="Prime"
             background="linear-gradient(180deg, #7C78FF 0%, #5847FF 52%, #4332F2 100%)"
             borderColor="#8E88FF"
-            height={18}
-            minWidth={51}
-            paddingInline={12}
+            height={16.333}
+            minWidth={39.333}
+            paddingInline={4.667}
           />
         </>
       );
     case "Lite":
       return (
         <>
-          <BadgeText brand={brand} color="#0E8F9F">
-            Cars24
-          </BadgeText>
+          <WordmarkImage alt="" height={7.791} src={LITE_WORDMARK_URL} width={35.492} />
           <SegmentedPill
-            brand={brand}
             label="Lite"
             background="linear-gradient(180deg, #0DB5BE 0%, #0A8F98 55%, #0A7276 100%)"
             borderColor="#2DC7CD"
-            height={18}
-            minWidth={41}
-            paddingInline={10}
+            height={16.333}
+            minWidth={29.333}
+            paddingInline={4.667}
           />
         </>
       );
     case "Luxe":
       return (
         <>
-          <BadgeText brand={brand} color={BEIGE_TEXT}>
-            Cars24
-          </BadgeText>
+          <WordmarkImage alt="" height={7.791} src={LUXE_WORDMARK_URL} width={35.492} />
           <SegmentedPill
-            brand={brand}
             label="Luxe"
             background="linear-gradient(180deg, #9D917D 0%, #7B7366 55%, #665F52 100%)"
             borderColor="#B3AA9B"
-            height={18}
-            minWidth={45}
-            paddingInline={10}
+            height={16.333}
+            minWidth={34.333}
+            paddingInline={4.667}
           />
         </>
       );

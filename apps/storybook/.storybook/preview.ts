@@ -2,6 +2,7 @@ import type { Preview } from "@storybook/react";
 import performancePreview from "@github-ui/storybook-addon-performance-panel/preview";
 import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
 import { themes } from "storybook/theming";
+import { ComponentDocsPage } from "../src/storybook-docs";
 import "./fonts.css";
 import "@geist/icons/style.css";
 
@@ -67,6 +68,9 @@ const preview: Preview = {
         color: /(background|color)$/i,
         date: /Date$/i
       }
+    },
+    docs: {
+      page: ComponentDocsPage
     },
     storybookCodePanel: {
       disabled: true,
