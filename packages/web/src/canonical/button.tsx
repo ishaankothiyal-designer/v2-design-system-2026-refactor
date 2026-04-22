@@ -1,15 +1,21 @@
 import {
+  cloneElement,
+  isValidElement,
   type ButtonHTMLAttributes,
   type CSSProperties,
-  type MouseEventHandler,
   type MouseEvent,
+  type MouseEventHandler,
+  type ReactElement,
   type ReactNode,
+  useInsertionEffect,
   useState
 } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
+import {
+  normalizeBrandId,
+  type DisplayBrandId
+} from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
-import { getRequiredThemeTokenValue } from "../theme";
-import { getTapFeedbackStyles } from "./press-feedback";
+import { ensureStyleSheet, runtimeTokenVar, runtimeTokenVarPx, toCssRule } from "./runtime-styles";
 
 export const canonicalButtonWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.button"
@@ -18,107 +24,207 @@ export const canonicalButtonWebContract = designSystemRegistry.components.find(
 export type ButtonShape = "Regular" | "Pill";
 export type ButtonStyleVariant = "Solid" | "Outline" | "Ghost" | "Transparent" | "Destructive";
 export type ButtonSize = "Extra Small" | "Small" | "Medium" | "Large" | "Extra Large";
-export type ButtonPreviewState = "Rest" | "Hover/Pressed";
+export type ButtonPreviewState = "Rest" | "Hover/Pressed" | "Focus";
 export type ButtonCTAVariant = "primary" | "secondary" | "ghost" | "transparent" | "destructive";
 
 type ButtonToneAlias = "primary" | "secondary" | "ghost";
 type LegacyButtonSize = "xs" | "sm" | "md" | "lg" | "xl";
+type ButtonSizeKey = "xs" | "sm" | "md" | "lg" | "xl";
+type ButtonVariantKey = "solid" | "outline" | "ghost" | "transparent" | "destructive";
+type StylableElement = ReactElement<{ style?: CSSProperties; className?: string }>;
 
 export interface ButtonCTA {
   text: ReactNode;
   variant?: ButtonCTAVariant;
 }
 
-type SizeMetrics = {
-  minWidth: string;
-  height: string;
-  gap: string;
-  paddingInline: string;
-  paddingBlock: string;
-  loaderSize: string;
-};
-
-type ButtonSurface = {
-  background: string;
-  border: string;
-  text: string;
-  icon: string;
-  loaderTrack: string;
-  loaderIndicator: string;
-};
-
+const BUTTON_ROOT_CLASS = "geist-button";
+const BUTTON_CONTENT_CLASS = "geist-button__content";
+const BUTTON_LABEL_CLASS = "geist-button__label";
+const BUTTON_SLOT_CLASS = "geist-button__slot";
+const BUTTON_LOADER_CLASS = "geist-button__loader";
+const BUTTON_STYLESHEET_ID = "geist-button-styles";
+const BUTTON_TAP_TRANSITION = "transform 140ms cubic-bezier(0.2, 0, 0, 1)";
+const BUTTON_TAP_TRANSFORM = "translateY(1px) scale(0.985)";
 const BUTTON_SPIN_KEYFRAMES = "@keyframes geist-button-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}";
 
-const BUTTON_SIZE_METRICS: Record<ButtonSize, SizeMetrics> = {
-  "Extra Small": {
-    minWidth: "90px",
-    height: "28px",
-    gap: "4px",
-    paddingInline: "12px",
-    paddingBlock: "5px",
-    loaderSize: "14px"
-  },
-  Small: {
-    minWidth: "95px",
-    height: "32px",
-    gap: "4px",
-    paddingInline: "12px",
-    paddingBlock: "7px",
-    loaderSize: "16px"
-  },
-  Medium: {
-    minWidth: "112px",
-    height: "40px",
-    gap: "6px",
-    paddingInline: "14px",
-    paddingBlock: "10px",
-    loaderSize: "18px"
-  },
-  Large: {
-    minWidth: "124px",
-    height: "44px",
-    gap: "6px",
-    paddingInline: "16px",
-    paddingBlock: "12px",
-    loaderSize: "18px"
-  },
-  "Extra Large": {
-    minWidth: "130px",
-    height: "56px",
-    gap: "6px",
-    paddingInline: "18px",
-    paddingBlock: "18px",
-    loaderSize: "20px"
+function getTokenSizeKey(size: ButtonSize): ButtonSizeKey {
+  if (size === "Extra Small") {
+    return "xs";
   }
-};
-
-function makeSurface(
-  background: string,
-  border: string,
-  text: string,
-  icon: string,
-  loaderTrack: string,
-  loaderIndicator: string
-): ButtonSurface {
-  return { background, border, text, icon, loaderTrack, loaderIndicator };
-}
-
-function toAlpha(color: string, alpha: number) {
-  const normalized = color.trim();
-  const hex = normalized.startsWith("#") ? normalized.slice(1) : normalized;
-  const safeAlpha = Math.max(0, Math.min(1, alpha));
-
-  if (!/^[\da-fA-F]{3}$|^[\da-fA-F]{6}$/.test(hex)) {
-    return color;
+  if (size === "Small") {
+    return "sm";
+  }
+  if (size === "Large") {
+    return "lg";
+  }
+  if (size === "Extra Large") {
+    return "xl";
   }
 
-  const expanded = hex.length === 3 ? hex.split("").map((part) => `${part}${part}`).join("") : hex;
-  const red = Number.parseInt(expanded.slice(0, 2), 16);
-  const green = Number.parseInt(expanded.slice(2, 4), 16);
-  const blue = Number.parseInt(expanded.slice(4, 6), 16);
-
-  return `rgba(${red}, ${green}, ${blue}, ${safeAlpha})`;
+  return "md";
 }
+
+function getRadiusTokenKey(sizeKey: ButtonSizeKey) {
+  if (sizeKey === "xl") {
+    return "xl";
+  }
+  if (sizeKey === "lg") {
+    return "lg";
+  }
+  if (sizeKey === "md") {
+    return "md";
+  }
+
+  return "sm";
+}
+
+function getVariantKey(styleVariant: ButtonStyleVariant): ButtonVariantKey {
+  switch (styleVariant) {
+    case "Solid":
+      return "solid";
+    case "Outline":
+      return "outline";
+    case "Ghost":
+      return "ghost";
+    case "Transparent":
+      return "transparent";
+    case "Destructive":
+      return "destructive";
+  }
+}
+
+const BUTTON_SIZE_KEYS = ["xs", "sm", "md", "lg", "xl"] as const;
+const BUTTON_VARIANT_KEYS = ["solid", "outline", "ghost", "transparent", "destructive"] as const;
+
+const BUTTON_STYLESHEET = [
+  BUTTON_SPIN_KEYFRAMES,
+  toCssRule(`.${BUTTON_ROOT_CLASS}`, {
+    "align-items": "center",
+    appearance: "none",
+    border: `${runtimeTokenVarPx("component.button.border.width")} solid transparent`,
+    "box-sizing": "border-box",
+    cursor: "pointer",
+    display: "inline-flex",
+    "justify-content": "center",
+    outline: "none",
+    "outline-offset": runtimeTokenVarPx("component.button.focus.outlineOffset"),
+    position: "relative",
+    "text-decoration": "none",
+    "transform-origin": "center center",
+    transition: [
+      "background-color 180ms cubic-bezier(0.2, 0, 0, 1)",
+      "border-color 180ms cubic-bezier(0.2, 0, 0, 1)",
+      "outline-color 180ms cubic-bezier(0.2, 0, 0, 1)",
+      "color 180ms cubic-bezier(0.2, 0, 0, 1)",
+      BUTTON_TAP_TRANSITION
+    ].join(", "),
+    "will-change": "transform"
+  }),
+  toCssRule(`.${BUTTON_ROOT_CLASS}[data-focused="true"]`, {
+    outline: `${runtimeTokenVarPx("component.button.focus.outlineWidth")} solid ${runtimeTokenVar("color.border.focus")}`
+  }),
+  toCssRule(`.${BUTTON_ROOT_CLASS}:focus-visible`, {
+    outline: `${runtimeTokenVarPx("component.button.focus.outlineWidth")} solid ${runtimeTokenVar("color.border.focus")}`
+  }),
+  toCssRule(`.${BUTTON_ROOT_CLASS}[data-disabled="true"]`, {
+    cursor: "not-allowed",
+    "will-change": "auto"
+  }),
+  toCssRule(`.${BUTTON_ROOT_CLASS}[data-pressed="true"][data-disabled="false"]`, {
+    transform: BUTTON_TAP_TRANSFORM
+  }),
+  toCssRule(`.${BUTTON_CONTENT_CLASS}`, {
+    "align-items": "center",
+    display: "inline-flex",
+    "justify-content": "center",
+    "min-width": "0"
+  }),
+  toCssRule(`.${BUTTON_LABEL_CLASS}`, {
+    color: "inherit",
+    "font-family": `${runtimeTokenVar("typography.fontFamily.sans")}, sans-serif`,
+    "font-weight": runtimeTokenVar("typography.fontWeight.medium"),
+    "white-space": "nowrap"
+  }),
+  toCssRule(`.${BUTTON_SLOT_CLASS}`, {
+    "align-items": "center",
+    color: "inherit",
+    display: "inline-flex",
+    "line-height": "0"
+  }),
+  toCssRule(`.${BUTTON_LOADER_CLASS}`, {
+    animation: "geist-button-spin 0.8s linear infinite",
+    border: `${runtimeTokenVarPx("component.button.loading.strokeWidth")} solid transparent`,
+    "border-radius": "50%",
+    "box-sizing": "border-box",
+  }),
+  ...BUTTON_SIZE_KEYS.flatMap((sizeKey) => [
+    toCssRule(`.${BUTTON_ROOT_CLASS}[data-size="${sizeKey}"]`, {
+      "min-height": runtimeTokenVarPx(`component.button.size.${sizeKey}.height`),
+      "min-width": runtimeTokenVarPx(`component.button.size.${sizeKey}.minWidth`),
+      padding: `${runtimeTokenVarPx(`component.button.size.${sizeKey}.paddingBlock`)} ${runtimeTokenVarPx(`component.button.size.${sizeKey}.paddingInline`)}`
+    }),
+    toCssRule(`.${BUTTON_ROOT_CLASS}[data-size="${sizeKey}"][data-shape="regular"]`, {
+      "border-radius": runtimeTokenVarPx(`radius.alt.${getRadiusTokenKey(sizeKey)}`)
+    }),
+    toCssRule(`.${BUTTON_ROOT_CLASS}[data-size="${sizeKey}"] .${BUTTON_CONTENT_CLASS}`, {
+      gap: runtimeTokenVarPx(`component.button.size.${sizeKey}.gap`)
+    }),
+    toCssRule(`.${BUTTON_ROOT_CLASS}[data-size="${sizeKey}"] .${BUTTON_LABEL_CLASS}`, {
+      "font-size": runtimeTokenVarPx(`component.button.typography.${sizeKey}.fontSize`),
+      "letter-spacing": runtimeTokenVarPx(`component.button.typography.${sizeKey}.letterSpacing`),
+      "line-height": runtimeTokenVarPx(`component.button.typography.${sizeKey}.lineHeight`)
+    }),
+    toCssRule(`.${BUTTON_ROOT_CLASS}[data-size="${sizeKey}"] .${BUTTON_SLOT_CLASS}`, {
+      "font-size": runtimeTokenVarPx(`component.button.size.${sizeKey}.iconSize`)
+    }),
+    toCssRule(`.${BUTTON_ROOT_CLASS}[data-size="${sizeKey}"] .${BUTTON_LOADER_CLASS}`, {
+      height: runtimeTokenVarPx(`component.button.size.${sizeKey}.loaderSize`),
+      width: runtimeTokenVarPx(`component.button.size.${sizeKey}.loaderSize`)
+    })
+  ]),
+  toCssRule(`.${BUTTON_ROOT_CLASS}[data-shape="pill"]`, {
+    "border-radius": runtimeTokenVarPx("radius.pill")
+  }),
+  ...[false, true].flatMap((onDark) => {
+    const modeKey = onDark ? "dark" : "light";
+    const modeSelector = `.${BUTTON_ROOT_CLASS}[data-on-dark="${String(onDark)}"]`;
+
+    return [
+      toCssRule(`${modeSelector}[data-disabled="true"]`, {
+        background: runtimeTokenVar(`component.button.color.${modeKey}.disabled.background`),
+        "border-color": runtimeTokenVar(`component.button.color.${modeKey}.disabled.border`),
+        color: runtimeTokenVar(`component.button.color.${modeKey}.disabled.foreground`)
+      }),
+      toCssRule(`${modeSelector}[data-disabled="true"] .${BUTTON_LOADER_CLASS}`, {
+        "border-color": runtimeTokenVar(`component.button.color.${modeKey}.disabled.loaderTrack`),
+        "border-top-color": runtimeTokenVar(`component.button.color.${modeKey}.disabled.loaderIndicator`)
+      }),
+      ...BUTTON_VARIANT_KEYS.flatMap((variantKey) =>
+        ["rest", "hover"].flatMap((stateKey) => {
+          const selector =
+            stateKey === "hover"
+              ? `${modeSelector}[data-variant="${variantKey}"][data-disabled="false"][data-hovered="true"]`
+              : `${modeSelector}[data-variant="${variantKey}"][data-disabled="false"][data-hovered="false"]`;
+
+          return [
+            toCssRule(selector, {
+              background: runtimeTokenVar(`component.button.color.${modeKey}.${variantKey}.${stateKey}.background`),
+              "border-color": runtimeTokenVar(`component.button.color.${modeKey}.${variantKey}.${stateKey}.border`),
+              color: runtimeTokenVar(`component.button.color.${modeKey}.${variantKey}.${stateKey}.foreground`)
+            }),
+            toCssRule(`${selector} .${BUTTON_LOADER_CLASS}`, {
+              "border-color": runtimeTokenVar(`component.button.color.${modeKey}.${variantKey}.${stateKey}.loaderTrack`),
+              "border-top-color": runtimeTokenVar(
+                `component.button.color.${modeKey}.${variantKey}.${stateKey}.loaderIndicator`
+              )
+            })
+          ];
+        })
+      )
+    ];
+  })
+].join("");
 
 function normalizeSize(size: ButtonProps["size"]): ButtonSize {
   if (size === "xs") {
@@ -184,176 +290,33 @@ function mapCtaVariant(variant: ButtonCTAVariant | undefined): ButtonStyleVarian
   return "Destructive";
 }
 
-function getSurface(
-  brand: DisplayBrandId,
-  styleVariant: ButtonStyleVariant,
-  onDark: boolean,
-  hoveredOrPressed: boolean,
-  disabled: boolean
-) {
-  const brandBase = String(getRequiredThemeTokenValue(brand, "color.brand.alt.500"));
-  const brandHover = String(getRequiredThemeTokenValue(brand, "color.brand.alt.600"));
-  const brandSubtle = String(getRequiredThemeTokenValue(brand, "color.brand.primary.100"));
-  const textPrimary = String(getRequiredThemeTokenValue(brand, "color.text.primary"));
-  const textInverse = String(getRequiredThemeTokenValue(brand, "color.text.inverse"));
-  const surfaceCanvas = String(getRequiredThemeTokenValue(brand, "color.surface.canvas"));
-  const surfaceSubtle = String(getRequiredThemeTokenValue(brand, "color.surface.subtle"));
-  const surfaceInverse = String(getRequiredThemeTokenValue(brand, "color.surface.inverse"));
-  const borderDefault = String(getRequiredThemeTokenValue(brand, "color.border.default"));
-  const statusDanger = String(getRequiredThemeTokenValue(brand, "color.status.danger"));
-
-  if (disabled) {
-    return onDark
-      ? makeSurface(
-          toAlpha(textInverse, 0.12),
-          "transparent",
-          toAlpha(textInverse, 0.45),
-          toAlpha(textInverse, 0.45),
-          toAlpha(textInverse, 0.2),
-          toAlpha(textInverse, 0.45)
-        )
-      : makeSurface(
-          surfaceSubtle,
-          "transparent",
-          toAlpha(textPrimary, 0.45),
-          toAlpha(textPrimary, 0.45),
-          toAlpha(textPrimary, 0.12),
-          toAlpha(textPrimary, 0.45)
-        );
-  }
-
-  if (onDark) {
-    switch (styleVariant) {
-      case "Solid":
-        return hoveredOrPressed
-          ? makeSurface(surfaceSubtle, "transparent", textPrimary, textPrimary, toAlpha(textPrimary, 0.14), textPrimary)
-          : makeSurface(surfaceCanvas, "transparent", textPrimary, textPrimary, toAlpha(textPrimary, 0.14), textPrimary);
-      case "Outline":
-        return hoveredOrPressed
-          ? makeSurface(toAlpha(textInverse, 0.1), textInverse, textInverse, textInverse, toAlpha(textInverse, 0.24), textInverse)
-          : makeSurface("transparent", textInverse, textInverse, textInverse, toAlpha(textInverse, 0.24), textInverse);
-      case "Ghost":
-        return hoveredOrPressed
-          ? makeSurface(toAlpha(textInverse, 0.1), "transparent", textInverse, textInverse, toAlpha(textInverse, 0.24), textInverse)
-          : makeSurface("transparent", "transparent", textInverse, textInverse, toAlpha(textInverse, 0.24), textInverse);
-      case "Transparent":
-        return hoveredOrPressed
-          ? makeSurface(toAlpha(textInverse, 0.18), "transparent", textInverse, textInverse, toAlpha(textInverse, 0.24), textInverse)
-          : makeSurface(toAlpha(textInverse, 0.12), "transparent", textInverse, textInverse, toAlpha(textInverse, 0.24), textInverse);
-      case "Destructive":
-        return hoveredOrPressed
-          ? makeSurface(toAlpha(statusDanger, 0.8), "transparent", textInverse, textInverse, toAlpha(textInverse, 0.24), textInverse)
-          : makeSurface(statusDanger, "transparent", textInverse, textInverse, toAlpha(textInverse, 0.24), textInverse);
-    }
-  }
-
-  switch (styleVariant) {
-    case "Solid":
-      return hoveredOrPressed
-        ? makeSurface(brandHover, "transparent", textInverse, textInverse, toAlpha(textInverse, 0.3), textInverse)
-        : makeSurface(brandBase, "transparent", textInverse, textInverse, toAlpha(textInverse, 0.3), textInverse);
-    case "Outline":
-      return hoveredOrPressed
-        ? makeSurface(brandSubtle, brandBase, brandBase, brandBase, toAlpha(textPrimary, 0.16), brandBase)
-        : makeSurface("transparent", brandBase, brandBase, brandBase, toAlpha(textPrimary, 0.16), brandBase);
-    case "Ghost":
-      return hoveredOrPressed
-        ? makeSurface(brandSubtle, "transparent", brandHover, brandHover, toAlpha(textPrimary, 0.16), brandHover)
-        : makeSurface("transparent", "transparent", brandBase, brandBase, toAlpha(textPrimary, 0.16), brandBase);
-    case "Transparent":
-      return hoveredOrPressed
-        ? makeSurface(toAlpha(surfaceInverse, 0.12), "transparent", textPrimary, textPrimary, toAlpha(textPrimary, 0.18), textPrimary)
-        : makeSurface(toAlpha(surfaceInverse, 0.06), "transparent", textPrimary, textPrimary, toAlpha(textPrimary, 0.16), textPrimary);
-    case "Destructive":
-      return hoveredOrPressed
-        ? makeSurface(toAlpha(statusDanger, 0.12), statusDanger, statusDanger, statusDanger, toAlpha(textPrimary, 0.16), statusDanger)
-        : makeSurface(toAlpha(statusDanger, 0.08), toAlpha(statusDanger, 0.24), statusDanger, statusDanger, toAlpha(textPrimary, 0.16), statusDanger);
-  }
-}
-
-function getRadius(brand: DisplayBrandId, size: ButtonSize, shape: ButtonShape) {
-  if (shape === "Pill") {
-    return `${Number(getRequiredThemeTokenValue(brand, "radius.pill"))}px`;
-  }
-
-  const radiusTokenPath =
-    size === "Extra Large"
-      ? "radius.alt.xl"
-      : size === "Large"
-        ? "radius.alt.lg"
-        : size === "Medium"
-          ? "radius.alt.md"
-          : "radius.alt.sm";
-
-  return `${Number(getRequiredThemeTokenValue(brand, radiusTokenPath))}px`;
-}
-
-function getIconSize(size: ButtonSize) {
-  if (size === "Extra Small") {
-    return "14px";
-  }
-
-  if (size === "Small") {
-    return "16px";
-  }
-
-  if (size === "Extra Large") {
-    return "20px";
-  }
-
-  return "18px";
-}
-
-function getTypographyTokenPrefix(size: ButtonSize) {
-  if (size === "Extra Small") {
-    return "component.button.typography.xs";
-  }
-  if (size === "Small") {
-    return "component.button.typography.sm";
-  }
-  if (size === "Large") {
-    return "component.button.typography.lg";
-  }
-  if (size === "Extra Large") {
-    return "component.button.typography.xl";
-  }
-
-  return "component.button.typography.md";
-}
-
-function renderSlot(content: ReactNode, color: string, size: string) {
+function renderSlot(content: ReactNode) {
   if (!content) {
     return null;
   }
 
-  if (typeof content === "string") {
+  if (typeof content === "string" || typeof content === "number") {
+    return <span className={BUTTON_SLOT_CLASS}>{content}</span>;
+  }
+
+  if (isValidElement(content)) {
+    const element = content as StylableElement;
+
     return (
-      <span
-        aria-hidden="true"
-        style={{
-          color,
-          display: "inline-flex",
-          fontSize: size,
-          lineHeight: 0
-        }}
-      >
-        {content}
+      <span className={BUTTON_SLOT_CLASS}>
+        {cloneElement(element, {
+          className: [element.props.className].filter(Boolean).join(" "),
+          style: {
+            color: "inherit",
+            fontSize: "inherit",
+            ...element.props.style
+          }
+        })}
       </span>
     );
   }
 
-  return (
-    <span
-      aria-hidden="true"
-      style={{
-        color,
-        display: "inline-flex",
-        lineHeight: 0
-      }}
-    >
-      {content}
-    </span>
-  );
+  return <span className={BUTTON_SLOT_CLASS}>{content}</span>;
 }
 
 export interface ButtonProps
@@ -376,6 +339,7 @@ export interface ButtonProps
 export function Button({
   brand = "Cars24",
   cta,
+  className,
   shape = "Regular",
   styleVariant,
   size = "Medium",
@@ -400,76 +364,20 @@ export function Button({
 }: ButtonProps) {
   const [hovered, setHovered] = useState(false);
   const [pressed, setPressed] = useState(false);
+  const [focused, setFocused] = useState(false);
+
+  useInsertionEffect(() => {
+    ensureStyleSheet(BUTTON_STYLESHEET_ID, BUTTON_STYLESHEET);
+  }, []);
 
   const normalizedSize = normalizeSize(size);
   const normalizedVariant = normalizeVariant(styleVariant ?? mapCtaVariant(cta?.variant), tone);
-  const metrics = BUTTON_SIZE_METRICS[normalizedSize];
-  const typographyTokenPrefix = getTypographyTokenPrefix(normalizedSize);
-  const hoveredOrPressed = forceState === "Hover/Pressed" || pressed || hovered;
-  const surface = getSurface(brand, normalizedVariant, onDark, hoveredOrPressed, disabled);
-  const medium = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.medium"));
-  const fontFamily = String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"));
-  const iconSize = getIconSize(normalizedSize);
+  const normalizedBrand = normalizeBrandId(brand);
   const isDisabled = disabled || loading;
+  const isHovered = forceState === "Hover/Pressed" || hovered || pressed;
+  const isPressed = !isDisabled && (pressed || forceState === "Hover/Pressed");
+  const isFocused = forceState === "Focus" || focused;
   const labelContent = children ?? cta?.text;
-  const labelFontSize = Number(getRequiredThemeTokenValue(brand, `${typographyTokenPrefix}.fontSize`));
-  const labelLineHeight = Number(getRequiredThemeTokenValue(brand, `${typographyTokenPrefix}.lineHeight`));
-  const labelLetterSpacing = Number(getRequiredThemeTokenValue(brand, `${typographyTokenPrefix}.letterSpacing`));
-
-  const rootStyles: CSSProperties = {
-    alignItems: "center",
-    background: surface.background,
-    border: `1px solid ${surface.border}`,
-    borderRadius: getRadius(brand, normalizedSize, shape),
-    boxSizing: "border-box",
-    color: surface.text,
-    cursor: isDisabled ? "not-allowed" : "pointer",
-    display: "inline-flex",
-    justifyContent: "center",
-    minHeight: metrics.height,
-    minWidth: metrics.minWidth,
-    padding: `${metrics.paddingBlock} ${metrics.paddingInline}`,
-    position: "relative",
-    transition:
-      "background-color 180ms cubic-bezier(0.2, 0, 0, 1), border-color 180ms cubic-bezier(0.2, 0, 0, 1), box-shadow 180ms cubic-bezier(0.2, 0, 0, 1), color 180ms cubic-bezier(0.2, 0, 0, 1)",
-    boxShadow: "none",
-    ...style,
-    ...getTapFeedbackStyles({
-      disabled: isDisabled,
-      pressed,
-      transition: style?.transition,
-      transform: style?.transform
-    })
-  };
-
-  const contentStyles: CSSProperties = {
-    alignItems: "center",
-    display: "inline-flex",
-    gap: metrics.gap,
-    justifyContent: "center",
-    minWidth: 0
-  };
-
-  const labelStyles: CSSProperties = {
-    color: surface.text,
-    fontFamily: `${fontFamily}, sans-serif`,
-    fontSize: `${labelFontSize}px`,
-    fontWeight: medium,
-    letterSpacing: `${labelLetterSpacing}px`,
-    lineHeight: `${labelLineHeight}px`,
-    whiteSpace: "nowrap"
-  };
-
-  const loaderStyles: CSSProperties = {
-    animation: "geist-button-spin 0.8s linear infinite",
-    border: "2px solid",
-    borderColor: surface.loaderTrack,
-    borderRadius: "50%",
-    borderTopColor: surface.loaderIndicator,
-    boxSizing: "border-box",
-    height: metrics.loaderSize,
-    width: metrics.loaderSize
-  };
 
   function handleMouseEnter(event: MouseEvent<HTMLButtonElement>) {
     if (!isDisabled) {
@@ -497,36 +405,47 @@ export function Button({
   }
 
   return (
-    <>
-      <style>{BUTTON_SPIN_KEYFRAMES}</style>
-      <button
-        {...rest}
-        aria-busy={loading || undefined}
-        disabled={isDisabled}
-        onClick={onClick}
-        onBlur={(event) => {
-          onBlur?.(event);
-        }}
-        onFocus={(event) => {
-          onFocus?.(event);
-        }}
-        onMouseDown={handleMouseDown}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        onMouseUp={handleMouseUp}
-        tabIndex={tabIndex}
-        style={rootStyles}
-      >
-        {loading ? (
-          <span aria-hidden="true" style={loaderStyles} />
-        ) : (
-          <span style={contentStyles}>
-            {renderSlot(leadingIcon, surface.icon, iconSize)}
-            {labelContent ? <span style={labelStyles}>{labelContent}</span> : null}
-            {renderSlot(trailingIcon, surface.icon, iconSize)}
-          </span>
-        )}
-      </button>
-    </>
+    <button
+      {...rest}
+      aria-busy={loading || undefined}
+      className={[BUTTON_ROOT_CLASS, className].filter(Boolean).join(" ")}
+      data-brand={normalizedBrand}
+      data-disabled={String(isDisabled)}
+      data-focused={String(isFocused)}
+      data-hovered={String(isHovered)}
+      data-loading={String(loading)}
+      data-on-dark={String(onDark)}
+      data-pressed={String(isPressed)}
+      data-shape={shape === "Pill" ? "pill" : "regular"}
+      data-size={getTokenSizeKey(normalizedSize)}
+      data-variant={getVariantKey(normalizedVariant)}
+      disabled={isDisabled}
+      onBlur={(event) => {
+        setFocused(false);
+        setPressed(false);
+        onBlur?.(event);
+      }}
+      onClick={onClick}
+      onFocus={(event) => {
+        setFocused(true);
+        onFocus?.(event);
+      }}
+      onMouseDown={handleMouseDown}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onMouseUp={handleMouseUp}
+      style={style}
+      tabIndex={tabIndex}
+    >
+      {loading ? (
+        <span aria-hidden="true" className={BUTTON_LOADER_CLASS} />
+      ) : (
+        <span className={BUTTON_CONTENT_CLASS}>
+          {renderSlot(leadingIcon)}
+          {labelContent ? <span className={BUTTON_LABEL_CLASS}>{labelContent}</span> : null}
+          {renderSlot(trailingIcon)}
+        </span>
+      )}
+    </button>
   );
 }

@@ -10,7 +10,7 @@ import {
 import type { IconName } from "@geist/icons";
 import { designSystemRegistry } from "@geist/contracts";
 import type { DisplayBrandId } from "@geist/tokens";
-import { getRequiredThemeTokenValue } from "../theme";
+import { getRequiredThemeTokenValue, tokenValueToRem } from "../theme";
 import {
   SegmentButton,
   type SegmentButtonPreviewState,
@@ -88,7 +88,7 @@ function resolveSegmentedControlBindingValue(
 }
 
 function toPx(value: string) {
-  return /^-?\d+(\.\d+)?$/.test(value) ? `${value}px` : value;
+  return tokenValueToRem(value);
 }
 
 function getFirstEnabledItemValue(items: SegmentedControlItem[], disabled: boolean) {

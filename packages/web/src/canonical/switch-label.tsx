@@ -1,9 +1,8 @@
-import type { CSSProperties, ReactNode } from "react";
-import { useId } from "react";
+import { type CSSProperties, type ReactNode, useId, useInsertionEffect } from "react";
 import { designSystemRegistry } from "@geist/contracts";
-import type { DisplayBrandId } from "@geist/tokens";
+import { type DisplayBrandId, normalizeBrandId } from "@geist/tokens";
 import { Switch, type SwitchProps, type SwitchSize } from "./switch";
-import { getRequiredThemeTokenValue } from "../theme";
+import { ensureStyleSheet, joinClassNames, runtimeTokenVar, runtimeTokenVarPx, toCssRule } from "./runtime-styles";
 
 export const canonicalSwitchLabelWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.switchLabel"
@@ -11,11 +10,11 @@ export const canonicalSwitchLabelWebContract = designSystemRegistry.components.f
 
 export type SwitchLabelSize = SwitchSize;
 
-type SwitchLabelTypography = {
-  fontSize: number;
-  letterSpacing: number;
-  lineHeight: number;
-};
+const SWITCH_LABEL_ROOT_CLASS = "geist-switch-label";
+const SWITCH_LABEL_CONTENT_CLASS = "geist-switch-label__content";
+const SWITCH_LABEL_TEXT_CLASS = "geist-switch-label__text";
+const SWITCH_LABEL_DESCRIPTION_CLASS = "geist-switch-label__description";
+const SWITCH_LABEL_STYLESHEET_ID = "geist-switch-label-styles";
 
 export interface SwitchLabelProps extends Omit<SwitchProps, "className" | "size" | "style"> {
   brand?: DisplayBrandId;
@@ -30,40 +29,72 @@ function getSizeKey(size: SwitchLabelSize) {
   return size === "Small" ? "sm" : "default";
 }
 
-function getTypography(brand: DisplayBrandId, path: string): SwitchLabelTypography {
-  return {
-    fontSize: Number(getRequiredThemeTokenValue(brand, `${path}.fontSize`)),
-    letterSpacing: Number(getRequiredThemeTokenValue(brand, `${path}.letterSpacing`)),
-    lineHeight: Number(getRequiredThemeTokenValue(brand, `${path}.lineHeight`))
-  };
-}
-
-function makeTypographyStyles({
-  brand,
-  color,
-  fontWeightPath,
-  typography
-}: {
-  brand: DisplayBrandId;
-  color: string;
-  fontWeightPath: string;
-  typography: SwitchLabelTypography;
-}): CSSProperties {
-  return {
-    color,
-    fontFamily: `${String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"))}, sans-serif`,
-    fontSize: typography.fontSize,
-    fontWeight: Number(getRequiredThemeTokenValue(brand, fontWeightPath)),
-    letterSpacing: typography.letterSpacing,
-    lineHeight: `${typography.lineHeight}px`,
-    margin: 0
-  };
-}
-
 function joinIds(...values: Array<string | undefined>) {
   const joined = values.filter(Boolean).join(" ");
   return joined.length > 0 ? joined : undefined;
 }
+
+const SWITCH_LABEL_STYLESHEET = [
+  toCssRule(`.${SWITCH_LABEL_ROOT_CLASS}`, {
+    "align-items": "flex-start",
+    display: "flex",
+    gap: runtimeTokenVarPx("component.switchLabel.layout.gap"),
+    "max-width": "100%"
+  }),
+  toCssRule(`.${SWITCH_LABEL_CONTENT_CLASS}`, {
+    cursor: "pointer",
+    display: "flex",
+    "flex": "1 1 auto",
+    "flex-direction": "column",
+    "max-width": "100%",
+    "min-width": "0",
+    "padding-inline": runtimeTokenVarPx("component.switchLabel.layout.contentPaddingInline")
+  }),
+  toCssRule(`.${SWITCH_LABEL_ROOT_CLASS}[data-disabled="true"] .${SWITCH_LABEL_CONTENT_CLASS}`, {
+    cursor: "not-allowed"
+  }),
+  toCssRule(`.${SWITCH_LABEL_ROOT_CLASS}[data-has-description="true"] .${SWITCH_LABEL_CONTENT_CLASS}`, {
+    gap: runtimeTokenVarPx("component.switchLabel.size.sm.contentGap")
+  }),
+  toCssRule(`.${SWITCH_LABEL_TEXT_CLASS}`, {
+    "font-family": `${runtimeTokenVar("typography.fontFamily.sans")}, sans-serif`,
+    "font-weight": "500",
+    margin: "0"
+  }),
+  toCssRule(`.${SWITCH_LABEL_DESCRIPTION_CLASS}`, {
+    "font-family": `${runtimeTokenVar("typography.fontFamily.sans")}, sans-serif`,
+    "font-weight": "400",
+    margin: "0",
+    "max-width": "100%"
+  }),
+  ...(["default", "sm"] as const).flatMap((sizeKey) => [
+    toCssRule(`.${SWITCH_LABEL_ROOT_CLASS}[data-size="${sizeKey}"][data-has-description="true"] .${SWITCH_LABEL_CONTENT_CLASS}`, {
+      gap: runtimeTokenVarPx(`component.switchLabel.size.${sizeKey}.contentGap`)
+    }),
+    toCssRule(`.${SWITCH_LABEL_ROOT_CLASS}[data-size="${sizeKey}"] .${SWITCH_LABEL_TEXT_CLASS}`, {
+      "font-size": runtimeTokenVarPx(`component.switchLabel.typography.label.${sizeKey}.fontSize`),
+      "letter-spacing": runtimeTokenVarPx(`component.switchLabel.typography.label.${sizeKey}.letterSpacing`),
+      "line-height": runtimeTokenVarPx(`component.switchLabel.typography.label.${sizeKey}.lineHeight`)
+    }),
+    toCssRule(`.${SWITCH_LABEL_ROOT_CLASS}[data-size="${sizeKey}"] .${SWITCH_LABEL_DESCRIPTION_CLASS}`, {
+      "font-size": runtimeTokenVarPx(`component.switchLabel.typography.description.${sizeKey}.fontSize`),
+      "letter-spacing": runtimeTokenVarPx(`component.switchLabel.typography.description.${sizeKey}.letterSpacing`),
+      "line-height": runtimeTokenVarPx(`component.switchLabel.typography.description.${sizeKey}.lineHeight`)
+    })
+  ]),
+  toCssRule(`.${SWITCH_LABEL_ROOT_CLASS}[data-disabled="false"] .${SWITCH_LABEL_TEXT_CLASS}`, {
+    color: runtimeTokenVar("component.switchLabel.color.label.default")
+  }),
+  toCssRule(`.${SWITCH_LABEL_ROOT_CLASS}[data-disabled="false"] .${SWITCH_LABEL_DESCRIPTION_CLASS}`, {
+    color: runtimeTokenVar("component.switchLabel.color.description.default")
+  }),
+  toCssRule(`.${SWITCH_LABEL_ROOT_CLASS}[data-disabled="true"] .${SWITCH_LABEL_TEXT_CLASS}`, {
+    color: runtimeTokenVar("component.switchLabel.color.label.disabled")
+  }),
+  toCssRule(`.${SWITCH_LABEL_ROOT_CLASS}[data-disabled="true"] .${SWITCH_LABEL_DESCRIPTION_CLASS}`, {
+    color: runtimeTokenVar("component.switchLabel.color.description.disabled")
+  })
+].join("");
 
 export function SwitchLabel({
   brand = "Cars24",
@@ -81,60 +112,22 @@ export function SwitchLabel({
   const sizeKey = getSizeKey(size);
   const labelId = `${resolvedId}-label`;
   const descriptionId = description ? `${resolvedId}-description` : undefined;
-  const layoutGap = Number(getRequiredThemeTokenValue(brand, "component.switchLabel.layout.gap"));
-  const contentPaddingInline = Number(
-    getRequiredThemeTokenValue(brand, "component.switchLabel.layout.contentPaddingInline")
-  );
-  const contentGap = Number(
-    getRequiredThemeTokenValue(brand, `component.switchLabel.size.${sizeKey}.contentGap`)
-  );
-  const labelTypography = getTypography(brand, `component.switchLabel.typography.label.${sizeKey}`);
-  const descriptionTypography = getTypography(
-    brand,
-    `component.switchLabel.typography.description.${sizeKey}`
-  );
-  const labelColor = String(
-    getRequiredThemeTokenValue(
-      brand,
-      disabled ? "component.switchLabel.color.label.disabled" : "component.switchLabel.color.label.default"
-    )
-  );
-  const descriptionColor = String(
-    getRequiredThemeTokenValue(
-      brand,
-      disabled
-        ? "component.switchLabel.color.description.disabled"
-        : "component.switchLabel.color.description.default"
-    )
-  );
-  const labelStyles = makeTypographyStyles({
-    brand,
-    color: labelColor,
-    fontWeightPath: "typography.fontWeight.medium",
-    typography: labelTypography
-  });
-  const descriptionStyles = {
-    ...makeTypographyStyles({
-      brand,
-      color: descriptionColor,
-      fontWeightPath: "typography.fontWeight.regular",
-      typography: descriptionTypography
-    }),
-    maxWidth: "100%"
-  } satisfies CSSProperties;
   const ariaDescribedBy = joinIds(descriptionId, rest["aria-describedby"]);
   const ariaLabelledBy = joinIds(labelId, rest["aria-labelledby"]);
+  const repoBrand = normalizeBrandId(brand);
+
+  useInsertionEffect(() => {
+    ensureStyleSheet(SWITCH_LABEL_STYLESHEET_ID, SWITCH_LABEL_STYLESHEET);
+  }, []);
 
   return (
     <div
-      className={className}
-      style={{
-        alignItems: "flex-start",
-        display: "flex",
-        gap: layoutGap,
-        maxWidth: "100%",
-        ...style
-      }}
+      className={joinClassNames(SWITCH_LABEL_ROOT_CLASS, className)}
+      data-brand={repoBrand}
+      data-disabled={String(disabled)}
+      data-has-description={String(Boolean(description))}
+      data-size={sizeKey}
+      style={style}
     >
       <Switch
         {...rest}
@@ -146,24 +139,12 @@ export function SwitchLabel({
         size={size}
       />
 
-      <label
-        htmlFor={resolvedId}
-        style={{
-          cursor: disabled ? "not-allowed" : "pointer",
-          display: "flex",
-          flex: "1 1 auto",
-          flexDirection: "column",
-          gap: description ? contentGap : 0,
-          maxWidth: "100%",
-          minWidth: 0,
-          paddingInline: contentPaddingInline
-        }}
-      >
-        <span id={labelId} style={labelStyles}>
+      <label className={SWITCH_LABEL_CONTENT_CLASS} htmlFor={resolvedId}>
+        <span className={SWITCH_LABEL_TEXT_CLASS} id={labelId}>
           {label}
         </span>
         {description ? (
-          <p id={descriptionId} style={descriptionStyles}>
+          <p className={SWITCH_LABEL_DESCRIPTION_CLASS} id={descriptionId}>
             {description}
           </p>
         ) : null}

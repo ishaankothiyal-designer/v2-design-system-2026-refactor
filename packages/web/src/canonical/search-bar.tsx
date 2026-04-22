@@ -10,7 +10,7 @@ import {
 } from "react";
 import type { DisplayBrandId } from "@geist/tokens";
 import { Icon } from "./icon";
-import { getRequiredThemeTokenValue, getThemeTokenValue } from "../theme";
+import { getRequiredThemeTokenValue, getThemeTokenValue, pxToRem } from "../theme";
 
 export type SearchBarSize = "Small" | "Large";
 export type SearchBarColor = "Solid White" | "Blue" | "Inverse";
@@ -276,10 +276,10 @@ function makeTypographyStyles({
   return {
     color,
     fontFamily: `${String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"))}, sans-serif`,
-    fontSize: `${typography.fontSize}px`,
+    fontSize: pxToRem(typography.fontSize),
     fontWeight: Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.regular")),
-    letterSpacing: `${typography.letterSpacing}px`,
-    lineHeight: `${typography.lineHeight}px`
+    letterSpacing: pxToRem(typography.letterSpacing),
+    lineHeight: pxToRem(typography.lineHeight)
   };
 }
 
@@ -360,16 +360,16 @@ export function SearchBar({
   const rootStyles: CSSProperties = {
     alignItems: "center",
     background: colors.background,
-    border: `${sizeTokens.borderWidth}px solid ${colors.border}`,
-    borderRadius: `${sizeTokens.radius}px`,
+    border: `${pxToRem(sizeTokens.borderWidth)} solid ${colors.border}`,
+    borderRadius: pxToRem(sizeTokens.radius),
     boxShadow: colors.shadow,
     boxSizing: "border-box",
     display: "flex",
-    gap: `${sizeTokens.fieldGap}px`,
-    height: `${sizeTokens.height}px`,
+    gap: pxToRem(sizeTokens.fieldGap),
+    height: pxToRem(sizeTokens.height),
     minWidth: 0,
     overflow: "hidden",
-    padding: `${sizeTokens.paddingBlock}px ${sizeTokens.paddingInline}px`,
+    padding: `${pxToRem(sizeTokens.paddingBlock)} ${pxToRem(sizeTokens.paddingInline)}`,
     width: "100%",
     ...style
   };
@@ -397,7 +397,7 @@ export function SearchBar({
     alignItems: "center",
     display: "flex",
     flex: "1 1 auto",
-    gap: resolvedShowBackButton ? `${sizeTokens.activeContentGap}px` : "0px",
+    gap: resolvedShowBackButton ? pxToRem(sizeTokens.activeContentGap) : "0px",
     minWidth: 0
   };
 
@@ -547,8 +547,8 @@ export function SearchBar({
                   background: colors.foreground,
                   display: "inline-block",
                   flex: "0 0 auto",
-                  height: `${typography.lineHeight}px`,
-                  width: "1px"
+                  height: pxToRem(typography.lineHeight),
+                  width: pxToRem(1)
                 }}
               />
             ) : null}

@@ -2,7 +2,7 @@ import { type CSSProperties, useState } from "react";
 import type { BrandId, DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
 import { Icon } from "./icon";
-import { getRequiredThemeTokenValue } from "../theme";
+import { getRequiredThemeTokenValue, pxToRem, tokenValueToRem } from "../theme";
 
 export const canonicalBannerWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.banner"
@@ -77,7 +77,9 @@ function resolveBannerBindingValue(
     token.startsWith("icon.") ||
     token.startsWith("typography.")
   ) {
-    return String(getRequiredThemeTokenValue(brand, token));
+    return token.startsWith("color.")
+      ? String(getRequiredThemeTokenValue(brand, token))
+      : tokenValueToRem(getRequiredThemeTokenValue(brand, token));
   }
 
   if (token === "drop-shadow/xl") {
@@ -204,7 +206,7 @@ export function Banner({
   const isDark = theme === "Dark";
   const rootWidth = resolveBannerBindingValue(brand, "container.width", "328px");
   const rootGap = resolveBannerBindingValue(brand, "container.gap", "0px");
-  const rootRadius = `${Number(getRequiredThemeTokenValue(brand, "radius.alt.lg"))}px`;
+  const rootRadius = pxToRem(Number(getRequiredThemeTokenValue(brand, "radius.alt.lg")));
   const rootShadow = resolveBannerBindingValue(brand, "container.shadow", BANNER_SHADOW_FALLBACK);
   const contentGap = icon
     ? resolveBannerBindingValue(brand, "content.gap", "8px")
@@ -213,7 +215,7 @@ export function Banner({
   const contentPaddingBlock = resolveBannerBindingValue(brand, "content.paddingBlock", "16px");
   const leadingIconSize = resolveBannerBindingValue(brand, "icon.leading.size", "20px");
   const actionIconSize = resolveBannerBindingValue(brand, "icon.action.size", "24px");
-  const actionTextRadius = `${Number(getRequiredThemeTokenValue(brand, "radius.pill"))}px`;
+  const actionTextRadius = pxToRem(Number(getRequiredThemeTokenValue(brand, "radius.pill")));
   const actionTextPaddingInline = resolveBannerBindingValue(brand, "action.text.paddingInline", "12px");
   const actionTextPaddingBlock = resolveBannerBindingValue(brand, "action.text.paddingBlock", "6px");
 
@@ -245,7 +247,7 @@ export function Banner({
     flexDirection: "column",
     flex: "1 0 0",
     minWidth: 0,
-    gap: heading ? "2px" : 0
+    gap: heading ? pxToRem(2) : 0
   };
 
   const actionAreaStyles: CSSProperties = {
@@ -253,25 +255,25 @@ export function Banner({
     flexDirection: actionType === "Text button" ? "column" : "row",
     justifyContent: "center",
     alignItems: actionType === "Text button" ? "flex-end" : "center",
-    paddingRight: "12px",
-    paddingLeft: "0px",
+    paddingRight: pxToRem(12),
+    paddingLeft: pxToRem(0),
     paddingTop:
       actionType === "Icon button"
         ? heading
-          ? "20px"
-          : "14px"
+          ? pxToRem(20)
+          : pxToRem(14)
         : heading
-          ? "16px"
-          : "10px",
+          ? pxToRem(16)
+          : pxToRem(10),
     paddingBottom:
       actionType === "Icon button"
         ? heading
-          ? "20px"
-          : "14px"
+          ? pxToRem(20)
+          : pxToRem(14)
         : heading
-          ? "16px"
-          : "10px",
-    width: actionType === "Text button" ? 68 : undefined,
+          ? pxToRem(16)
+          : pxToRem(10),
+    width: actionType === "Text button" ? pxToRem(68) : undefined,
     flexShrink: 0
   };
 
@@ -279,9 +281,9 @@ export function Banner({
     display: "inline-flex",
     alignItems: "center",
     justifyContent: "center",
-    gap: "4px",
-    height: 28,
-    maxHeight: 28,
+    gap: pxToRem(4),
+    height: pxToRem(28),
+    maxHeight: pxToRem(28),
     border: 0,
     borderRadius: actionTextRadius,
     padding: `${actionTextPaddingBlock} ${actionTextPaddingInline}`,
@@ -289,8 +291,8 @@ export function Banner({
     color: tone.actionText,
     cursor: "pointer",
     fontFamily: `${fontFamily}, sans-serif`,
-    fontSize: "12px",
-    lineHeight: "16px",
+    fontSize: pxToRem(12),
+    lineHeight: pxToRem(16),
     fontWeight: medium,
     boxShadow: "none"
   };
@@ -304,7 +306,7 @@ export function Banner({
     background: "transparent",
     color: tone.actionIcon,
     cursor: "pointer",
-    borderRadius: `${Number(getRequiredThemeTokenValue(brand, "radius.alt.md"))}px`,
+    borderRadius: pxToRem(Number(getRequiredThemeTokenValue(brand, "radius.alt.md"))),
     boxShadow: "none"
   };
 
@@ -333,8 +335,8 @@ export function Banner({
                   margin: 0,
                   color: tone.titleColor,
                   fontFamily: `${fontFamily}, sans-serif`,
-                  fontSize: "16px",
-                  lineHeight: "20px",
+                  fontSize: pxToRem(16),
+                  lineHeight: pxToRem(20),
                   fontWeight: medium
                 }}
               >
@@ -345,8 +347,8 @@ export function Banner({
                   margin: 0,
                   color: tone.descriptionColor,
                   fontFamily: `${fontFamily}, sans-serif`,
-                  fontSize: "12px",
-                  lineHeight: "18px",
+                  fontSize: pxToRem(12),
+                  lineHeight: pxToRem(18),
                   fontWeight: regular
                 }}
               >
@@ -359,8 +361,8 @@ export function Banner({
                 margin: 0,
                 color: tone.titleColor,
                 fontFamily: `${fontFamily}, sans-serif`,
-                fontSize: "14px",
-                lineHeight: "20px",
+                fontSize: pxToRem(14),
+                lineHeight: pxToRem(20),
                 fontWeight: regular
               }}
             >

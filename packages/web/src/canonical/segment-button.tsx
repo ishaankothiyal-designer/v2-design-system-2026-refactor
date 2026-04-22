@@ -12,7 +12,7 @@ import {
 import type { IconName } from "@geist/icons";
 import { designSystemRegistry } from "@geist/contracts";
 import type { DisplayBrandId } from "@geist/tokens";
-import { getRequiredThemeTokenValue } from "../theme";
+import { getRequiredThemeTokenValue, tokenValueToRem } from "../theme";
 import { getTapFeedbackStyles } from "./press-feedback";
 import { Icon } from "./icon";
 
@@ -90,7 +90,7 @@ function resolveSegmentButtonBindingValue(brand: DisplayBrandId, slot: string, f
 }
 
 function toPx(value: string) {
-  return /^-?\d+(\.\d+)?$/.test(value) ? `${value}px` : value;
+  return tokenValueToRem(value);
 }
 
 function renderDecorativeIcon({

@@ -1,9 +1,15 @@
-import type { ButtonHTMLAttributes, CSSProperties, HTMLAttributes, ReactNode } from "react";
-import { getRequiredThemeTokenValue } from "../theme";
+import {
+  type ButtonHTMLAttributes,
+  type HTMLAttributes,
+  type ReactNode,
+  useInsertionEffect
+} from "react";
+import { getRequiredThemeTokenValue, tokenValueToRem } from "../theme";
 import { Avatar, type AvatarAppearance } from "./avatar";
 import { EliteBadge, type EliteBadgeName } from "./elite-badge";
 import { Icon } from "./icon";
 import { IconButton, type IconButtonProps } from "./icon-button";
+import { ensureStyleSheet, joinClassNames, toCssRule } from "./runtime-styles";
 import { SearchBar, type SearchBarProps } from "./search-bar";
 
 export type EliteHeaderBrand = "Cars24";
@@ -45,6 +51,22 @@ export interface EliteHeaderProps extends Omit<HTMLAttributes<HTMLDivElement>, "
   onTitleClick?: ButtonHTMLAttributes<HTMLButtonElement>["onClick"];
 }
 
+const ELITE_HEADER_ROOT_CLASS = "geist-elite-header";
+const ELITE_HEADER_BAR_CLASS = "geist-elite-header__bar";
+const ELITE_HEADER_SEARCH_SLOT_CLASS = "geist-elite-header__search-slot";
+const ELITE_HEADER_TITLE_SLOT_CLASS = "geist-elite-header__title-slot";
+const ELITE_HEADER_TITLE_CONTROL_CLASS = "geist-elite-header__title-control";
+const ELITE_HEADER_TITLE_ROW_CLASS = "geist-elite-header__title-row";
+const ELITE_HEADER_TITLE_TEXT_CLASS = "geist-elite-header__title-text";
+const ELITE_HEADER_TITLE_ICON_CLASS = "geist-elite-header__title-icon";
+const ELITE_HEADER_SUBTITLE_CLASS = "geist-elite-header__subtitle";
+const ELITE_HEADER_TRAILING_CLASS = "geist-elite-header__trailing";
+const ELITE_HEADER_AVATAR_TRIGGER_CLASS = "geist-elite-header__avatar-trigger";
+const ELITE_HEADER_STYLESHEET_ID = "geist-elite-header-styles";
+
+const ELITE_HEADER_BRANDS = ["Cars24"] as const;
+const ELITE_HEADER_VARIANTS = ["Light", "Dark"] as const;
+
 const defaultLeadingAction: EliteHeaderIconAction = {
   icon: <Icon name="placeholder-generate-outline" decorative />,
   label: "Open actions"
@@ -66,7 +88,7 @@ const defaultAvatarAction: EliteHeaderIconAction = {
 };
 
 function toPx(value: number | string) {
-  return typeof value === "number" ? `${value}px` : /^\d+(\.\d+)?$/.test(value) ? `${value}px` : value;
+  return tokenValueToRem(value);
 }
 
 function isInverseVariant(variant: EliteHeaderVariant) {
@@ -107,6 +129,143 @@ function resolveSearchColor(variant: EliteHeaderVariant): "Inverse" | "Solid Whi
   return variant === "Dark" ? "Inverse" : "Solid White";
 }
 
+function buildEliteHeaderRules(brand: EliteHeaderBrand, variant: EliteHeaderVariant) {
+  const selector = `.${ELITE_HEADER_ROOT_CLASS}[data-brand="${brand}"][data-variant="${variant.toLowerCase()}"]`;
+  const titleFontFamily = String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"));
+
+  return toCssRule(selector, {
+    "--elite-header-action-control-extent": toPx(
+      getRequiredThemeTokenValue(brand, "component.iconButton.size.sm.boxSize")
+    ),
+    "--elite-header-background": resolveBackground(brand, variant),
+    "--elite-header-border-color": resolveDividerColor(brand, variant),
+    "--elite-header-cluster-gap": toPx(getRequiredThemeTokenValue(brand, "component.sectionHeader.size.actionGap")),
+    "--elite-header-control-gap": toPx(getRequiredThemeTokenValue(brand, "spacing.2")),
+    "--elite-header-horizontal-padding": toPx(getRequiredThemeTokenValue(brand, "spacing.3")),
+    "--elite-header-subtitle-color": resolveSubtitleColor(brand, variant),
+    "--elite-header-subtitle-font-family": `${titleFontFamily}, sans-serif`,
+    "--elite-header-subtitle-font-size": toPx(getRequiredThemeTokenValue(brand, "typography.fontSize.xs")),
+    "--elite-header-subtitle-font-weight": String(
+      getRequiredThemeTokenValue(brand, "typography.fontWeight.regular")
+    ),
+    "--elite-header-subtitle-line-height": toPx(getRequiredThemeTokenValue(brand, "typography.lineHeight.xs")),
+    "--elite-header-title-color": resolveTitleColor(brand, variant),
+    "--elite-header-title-font-family": `${titleFontFamily}, sans-serif`,
+    "--elite-header-title-font-size": toPx(getRequiredThemeTokenValue(brand, "typography.fontSize.sm")),
+    "--elite-header-title-font-weight": String(
+      getRequiredThemeTokenValue(brand, "typography.fontWeight.semibold")
+    ),
+    "--elite-header-title-gap": toPx(getRequiredThemeTokenValue(brand, "spacing.1")),
+    "--elite-header-title-line-height": toPx(getRequiredThemeTokenValue(brand, "typography.lineHeight.sm"))
+  });
+}
+
+const ELITE_HEADER_STYLESHEET = [
+  toCssRule(`.${ELITE_HEADER_ROOT_CLASS}`, {
+    background: "var(--elite-header-background)",
+    "border-bottom": "1px solid var(--elite-header-border-color)",
+    "box-sizing": "border-box",
+    overflow: "hidden",
+    padding: "0 var(--elite-header-horizontal-padding)",
+    width: "100%"
+  }),
+  toCssRule(`.${ELITE_HEADER_BAR_CLASS}`, {
+    "align-items": "center",
+    display: "flex",
+    gap: "var(--elite-header-control-gap)",
+    height: "56px",
+    "min-width": "0",
+    width: "100%"
+  }),
+  toCssRule(`.${ELITE_HEADER_SEARCH_SLOT_CLASS}`, {
+    flex: "1",
+    "min-width": "0"
+  }),
+  toCssRule(`.${ELITE_HEADER_TITLE_SLOT_CLASS}`, {
+    display: "grid",
+    flex: "1",
+    gap: "0",
+    "min-width": "0"
+  }),
+  toCssRule(`.${ELITE_HEADER_TITLE_CONTROL_CLASS}`, {
+    "align-items": "center",
+    appearance: "none",
+    background: "transparent",
+    border: "none",
+    cursor: "pointer",
+    display: "inline-flex",
+    "justify-content": "flex-start",
+    margin: "0",
+    "max-width": "100%",
+    "min-width": "0",
+    padding: "0"
+  }),
+  toCssRule(`span.${ELITE_HEADER_TITLE_CONTROL_CLASS}`, {
+    cursor: "default"
+  }),
+  toCssRule(`.${ELITE_HEADER_TITLE_ROW_CLASS}`, {
+    "align-items": "center",
+    display: "inline-flex",
+    gap: "var(--elite-header-title-gap)",
+    "max-width": "100%",
+    "min-width": "0"
+  }),
+  toCssRule(`.${ELITE_HEADER_TITLE_TEXT_CLASS}`, {
+    color: "var(--elite-header-title-color)",
+    "font-family": "var(--elite-header-title-font-family)",
+    "font-size": "var(--elite-header-title-font-size)",
+    "font-weight": "var(--elite-header-title-font-weight)",
+    "letter-spacing": "0",
+    "line-height": "var(--elite-header-title-line-height)",
+    overflow: "hidden",
+    "text-overflow": "ellipsis",
+    "white-space": "nowrap"
+  }),
+  toCssRule(`.${ELITE_HEADER_TITLE_ICON_CLASS}`, {
+    "align-items": "center",
+    color: "var(--elite-header-title-color)",
+    display: "inline-flex",
+    "flex-shrink": "0",
+    "line-height": "0"
+  }),
+  toCssRule(`.${ELITE_HEADER_SUBTITLE_CLASS}`, {
+    color: "var(--elite-header-subtitle-color)",
+    "font-family": "var(--elite-header-subtitle-font-family)",
+    "font-size": "var(--elite-header-subtitle-font-size)",
+    "font-weight": "var(--elite-header-subtitle-font-weight)",
+    "letter-spacing": "0",
+    "line-height": "var(--elite-header-subtitle-line-height)",
+    margin: "0",
+    overflow: "hidden",
+    "text-overflow": "ellipsis",
+    "white-space": "nowrap"
+  }),
+  toCssRule(`.${ELITE_HEADER_TRAILING_CLASS}`, {
+    "align-items": "center",
+    display: "flex",
+    "flex-shrink": "0",
+    gap: "var(--elite-header-cluster-gap)",
+    "justify-content": "flex-end"
+  }),
+  toCssRule(`.${ELITE_HEADER_AVATAR_TRIGGER_CLASS}`, {
+    "align-items": "center",
+    appearance: "none",
+    background: "transparent",
+    border: "none",
+    "border-radius": "50%",
+    display: "inline-flex",
+    "flex-shrink": "0",
+    height: "var(--elite-header-action-control-extent)",
+    "justify-content": "center",
+    padding: "0",
+    width: "var(--elite-header-action-control-extent)"
+  }),
+  toCssRule(`button.${ELITE_HEADER_AVATAR_TRIGGER_CLASS}`, {
+    cursor: "pointer"
+  }),
+  ...ELITE_HEADER_BRANDS.flatMap((brand) => ELITE_HEADER_VARIANTS.map((variant) => buildEliteHeaderRules(brand, variant)))
+].join("");
+
 /**
  * Premium header composition for Elite surfaces, with dedicated search and badge states.
  */
@@ -141,86 +300,41 @@ export function EliteHeader({
   style,
   ...rest
 }: EliteHeaderProps) {
+  useInsertionEffect(() => {
+    ensureStyleSheet(ELITE_HEADER_STYLESHEET_ID, ELITE_HEADER_STYLESHEET);
+  }, []);
+
   const inverse = isInverseVariant(variant);
-  const background = resolveBackground(brand, variant);
-  const dividerColor = resolveDividerColor(brand, variant);
-  const titleColor = resolveTitleColor(brand, variant);
-  const subtitleColor = resolveSubtitleColor(brand, variant);
   const searchColor = resolveSearchColor(variant);
-  const actionControlExtent = toPx(getRequiredThemeTokenValue(brand, "component.iconButton.size.sm.boxSize"));
-  const horizontalPadding = toPx(getRequiredThemeTokenValue(brand, "spacing.3"));
-  const clusterGap = toPx(getRequiredThemeTokenValue(brand, "component.sectionHeader.size.actionGap"));
-  const controlGap = toPx(getRequiredThemeTokenValue(brand, "spacing.2"));
-  const titleGap = toPx(getRequiredThemeTokenValue(brand, "spacing.1"));
-  const titleFontFamily = String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"));
-  const titleFontSize = toPx(getRequiredThemeTokenValue(brand, "typography.fontSize.sm"));
-  const titleLineHeight = toPx(getRequiredThemeTokenValue(brand, "typography.lineHeight.sm"));
-  const titleFontWeight = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.semibold"));
-  const subtitleFontSize = toPx(getRequiredThemeTokenValue(brand, "typography.fontSize.xs"));
-  const subtitleLineHeight = toPx(getRequiredThemeTokenValue(brand, "typography.lineHeight.xs"));
-  const subtitleFontWeight = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.regular"));
   const resolvedBadgeName: EliteBadgeName =
     badgeLabel.trim().toLowerCase() === "all cars" ? "All cars" : badgeName;
-  const resolvedActions = [
-    ...(showAction1 ? [action1] : []),
-    ...(showAction2 ? [action2] : [])
-  ];
+  const resolvedActions = [...(showAction1 ? [action1] : []), ...(showAction2 ? [action2] : [])];
 
-  const titleRowNode =
-    showTitle ? (
-      <span
-        style={{
-          alignItems: "center",
-          display: "inline-flex",
-          gap: titleGap,
-          maxWidth: "100%"
-        }}
-      >
-        <span
-          style={{
-            color: titleColor,
-            fontFamily: `${titleFontFamily}, sans-serif`,
-            fontSize: titleFontSize,
-            fontWeight: titleFontWeight,
-            letterSpacing: 0,
-            lineHeight: titleLineHeight,
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap"
-          }}
-        >
-          {title}
+  const titleRowNode = showTitle ? (
+    <span className={ELITE_HEADER_TITLE_ROW_CLASS}>
+      <span className={ELITE_HEADER_TITLE_TEXT_CLASS}>{title}</span>
+
+      {showTitleChevron ? (
+        <span className={ELITE_HEADER_TITLE_ICON_CLASS}>
+          <Icon decorative name="chevron-down-small-outline" size="sm" style={{ color: "inherit" }} />
         </span>
+      ) : null}
+    </span>
+  ) : null;
 
-        {showTitleChevron ? (
-          <Icon decorative name="chevron-down-small-outline" size="sm" style={{ color: titleColor }} />
-        ) : null}
-      </span>
-    ) : null;
-
-  const titleRow = onTitleClick ? (
-    <button
-      aria-label={title}
-      onClick={onTitleClick}
-      style={{
-        alignItems: "center",
-        appearance: "none",
-        background: "transparent",
-        border: "none",
-        cursor: "pointer",
-        display: "inline-flex",
-        justifyContent: "flex-start",
-        margin: 0,
-        minWidth: 0,
-        padding: 0
-      }}
-      type="button"
-    >
-      {titleRowNode}
-    </button>
-  ) : (
-    titleRowNode
-  );
+  const titleRow =
+    onTitleClick && titleRowNode ? (
+      <button
+        aria-label={title}
+        className={ELITE_HEADER_TITLE_CONTROL_CLASS}
+        onClick={onTitleClick}
+        type="button"
+      >
+        {titleRowNode}
+      </button>
+    ) : (
+      <span className={ELITE_HEADER_TITLE_CONTROL_CLASS}>{titleRowNode}</span>
+    );
 
   const avatarNode = showAvatar ? (
     (() => {
@@ -239,22 +353,9 @@ export function EliteHeader({
       return avatarAction.onClick ? (
         <button
           aria-label={avatarAction["aria-label"] ?? avatarAction.label}
+          className={ELITE_HEADER_AVATAR_TRIGGER_CLASS}
           onClick={avatarAction.onClick}
-          style={{
-            alignItems: "center",
-            appearance: "none",
-            background: "transparent",
-            border: "none",
-            borderRadius: "50%",
-            cursor: "pointer",
-            display: "inline-flex",
-            flexShrink: 0,
-            height: actionControlExtent,
-            justifyContent: "center",
-            padding: 0,
-            width: actionControlExtent,
-            ...(avatarAction.style ?? {})
-          }}
+          style={avatarAction.style}
           type="button"
         >
           <Avatar {...avatarProps} />
@@ -262,16 +363,9 @@ export function EliteHeader({
       ) : (
         <span
           aria-label={avatarAction["aria-label"] ?? avatarAction.label}
+          className={ELITE_HEADER_AVATAR_TRIGGER_CLASS}
           role="img"
-          style={{
-            alignItems: "center",
-            display: "inline-flex",
-            flexShrink: 0,
-            height: actionControlExtent,
-            justifyContent: "center",
-            width: actionControlExtent,
-            ...(avatarAction.style ?? {})
-          }}
+          style={avatarAction.style}
         >
           <Avatar {...avatarProps} />
         </span>
@@ -282,27 +376,13 @@ export function EliteHeader({
   return (
     <div
       {...rest}
-      className={className}
-      style={{
-        background,
-        borderBottom: `1px solid ${dividerColor}`,
-        boxSizing: "border-box",
-        overflow: "hidden",
-        padding: `0 ${horizontalPadding}`,
-        width: "100%",
-        ...style
-      }}
+      className={joinClassNames(ELITE_HEADER_ROOT_CLASS, className)}
+      data-brand={brand}
+      data-type={type.toLowerCase()}
+      data-variant={variant.toLowerCase()}
+      style={style}
     >
-      <div
-        style={{
-          alignItems: "center",
-          display: "flex",
-          gap: controlGap,
-          height: "56px",
-          minWidth: 0,
-          width: "100%"
-        }}
-      >
+      <div className={ELITE_HEADER_BAR_CLASS}>
         {showLeadingAction ? (
           <IconButton
             {...leadingAction}
@@ -312,69 +392,30 @@ export function EliteHeader({
             onDark={inverse}
             shape="Round"
             size="Small"
-            style={{
-              height: actionControlExtent,
-              width: actionControlExtent,
-              ...(leadingAction.style ?? {})
-            }}
+            style={leadingAction.style}
             styleVariant="Subtle - Black"
           />
         ) : null}
 
         {type === "Search" ? (
-          <SearchBar
-            {...searchBarProps}
-            brand={brand}
-            color={searchColor}
-            placeholder={searchPlaceholder}
-            size="Small"
-            style={{
-              flex: 1,
-              minWidth: 0,
-              ...(searchBarProps?.style ?? {})
-            }}
-          />
+          <div className={ELITE_HEADER_SEARCH_SLOT_CLASS}>
+            <SearchBar
+              {...searchBarProps}
+              brand={brand}
+              color={searchColor}
+              placeholder={searchPlaceholder}
+              size="Small"
+              style={searchBarProps?.style}
+            />
+          </div>
         ) : (
           <>
-            <div
-              style={{
-                display: "grid",
-                flex: 1,
-                gap: 0,
-                minWidth: 0
-              }}
-            >
+            <div className={ELITE_HEADER_TITLE_SLOT_CLASS}>
               {titleRow}
-
-              {showSubtitle ? (
-                <p
-                  style={{
-                    color: subtitleColor,
-                    fontFamily: `${titleFontFamily}, sans-serif`,
-                    fontSize: subtitleFontSize,
-                    fontWeight: subtitleFontWeight,
-                    letterSpacing: 0,
-                    lineHeight: subtitleLineHeight,
-                    margin: 0,
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap"
-                  }}
-                >
-                  {subtitle}
-                </p>
-              ) : null}
+              {showSubtitle ? <p className={ELITE_HEADER_SUBTITLE_CLASS}>{subtitle}</p> : null}
             </div>
 
-            <div
-              style={{
-                alignItems: "center",
-                display: "flex",
-                flexShrink: 0,
-                gap: clusterGap,
-                justifyContent: "flex-end"
-              }}
-            >
+            <div className={ELITE_HEADER_TRAILING_CLASS}>
               {showBadge ? <EliteBadge badgeName={resolvedBadgeName} brand={brand} /> : null}
 
               {resolvedActions.map(({ icon, label, style: actionStyle, ...action }, index) => (
@@ -387,11 +428,7 @@ export function EliteHeader({
                   onDark={inverse}
                   shape="Round"
                   size="Small"
-                  style={{
-                    height: actionControlExtent,
-                    width: actionControlExtent,
-                    ...(actionStyle ?? {})
-                  }}
+                  style={actionStyle}
                   styleVariant="Subtle - Black"
                 />
               ))}

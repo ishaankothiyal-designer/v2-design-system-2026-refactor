@@ -1,20 +1,20 @@
 import {
   type ChangeEvent,
-  type CSSProperties,
   type FocusEvent,
   type InputHTMLAttributes,
   type MouseEvent as ReactMouseEvent,
   type ReactNode,
   useId,
+  useInsertionEffect,
   useState
 } from "react";
 import type { IconName } from "@geist/icons";
-import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
+import { type DisplayBrandId, normalizeBrandId } from "@geist/tokens";
 import { Icon } from "./icon";
 import { HelperText } from "./helper-text";
 import { Label } from "./label";
-import { getRequiredThemeTokenValue } from "../theme";
+import { ensureStyleSheet, joinClassNames, runtimeTokenVar, runtimeTokenVarPx, toCssRule } from "./runtime-styles";
 
 export const canonicalTextInputWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.textInput"
@@ -35,30 +35,18 @@ export type TextInputHelperTone = "Default" | "Error" | "Success";
 
 type FieldVisualState = "rest" | "hover" | "active" | "typed" | "error" | "success" | "disabled";
 
-type TextInputSizeTokens = {
-  affixBoxSize: number;
-  containerGap: number;
-  fieldGap: number;
-  fieldPaddingBlock: number;
-  fieldPaddingInline: number;
-  height: number;
-  helperGap: number;
-  labelPaddingInline: number;
-};
-
-type TextInputTypography = {
-  fontSize: number;
-  letterSpacing: number;
-  lineHeight: number;
-};
-
-type TextInputFieldColors = {
-  affix: string;
-  background: string;
-  border: string;
-  placeholder: string;
-  value: string;
-};
+const TEXT_INPUT_ROOT_CLASS = "geist-text-input";
+const TEXT_INPUT_LABEL_SLOT_CLASS = "geist-text-input__label-slot";
+const TEXT_INPUT_FIELD_CLASS = "geist-text-input__field";
+const TEXT_INPUT_AFFIX_CLASS = "geist-text-input__affix";
+const TEXT_INPUT_CONTROL_CLASS = "geist-text-input__control";
+const TEXT_INPUT_ELEMENT_CLASS = "geist-text-input__element";
+const TEXT_INPUT_PREVIEW_CLASS = "geist-text-input__preview";
+const TEXT_INPUT_PREVIEW_TEXT_CLASS = "geist-text-input__preview-text";
+const TEXT_INPUT_PREVIEW_CARET_CLASS = "geist-text-input__preview-caret";
+const TEXT_INPUT_STYLESHEET_ID = "geist-text-input-styles";
+const TEXT_INPUT_CARET_KEYFRAMES =
+  "@keyframes geist-text-input-caret-blink{0%,49%{opacity:1;}50%,100%{opacity:0;}}";
 
 function getSizeKey(size: TextInputSize) {
   return size === "Large" ? "lg" : "sm";
@@ -66,45 +54,6 @@ function getSizeKey(size: TextInputSize) {
 
 function getLabelSize(size: TextInputSize) {
   return size === "Large" ? "Large" : "Medium";
-}
-
-function getFieldRadius(brand: DisplayBrandId, size: TextInputSize) {
-  return Number(getRequiredThemeTokenValue(brand, size === "Large" ? "radius.alt.lg" : "radius.alt.md"));
-}
-
-function getSizeTokens(brand: DisplayBrandId, size: TextInputSize): TextInputSizeTokens {
-  const tokenPrefix = `component.textInput.size.${getSizeKey(size)}`;
-
-  return {
-    affixBoxSize: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.affixBoxSize`)),
-    containerGap: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.containerGap`)),
-    fieldGap: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.fieldGap`)),
-    fieldPaddingBlock: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.fieldPaddingBlock`)),
-    fieldPaddingInline: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.fieldPaddingInline`)),
-    height: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.height`)),
-    helperGap: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.helperGap`)),
-    labelPaddingInline: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.labelPaddingInline`))
-  };
-}
-
-function getTypography(brand: DisplayBrandId, path: string): TextInputTypography {
-  return {
-    fontSize: Number(getRequiredThemeTokenValue(brand, `${path}.fontSize`)),
-    letterSpacing: Number(getRequiredThemeTokenValue(brand, `${path}.letterSpacing`)),
-    lineHeight: Number(getRequiredThemeTokenValue(brand, `${path}.lineHeight`))
-  };
-}
-
-function getFieldColors(brand: DisplayBrandId, state: FieldVisualState): TextInputFieldColors {
-  const tokenPrefix = `component.textInput.color.field.${state}`;
-
-  return {
-    affix: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.affix`)),
-    background: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.background`)),
-    border: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.border`)),
-    placeholder: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.placeholder`)),
-    value: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.value`))
-  };
 }
 
 function resolveVisualState({
@@ -177,27 +126,145 @@ function resolveVisualState({
   return "rest";
 }
 
-function makeTypographyStyles({
-  brand,
-  color,
-  fontWeightPath,
-  typography
-}: {
-  brand: DisplayBrandId;
-  color: string;
-  fontWeightPath: string;
-  typography: TextInputTypography;
-}): CSSProperties {
-  return {
-    color,
-    fontFamily: `${String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"))}, sans-serif`,
-    fontSize: `${typography.fontSize}px`,
-    fontWeight: Number(getRequiredThemeTokenValue(brand, fontWeightPath)),
-    letterSpacing: `${typography.letterSpacing}px`,
-    lineHeight: `${typography.lineHeight}px`,
-    margin: 0
-  };
-}
+const TEXT_INPUT_STYLESHEET = [
+  TEXT_INPUT_CARET_KEYFRAMES,
+  toCssRule(`.${TEXT_INPUT_ROOT_CLASS}`, {
+    display: "grid",
+    width: "100%"
+  }),
+  toCssRule(`.${TEXT_INPUT_LABEL_SLOT_CLASS}`, {
+    display: "block",
+  }),
+  toCssRule(`.${TEXT_INPUT_FIELD_CLASS}`, {
+    "align-items": "center",
+    "box-sizing": "border-box",
+    display: "flex",
+    "min-width": "0",
+    width: "100%"
+  }),
+  toCssRule(`.${TEXT_INPUT_AFFIX_CLASS}`, {
+    "align-items": "center",
+    display: "inline-flex",
+    "flex": "0 0 auto",
+    "justify-content": "center",
+  }),
+  toCssRule(`.${TEXT_INPUT_CONTROL_CLASS}`, {
+    "align-items": "center",
+    display: "flex",
+    "flex": "1 1 auto",
+    "min-width": "0"
+  }),
+  toCssRule(`.${TEXT_INPUT_ELEMENT_CLASS}`, {
+    appearance: "none",
+    background: "transparent",
+    border: "none",
+    "flex": "1 1 auto",
+    "font-family": `${runtimeTokenVar("typography.fontFamily.sans")}, sans-serif`,
+    "font-weight": runtimeTokenVar("typography.fontWeight.regular"),
+    "min-width": "0",
+    outline: "none",
+    padding: "0"
+  }),
+  toCssRule(`.${TEXT_INPUT_ROOT_CLASS}[data-filled="true"] .${TEXT_INPUT_ELEMENT_CLASS}`, {
+    "font-weight": runtimeTokenVar("typography.fontWeight.medium")
+  }),
+  toCssRule(`.${TEXT_INPUT_ELEMENT_CLASS}::placeholder`, {
+    opacity: "1"
+  }),
+  toCssRule(`.${TEXT_INPUT_ROOT_CLASS}[data-state="active"] .${TEXT_INPUT_ELEMENT_CLASS}`, {
+    "caret-color": runtimeTokenVar("component.textInput.color.field.active.border")
+  }),
+  toCssRule(`.${TEXT_INPUT_ROOT_CLASS}:not([data-state="active"]) .${TEXT_INPUT_ELEMENT_CLASS}`, {
+    "caret-color": runtimeTokenVar("component.textInput.color.field.typed.value")
+  }),
+  toCssRule(`.${TEXT_INPUT_PREVIEW_CLASS}`, {
+    "align-items": "center",
+    display: "flex",
+    "flex": "1 1 auto",
+    "min-width": "0"
+  }),
+  toCssRule(`.${TEXT_INPUT_PREVIEW_TEXT_CLASS}`, {
+    "font-family": `${runtimeTokenVar("typography.fontFamily.sans")}, sans-serif`,
+    "font-weight": runtimeTokenVar("typography.fontWeight.regular"),
+    "min-width": "0",
+    overflow: "hidden",
+    "text-overflow": "ellipsis",
+    "white-space": "nowrap"
+  }),
+  toCssRule(`.${TEXT_INPUT_ROOT_CLASS}[data-filled="true"] .${TEXT_INPUT_PREVIEW_TEXT_CLASS}`, {
+    "font-weight": runtimeTokenVar("typography.fontWeight.medium")
+  }),
+  toCssRule(`.${TEXT_INPUT_PREVIEW_CARET_CLASS}`, {
+    animation: "geist-text-input-caret-blink 1s steps(1, end) infinite",
+    display: "inline-block",
+    "flex-shrink": "0",
+  }),
+  ...(["sm", "lg"] as const).flatMap((sizeKey) => [
+    toCssRule(`.${TEXT_INPUT_ROOT_CLASS}[data-size="${sizeKey}"]`, {
+      gap: runtimeTokenVarPx(`component.textInput.size.${sizeKey}.containerGap`)
+    }),
+    toCssRule(`.${TEXT_INPUT_ROOT_CLASS}[data-size="${sizeKey}"] .${TEXT_INPUT_LABEL_SLOT_CLASS}`, {
+      "padding-inline": runtimeTokenVarPx(`component.textInput.size.${sizeKey}.labelPaddingInline`)
+    }),
+    toCssRule(`.${TEXT_INPUT_ROOT_CLASS}[data-size="${sizeKey}"] .${TEXT_INPUT_FIELD_CLASS}`, {
+      gap: runtimeTokenVarPx(`component.textInput.size.${sizeKey}.fieldGap`),
+      height: runtimeTokenVarPx(`component.textInput.size.${sizeKey}.height`),
+      padding: `${runtimeTokenVarPx(`component.textInput.size.${sizeKey}.fieldPaddingBlock`)} ${runtimeTokenVarPx(`component.textInput.size.${sizeKey}.fieldPaddingInline`)}`,
+      "border-radius": runtimeTokenVarPx(sizeKey === "lg" ? "radius.alt.lg" : "radius.alt.md"),
+      border: `${runtimeTokenVarPx("component.textInput.border.width")} solid ${runtimeTokenVar(`component.textInput.color.field.rest.border`)}`
+    }),
+    toCssRule(`.${TEXT_INPUT_ROOT_CLASS}[data-size="${sizeKey}"] .${TEXT_INPUT_AFFIX_CLASS}`, {
+      height: runtimeTokenVarPx(`component.textInput.size.${sizeKey}.affixBoxSize`),
+      width: runtimeTokenVarPx(`component.textInput.size.${sizeKey}.affixBoxSize`)
+    }),
+    toCssRule(`.${TEXT_INPUT_ROOT_CLASS}[data-size="${sizeKey}"] .${TEXT_INPUT_ELEMENT_CLASS}`, {
+      "font-size": runtimeTokenVarPx(`component.textInput.typography.input.${sizeKey}.fontSize`),
+      "letter-spacing": runtimeTokenVarPx(`component.textInput.typography.input.${sizeKey}.letterSpacing`),
+      "line-height": runtimeTokenVarPx(`component.textInput.typography.input.${sizeKey}.lineHeight`)
+    }),
+    toCssRule(`.${TEXT_INPUT_ROOT_CLASS}[data-size="${sizeKey}"] .${TEXT_INPUT_PREVIEW_TEXT_CLASS}`, {
+      "font-size": runtimeTokenVarPx(`component.textInput.typography.input.${sizeKey}.fontSize`),
+      "letter-spacing": runtimeTokenVarPx(`component.textInput.typography.input.${sizeKey}.letterSpacing`),
+      "line-height": runtimeTokenVarPx(`component.textInput.typography.input.${sizeKey}.lineHeight`)
+    }),
+    toCssRule(`.${TEXT_INPUT_ROOT_CLASS}[data-size="${sizeKey}"] .${TEXT_INPUT_PREVIEW_CARET_CLASS}`, {
+      height: `max(${runtimeTokenVarPx(`component.textInput.size.${sizeKey}.affixBoxSize`)}, ${runtimeTokenVarPx(`component.textInput.typography.input.${sizeKey}.lineHeight`)})`,
+      "margin-left": runtimeTokenVarPx("component.textInput.caret.gap"),
+      width: runtimeTokenVarPx("component.textInput.caret.width")
+    })
+  ]),
+  toCssRule(`.${TEXT_INPUT_AFFIX_CLASS} > *`, {
+    color: "inherit",
+    "font-size": runtimeTokenVarPx("component.textInput.icon.affixSize")
+  }),
+  ...(["rest", "hover", "active", "typed", "error", "success", "disabled"] as const).flatMap((stateKey) => [
+    toCssRule(`.${TEXT_INPUT_ROOT_CLASS}[data-state="${stateKey}"] .${TEXT_INPUT_FIELD_CLASS}`, {
+      background: runtimeTokenVar(`component.textInput.color.field.${stateKey}.background`),
+      border: `${runtimeTokenVarPx("component.textInput.border.width")} solid ${runtimeTokenVar(`component.textInput.color.field.${stateKey}.border`)}`
+    }),
+    toCssRule(`.${TEXT_INPUT_ROOT_CLASS}[data-state="${stateKey}"] .${TEXT_INPUT_AFFIX_CLASS}`, {
+      color: runtimeTokenVar(`component.textInput.color.field.${stateKey}.affix`)
+    }),
+    toCssRule(`.${TEXT_INPUT_ROOT_CLASS}[data-state="${stateKey}"] .${TEXT_INPUT_ELEMENT_CLASS}`, {
+      color: runtimeTokenVar(`component.textInput.color.field.${stateKey}.placeholder`)
+    }),
+    toCssRule(`.${TEXT_INPUT_ROOT_CLASS}[data-state="${stateKey}"] .${TEXT_INPUT_ELEMENT_CLASS}::placeholder`, {
+      color: runtimeTokenVar(`component.textInput.color.field.${stateKey}.placeholder`)
+    }),
+    toCssRule(`.${TEXT_INPUT_ROOT_CLASS}[data-state="${stateKey}"] .${TEXT_INPUT_PREVIEW_TEXT_CLASS}`, {
+      color: runtimeTokenVar(`component.textInput.color.field.${stateKey}.placeholder`)
+    }),
+    toCssRule(`.${TEXT_INPUT_ROOT_CLASS}[data-state="${stateKey}"] .${TEXT_INPUT_PREVIEW_CARET_CLASS}`, {
+      background: runtimeTokenVar(`component.textInput.color.field.${stateKey}.border`)
+    })
+  ]),
+  toCssRule(`.${TEXT_INPUT_ROOT_CLASS}[data-filled="true"] .${TEXT_INPUT_ELEMENT_CLASS}`, {
+    color: runtimeTokenVar("component.textInput.color.field.typed.value")
+  }),
+  toCssRule(`.${TEXT_INPUT_ROOT_CLASS}[data-filled="true"] .${TEXT_INPUT_PREVIEW_TEXT_CLASS}`, {
+    color: runtimeTokenVar("component.textInput.color.field.typed.value")
+  }),
+].join("");
 
 export interface TextInputProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "defaultValue" | "size" | "value"> {
@@ -218,6 +285,7 @@ export interface TextInputProps
 
 export function TextInput({
   brand = "Cars24",
+  className,
   defaultValue,
   disabled = false,
   forceState,
@@ -246,10 +314,6 @@ export function TextInput({
   const generatedId = useId();
   const inputId = id ?? `text-input-${generatedId}`;
   const helperId = `${inputId}-helper`;
-  const sanitizedId = generatedId.replace(/[^a-zA-Z0-9_-]/g, "");
-  const placeholderClassName = `geist-text-input-${sanitizedId}`;
-  const caretKeyframesName = `geist-text-input-caret-blink-${sanitizedId}`;
-  const previewCaretClassName = `geist-text-input-caret-${sanitizedId}`;
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue ?? "");
@@ -257,8 +321,6 @@ export function TextInput({
   const currentValue = value ?? uncontrolledValue;
   const hasValue = currentValue.length > 0;
   const sizeKey = getSizeKey(size);
-  const sizeTokens = getSizeTokens(brand, size);
-  const inputTypography = getTypography(brand, `component.textInput.typography.input.${sizeKey}`);
   const visualState = resolveVisualState({
     disabled,
     focused,
@@ -267,86 +329,23 @@ export function TextInput({
     hasValue,
     validationState
   });
-  const fieldColors = getFieldColors(brand, visualState);
   const resolvedHelperTone =
     forceState === "Error"
       ? "Error"
       : forceState === "Success"
         ? "Success"
         : helperTone ?? validationState;
-  const borderWidth = Number(getRequiredThemeTokenValue(brand, "component.textInput.border.width"));
-  const fieldRadius = getFieldRadius(brand, size);
-  const affixIconSize = Number(getRequiredThemeTokenValue(brand, "component.textInput.icon.affixSize"));
-  const caretWidth = Number(getRequiredThemeTokenValue(brand, "component.textInput.caret.width"));
-  const caretGap = Number(getRequiredThemeTokenValue(brand, "component.textInput.caret.gap"));
   const labelSize = getLabelSize(size);
   const showLabel = label !== undefined && label !== null;
   const showHelper = helperText !== undefined && helperText !== null;
   const previewMode = forceState !== undefined;
   const previewShowsCaret = forceState === "Active" || forceState === "Typing";
-  const inputColor = hasValue ? fieldColors.value : fieldColors.placeholder;
-  const inputFontWeightPath = hasValue ? "typography.fontWeight.medium" : "typography.fontWeight.regular";
-  const previewTextValue = currentValue || placeholder;
-  const previewHasValue = currentValue.length > 0;
-  const previewTextColor = previewHasValue ? fieldColors.value : fieldColors.placeholder;
-  const previewTextFontWeightPath = previewHasValue
-    ? "typography.fontWeight.medium"
-    : "typography.fontWeight.regular";
   const ariaInvalid = visualState === "error" ? true : undefined;
+  const repoBrand = normalizeBrandId(brand);
 
-  const fieldStyles: CSSProperties = {
-    alignItems: "center",
-    background: fieldColors.background,
-    border: `${borderWidth}px solid ${fieldColors.border}`,
-    borderRadius: `${fieldRadius}px`,
-    boxSizing: "border-box",
-    display: "flex",
-    gap: `${sizeTokens.fieldGap}px`,
-    height: `${sizeTokens.height}px`,
-    minWidth: 0,
-    padding: `${sizeTokens.fieldPaddingBlock}px ${sizeTokens.fieldPaddingInline}px`,
-    width: "100%"
-  };
-
-  const affixStyles: CSSProperties = {
-    alignItems: "center",
-    color: fieldColors.affix,
-    display: "inline-flex",
-    flex: "0 0 auto",
-    height: `${sizeTokens.affixBoxSize}px`,
-    justifyContent: "center",
-    width: `${sizeTokens.affixBoxSize}px`
-  };
-
-  const actualInputStyles: CSSProperties = {
-    ...makeTypographyStyles({
-      brand,
-      color: inputColor,
-      fontWeightPath: inputFontWeightPath,
-      typography: inputTypography
-    }),
-    appearance: "none",
-    background: "transparent",
-    border: "none",
-    caretColor: visualState === "active" ? fieldColors.border : fieldColors.value,
-    flex: "1 1 auto",
-    minWidth: 0,
-    outline: "none",
-    padding: 0
-  };
-
-  const previewTextStyles: CSSProperties = {
-    ...makeTypographyStyles({
-      brand,
-      color: previewTextColor,
-      fontWeightPath: previewTextFontWeightPath,
-      typography: inputTypography
-    }),
-    minWidth: 0,
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap"
-  };
+  useInsertionEffect(() => {
+    ensureStyleSheet(TEXT_INPUT_STYLESHEET_ID, TEXT_INPUT_STYLESHEET);
+  }, []);
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     if (value === undefined) {
@@ -388,100 +387,67 @@ export function TextInput({
 
   return (
     <div
-      style={{
-        display: "grid",
-        gap: `${sizeTokens.containerGap}px`,
-        width: "100%",
-        ...style
-      }}
+      className={joinClassNames(TEXT_INPUT_ROOT_CLASS, className)}
+      data-brand={repoBrand}
+      data-filled={String(hasValue)}
+      data-size={sizeKey}
+      data-state={visualState}
+      style={style}
     >
-      <style>{`
-        .${placeholderClassName}::placeholder{color:${fieldColors.placeholder};opacity:1;}
-        @keyframes ${caretKeyframesName}{
-          0%,49%{opacity:1;}
-          50%,100%{opacity:0;}
-        }
-        .${previewCaretClassName}{
-          animation:${caretKeyframesName} 1s steps(1, end) infinite;
-        }
-      `}</style>
-
       {showLabel ? (
         previewMode ? (
-          <div
-            style={{
-              display: "block",
-              paddingInline: `${sizeTokens.labelPaddingInline}px`
-            }}
-          >
-            {labelNode}
-          </div>
+          <div className={TEXT_INPUT_LABEL_SLOT_CLASS}>{labelNode}</div>
         ) : (
-          <label
-            htmlFor={inputId}
-            style={{
-              display: "block",
-              paddingInline: `${sizeTokens.labelPaddingInline}px`
-            }}
-          >
+          <label className={TEXT_INPUT_LABEL_SLOT_CLASS} htmlFor={inputId}>
             {labelNode}
           </label>
         )
       ) : null}
 
-      <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} style={fieldStyles}>
+      <div className={TEXT_INPUT_FIELD_CLASS} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
         {prefixIconName ? (
-          <span style={affixStyles}>
-            <Icon decorative brand={brand} name={prefixIconName} style={{ fontSize: `${affixIconSize}px` }} />
+          <span className={TEXT_INPUT_AFFIX_CLASS}>
+            <Icon
+              decorative
+              brand={brand}
+              name={prefixIconName}
+              style={{ color: "inherit", fontSize: runtimeTokenVarPx("component.textInput.icon.affixSize") }}
+            />
           </span>
         ) : null}
 
-        {previewMode ? (
-          <div
-            aria-hidden="true"
-            style={{
-              alignItems: "center",
-              display: "flex",
-              flex: "1 1 auto",
-              minWidth: 0
-            }}
-          >
-            <span style={previewTextStyles}>{previewTextValue}</span>
-            {previewShowsCaret ? (
-              <span
-                className={previewCaretClassName}
-                style={{
-                  background: fieldColors.border,
-                  display: "inline-block",
-                  flexShrink: 0,
-                  height: `${Math.max(sizeTokens.affixBoxSize, inputTypography.lineHeight)}px`,
-                  marginLeft: `${caretGap}px`,
-                  width: `${caretWidth}px`
-                }}
-              />
-            ) : null}
-          </div>
-        ) : (
-          <input
-            {...rest}
-            aria-describedby={showHelper ? helperId : undefined}
-            aria-invalid={ariaInvalid}
-            className={placeholderClassName}
-            disabled={disabled}
-            id={inputId}
-            onBlur={handleBlur}
-            onChange={handleChange}
-            onFocus={handleFocus}
-            placeholder={placeholder}
-            style={actualInputStyles}
-            type={type}
-            value={currentValue}
-          />
-        )}
+        <div className={TEXT_INPUT_CONTROL_CLASS}>
+          {previewMode ? (
+            <div aria-hidden="true" className={TEXT_INPUT_PREVIEW_CLASS}>
+              <span className={TEXT_INPUT_PREVIEW_TEXT_CLASS}>{currentValue || placeholder}</span>
+              {previewShowsCaret ? <span className={TEXT_INPUT_PREVIEW_CARET_CLASS} /> : null}
+            </div>
+          ) : (
+            <input
+              {...rest}
+              aria-describedby={showHelper ? helperId : undefined}
+              aria-invalid={ariaInvalid}
+              className={TEXT_INPUT_ELEMENT_CLASS}
+              disabled={disabled}
+              id={inputId}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              onFocus={handleFocus}
+              placeholder={placeholder}
+              type={type}
+              value={currentValue}
+            />
+          )}
+        </div>
 
         {suffixIconName ? (
-          <span style={affixStyles}>
-            <Icon decorative brand={brand} name={suffixIconName} style={{ fontSize: `${affixIconSize}px` }} />
+          <span className={TEXT_INPUT_AFFIX_CLASS}>
+            <Icon
+              decorative
+              brand={brand}
+              name={suffixIconName}
+              style={{ color: "inherit", fontSize: runtimeTokenVarPx("component.textInput.icon.affixSize") }}
+            />
           </span>
         ) : null}
       </div>
@@ -490,12 +456,12 @@ export function TextInput({
         <HelperText
           align="center"
           brand={brand}
+          className={TEXT_INPUT_LABEL_SLOT_CLASS}
           fullWidth
           id={showHelper && !previewMode ? helperId : undefined}
           helperText={helperText}
           showIcon={showHelperIcon}
           size={size}
-          style={{ paddingInline: `${sizeTokens.labelPaddingInline}px` }}
           tone={resolvedHelperTone}
         />
       ) : null}

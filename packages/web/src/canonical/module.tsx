@@ -1,7 +1,7 @@
 import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
 import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
-import { getRequiredThemeTokenValue } from "../theme";
+import { getRequiredThemeTokenValue, pxToRem } from "../theme";
 import { ButtonGroup, type ButtonGroupButtonAction } from "./button-group";
 import { Icon } from "./icon";
 import { SectionHeader } from "./section-header";
@@ -33,7 +33,7 @@ export interface ModuleProps extends Omit<HTMLAttributes<HTMLDivElement>, "child
 }
 
 function toCssSize(value: number | string) {
-  return typeof value === "number" ? `${value}px` : value;
+  return typeof value === "number" ? pxToRem(value) : value;
 }
 
 /**
@@ -73,9 +73,9 @@ export function Module({
     boxSizing: "border-box",
     display: "flex",
     flexDirection: "column",
-    gap: `${spacing4}px`,
+    gap: pxToRem(spacing4),
     overflow: "hidden",
-    padding: `${spacing4}px`,
+    padding: pxToRem(spacing4),
     width: "100%",
     ...style
   };

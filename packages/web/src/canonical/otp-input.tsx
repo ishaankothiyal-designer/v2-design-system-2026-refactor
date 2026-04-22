@@ -17,7 +17,7 @@ import { Icon } from "./icon";
 import { HelperText } from "./helper-text";
 import { Label } from "./label";
 import { LinkButton } from "./link-button";
-import { getRequiredThemeTokenValue } from "../theme";
+import { getRequiredThemeTokenValue, pxToRem } from "../theme";
 
 export const canonicalOtpInputWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.otpInput"
@@ -132,10 +132,10 @@ function makeTypographyStyles({
   return {
     color,
     fontFamily: `${String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"))}, sans-serif`,
-    fontSize: `${typography.fontSize}px`,
+    fontSize: pxToRem(typography.fontSize),
     fontWeight: Number(getRequiredThemeTokenValue(brand, fontWeightPath)),
-    letterSpacing: `${typography.letterSpacing}px`,
-    lineHeight: `${typography.lineHeight}px`,
+    letterSpacing: pxToRem(typography.letterSpacing),
+    lineHeight: pxToRem(typography.lineHeight),
     margin: 0
   };
 }
@@ -470,7 +470,7 @@ export function OtpInput({
       role="group"
       style={{
         display: "grid",
-        gap: `${sizeTokens.containerGap}px`,
+        gap: pxToRem(sizeTokens.containerGap),
         maxWidth: "100%",
         minWidth: 0,
         width: "fit-content",
@@ -484,7 +484,7 @@ export function OtpInput({
           id={labelId}
           style={{
             display: "block",
-            paddingInline: `${sizeTokens.labelPaddingInline}px`
+            paddingInline: pxToRem(sizeTokens.labelPaddingInline)
           }}
         >
           {labelNode}
@@ -497,7 +497,7 @@ export function OtpInput({
         style={{
           alignItems: "center",
           display: "flex",
-          gap: `${sizeTokens.boxGap}px`,
+          gap: pxToRem(sizeTokens.boxGap),
           width: "fit-content"
         }}
       >
@@ -521,14 +521,14 @@ export function OtpInput({
               style={{
                 alignItems: "center",
                 background: fieldColors.background,
-                border: `${borderWidth}px solid ${fieldColors.border}`,
-                borderRadius: `${fieldRadius}px`,
+                border: `${pxToRem(borderWidth)} solid ${fieldColors.border}`,
+                borderRadius: pxToRem(fieldRadius),
                 boxSizing: "border-box",
                 display: "flex",
-                height: `${sizeTokens.boxSize}px`,
+                height: pxToRem(sizeTokens.boxSize),
                 justifyContent: "center",
                 position: "relative",
-                width: `${sizeTokens.boxSize}px`
+                width: pxToRem(sizeTokens.boxSize)
               }}
             >
               {showPlaceholder ? (
@@ -612,7 +612,7 @@ export function OtpInput({
           iconSize={Number(getRequiredThemeTokenValue(brand, "component.otpInput.icon.helperSize"))}
           showIcon={showHelperIcon}
           size={size}
-          style={{ paddingInline: `${sizeTokens.supportingPaddingInline}px` }}
+          style={{ paddingInline: pxToRem(sizeTokens.supportingPaddingInline) }}
           textColor={helperColors.text}
           typography={helperTypography}
           tone={resolvedHelperTone}
@@ -625,9 +625,9 @@ export function OtpInput({
           style={{
             alignItems: "center",
             display: "flex",
-            gap: `${sizeTokens.helperGap}px`,
+            gap: pxToRem(sizeTokens.helperGap),
             minWidth: 0,
-            paddingInline: `${sizeTokens.supportingPaddingInline}px`
+            paddingInline: pxToRem(sizeTokens.supportingPaddingInline)
           }}
         >
           {resendPrompt ? (
@@ -666,9 +666,9 @@ export function OtpInput({
           style={{
             alignItems: "center",
             display: "flex",
-            gap: `${sizeTokens.helperGap}px`,
+            gap: pxToRem(sizeTokens.helperGap),
             minWidth: 0,
-            paddingInline: `${sizeTokens.supportingPaddingInline}px`
+            paddingInline: pxToRem(sizeTokens.supportingPaddingInline)
           }}
         >
           {timerPrompt ? (

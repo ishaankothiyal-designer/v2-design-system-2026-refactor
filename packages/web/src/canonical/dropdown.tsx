@@ -1,19 +1,19 @@
 import {
   type ButtonHTMLAttributes,
-  type CSSProperties,
   type FocusEvent,
   type MouseEvent as ReactMouseEvent,
   type ReactNode,
   useId,
+  useInsertionEffect,
   useState
 } from "react";
 import type { IconName } from "@geist/icons";
-import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
+import { type DisplayBrandId, normalizeBrandId } from "@geist/tokens";
 import { Icon } from "./icon";
 import { HelperText } from "./helper-text";
 import { Label } from "./label";
-import { getRequiredThemeTokenValue } from "../theme";
+import { ensureStyleSheet, joinClassNames, runtimeTokenVar, runtimeTokenVarPx, toCssRule } from "./runtime-styles";
 
 export const canonicalDropdownWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.dropdown"
@@ -26,35 +26,13 @@ export type DropdownHelperTone = "Default" | "Error";
 
 type FieldVisualState = "rest" | "active" | "selected" | "error" | "disabled";
 
-type DropdownSizeTokens = {
-  affixBoxSize: number;
-  affixIconSize: number;
-  chevronSize: number;
-  containerGap: number;
-  fieldGap: number;
-  fieldPaddingBlock: number;
-  fieldPaddingInline: number;
-  height: number;
-  helperGap: number;
-  helperIconSize: number;
-  labelPaddingInline: number;
-  textWrapperPaddingBlock: number;
-};
-
-type DropdownTypography = {
-  fontSize: number;
-  letterSpacing: number;
-  lineHeight: number;
-};
-
-type DropdownFieldColors = {
-  background: string;
-  border: string;
-  chevron: string;
-  placeholder: string;
-  prefix: string;
-  value: string;
-};
+const DROPDOWN_ROOT_CLASS = "geist-dropdown";
+const DROPDOWN_LABEL_SLOT_CLASS = "geist-dropdown__label-slot";
+const DROPDOWN_FIELD_CLASS = "geist-dropdown__field";
+const DROPDOWN_AFFIX_CLASS = "geist-dropdown__affix";
+const DROPDOWN_TEXT_WRAPPER_CLASS = "geist-dropdown__text-wrapper";
+const DROPDOWN_TEXT_CLASS = "geist-dropdown__text";
+const DROPDOWN_STYLESHEET_ID = "geist-dropdown-styles";
 
 function getSizeKey(size: DropdownSize) {
   return size === "Large" ? "lg" : "sm";
@@ -62,86 +40,6 @@ function getSizeKey(size: DropdownSize) {
 
 function getLabelSize(size: DropdownSize) {
   return size === "Large" ? "Large" : "Medium";
-}
-
-function getSizeTokens(brand: DisplayBrandId, size: DropdownSize): DropdownSizeTokens {
-  const sizeKey = getSizeKey(size);
-  const textInputPrefix = `component.textInput.size.${sizeKey}`;
-
-  return {
-    affixBoxSize: Number(getRequiredThemeTokenValue(brand, `${textInputPrefix}.affixBoxSize`)),
-    affixIconSize: Number(getRequiredThemeTokenValue(brand, "component.textInput.icon.affixSize")),
-    chevronSize: Number(getRequiredThemeTokenValue(brand, "component.phoneInput.icon.countryChevronSize")),
-    containerGap: Number(getRequiredThemeTokenValue(brand, "component.phoneInput.size.sm.containerGap")),
-    fieldGap: Number(getRequiredThemeTokenValue(brand, `${textInputPrefix}.fieldGap`)),
-    fieldPaddingBlock: Number(getRequiredThemeTokenValue(brand, `${textInputPrefix}.fieldPaddingBlock`)),
-    fieldPaddingInline: Number(getRequiredThemeTokenValue(brand, `${textInputPrefix}.fieldPaddingInline`)),
-    height: Number(getRequiredThemeTokenValue(brand, `${textInputPrefix}.height`)),
-    helperGap: Number(getRequiredThemeTokenValue(brand, `${textInputPrefix}.helperGap`)),
-    helperIconSize: Number(getRequiredThemeTokenValue(brand, "component.phoneInput.icon.helperSize")),
-    labelPaddingInline: Number(getRequiredThemeTokenValue(brand, `${textInputPrefix}.labelPaddingInline`)),
-    textWrapperPaddingBlock:
-      size === "Large"
-        ? Number(getRequiredThemeTokenValue(brand, "component.phoneInput.size.sm.labelPaddingInline"))
-        : 0
-  };
-}
-
-function getTypography(brand: DisplayBrandId, path: string): DropdownTypography {
-  return {
-    fontSize: Number(getRequiredThemeTokenValue(brand, `${path}.fontSize`)),
-    letterSpacing: Number(getRequiredThemeTokenValue(brand, `${path}.letterSpacing`)),
-    lineHeight: Number(getRequiredThemeTokenValue(brand, `${path}.lineHeight`))
-  };
-}
-
-function makeTypographyStyles({
-  brand,
-  color,
-  fontWeightPath,
-  typography
-}: {
-  brand: DisplayBrandId;
-  color: string;
-  fontWeightPath: string;
-  typography: DropdownTypography;
-}): CSSProperties {
-  return {
-    color,
-    fontFamily: `${String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"))}, sans-serif`,
-    fontSize: `${typography.fontSize}px`,
-    fontWeight: Number(getRequiredThemeTokenValue(brand, fontWeightPath)),
-    letterSpacing: `${typography.letterSpacing}px`,
-    lineHeight: `${typography.lineHeight}px`,
-    margin: 0
-  };
-}
-
-function getFieldColors(brand: DisplayBrandId, state: FieldVisualState): DropdownFieldColors {
-  const textInputStateKey =
-    state === "selected" ? "typed" : state === "disabled" ? "disabled" : state;
-  const phoneInputStateKey =
-    state === "selected"
-      ? "filled"
-      : state === "error"
-        ? "destructive"
-        : state === "disabled"
-          ? "disabled"
-          : state;
-  const textInputPrefix = `component.textInput.color.field.${textInputStateKey}`;
-  const phoneInputPrefix = `component.phoneInput.color.field.${phoneInputStateKey}`;
-
-  return {
-    background:
-      state === "disabled"
-        ? String(getRequiredThemeTokenValue(brand, `${phoneInputPrefix}.background`))
-        : String(getRequiredThemeTokenValue(brand, `${textInputPrefix}.background`)),
-    border: String(getRequiredThemeTokenValue(brand, `${textInputPrefix}.border`)),
-    chevron: String(getRequiredThemeTokenValue(brand, `${phoneInputPrefix}.chevron`)),
-    placeholder: String(getRequiredThemeTokenValue(brand, `${textInputPrefix}.placeholder`)),
-    prefix: String(getRequiredThemeTokenValue(brand, `${textInputPrefix}.affix`)),
-    value: String(getRequiredThemeTokenValue(brand, `${textInputPrefix}.value`))
-  };
 }
 
 function resolveVisualState({
@@ -204,6 +102,119 @@ function hasDisplayValue(value: string | undefined) {
   return value !== undefined && value.length > 0;
 }
 
+const DROPDOWN_STYLESHEET = [
+  toCssRule(`.${DROPDOWN_ROOT_CLASS}`, {
+    display: "grid",
+    width: "100%"
+  }),
+  toCssRule(`.${DROPDOWN_LABEL_SLOT_CLASS}`, {
+    display: "block",
+  }),
+  toCssRule(`.${DROPDOWN_FIELD_CLASS}`, {
+    "align-items": "center",
+    appearance: "none",
+    "box-sizing": "border-box",
+    cursor: "pointer",
+    display: "flex",
+    margin: "0",
+    "min-width": "0",
+    "text-align": "left",
+    width: "100%"
+  }),
+  toCssRule(`.${DROPDOWN_ROOT_CLASS}[data-disabled="true"] .${DROPDOWN_FIELD_CLASS}`, {
+    cursor: "not-allowed"
+  }),
+  toCssRule(`.${DROPDOWN_AFFIX_CLASS}`, {
+    "align-items": "center",
+    display: "inline-flex",
+    "flex": "0 0 auto",
+    "justify-content": "center",
+  }),
+  toCssRule(`.${DROPDOWN_AFFIX_CLASS}[data-role="chevron"]`, {
+  }),
+  toCssRule(`.${DROPDOWN_TEXT_WRAPPER_CLASS}`, {
+    "align-items": "center",
+    display: "flex",
+    "flex": "1 1 auto",
+    "min-width": "0",
+  }),
+  toCssRule(`.${DROPDOWN_TEXT_CLASS}`, {
+    "font-family": `${runtimeTokenVar("typography.fontFamily.sans")}, sans-serif`,
+    "font-weight": runtimeTokenVar("typography.fontWeight.regular"),
+    "min-width": "0",
+    overflow: "hidden",
+    "text-overflow": "ellipsis",
+    "white-space": "nowrap"
+  }),
+  toCssRule(`.${DROPDOWN_ROOT_CLASS}[data-filled="true"] .${DROPDOWN_TEXT_CLASS}`, {
+    "font-weight": runtimeTokenVar("typography.fontWeight.medium")
+  }),
+  ...(["sm", "lg"] as const).flatMap((sizeKey) => [
+    toCssRule(`.${DROPDOWN_ROOT_CLASS}[data-size="${sizeKey}"]`, {
+      gap: runtimeTokenVarPx("component.phoneInput.size.sm.containerGap")
+    }),
+    toCssRule(`.${DROPDOWN_ROOT_CLASS}[data-size="${sizeKey}"] .${DROPDOWN_LABEL_SLOT_CLASS}`, {
+      "padding-inline": runtimeTokenVarPx(`component.textInput.size.${sizeKey}.labelPaddingInline`)
+    }),
+    toCssRule(`.${DROPDOWN_ROOT_CLASS}[data-size="${sizeKey}"] .${DROPDOWN_FIELD_CLASS}`, {
+      gap: runtimeTokenVarPx(`component.textInput.size.${sizeKey}.fieldGap`),
+      height: runtimeTokenVarPx(`component.textInput.size.${sizeKey}.height`),
+      padding: `${runtimeTokenVarPx(`component.textInput.size.${sizeKey}.fieldPaddingBlock`)} ${runtimeTokenVarPx(`component.textInput.size.${sizeKey}.fieldPaddingInline`)}`,
+      "border-radius": runtimeTokenVarPx(sizeKey === "lg" ? "radius.alt.lg" : "radius.alt.md"),
+      border: `${runtimeTokenVarPx("component.textInput.border.width")} solid ${runtimeTokenVar("component.textInput.color.field.rest.border")}`
+    }),
+    toCssRule(`.${DROPDOWN_ROOT_CLASS}[data-size="${sizeKey}"] .${DROPDOWN_AFFIX_CLASS}`, {
+      height: runtimeTokenVarPx(`component.textInput.size.${sizeKey}.affixBoxSize`),
+      width: runtimeTokenVarPx(`component.textInput.size.${sizeKey}.affixBoxSize`)
+    }),
+    toCssRule(`.${DROPDOWN_ROOT_CLASS}[data-size="${sizeKey}"] .${DROPDOWN_TEXT_WRAPPER_CLASS}`, {
+      "padding-block": sizeKey === "lg" ? runtimeTokenVarPx("component.phoneInput.size.sm.labelPaddingInline") : "0px"
+    }),
+    toCssRule(`.${DROPDOWN_ROOT_CLASS}[data-size="${sizeKey}"] .${DROPDOWN_TEXT_CLASS}`, {
+      "font-size": runtimeTokenVarPx(`component.textInput.typography.input.${sizeKey}.fontSize`),
+      "letter-spacing": runtimeTokenVarPx(`component.textInput.typography.input.${sizeKey}.letterSpacing`),
+      "line-height": runtimeTokenVarPx(`component.textInput.typography.input.${sizeKey}.lineHeight`)
+    })
+  ]),
+  toCssRule(`.${DROPDOWN_AFFIX_CLASS}:not([data-role="chevron"])`, {
+    color: runtimeTokenVar("component.textInput.color.field.rest.affix")
+  }),
+  ...(["rest", "active", "selected", "error", "disabled"] as const).flatMap((stateKey) => {
+    const textInputStateKey =
+      stateKey === "selected" ? "typed" : stateKey === "disabled" ? "disabled" : stateKey;
+    const phoneInputStateKey =
+      stateKey === "selected"
+        ? "filled"
+        : stateKey === "error"
+          ? "destructive"
+          : stateKey === "disabled"
+            ? "disabled"
+            : stateKey;
+
+    return [
+      toCssRule(`.${DROPDOWN_ROOT_CLASS}[data-state="${stateKey}"] .${DROPDOWN_FIELD_CLASS}`, {
+        background:
+          stateKey === "disabled"
+            ? runtimeTokenVar(`component.phoneInput.color.field.${phoneInputStateKey}.background`)
+            : runtimeTokenVar(`component.textInput.color.field.${textInputStateKey}.background`),
+        border: `${runtimeTokenVarPx("component.textInput.border.width")} solid ${runtimeTokenVar(`component.textInput.color.field.${textInputStateKey}.border`)}`
+      }),
+      toCssRule(`.${DROPDOWN_ROOT_CLASS}[data-state="${stateKey}"] .${DROPDOWN_AFFIX_CLASS}:not([data-role="chevron"])`, {
+        color: runtimeTokenVar(`component.textInput.color.field.${textInputStateKey}.affix`)
+      }),
+      toCssRule(`.${DROPDOWN_ROOT_CLASS}[data-state="${stateKey}"] .${DROPDOWN_AFFIX_CLASS}[data-role="chevron"]`, {
+        color: runtimeTokenVar(`component.phoneInput.color.field.${phoneInputStateKey}.chevron`)
+      }),
+      toCssRule(`.${DROPDOWN_ROOT_CLASS}[data-state="${stateKey}"] .${DROPDOWN_TEXT_CLASS}`, {
+        color: runtimeTokenVar(`component.textInput.color.field.${textInputStateKey}.placeholder`)
+      })
+    ];
+  }),
+  toCssRule(`.${DROPDOWN_ROOT_CLASS}[data-filled="true"] .${DROPDOWN_TEXT_CLASS}`, {
+    color: runtimeTokenVar("component.textInput.color.field.typed.value")
+  })
+].join("");
+
 export interface DropdownProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children" | "size" | "value"> {
   brand?: DisplayBrandId;
@@ -224,6 +235,7 @@ export interface DropdownProps
 
 export function Dropdown({
   brand = "Cars24",
+  className,
   disabled = false,
   forceState,
   helperText,
@@ -253,9 +265,6 @@ export function Dropdown({
   const [focused, setFocused] = useState(false);
 
   const sizeKey = getSizeKey(size);
-  const sizeTokens = getSizeTokens(brand, size);
-  const inputTypography = getTypography(brand, `component.textInput.typography.input.${sizeKey}`);
-  const helperTypography = getTypography(brand, `component.textInput.typography.helper.${sizeKey}`);
   const hasValue = hasDisplayValue(value);
   const visualState = resolveVisualState({
     disabled,
@@ -271,68 +280,17 @@ export function Dropdown({
     size,
     validationState
   });
-  const fieldColors = getFieldColors(brand, visualState);
-  const borderWidth = Number(getRequiredThemeTokenValue(brand, "component.textInput.border.width"));
-  const fieldRadius = Number(
-    getRequiredThemeTokenValue(brand, size === "Large" ? "radius.alt.lg" : "radius.alt.md")
-  );
   const labelSize = getLabelSize(size);
   const previewMode = forceState !== undefined;
   const showLabel = label !== undefined && label !== null;
   const showHelper = helperText !== undefined && helperText !== null;
   const displayText = hasValue ? value : placeholder;
-  const textColor = hasValue ? fieldColors.value : fieldColors.placeholder;
-  const textFontWeightPath = hasValue ? "typography.fontWeight.medium" : "typography.fontWeight.regular";
   const ariaInvalid = visualState === "error" ? true : undefined;
+  const repoBrand = normalizeBrandId(brand);
 
-  const fieldStyles: CSSProperties = {
-    alignItems: "center",
-    appearance: "none",
-    background: fieldColors.background,
-    border: `${borderWidth}px solid ${fieldColors.border}`,
-    borderRadius: `${fieldRadius}px`,
-    boxSizing: "border-box",
-    cursor: disabled ? "not-allowed" : "pointer",
-    display: "flex",
-    gap: `${sizeTokens.fieldGap}px`,
-    height: `${sizeTokens.height}px`,
-    margin: 0,
-    minWidth: 0,
-    padding: `${sizeTokens.fieldPaddingBlock}px ${sizeTokens.fieldPaddingInline}px`,
-    textAlign: "left",
-    width: "100%"
-  };
-
-  const affixStyles: CSSProperties = {
-    alignItems: "center",
-    color: fieldColors.prefix,
-    display: "inline-flex",
-    flex: "0 0 auto",
-    height: `${sizeTokens.affixBoxSize}px`,
-    justifyContent: "center",
-    width: `${sizeTokens.affixBoxSize}px`
-  };
-
-  const textWrapperStyles: CSSProperties = {
-    alignItems: "center",
-    display: "flex",
-    flex: "1 1 auto",
-    minWidth: 0,
-    paddingBlock: `${sizeTokens.textWrapperPaddingBlock}px`
-  };
-
-  const valueStyles: CSSProperties = {
-    ...makeTypographyStyles({
-      brand,
-      color: textColor,
-      fontWeightPath: textFontWeightPath,
-      typography: inputTypography
-    }),
-    minWidth: 0,
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap"
-  };
+  useInsertionEffect(() => {
+    ensureStyleSheet(DROPDOWN_STYLESHEET_ID, DROPDOWN_STYLESHEET);
+  }, []);
 
   function handleFocus(event: FocusEvent<HTMLButtonElement>) {
     setFocused(true);
@@ -365,26 +323,26 @@ export function Dropdown({
   const fieldContent = (
     <>
       {prefixIconName ? (
-        <span style={affixStyles}>
+        <span className={DROPDOWN_AFFIX_CLASS}>
           <Icon
             decorative
             brand={brand}
             name={prefixIconName}
-            style={{ color: fieldColors.prefix, fontSize: `${sizeTokens.affixIconSize}px` }}
+            style={{ color: "inherit", fontSize: runtimeTokenVarPx("component.textInput.icon.affixSize") }}
           />
         </span>
       ) : null}
 
-      <span style={textWrapperStyles}>
-        <span style={valueStyles}>{displayText}</span>
+      <span className={DROPDOWN_TEXT_WRAPPER_CLASS}>
+        <span className={DROPDOWN_TEXT_CLASS}>{displayText}</span>
       </span>
 
-      <span style={{ ...affixStyles, color: fieldColors.chevron }}>
+      <span className={DROPDOWN_AFFIX_CLASS} data-role="chevron">
         <Icon
           decorative
           brand={brand}
           name="chevron-down-small-outline"
-          style={{ color: fieldColors.chevron, fontSize: `${sizeTokens.chevronSize}px` }}
+          style={{ color: "inherit", fontSize: runtimeTokenVarPx("component.phoneInput.icon.countryChevronSize") }}
         />
       </span>
     </>
@@ -392,38 +350,26 @@ export function Dropdown({
 
   return (
     <div
-      style={{
-        display: "grid",
-        gap: `${sizeTokens.containerGap}px`,
-        width: "100%",
-        ...style
-      }}
+      className={joinClassNames(DROPDOWN_ROOT_CLASS, className)}
+      data-brand={repoBrand}
+      data-disabled={String(disabled)}
+      data-filled={String(hasValue)}
+      data-size={sizeKey}
+      data-state={visualState}
+      style={style}
     >
       {showLabel ? (
         previewMode ? (
-          <div
-            style={{
-              display: "block",
-              paddingInline: `${sizeTokens.labelPaddingInline}px`
-            }}
-          >
-            {labelNode}
-          </div>
+          <div className={DROPDOWN_LABEL_SLOT_CLASS}>{labelNode}</div>
         ) : (
-          <label
-            htmlFor={buttonId}
-            style={{
-              display: "block",
-              paddingInline: `${sizeTokens.labelPaddingInline}px`
-            }}
-          >
+          <label className={DROPDOWN_LABEL_SLOT_CLASS} htmlFor={buttonId}>
             {labelNode}
           </label>
         )
       ) : null}
 
       {previewMode ? (
-        <div aria-hidden="true" style={fieldStyles}>
+        <div aria-hidden="true" className={DROPDOWN_FIELD_CLASS}>
           {fieldContent}
         </div>
       ) : (
@@ -433,13 +379,13 @@ export function Dropdown({
           aria-expanded={open}
           aria-invalid={ariaInvalid}
           aria-required={required || undefined}
+          className={DROPDOWN_FIELD_CLASS}
           disabled={disabled}
           id={buttonId}
           onBlur={handleBlur}
           onFocus={handleFocus}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-          style={fieldStyles}
           type={type}
         >
           {fieldContent}
@@ -450,30 +396,23 @@ export function Dropdown({
         <HelperText
           align="center"
           brand={brand}
+          className={DROPDOWN_LABEL_SLOT_CLASS}
           fullWidth
           id={previewMode ? undefined : helperId}
           helperText={helperText}
-          iconColor={String(
-            getRequiredThemeTokenValue(
-              brand,
-              resolvedHelperTone === "Error"
-                ? "component.phoneInput.color.helper.destructive.icon"
-                : "component.phoneInput.color.helper.default.icon"
-            )
-          )}
+          iconColor={
+            resolvedHelperTone === "Error"
+              ? runtimeTokenVar("component.phoneInput.color.helper.destructive.icon")
+              : runtimeTokenVar("component.phoneInput.color.helper.default.icon")
+          }
           iconName={resolvedHelperTone === "Error" ? "error-outline" : "info-outline"}
-          iconSize={sizeTokens.helperIconSize}
           showIcon={showHelperIcon}
           size={size}
-          style={{ paddingInline: `${sizeTokens.labelPaddingInline}px` }}
-          textColor={String(
-            getRequiredThemeTokenValue(
-              brand,
-              resolvedHelperTone === "Error"
-                ? "component.phoneInput.color.helper.destructive.text"
-                : "component.phoneInput.color.helper.default.text"
-            )
-          )}
+          textColor={
+            resolvedHelperTone === "Error"
+              ? runtimeTokenVar("component.phoneInput.color.helper.destructive.text")
+              : runtimeTokenVar("component.phoneInput.color.helper.default.text")
+          }
         />
       ) : null}
     </div>

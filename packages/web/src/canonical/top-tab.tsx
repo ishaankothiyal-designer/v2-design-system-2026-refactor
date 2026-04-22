@@ -14,7 +14,7 @@ import {
 import type { IconName } from "@geist/icons";
 import { designSystemRegistry } from "@geist/contracts";
 import type { DisplayBrandId } from "@geist/tokens";
-import { getRequiredThemeTokenValue } from "../theme";
+import { getRequiredThemeTokenValue, tokenValueToRem } from "../theme";
 import { CounterBadge } from "./counter-badge";
 import { Icon } from "./icon";
 import { NotificationBadge } from "./notification-badge";
@@ -97,7 +97,7 @@ function resolveTopTabBindingValue(brand: DisplayBrandId, slot: string, fallback
 }
 
 function toPx(value: string) {
-  return /^-?\d+(\.\d+)?$/.test(value) ? `${value}px` : value;
+  return tokenValueToRem(value);
 }
 
 function getFirstEnabledItemValue(items: TopTabItem[], disabled: boolean) {

@@ -1,7 +1,8 @@
-import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
+import { type CSSProperties, type HTMLAttributes, type ReactNode, useInsertionEffect } from "react";
 import type { DisplayBrandId } from "@geist/tokens";
 import type { IconName } from "@geist/icons";
-import { getRequiredThemeTokenValue } from "../theme";
+import { ensureStyleSheet, joinClassNames, toCssRule } from "./runtime-styles";
+import { getRequiredThemeTokenValue, tokenValueToRem } from "../theme";
 import { BrandLogo } from "./brand-logo";
 import { Icon } from "./icon";
 
@@ -37,6 +38,16 @@ type AvatarSizeSpec = {
   lineHeight: number;
   lineHeightToken: string;
 };
+
+const AVATAR_ROOT_CLASS = "geist-avatar";
+const AVATAR_FRAME_CLASS = "geist-avatar__frame";
+const AVATAR_CONTENT_CLASS = "geist-avatar__content";
+const AVATAR_STATUS_DOT_SHELL_CLASS = "geist-avatar__status-dot-shell";
+const AVATAR_STATUS_DOT_CLASS = "geist-avatar__status-dot";
+const AVATAR_STATUS_BADGE_WRAP_CLASS = "geist-avatar__status-badge-wrap";
+const AVATAR_STATUS_BADGE_CLASS = "geist-avatar__status-badge";
+const AVATAR_STATUS_BADGE_MARK_CLASS = "geist-avatar__status-badge-mark";
+const AVATAR_STYLESHEET_ID = "geist-avatar-styles";
 
 export const AVATAR_SIZE_SPECS: Record<AvatarSize, AvatarSizeSpec> = {
   "Extra small": {
@@ -122,7 +133,7 @@ export const AVATAR_SIZE_SPECS: Record<AvatarSize, AvatarSizeSpec> = {
 };
 
 function toPx(value: number | string) {
-  return typeof value === "number" ? `${value}px` : /^\d+(\.\d+)?$/.test(value) ? `${value}px` : value;
+  return tokenValueToRem(value);
 }
 
 function getInitials(initials: string) {
@@ -237,18 +248,15 @@ function AvatarStatusBadge({
   if (badgeType === "Cars24") {
     return (
       <span
-        aria-hidden="true"
-        style={{
-          alignItems: "center",
-          background: surfaceColor,
-          border: `1px solid ${fillColor}`,
-          borderRadius: "50%",
-          boxSizing: "border-box",
-          display: "inline-flex",
-          height: toPx(extent),
-          justifyContent: "center",
-          width: toPx(extent)
-        }}
+        className={AVATAR_STATUS_BADGE_CLASS}
+        style={
+          {
+            "--avatar-badge-border": fillColor,
+            "--avatar-badge-extent": toPx(extent),
+            "--avatar-badge-fill": surfaceColor,
+            "--avatar-badge-surface": surfaceColor
+          } as CSSProperties
+        }
       >
         <BrandLogo
           brand={brand}
@@ -266,39 +274,128 @@ function AvatarStatusBadge({
 
   return (
     <span
-      aria-hidden="true"
-      style={{
-        alignItems: "center",
-        display: "inline-flex",
-        height: toPx(extent),
-        justifyContent: "center",
-        position: "relative",
-        width: toPx(extent)
-      }}
+      className={AVATAR_STATUS_BADGE_CLASS}
+      style={
+        {
+          "--avatar-badge-color": fillColor,
+          "--avatar-badge-extent": toPx(extent)
+        } as CSSProperties
+      }
     >
       <Icon
         decorative
         name={badgeType === "Verified" ? "check-badge-fill" : "medal-badge-winner-filled"}
         style={{
-          color: fillColor,
-          fontSize: toPx(extent)
+          color: "var(--avatar-badge-color)",
+          fontSize: "var(--avatar-badge-extent)"
         }}
       />
       <Icon
         decorative
+        className={AVATAR_STATUS_BADGE_MARK_CLASS}
         name={badgeType === "Verified" ? "checkmark-1-filled" : "crown-vip-filled"}
         style={{
-          color: String(getRequiredThemeTokenValue(brand, "color.text.inverse")),
-          fontSize: toPx(iconSize),
-          left: "50%",
-          position: "absolute",
-          top: "50%",
-          transform: "translate(-50%, -50%)"
+          color: "var(--avatar-badge-mark-color)",
+          fontSize: toPx(iconSize)
         }}
       />
     </span>
   );
 }
+
+const AVATAR_STYLESHEET = [
+  toCssRule(`.${AVATAR_ROOT_CLASS}`, {
+    "border-radius": "var(--avatar-radius)",
+    display: "inline-flex",
+    "flex-shrink": "0",
+    height: "var(--avatar-box-size)",
+    overflow: "visible",
+    position: "relative",
+    "vertical-align": "middle",
+    width: "var(--avatar-box-size)"
+  }),
+  toCssRule(`.${AVATAR_FRAME_CLASS}`, {
+    "border-radius": "var(--avatar-radius)",
+    display: "inline-flex",
+    height: "100%",
+    overflow: "hidden",
+    width: "100%"
+  }),
+  toCssRule(`.${AVATAR_CONTENT_CLASS}`, {
+    "align-items": "center",
+    "background": "var(--avatar-content-background)",
+    "border-radius": "var(--avatar-radius)",
+    color: "var(--avatar-content-color)",
+    display: "inline-flex",
+    "font-family": "var(--avatar-font-family)",
+    "font-size": "var(--avatar-font-size)",
+    "font-weight": "var(--avatar-font-weight)",
+    height: "100%",
+    "justify-content": "center",
+    "letter-spacing": "var(--avatar-letter-spacing)",
+    "line-height": "var(--avatar-line-height)",
+    "text-transform": "uppercase",
+    width: "100%"
+  }),
+  toCssRule(`.${AVATAR_CONTENT_CLASS} > img`, {
+    "border-radius": "var(--avatar-radius)",
+    display: "block",
+    height: "100%",
+    "object-fit": "cover",
+    width: "100%"
+  }),
+  toCssRule(`.${AVATAR_STATUS_DOT_SHELL_CLASS}`, {
+    "align-items": "center",
+    background: "var(--avatar-surface-color)",
+    "border-radius": "50%",
+    bottom: "var(--avatar-dot-offset)",
+    display: "inline-flex",
+    height: "var(--avatar-dot-shell-size)",
+    "justify-content": "center",
+    "pointer-events": "none",
+    position: "absolute",
+    right: "var(--avatar-dot-offset)",
+    width: "var(--avatar-dot-shell-size)"
+  }),
+  toCssRule(`.${AVATAR_STATUS_DOT_CLASS}`, {
+    background: "var(--avatar-dot-color)",
+    "border-radius": "50%",
+    display: "block",
+    height: "80%",
+    width: "80%"
+  }),
+  toCssRule(`.${AVATAR_STATUS_BADGE_WRAP_CLASS}`, {
+    "align-items": "center",
+    background: "var(--avatar-surface-color)",
+    "border-radius": "50%",
+    bottom: "0",
+    display: "inline-flex",
+    height: "var(--avatar-badge-wrap-size)",
+    "justify-content": "center",
+    "pointer-events": "none",
+    position: "absolute",
+    right: "0",
+    transform: "translate(10%, 10%)",
+    width: "var(--avatar-badge-wrap-size)"
+  }),
+  toCssRule(`.${AVATAR_STATUS_BADGE_CLASS}`, {
+    "align-items": "center",
+    background: "var(--avatar-badge-fill, transparent)",
+    border: "var(--avatar-badge-border, 0 solid transparent)",
+    "border-radius": "50%",
+    display: "inline-flex",
+    height: "var(--avatar-badge-extent)",
+    "justify-content": "center",
+    position: "relative",
+    width: "var(--avatar-badge-extent)"
+  }),
+  toCssRule(`.${AVATAR_STATUS_BADGE_MARK_CLASS}`, {
+    left: "50%",
+    position: "absolute",
+    top: "50%",
+    transform: "translate(-50%, -50%)"
+  })
+].join("");
 
 export interface AvatarProps
   extends Omit<HTMLAttributes<HTMLSpanElement>, "children" | "color"> {
@@ -324,6 +421,7 @@ export function Avatar({
   adornment = "Status dot",
   badgeType = "Verified",
   brand = "Cars24",
+  className,
   icon,
   iconName = "people-circle-user-circle-avatar-profile-outline",
   imageAlt = "Profile image",
@@ -335,8 +433,12 @@ export function Avatar({
   style,
   ...rest
 }: AvatarProps) {
+  useInsertionEffect(() => {
+    ensureStyleSheet(AVATAR_STYLESHEET_ID, AVATAR_STYLESHEET);
+  }, []);
+
   const metrics = getAvatarResolvedMetrics(brand, size);
-  const radius = `${Number(getRequiredThemeTokenValue(brand, "radius.pill"))}px`;
+  const radius = tokenValueToRem(getRequiredThemeTokenValue(brand, "radius.pill"));
   const surfaceColor = String(
     getRequiredThemeTokenValue(brand, onDark ? "color.surface.inverse" : "color.surface.canvas")
   );
@@ -364,61 +466,40 @@ export function Avatar({
       : "var(--cars24-semantic-text-brand-base, #4736FE)"
   );
   const fontFamily = String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"));
+
   const contentNode =
     appearance === "Image" && imageSrc ? (
-      <img
-        alt={imageAlt}
-        src={imageSrc}
-        style={{
-          borderRadius: radius,
-          display: "block",
-          height: "100%",
-          objectFit: "cover",
-          width: "100%"
-        }}
-      />
+      <img alt={imageAlt} src={imageSrc} />
     ) : appearance === "Initials" ? (
       <span
         aria-hidden={rest["aria-label"] || rest["aria-labelledby"] ? undefined : true}
-        style={{
-          alignItems: "center",
-          background: initialsBackground,
-          borderRadius: radius,
-          color: initialsForeground,
-          display: "inline-flex",
-          fontFamily: `${fontFamily}, sans-serif`,
-          fontSize: toPx(metrics.fontSize),
-          fontWeight: metrics.fontWeight,
-          height: "100%",
-          justifyContent: "center",
-          letterSpacing: metrics.letterSpacing,
-          lineHeight: toPx(metrics.lineHeight),
-          textTransform: "uppercase",
-          width: "100%"
-        }}
+        className={AVATAR_CONTENT_CLASS}
+        style={
+          {
+            "--avatar-content-background": initialsBackground,
+            "--avatar-content-color": initialsForeground
+          } as CSSProperties
+        }
       >
         {getInitials(initials)}
       </span>
     ) : (
       <span
         aria-hidden={rest["aria-label"] || rest["aria-labelledby"] ? undefined : true}
-        style={{
-          alignItems: "center",
-          background: iconBackground,
-          borderRadius: radius,
-          color: iconForeground,
-          display: "inline-flex",
-          height: "100%",
-          justifyContent: "center",
-          width: "100%"
-        }}
+        className={AVATAR_CONTENT_CLASS}
+        style={
+          {
+            "--avatar-content-background": iconBackground,
+            "--avatar-content-color": iconForeground
+          } as CSSProperties
+        }
       >
         {icon ?? (
           <Icon
             decorative
             name={iconName}
             style={{
-              color: iconForeground,
+              color: "inherit",
               fontSize: toPx(metrics.iconSize)
             }}
           />
@@ -429,79 +510,36 @@ export function Avatar({
   return (
     <span
       {...rest}
+      className={joinClassNames(AVATAR_ROOT_CLASS, className)}
       style={
         {
-          borderRadius: radius,
-          display: "inline-flex",
-          flexShrink: 0,
-          height: toPx(metrics.boxSize),
-          overflow: "visible",
-          position: "relative",
-          verticalAlign: "middle",
-          width: toPx(metrics.boxSize),
+          "--avatar-badge-mark-color": String(getRequiredThemeTokenValue(brand, "color.text.inverse")),
+          "--avatar-badge-wrap-size": toPx(metrics.badgeExtent + metrics.badgeInset * 2),
+          "--avatar-box-size": toPx(metrics.boxSize),
+          "--avatar-dot-color": resolveStatusDotColor(brand, statusDotColor, onDark),
+          "--avatar-dot-offset": toPx(metrics.dotOffset),
+          "--avatar-dot-shell-size": toPx(metrics.dotShellSize),
+          "--avatar-font-family": `${fontFamily}, sans-serif`,
+          "--avatar-font-size": toPx(metrics.fontSize),
+          "--avatar-font-weight": String(metrics.fontWeight),
+          "--avatar-letter-spacing": metrics.letterSpacing,
+          "--avatar-line-height": toPx(metrics.lineHeight),
+          "--avatar-radius": radius,
+          "--avatar-surface-color": surfaceColor,
           ...style
-        } satisfies CSSProperties
+        } as CSSProperties
       }
     >
-      <span
-        style={{
-          borderRadius: radius,
-          display: "inline-flex",
-          height: "100%",
-          overflow: "hidden",
-          width: "100%"
-        }}
-      >
-        {contentNode}
-      </span>
+      <span className={AVATAR_FRAME_CLASS}>{contentNode}</span>
 
       {adornment === "Status dot" ? (
-        <span
-          aria-hidden="true"
-          style={{
-            alignItems: "center",
-            background: surfaceColor,
-            borderRadius: "50%",
-            bottom: toPx(metrics.dotOffset),
-            display: "inline-flex",
-            height: toPx(metrics.dotShellSize),
-            justifyContent: "center",
-            pointerEvents: "none",
-            position: "absolute",
-            right: toPx(metrics.dotOffset),
-            width: toPx(metrics.dotShellSize)
-          }}
-        >
-          <span
-            style={{
-              background: resolveStatusDotColor(brand, statusDotColor, onDark),
-              borderRadius: "50%",
-              display: "block",
-              height: "80%",
-              width: "80%"
-            }}
-          />
+        <span aria-hidden="true" className={AVATAR_STATUS_DOT_SHELL_CLASS}>
+          <span className={AVATAR_STATUS_DOT_CLASS} />
         </span>
       ) : null}
 
       {adornment === "Status badge" ? (
-        <span
-          aria-hidden="true"
-          style={{
-            alignItems: "center",
-            background: surfaceColor,
-            borderRadius: "50%",
-            bottom: 0,
-            display: "inline-flex",
-            height: toPx(metrics.badgeExtent + metrics.badgeInset * 2),
-            justifyContent: "center",
-            pointerEvents: "none",
-            position: "absolute",
-            right: 0,
-            transform: "translate(10%, 10%)",
-            width: toPx(metrics.badgeExtent + metrics.badgeInset * 2)
-          }}
-        >
+        <span aria-hidden="true" className={AVATAR_STATUS_BADGE_WRAP_CLASS}>
           <AvatarStatusBadge
             badgeType={badgeType}
             brand={brand}

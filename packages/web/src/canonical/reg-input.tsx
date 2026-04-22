@@ -14,7 +14,7 @@ import { designSystemRegistry } from "@geist/contracts";
 import { Icon } from "./icon";
 import { HelperText } from "./helper-text";
 import { Label } from "./label";
-import { getRequiredThemeTokenValue } from "../theme";
+import { getRequiredThemeTokenValue, pxToRem } from "../theme";
 
 export const canonicalRegInputWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.regInput"
@@ -271,10 +271,10 @@ function makeTypographyStyles({
   return {
     color,
     fontFamily: `${String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"))}, sans-serif`,
-    fontSize: `${typography.fontSize}px`,
+    fontSize: pxToRem(typography.fontSize),
     fontWeight: Number(getRequiredThemeTokenValue(brand, fontWeightPath)),
-    letterSpacing: `${typography.letterSpacing}px`,
-    lineHeight: `${typography.lineHeight}px`,
+    letterSpacing: pxToRem(typography.letterSpacing),
+    lineHeight: pxToRem(typography.lineHeight),
     margin: 0
   };
 }
@@ -415,11 +415,11 @@ export function RegInput({
   const fieldStyles: CSSProperties = {
     alignItems: "center",
     background: fieldColors.background,
-    border: `${borderWidth}px solid ${fieldColors.border}`,
-    borderRadius: `${fieldRadius}px`,
+    border: `${pxToRem(borderWidth)} solid ${fieldColors.border}`,
+    borderRadius: pxToRem(fieldRadius),
     boxSizing: "border-box",
     display: "flex",
-    height: `${sizeTokens.fieldHeight}px`,
+    height: pxToRem(sizeTokens.fieldHeight),
     minWidth: 0,
     overflow: "hidden",
     width: "100%"
@@ -440,23 +440,23 @@ export function RegInput({
     alignItems: "center",
     display: "flex",
     flexDirection: "column",
-    gap: `${badgeGap}px`,
-    height: `${badgeInnerHeight}px`,
+    gap: pxToRem(badgeGap),
+    height: pxToRem(badgeInnerHeight),
     justifyContent: "center",
     lineHeight: 0,
-    width: `${badgeInnerWidth}px`
+    width: pxToRem(badgeInnerWidth)
   };
 
   const badgeGlyphStyles: CSSProperties = {
     display: "block",
-    height: "10px",
-    width: "10px"
+    height: pxToRem(10),
+    width: pxToRem(10)
   };
 
   const badgeWordmarkStyles: CSSProperties = {
     display: "block",
-    height: "8.52px",
-    width: "19.15px"
+    height: pxToRem(8.52),
+    width: pxToRem(19.15)
   };
 
   const badgeLabelStyles: CSSProperties = {
@@ -466,7 +466,7 @@ export function RegInput({
       fontWeightPath: "typography.fontWeight.medium",
       typography: badgeTypography
     }),
-    lineHeight: `${badgeTypography.lineHeight}px`,
+    lineHeight: pxToRem(badgeTypography.lineHeight),
     textTransform: "uppercase"
   };
 
@@ -494,9 +494,9 @@ export function RegInput({
     alignItems: "center",
     display: "flex",
     flex: "1 1 auto",
-    gap: `${sizeTokens.fieldGap}px`,
+    gap: pxToRem(sizeTokens.fieldGap),
     minWidth: 0,
-    padding: `${sizeTokens.fieldPaddingBlock}px ${showDismissAction ? 0 : sizeTokens.fieldPaddingInline}px ${sizeTokens.fieldPaddingBlock}px ${sizeTokens.fieldPaddingInline}px`
+    padding: `${pxToRem(sizeTokens.fieldPaddingBlock)} ${showDismissAction ? 0 : pxToRem(sizeTokens.fieldPaddingInline)} ${pxToRem(sizeTokens.fieldPaddingBlock)} ${pxToRem(sizeTokens.fieldPaddingInline)}`
   };
 
   const previewTextStyles: CSSProperties = {
@@ -524,29 +524,29 @@ export function RegInput({
     appearance: "none",
     background: "transparent",
     border: "none",
-    borderLeft: `${borderWidth}px solid ${fieldColors.divider}`,
+    borderLeft: `${pxToRem(borderWidth)} solid ${fieldColors.divider}`,
     cursor: disabled ? "not-allowed" : "pointer",
     display: "inline-flex",
     flexShrink: 0,
     justifyContent: "center",
     margin: 0,
-    padding: `0 ${sizeTokens.fieldPaddingInline}px 0 ${Number(getRequiredThemeTokenValue(brand, "spacing.4"))}px`
+    padding: `0 ${pxToRem(sizeTokens.fieldPaddingInline)} 0 ${pxToRem(Number(getRequiredThemeTokenValue(brand, "spacing.4")))}`
   };
 
   const clearActionStyles: CSSProperties = {
     alignItems: "center",
     appearance: "none",
     background: "transparent",
-    border: `${borderWidth}px solid ${fieldColors.actionBorder}`,
-    borderRadius: `${actionRadius}px`,
+    border: `${pxToRem(borderWidth)} solid ${fieldColors.actionBorder}`,
+    borderRadius: pxToRem(actionRadius),
     cursor: disabled ? "not-allowed" : "pointer",
     display: "inline-flex",
     flexShrink: 0,
-    height: `${sizeTokens.actionSize}px`,
+    height: pxToRem(sizeTokens.actionSize),
     justifyContent: "center",
-    margin: `0 ${sizeTokens.fieldPaddingInline}px 0 ${Number(getRequiredThemeTokenValue(brand, "spacing.1"))}px`,
+    margin: `0 ${pxToRem(sizeTokens.fieldPaddingInline)} 0 ${pxToRem(Number(getRequiredThemeTokenValue(brand, "spacing.1")))}`,
     padding: 0,
-    width: `${sizeTokens.actionSize}px`
+    width: pxToRem(sizeTokens.actionSize)
   };
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
@@ -655,7 +655,7 @@ export function RegInput({
     <div
       style={{
         display: "grid",
-        gap: `${sizeTokens.helperGap}px`,
+        gap: pxToRem(sizeTokens.helperGap),
         width: "100%",
         ...style
       }}
@@ -674,7 +674,7 @@ export function RegInput({
       <div
         style={{
           display: "grid",
-          gap: `${sizeTokens.labelFieldGap}px`
+          gap: pxToRem(sizeTokens.labelFieldGap)
         }}
       >
         {showLabel ? (
@@ -682,7 +682,7 @@ export function RegInput({
             <div
               style={{
                 display: "block",
-                paddingInline: `${sizeTokens.labelPaddingInline}px`
+                paddingInline: pxToRem(sizeTokens.labelPaddingInline)
               }}
             >
               {labelNode}
@@ -692,7 +692,7 @@ export function RegInput({
               htmlFor={inputId}
               style={{
                 display: "block",
-                paddingInline: `${sizeTokens.labelPaddingInline}px`
+                paddingInline: pxToRem(sizeTokens.labelPaddingInline)
               }}
             >
               {labelNode}
@@ -737,9 +737,9 @@ export function RegInput({
                       background: fieldColors.border,
                       display: "inline-block",
                       flexShrink: 0,
-                      height: `${inputTypography.lineHeight - 4}px`,
-                      marginLeft: previewTextValue ? `${caretGap}px` : 0,
-                      width: `${caretWidth}px`
+                      height: pxToRem(inputTypography.lineHeight - 4),
+                      marginLeft: previewTextValue ? pxToRem(caretGap) : 0,
+                      width: pxToRem(caretWidth)
                     }}
                   />
                 ) : null}
@@ -783,7 +783,7 @@ export function RegInput({
                 name={trailingActionIconName}
                 style={{
                   color: fieldColors.actionIcon,
-                  fontSize: `${trailingActionIconPixelSize}px`
+                  fontSize: pxToRem(trailingActionIconPixelSize)
                 }}
               />
             </button>
@@ -802,7 +802,7 @@ export function RegInput({
                 name={trailingActionIconName}
                 style={{
                   color: fieldColors.actionIcon,
-                  fontSize: `${trailingActionIconPixelSize}px`
+                  fontSize: pxToRem(trailingActionIconPixelSize)
                 }}
               />
             </button>
@@ -818,7 +818,7 @@ export function RegInput({
           helperText={helperText}
           showIcon={showHelperIcon}
           size={size}
-          style={{ paddingInline: `${sizeTokens.labelPaddingInline}px` }}
+          style={{ paddingInline: pxToRem(sizeTokens.labelPaddingInline) }}
           tone={(helperTone ?? (destructive ? "Destructive" : "Default")) === "Destructive" ? "Error" : "Default"}
         />
       ) : null}

@@ -1,0 +1,15 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import { IconLibraryGallery } from "./IconLibraryGallery";
+import { multicolorIconCount, totalIconCount, totalIconFamilyCount } from "./iconLibraryData";
+
+<Meta title="Foundations/Icon Library" />
+
+# Icon Library
+
+Complete icon documentation generated from the `@geist/icons` registry. This page uses Storybook's `IconGallery` and `IconItem` blocks so every exported icon is documented in the same visual format as the official docs.
+
+The current library contains **{totalIconCount} icons** across **{totalIconFamilyCount} families**, including **{multicolorIconCount} multi-path icons**. Families keep related variants like line, outline, and filled states together so the library stays easier to scan.
+
+Use the filter tabs below to narrow the library to filled or outline variants while keeping the same family grouping.
+
+<IconLibraryGallery />

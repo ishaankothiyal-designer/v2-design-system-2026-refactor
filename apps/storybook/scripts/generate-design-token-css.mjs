@@ -20,6 +20,7 @@ const figmaGapDocsOutputPath = path.join(generatedDir, "GapTokens.mdx");
 const figmaGapDataOutputPath = path.join(generatedDir, "gapTokenData.ts");
 const radiusDocsOutputPath = path.join(generatedDir, "RadiusTokens.mdx");
 const radiusDataOutputPath = path.join(generatedDir, "radiusTokenData.ts");
+const REM_BASE_PX = 16;
 
 function readJson(filePath) {
   return JSON.parse(readFileSync(filePath, "utf8"));
@@ -71,6 +72,14 @@ function compareNaturally(left, right) {
 
 function sanitizeComment(value) {
   return value.replace(/\*\//g, "*\\/").replace(/\s+/g, " ").trim();
+}
+
+function toRem(value) {
+  if (value === 0) {
+    return "0";
+  }
+
+  return `${Number((value / REM_BASE_PX).toFixed(4)).toString()}rem`;
 }
 
 function isColorToken(value) {
@@ -148,6 +157,10 @@ function serializeBaseValue(value, presenter) {
       return String(value);
     }
 
+    if (presenter === "FontSize" || presenter === "LineHeight" || presenter === "BorderRadius" || presenter === "Spacing") {
+      return toRem(value);
+    }
+
     return `${value}px`;
   }
 
@@ -165,6 +178,10 @@ function serializeTypographyValue(value, presenter) {
 
   if (presenter === "FontWeight" || presenter === "Opacity") {
     return String(value);
+  }
+
+  if (presenter === "FontSize" || presenter === "LineHeight" || presenter === "Spacing" || presenter === "BorderRadius") {
+    return toRem(value);
   }
 
   return `${value}px`;

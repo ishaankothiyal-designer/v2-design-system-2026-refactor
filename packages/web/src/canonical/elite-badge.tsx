@@ -1,6 +1,6 @@
 import type { CSSProperties, HTMLAttributes } from "react";
 import { Icon } from "./icon";
-import { getRequiredThemeTokenValue } from "../theme";
+import { getRequiredThemeTokenValue, tokenValueToRem } from "../theme";
 
 export type EliteBadgeBrand = "Cars24";
 export type EliteBadgeName = "Elite" | "All cars";
@@ -11,7 +11,7 @@ export interface EliteBadgeProps extends Omit<HTMLAttributes<HTMLSpanElement>, "
 }
 
 function toPx(value: number | string) {
-  return typeof value === "number" ? `${value}px` : /^\d+(\.\d+)?$/.test(value) ? `${value}px` : value;
+  return tokenValueToRem(value);
 }
 
 function EliteWordmark({ color }: { color: string }) {

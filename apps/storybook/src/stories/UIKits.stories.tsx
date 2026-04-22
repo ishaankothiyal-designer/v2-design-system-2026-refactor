@@ -4,6 +4,7 @@ import { UIExample as AccordionUIExample } from "./Accordion.stories";
 import { UIExample as AIChatUIExample } from "./AIChatMobileScreenExample";
 import { UIExample as BannerUIExample } from "./Banner.stories";
 import { UIExample as ButtonUIExample } from "./Button.stories";
+import { UIExample as CarMarketplaceDashboardUIExample } from "./CarMarketplaceDashboardDesktopScreenExample";
 import { UIExample as CarListingUIExample } from "./CarListingMobileScreenExample";
 import { UIExample as DogInventoryUIExample } from "./DogInventoryShopLandingMobileScreenExample";
 import { UIExample as FoodDeliveryUIExample } from "./FoodDeliveryMobileScreenExample";
@@ -49,6 +50,10 @@ export const Button = {
 
 export const CarListing = {
   ...CarListingUIExample
+};
+
+export const CarMarketplaceDashboard = {
+  ...CarMarketplaceDashboardUIExample
 };
 
 export const DogInventory = {

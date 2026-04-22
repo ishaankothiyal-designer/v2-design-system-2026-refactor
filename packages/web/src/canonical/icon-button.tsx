@@ -6,12 +6,12 @@ import {
   type MouseEvent,
   type ReactElement,
   type ReactNode,
+  useInsertionEffect,
   useState
 } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
-import { getRequiredThemeTokenValue } from "../theme";
-import { getTapFeedbackStyles } from "./press-feedback";
+import { normalizeBrandId, type DisplayBrandId } from "@geist/tokens";
+import { ensureStyleSheet, runtimeTokenVar, runtimeTokenVarPx, toCssRule } from "./runtime-styles";
 
 export const canonicalIconButtonWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.iconButton"
@@ -31,21 +31,16 @@ export type IconButtonStyleVariant =
 export type IconButtonSize = "XXXSmall" | "XXSmall" | "XSmall" | "Small" | "Medium" | "Large";
 export type IconButtonPreviewState = "Rest" | "Hover/Pressed";
 
-type IconButtonMetrics = {
-  borderRadius: number;
-  boxSize: number;
-  iconSize: number;
-};
+type IconButtonSizeKey = "xxxs" | "xxs" | "xs" | "sm" | "md" | "lg";
+type StylableElement = ReactElement<{ style?: CSSProperties; className?: string }>;
 
-type IconButtonSurface = {
-  background: string;
-  border: string;
-  foreground: string;
-};
+const ICON_BUTTON_ROOT_CLASS = "geist-icon-button";
+const ICON_BUTTON_SLOT_CLASS = "geist-icon-button__slot";
+const ICON_BUTTON_STYLESHEET_ID = "geist-icon-button-styles";
+const ICON_BUTTON_TAP_TRANSFORM = "translateY(1px) scale(0.985)";
+const ICON_BUTTON_TAP_TRANSITION = "transform 140ms cubic-bezier(0.2, 0, 0, 1)";
 
-type StylableIconElement = ReactElement<{ style?: CSSProperties }>;
-
-function getTokenSizeKey(size: IconButtonSize) {
+function getTokenSizeKey(size: IconButtonSize): IconButtonSizeKey {
   if (size === "Large") {
     return "lg";
   }
@@ -65,187 +60,169 @@ function getTokenSizeKey(size: IconButtonSize) {
   return "xxxs";
 }
 
-function getMetrics(brand: DisplayBrandId, size: IconButtonSize): IconButtonMetrics {
-  const tokenSizeKey = getTokenSizeKey(size);
-  const tokenPrefix = `component.iconButton.size.${tokenSizeKey}`;
-
-  return {
-    borderRadius: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.borderRadius`)),
-    boxSize: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.boxSize`)),
-    iconSize: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.iconSize`))
-  };
-}
-
-function getSurfaceTokenPrefix(onDark: boolean, styleVariant: IconButtonStyleVariant, active: boolean) {
-  const stateKey = active ? "hover" : "rest";
-  const modeKey = onDark ? "dark" : "light";
-
+function getVariantKey(styleVariant: IconButtonStyleVariant) {
   switch (styleVariant) {
     case "Solid - Primary":
-      return `component.iconButton.color.${modeKey}.solid.primary.${stateKey}`;
+      return "solid-primary";
     case "Solid - Black":
-      return `component.iconButton.color.${modeKey}.solid.black.${stateKey}`;
+      return "solid-black";
     case "Outline - Primary":
-      return `component.iconButton.color.${modeKey}.outline.primary.${stateKey}`;
+      return "outline-primary";
     case "Outline - Black":
-      return `component.iconButton.color.${modeKey}.outline.black.${stateKey}`;
+      return "outline-black";
     case "Subtle - Primary":
-      return `component.iconButton.color.${modeKey}.subtle.primary.${stateKey}`;
+      return "subtle-primary";
     case "Subtle - Black":
-      return `component.iconButton.color.${modeKey}.subtle.black.${stateKey}`;
+      return "subtle-black";
     case "Ghost - Brand":
-      return `component.iconButton.color.${modeKey}.ghost.primary.${stateKey}`;
+      return "ghost-primary";
     case "Ghost - Black":
-      return `component.iconButton.color.${modeKey}.ghost.black.${stateKey}`;
+      return "ghost-black";
     case "Transparent":
-      return `component.iconButton.color.${modeKey}.transparent.${stateKey}`;
+      return "transparent";
   }
 }
 
-function getSurface(
-  brand: DisplayBrandId,
-  styleVariant: IconButtonStyleVariant,
-  onDark: boolean,
-  active: boolean,
-  disabled: boolean
-): IconButtonSurface {
-  const brandAction = String(getRequiredThemeTokenValue(brand, "color.brand.alt.500"));
-  const brandBaseHover = String(getRequiredThemeTokenValue(brand, "color.brand.primary.600"));
-  const brandSubtler = String(getRequiredThemeTokenValue(brand, "color.brand.primary.50"));
-  const brandSubtlerHover = String(getRequiredThemeTokenValue(brand, "color.brand.primary.100"));
-  const textPrimary = String(getRequiredThemeTokenValue(brand, "color.text.primary"));
-  const textInverse = String(getRequiredThemeTokenValue(brand, "color.text.inverse"));
-  const modeKey = onDark ? "dark" : "light";
-
-  if (disabled) {
-    const disabledPrefix = `component.iconButton.color.${modeKey}.disabled`;
-    return {
-      background: String(getRequiredThemeTokenValue(brand, `${disabledPrefix}.background`)),
-      border: String(getRequiredThemeTokenValue(brand, `${disabledPrefix}.border`)),
-      foreground: String(getRequiredThemeTokenValue(brand, `${disabledPrefix}.foreground`))
-    };
+function getVariantTokenSegments(styleVariantKey: string) {
+  if (styleVariantKey === "transparent") {
+    return ["transparent"] as const;
   }
 
-  if (!onDark && styleVariant === "Solid - Primary") {
-    return {
-      background: active ? brandBaseHover : brandAction,
-      border: "transparent",
-      foreground: textInverse
-    };
-  }
-
-  if (onDark && styleVariant === "Solid - Primary") {
-    const tokenPrefix = `component.iconButton.color.${modeKey}.solid.primary.${active ? "hover" : "rest"}`;
-
-    return {
-      background: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.background`)),
-      border: "transparent",
-      foreground: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.foreground`))
-    };
-  }
-
-  if (!onDark && styleVariant === "Outline - Primary") {
-    return {
-      background: active ? brandSubtlerHover : "transparent",
-      border: brandAction,
-      foreground: brandAction
-    };
-  }
-
-  if (!onDark && styleVariant === "Subtle - Primary") {
-    return {
-      background: active ? brandSubtlerHover : brandSubtler,
-      border: "transparent",
-      foreground: brandAction
-    };
-  }
-
-  if (!onDark && styleVariant === "Ghost - Brand") {
-    return {
-      background: "transparent",
-      border: "transparent",
-      foreground: brandAction
-    };
-  }
-
-  if (onDark && styleVariant === "Ghost - Brand") {
-    return {
-      background: "transparent",
-      border: "transparent",
-      foreground: textInverse
-    };
-  }
-
-  if (onDark && styleVariant === "Subtle - Primary") {
-    const tokenPrefix = `component.iconButton.color.${modeKey}.subtle.primary.${active ? "hover" : "rest"}`;
-
-    return {
-      background: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.background`)),
-      border: "transparent",
-      foreground: textInverse
-    };
-  }
-
-  if (onDark && styleVariant === "Outline - Primary") {
-    const tokenPrefix = `component.iconButton.color.${modeKey}.outline.primary.${active ? "hover" : "rest"}`;
-
-    return {
-      background: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.background`)),
-      border: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.border`)),
-      foreground: textInverse
-    };
-  }
-
-  if (styleVariant === "Transparent") {
-    const tokenPrefix = getSurfaceTokenPrefix(onDark, styleVariant, active);
-    return {
-      background: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.background`)),
-      border: "transparent",
-      foreground: onDark ? textInverse : textPrimary
-    };
-  }
-
-  const tokenPrefix = getSurfaceTokenPrefix(onDark, styleVariant, active);
-  const border =
-    styleVariant === "Solid - Black" ||
-    styleVariant === "Subtle - Black" ||
-    styleVariant === "Ghost - Black"
-      ? "transparent"
-      : String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.border`));
-
-  return {
-    background: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.background`)),
-    border,
-    foreground: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.foreground`))
-  };
+  const [family, tone] = styleVariantKey.split("-") as ["solid" | "outline" | "subtle" | "ghost", "primary" | "black"];
+  return [family, tone] as const;
 }
 
-function renderIcon(icon: ReactNode, foreground: string, iconSize: number) {
-  const iconWrapperStyles: CSSProperties = {
-    alignItems: "center",
-    color: foreground,
+const ICON_BUTTON_SIZE_KEYS = ["xxxs", "xxs", "xs", "sm", "md", "lg"] as const;
+const ICON_BUTTON_VARIANT_KEYS = [
+  "solid-primary",
+  "solid-black",
+  "outline-primary",
+  "outline-black",
+  "subtle-primary",
+  "subtle-black",
+  "ghost-primary",
+  "ghost-black",
+  "transparent"
+] as const;
+
+const ICON_BUTTON_STYLESHEET = [
+  toCssRule(`.${ICON_BUTTON_ROOT_CLASS}`, {
+    "align-items": "center",
+    appearance: "none",
+    border: `${runtimeTokenVarPx("component.iconButton.border.width")} solid transparent`,
+    "box-sizing": "border-box",
+    cursor: "pointer",
     display: "inline-flex",
-    fontSize: `${iconSize}px`,
-    height: `${iconSize}px`,
-    justifyContent: "center",
-    lineHeight: 1,
-    width: `${iconSize}px`
-  };
+    "justify-content": "center",
+    outline: "none",
+    "outline-offset": runtimeTokenVarPx("component.iconButton.focus.outlineOffset"),
+    padding: "0",
+    "transform-origin": "center center",
+    transition: [
+      "background-color 180ms cubic-bezier(0.2, 0, 0, 1)",
+      "border-color 180ms cubic-bezier(0.2, 0, 0, 1)",
+      "outline-color 180ms cubic-bezier(0.2, 0, 0, 1)",
+      ICON_BUTTON_TAP_TRANSITION
+    ].join(", "),
+    "will-change": "transform"
+  }),
+  toCssRule(`.${ICON_BUTTON_ROOT_CLASS}[data-focused="true"]`, {
+    outline: `${runtimeTokenVarPx("component.iconButton.focus.outlineWidth")} solid ${runtimeTokenVar("color.border.focus")}`
+  }),
+  toCssRule(`.${ICON_BUTTON_ROOT_CLASS}:focus-visible`, {
+    outline: `${runtimeTokenVarPx("component.iconButton.focus.outlineWidth")} solid ${runtimeTokenVar("color.border.focus")}`
+  }),
+  toCssRule(`.${ICON_BUTTON_ROOT_CLASS}[data-disabled="true"]`, {
+    cursor: "not-allowed",
+    "will-change": "auto"
+  }),
+  toCssRule(`.${ICON_BUTTON_ROOT_CLASS}[data-pressed="true"][data-disabled="false"]`, {
+    transform: ICON_BUTTON_TAP_TRANSFORM
+  }),
+  toCssRule(`.${ICON_BUTTON_SLOT_CLASS}`, {
+    "align-items": "center",
+    color: "inherit",
+    display: "inline-flex",
+    "justify-content": "center",
+    "line-height": "1",
+  }),
+  ...ICON_BUTTON_SIZE_KEYS.flatMap((sizeKey) => [
+    toCssRule(`.${ICON_BUTTON_ROOT_CLASS}[data-size="${sizeKey}"]`, {
+      height: runtimeTokenVarPx(`component.iconButton.size.${sizeKey}.boxSize`),
+      width: runtimeTokenVarPx(`component.iconButton.size.${sizeKey}.boxSize`)
+    }),
+    toCssRule(`.${ICON_BUTTON_ROOT_CLASS}[data-size="${sizeKey}"][data-shape="regular"]`, {
+      "border-radius": runtimeTokenVarPx(`component.iconButton.size.${sizeKey}.borderRadius`)
+    }),
+    toCssRule(`.${ICON_BUTTON_ROOT_CLASS}[data-size="${sizeKey}"] .${ICON_BUTTON_SLOT_CLASS}`, {
+      "font-size": runtimeTokenVarPx(`component.iconButton.size.${sizeKey}.iconSize`),
+      height: runtimeTokenVarPx(`component.iconButton.size.${sizeKey}.iconSize`),
+      width: runtimeTokenVarPx(`component.iconButton.size.${sizeKey}.iconSize`)
+    })
+  ]),
+  toCssRule(`.${ICON_BUTTON_ROOT_CLASS}[data-shape="round"]`, {
+    "border-radius": runtimeTokenVarPx("radius.pill")
+  }),
+  ...[false, true].flatMap((onDark) => {
+    const modeKey = onDark ? "dark" : "light";
+    const modeSelector = `.${ICON_BUTTON_ROOT_CLASS}[data-on-dark="${String(onDark)}"]`;
 
+    return [
+      toCssRule(`${modeSelector}[data-disabled="true"]`, {
+        background: runtimeTokenVar(`component.iconButton.color.${modeKey}.disabled.background`),
+        "border-color": runtimeTokenVar(`component.iconButton.color.${modeKey}.disabled.border`),
+        color: runtimeTokenVar(`component.iconButton.color.${modeKey}.disabled.foreground`)
+      }),
+      ...ICON_BUTTON_VARIANT_KEYS.flatMap((styleVariantKey) => {
+        const segments = getVariantTokenSegments(styleVariantKey);
+
+        return (["rest", "hover"] as const).map((stateKey) => {
+          const selector =
+            stateKey === "hover"
+              ? `${modeSelector}[data-variant="${styleVariantKey}"][data-disabled="false"][data-hovered="true"]`
+              : `${modeSelector}[data-variant="${styleVariantKey}"][data-disabled="false"][data-hovered="false"]`;
+
+          const tokenPrefix =
+            segments.length === 1
+              ? `component.iconButton.color.${modeKey}.${segments[0]}.${stateKey}`
+              : `component.iconButton.color.${modeKey}.${segments[0]}.${segments[1]}.${stateKey}`;
+
+          return toCssRule(selector, {
+            background: runtimeTokenVar(`${tokenPrefix}.background`),
+            "border-color":
+              styleVariantKey === "solid-primary" ||
+              styleVariantKey === "solid-black" ||
+              styleVariantKey === "subtle-primary" ||
+              styleVariantKey === "subtle-black" ||
+              styleVariantKey === "ghost-primary" ||
+              styleVariantKey === "ghost-black" ||
+              styleVariantKey === "transparent"
+                ? "transparent"
+                : runtimeTokenVar(`${tokenPrefix}.border`),
+            color: runtimeTokenVar(`${tokenPrefix}.foreground`)
+          });
+        });
+      })
+    ];
+  })
+].join("");
+
+function renderIcon(icon: ReactNode) {
   if (!icon) {
     return null;
   }
 
   if (isValidElement(icon)) {
-    const stylableIcon = icon as StylableIconElement;
+    const element = icon as StylableElement;
 
     return (
-      <span aria-hidden style={iconWrapperStyles}>
-        {cloneElement(stylableIcon, {
+      <span aria-hidden className={ICON_BUTTON_SLOT_CLASS}>
+        {cloneElement(element, {
+          className: [element.props.className].filter(Boolean).join(" "),
           style: {
-            ...(stylableIcon.props.style ?? {}),
-            color: foreground,
-            fontSize: `${iconSize}px`
+            color: "inherit",
+            fontSize: "inherit",
+            ...element.props.style
           }
         })}
       </span>
@@ -253,7 +230,7 @@ function renderIcon(icon: ReactNode, foreground: string, iconSize: number) {
   }
 
   return (
-    <span aria-hidden style={iconWrapperStyles}>
+    <span aria-hidden className={ICON_BUTTON_SLOT_CLASS}>
       {icon}
     </span>
   );
@@ -272,6 +249,7 @@ export interface IconButtonProps
 
 export function IconButton({
   brand = "Cars24",
+  className,
   disabled = false,
   forceState,
   icon,
@@ -293,41 +271,14 @@ export function IconButton({
   const [hovered, setHovered] = useState(false);
   const [pressed, setPressed] = useState(false);
 
-  const active = forceState === "Hover/Pressed" || hovered || pressed;
-  const metrics = getMetrics(brand, size);
-  const borderWidth = Number(getRequiredThemeTokenValue(brand, "component.iconButton.border.width"));
-  const focusColor = String(getRequiredThemeTokenValue(brand, "color.border.focus"));
-  const focusOutlineWidth = Number(getRequiredThemeTokenValue(brand, "component.iconButton.focus.outlineWidth"));
-  const focusOutlineOffset = Number(getRequiredThemeTokenValue(brand, "component.iconButton.focus.outlineOffset"));
-  const roundRadius = Number(getRequiredThemeTokenValue(brand, "radius.pill"));
-  const surface = getSurface(brand, styleVariant, onDark, active, disabled);
+  useInsertionEffect(() => {
+    ensureStyleSheet(ICON_BUTTON_STYLESHEET_ID, ICON_BUTTON_STYLESHEET);
+  }, []);
 
-  const rootStyles: CSSProperties = {
-    alignItems: "center",
-    appearance: "none",
-    background: surface.background,
-    border: `${borderWidth}px solid ${surface.border}`,
-    borderRadius: `${shape === "Round" ? roundRadius : metrics.borderRadius}px`,
-    boxSizing: "border-box",
-    color: surface.foreground,
-    cursor: disabled ? "not-allowed" : "pointer",
-    display: "inline-flex",
-    height: `${metrics.boxSize}px`,
-    justifyContent: "center",
-    outline: focused ? `${focusOutlineWidth}px solid ${focusColor}` : "none",
-    outlineOffset: focused ? `${focusOutlineOffset}px` : undefined,
-    padding: 0,
-    width: `${metrics.boxSize}px`,
-    transition:
-      "background-color 180ms cubic-bezier(0.2, 0, 0, 1), border-color 180ms cubic-bezier(0.2, 0, 0, 1), outline-color 180ms cubic-bezier(0.2, 0, 0, 1)",
-    ...style,
-    ...getTapFeedbackStyles({
-      disabled,
-      pressed,
-      transition: style?.transition,
-      transform: style?.transform
-    })
-  };
+  const normalizedBrand = normalizeBrandId(brand);
+  const isHovered = forceState === "Hover/Pressed" || hovered || pressed;
+  const isPressed = !disabled && (pressed || forceState === "Hover/Pressed");
+  const isFocused = focused;
 
   function handleMouseEnter(event: MouseEvent<HTMLButtonElement>) {
     if (!disabled) {
@@ -357,6 +308,16 @@ export function IconButton({
   return (
     <button
       {...rest}
+      className={[ICON_BUTTON_ROOT_CLASS, className].filter(Boolean).join(" ")}
+      data-brand={normalizedBrand}
+      data-disabled={String(disabled)}
+      data-focused={String(isFocused)}
+      data-hovered={String(isHovered)}
+      data-on-dark={String(onDark)}
+      data-pressed={String(isPressed)}
+      data-shape={shape === "Round" ? "round" : "regular"}
+      data-size={getTokenSizeKey(size)}
+      data-variant={getVariantKey(styleVariant)}
       disabled={disabled}
       type={type}
       onBlur={(event) => {
@@ -371,9 +332,9 @@ export function IconButton({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onMouseUp={handleMouseUp}
-      style={rootStyles}
+      style={style}
     >
-      {renderIcon(icon, surface.foreground, metrics.iconSize)}
+      {renderIcon(icon)}
     </button>
   );
 }
