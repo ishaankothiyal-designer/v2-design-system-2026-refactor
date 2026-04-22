@@ -1,0 +1,22 @@
+{
+  "name": "v2-design-system-cli",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "geist-ds": "./dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsx ../../scripts/sync-design-system-registry.ts && tsc -p tsconfig.json",
+    "serve": "tsx src/cli.ts serve",
+    "typecheck": "tsx ../../scripts/sync-design-system-registry.ts && tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@geist/contracts": "workspace:*"
+  }
+}

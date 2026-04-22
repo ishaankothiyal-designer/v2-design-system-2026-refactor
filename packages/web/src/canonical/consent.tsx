@@ -1,10 +1,10 @@
-import type { CSSProperties, ReactNode } from "react";
-import { useId } from "react";
+import { type CSSProperties, type ReactNode, useId, useInsertionEffect } from "react";
 import { designSystemRegistry } from "@geist/contracts";
 import type { DisplayBrandId } from "@geist/tokens";
+import { normalizeBrandId } from "@geist/tokens";
 import { Checkbox, type CheckboxProps, type CheckboxSize } from "./checkbox";
 import { Text } from "./text";
-import { getRequiredThemeTokenValue } from "../theme";
+import { ensureStyleSheet, joinClassNames, runtimeTokenVar, runtimeTokenVarPx, toCssRule } from "./runtime-styles";
 
 export const canonicalConsentWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.consent"
@@ -12,11 +12,10 @@ export const canonicalConsentWebContract = designSystemRegistry.components.find(
 
 export type ConsentSize = "Small" | "Medium" | "Large";
 
-type ConsentTypography = {
-  fontSize: number;
-  letterSpacing: number;
-  lineHeight: number;
-};
+const CONSENT_ROOT_CLASS = "geist-consent";
+const CONSENT_CONTENT_CLASS = "geist-consent__content";
+const CONSENT_TEXT_CLASS = "geist-consent__text";
+const CONSENT_STYLESHEET_ID = "geist-consent-styles";
 
 export interface ConsentProps extends Omit<CheckboxProps, "className" | "size" | "style"> {
   brand?: DisplayBrandId;
@@ -43,26 +42,63 @@ function getCheckboxSize(size: ConsentSize): CheckboxSize {
   return size === "Large" ? "Medium" : "Small";
 }
 
-function getTypography(brand: DisplayBrandId, size: ConsentSize): ConsentTypography {
-  const sizeKey = getSizeKey(size);
-
-  return {
-    fontSize: Number(getRequiredThemeTokenValue(brand, `component.consent.content.size.${sizeKey}.fontSize`)),
-    letterSpacing: Number(
-      getRequiredThemeTokenValue(brand, `component.consent.content.size.${sizeKey}.letterSpacing`)
-    ),
-    lineHeight: Number(getRequiredThemeTokenValue(brand, `component.consent.content.size.${sizeKey}.lineHeight`))
-  };
-}
-
 function joinIds(...values: Array<string | undefined>) {
   const joined = values.filter(Boolean).join(" ");
   return joined.length > 0 ? joined : undefined;
 }
 
-/**
- * Checkbox-based consent copy row that follows the Figma component variants without introducing a new input primitive.
- */
+const CONSENT_STYLESHEET = [
+  toCssRule(`.${CONSENT_ROOT_CLASS}`, {
+    "align-items": "flex-start",
+    background: "transparent",
+    "border-radius": "0px",
+    "box-sizing": "border-box",
+    display: "flex",
+    gap: runtimeTokenVarPx("component.consent.layout.gap"),
+    "max-width": "100%",
+    padding: `${runtimeTokenVarPx("component.consent.layout.paddingBlock")} ${runtimeTokenVarPx("component.consent.layout.paddingInline")}`,
+    width: "100%"
+  }),
+  toCssRule(`.${CONSENT_CONTENT_CLASS}`, {
+    cursor: "pointer",
+    display: "flex",
+    "flex": "1 1 auto",
+    "min-width": "0"
+  }),
+  toCssRule(`.${CONSENT_ROOT_CLASS}[data-disabled="true"] .${CONSENT_CONTENT_CLASS}`, {
+    cursor: "not-allowed"
+  }),
+  toCssRule(`.${CONSENT_TEXT_CLASS}`, {
+    color: runtimeTokenVar("component.consent.content.color.default"),
+    display: "block",
+    "font-family": `${runtimeTokenVar("typography.fontFamily.sans")}, sans-serif`,
+    margin: "0"
+  }),
+  ...(["sm", "md", "lg"] as const).flatMap((sizeKey) => [
+    toCssRule(`.${CONSENT_ROOT_CLASS}[data-size="${sizeKey}"][data-inside-card="false"] .${CONSENT_CONTENT_CLASS}`, {
+      "padding-bottom": runtimeTokenVarPx(`component.consent.content.size.${sizeKey}.paddingBottom`),
+      "padding-top": runtimeTokenVarPx(`component.consent.content.size.${sizeKey}.paddingTop`)
+    }),
+    toCssRule(`.${CONSENT_ROOT_CLASS}[data-size="${sizeKey}"][data-inside-card="true"]`, {
+      background: runtimeTokenVar("component.consent.layout.insideCard.background"),
+      "border-radius": runtimeTokenVarPx(`component.consent.layout.insideCard.${sizeKey}.radius`),
+      padding: `${runtimeTokenVarPx(`component.consent.layout.insideCard.${sizeKey}.padding`)} ${runtimeTokenVarPx(`component.consent.layout.insideCard.${sizeKey}.padding`)}`
+    }),
+    toCssRule(`.${CONSENT_ROOT_CLASS}[data-size="${sizeKey}"][data-inside-card="true"] .${CONSENT_CONTENT_CLASS}`, {
+      "padding-bottom": runtimeTokenVarPx(`component.consent.content.size.${sizeKey}.insideCardPaddingBottom`),
+      "padding-top": runtimeTokenVarPx(`component.consent.content.size.${sizeKey}.insideCardPaddingTop`)
+    }),
+    toCssRule(`.${CONSENT_ROOT_CLASS}[data-size="${sizeKey}"] .${CONSENT_TEXT_CLASS}`, {
+      "font-size": runtimeTokenVarPx(`component.consent.content.size.${sizeKey}.fontSize`),
+      "letter-spacing": runtimeTokenVarPx(`component.consent.content.size.${sizeKey}.letterSpacing`),
+      "line-height": runtimeTokenVarPx(`component.consent.content.size.${sizeKey}.lineHeight`)
+    })
+  ]),
+  toCssRule(`.${CONSENT_ROOT_CLASS}[data-disabled="true"] .${CONSENT_TEXT_CLASS}`, {
+    color: runtimeTokenVar("component.consent.content.color.disabled")
+  })
+].join("");
+
 export function Consent({
   brand = "Cars24",
   checked,
@@ -79,61 +115,21 @@ export function Consent({
   const resolvedId = id ?? generatedId;
   const sizeKey = getSizeKey(size);
   const labelId = `${resolvedId}-label`;
-  const typography = getTypography(brand, size);
-  const rootGap = Number(getRequiredThemeTokenValue(brand, "component.consent.layout.gap"));
-  const textColor = String(
-    getRequiredThemeTokenValue(
-      brand,
-      disabled
-        ? "component.consent.content.color.disabled"
-        : "component.consent.content.color.default"
-    )
-  );
-  const outerPaddingInline = insideCard
-    ? Number(getRequiredThemeTokenValue(brand, `component.consent.layout.insideCard.${sizeKey}.padding`))
-    : Number(getRequiredThemeTokenValue(brand, "component.consent.layout.paddingInline"));
-  const outerPaddingBlock = insideCard
-    ? Number(getRequiredThemeTokenValue(brand, `component.consent.layout.insideCard.${sizeKey}.padding`))
-    : Number(getRequiredThemeTokenValue(brand, "component.consent.layout.paddingBlock"));
-  const contentPaddingTop = Number(
-    getRequiredThemeTokenValue(
-      brand,
-      insideCard
-        ? `component.consent.content.size.${sizeKey}.insideCardPaddingTop`
-        : `component.consent.content.size.${sizeKey}.paddingTop`
-    )
-  );
-  const contentPaddingBottom = Number(
-    getRequiredThemeTokenValue(
-      brand,
-      insideCard
-        ? `component.consent.content.size.${sizeKey}.insideCardPaddingBottom`
-        : `component.consent.content.size.${sizeKey}.paddingBottom`
-    )
-  );
-  const rootBackground = insideCard
-    ? String(getRequiredThemeTokenValue(brand, "component.consent.layout.insideCard.background"))
-    : "transparent";
-  const rootRadius = insideCard
-    ? Number(getRequiredThemeTokenValue(brand, `component.consent.layout.insideCard.${sizeKey}.radius`))
-    : 0;
   const ariaLabelledBy = joinIds(labelId, rest["aria-labelledby"]);
+  const repoBrand = normalizeBrandId(brand);
+
+  useInsertionEffect(() => {
+    ensureStyleSheet(CONSENT_STYLESHEET_ID, CONSENT_STYLESHEET);
+  }, []);
 
   return (
     <div
-      className={className}
-      style={{
-        alignItems: "flex-start",
-        background: rootBackground,
-        borderRadius: rootRadius > 0 ? `${rootRadius}px` : undefined,
-        boxSizing: "border-box",
-        display: "flex",
-        gap: rootGap,
-        maxWidth: "100%",
-        padding: `${outerPaddingBlock}px ${outerPaddingInline}px`,
-        width: "100%",
-        ...style
-      }}
+      className={joinClassNames(CONSENT_ROOT_CLASS, className)}
+      data-brand={repoBrand}
+      data-disabled={String(disabled)}
+      data-inside-card={String(insideCard)}
+      data-size={sizeKey}
+      style={style}
     >
       <Checkbox
         {...rest}
@@ -145,29 +141,12 @@ export function Consent({
         size={getCheckboxSize(size)}
       />
 
-      <label
-        htmlFor={resolvedId}
-        style={{
-          cursor: disabled ? "not-allowed" : "pointer",
-          display: "flex",
-          flex: "1 1 auto",
-          minWidth: 0,
-          paddingBottom: contentPaddingBottom,
-          paddingTop: contentPaddingTop
-        }}
-      >
+      <label className={CONSENT_CONTENT_CLASS} htmlFor={resolvedId}>
         <Text
           as="span"
           brand={brand}
+          className={CONSENT_TEXT_CLASS}
           id={labelId}
-          style={{
-            color: textColor,
-            display: "block",
-            fontSize: typography.fontSize,
-            letterSpacing: typography.letterSpacing,
-            lineHeight: `${typography.lineHeight}px`,
-            margin: 0
-          }}
           tone="secondary"
         >
           {label}

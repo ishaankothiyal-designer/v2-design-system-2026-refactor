@@ -28,6 +28,42 @@
     }
   },
   "component": {
+    "button": {
+      "color": {
+        "light": {
+          "solid": {
+            "rest": {
+              "background": "#002329"
+            },
+            "hover": {
+              "background": "#0A0A0A"
+            }
+          },
+          "outline": {
+            "rest": {
+              "border": "#002329",
+              "foreground": "#002329"
+            },
+            "hover": {
+              "background": "#B4F7EE",
+              "border": "#002329",
+              "foreground": "#002329"
+            }
+          },
+          "ghost": {
+            "rest": {
+              "foreground": "#002329",
+              "loaderIndicator": "#002329"
+            },
+            "hover": {
+              "background": "#B4F7EE",
+              "foreground": "#0A0A0A",
+              "loaderIndicator": "#0A0A0A"
+            }
+          }
+        }
+      }
+    },
     "captionButton": {
       "color": {
         "light": {

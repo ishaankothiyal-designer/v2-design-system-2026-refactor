@@ -10,7 +10,7 @@ import {
 import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
 import { Icon } from "./icon";
-import { getRequiredThemeTokenValue } from "../theme";
+import { getRequiredThemeTokenValue, tokenValueToRem } from "../theme";
 
 export const canonicalBadgeWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.badge"
@@ -238,7 +238,7 @@ const BADGE_STATE_FILTERS: Record<BadgeInteractionState, string> = {
 };
 
 function toPx(value: number) {
-  return `${value}px`;
+  return tokenValueToRem(value);
 }
 
 

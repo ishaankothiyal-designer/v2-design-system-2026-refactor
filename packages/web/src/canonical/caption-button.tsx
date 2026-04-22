@@ -1,14 +1,13 @@
 import {
   type ButtonHTMLAttributes,
-  type CSSProperties,
   type MouseEvent,
   type ReactNode,
+  useInsertionEffect,
   useState
 } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
-import { getRequiredThemeTokenValue } from "../theme";
-import { getTapFeedbackStyles } from "./press-feedback";
+import { normalizeBrandId, type DisplayBrandId } from "@geist/tokens";
+import { ensureStyleSheet, runtimeTokenVar, runtimeTokenVarPx, toCssRule } from "./runtime-styles";
 
 export const canonicalCaptionButtonWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.captionButton"
@@ -19,87 +18,112 @@ export type CaptionButtonSize = "Medium" | "Large";
 export type CaptionButtonCaptionPosition = "Up" | "Down";
 export type CaptionButtonPreviewState = "Rest" | "Hover/Pressed";
 
-type CaptionButtonSurface = {
-  background: string;
-  borderColor: string;
-  foreground: string;
-};
+type CaptionButtonSizeKey = "md" | "lg";
 
-type CaptionButtonSizeMetrics = {
-  borderRadius: number;
-  height: number;
-  paddingInline: number;
-};
+const CAPTION_BUTTON_ROOT_CLASS = "geist-caption-button";
+const CAPTION_BUTTON_LABEL_CLASS = "geist-caption-button__label";
+const CAPTION_BUTTON_CAPTION_CLASS = "geist-caption-button__caption";
+const CAPTION_BUTTON_STYLESHEET_ID = "geist-caption-button-styles";
+const CAPTION_BUTTON_TAP_TRANSFORM = "translateY(1px) scale(0.985)";
+const CAPTION_BUTTON_TAP_TRANSITION = "transform 140ms cubic-bezier(0.2, 0, 0, 1)";
 
-type CaptionButtonTypography = {
-  fontSize: number;
-  letterSpacing: number;
-  lineHeight: number;
-};
-
-function getTokenSizeKey(size: CaptionButtonSize) {
+function getTokenSizeKey(size: CaptionButtonSize): CaptionButtonSizeKey {
   return size === "Large" ? "lg" : "md";
 }
 
-function getSizeMetrics(brand: DisplayBrandId, size: CaptionButtonSize): CaptionButtonSizeMetrics {
-  const tokenSizeKey = getTokenSizeKey(size);
-  const tokenPrefix = `component.captionButton.size.${tokenSizeKey}`;
-
-  return {
-    borderRadius: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.borderRadius`)),
-    height: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.height`)),
-    paddingInline: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.paddingInline`))
-  };
+function getVariantKey(styleVariant: CaptionButtonStyleVariant) {
+  return styleVariant === "Secondary" ? "secondary" : "primary";
 }
 
-function getTypography(
-  brand: DisplayBrandId,
-  role: "label" | "caption",
-  size: CaptionButtonSize
-): CaptionButtonTypography {
-  const tokenSizeKey = getTokenSizeKey(size);
-  const tokenPrefix = `component.captionButton.typography.${role}.${tokenSizeKey}`;
+const CAPTION_BUTTON_STYLESHEET = [
+  toCssRule(`.${CAPTION_BUTTON_ROOT_CLASS}`, {
+    "align-items": "center",
+    appearance: "none",
+    border: `${runtimeTokenVarPx("component.captionButton.border.width")} solid transparent`,
+    "box-sizing": "border-box",
+    cursor: "pointer",
+    display: "inline-flex",
+    "flex-direction": "column",
+    "justify-content": "center",
+    "min-width": "0",
+    outline: "none",
+    "outline-offset": runtimeTokenVarPx("component.captionButton.focus.outlineOffset"),
+    overflow: "hidden",
+    "text-align": "center",
+    "transform-origin": "center center",
+    transition: [
+      "background-color 180ms cubic-bezier(0.2, 0, 0, 1)",
+      "border-color 180ms cubic-bezier(0.2, 0, 0, 1)",
+      "outline-color 180ms cubic-bezier(0.2, 0, 0, 1)",
+      CAPTION_BUTTON_TAP_TRANSITION
+    ].join(", "),
+    "will-change": "transform"
+  }),
+  toCssRule(`.${CAPTION_BUTTON_ROOT_CLASS}[data-focused="true"]`, {
+    outline: `${runtimeTokenVarPx("component.captionButton.focus.outlineWidth")} solid ${runtimeTokenVar("color.border.focus")}`
+  }),
+  toCssRule(`.${CAPTION_BUTTON_ROOT_CLASS}:focus-visible`, {
+    outline: `${runtimeTokenVarPx("component.captionButton.focus.outlineWidth")} solid ${runtimeTokenVar("color.border.focus")}`
+  }),
+  toCssRule(`.${CAPTION_BUTTON_ROOT_CLASS}[data-disabled="true"]`, {
+    cursor: "not-allowed",
+    "will-change": "auto"
+  }),
+  toCssRule(`.${CAPTION_BUTTON_ROOT_CLASS}[data-pressed="true"][data-disabled="false"]`, {
+    transform: CAPTION_BUTTON_TAP_TRANSFORM
+  }),
+  toCssRule(`.${CAPTION_BUTTON_LABEL_CLASS}`, {
+    color: "inherit",
+    "font-family": `${runtimeTokenVar("typography.fontFamily.sans")}, sans-serif`,
+    "font-weight": runtimeTokenVar("typography.fontWeight.medium"),
+    "white-space": "nowrap"
+  }),
+  toCssRule(`.${CAPTION_BUTTON_CAPTION_CLASS}`, {
+    color: "inherit",
+    "font-family": `${runtimeTokenVar("typography.fontFamily.sans")}, sans-serif`,
+    "font-weight": runtimeTokenVar("typography.fontWeight.regular"),
+    "white-space": "nowrap"
+  }),
+  ...(["md", "lg"] as const).flatMap((sizeKey) => [
+    toCssRule(`.${CAPTION_BUTTON_ROOT_CLASS}[data-size="${sizeKey}"]`, {
+      "border-radius": runtimeTokenVarPx(`component.captionButton.size.${sizeKey}.borderRadius`),
+      height: runtimeTokenVarPx(`component.captionButton.size.${sizeKey}.height`),
+      padding: `0 ${runtimeTokenVarPx(`component.captionButton.size.${sizeKey}.paddingInline`)}`
+    }),
+    toCssRule(`.${CAPTION_BUTTON_ROOT_CLASS}[data-size="${sizeKey}"] .${CAPTION_BUTTON_LABEL_CLASS}`, {
+      "font-size": runtimeTokenVarPx(`component.captionButton.typography.label.${sizeKey}.fontSize`),
+      "letter-spacing": runtimeTokenVarPx(`component.captionButton.typography.label.${sizeKey}.letterSpacing`),
+      "line-height": runtimeTokenVarPx(`component.captionButton.typography.label.${sizeKey}.lineHeight`)
+    }),
+    toCssRule(`.${CAPTION_BUTTON_ROOT_CLASS}[data-size="${sizeKey}"] .${CAPTION_BUTTON_CAPTION_CLASS}`, {
+      "font-size": runtimeTokenVarPx(`component.captionButton.typography.caption.${sizeKey}.fontSize`),
+      "letter-spacing": runtimeTokenVarPx(`component.captionButton.typography.caption.${sizeKey}.letterSpacing`),
+      "line-height": runtimeTokenVarPx(`component.captionButton.typography.caption.${sizeKey}.lineHeight`)
+    })
+  ]),
+  toCssRule(`.${CAPTION_BUTTON_ROOT_CLASS}[data-disabled="true"]`, {
+    background: runtimeTokenVar("component.captionButton.color.light.disabled.background"),
+    "border-color": runtimeTokenVar("component.captionButton.color.light.disabled.border"),
+    color: runtimeTokenVar("component.captionButton.color.light.disabled.foreground")
+  }),
+  ...(["primary", "secondary"] as const).flatMap((variantKey) =>
+    (["rest", "hover"] as const).map((stateKey) => {
+      const selector =
+        stateKey === "hover"
+          ? `.${CAPTION_BUTTON_ROOT_CLASS}[data-variant="${variantKey}"][data-disabled="false"][data-hovered="true"]`
+          : `.${CAPTION_BUTTON_ROOT_CLASS}[data-variant="${variantKey}"][data-disabled="false"][data-hovered="false"]`;
 
-  return {
-    fontSize: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.fontSize`)),
-    letterSpacing: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.letterSpacing`)),
-    lineHeight: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.lineHeight`))
-  };
-}
-
-function getSurface(
-  brand: DisplayBrandId,
-  styleVariant: CaptionButtonStyleVariant,
-  hoveredOrPressed: boolean,
-  disabled: boolean
-): CaptionButtonSurface {
-  if (disabled) {
-    return {
-      background: String(
-        getRequiredThemeTokenValue(brand, "component.captionButton.color.light.disabled.background")
-      ),
-      borderColor: String(
-        getRequiredThemeTokenValue(brand, "component.captionButton.color.light.disabled.border")
-      ),
-      foreground: String(
-        getRequiredThemeTokenValue(brand, "component.captionButton.color.light.disabled.foreground")
-      )
-    };
-  }
-
-  const stateKey = hoveredOrPressed ? "hover" : "rest";
-  const variantKey = styleVariant === "Secondary" ? "secondary" : "primary";
-  const tokenPrefix = `component.captionButton.color.light.${variantKey}.${stateKey}`;
-
-  return {
-    background: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.background`)),
-    borderColor:
-      variantKey === "secondary"
-        ? String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.border`))
-        : "transparent",
-    foreground: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.foreground`))
-  };
-}
+      return toCssRule(selector, {
+        background: runtimeTokenVar(`component.captionButton.color.light.${variantKey}.${stateKey}.background`),
+        "border-color":
+          variantKey === "secondary"
+            ? runtimeTokenVar(`component.captionButton.color.light.${variantKey}.${stateKey}.border`)
+            : "transparent",
+        color: runtimeTokenVar(`component.captionButton.color.light.${variantKey}.${stateKey}.foreground`)
+      });
+    })
+  )
+].join("");
 
 export interface CaptionButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "size"> {
   brand?: DisplayBrandId;
@@ -115,6 +139,7 @@ export function CaptionButton({
   caption,
   captionPosition = "Up",
   children,
+  className,
   disabled = false,
   forceState,
   onBlur,
@@ -133,72 +158,16 @@ export function CaptionButton({
   const [hovered, setHovered] = useState(false);
   const [pressed, setPressed] = useState(false);
 
-  const hoveredOrPressed = forceState === "Hover/Pressed" || hovered || pressed;
-  const borderWidth = Number(getRequiredThemeTokenValue(brand, "component.captionButton.border.width"));
-  const focusColor = String(getRequiredThemeTokenValue(brand, "color.border.focus"));
-  const focusOutlineWidth = Number(
-    getRequiredThemeTokenValue(brand, "component.captionButton.focus.outlineWidth")
-  );
-  const focusOutlineOffset = Number(
-    getRequiredThemeTokenValue(brand, "component.captionButton.focus.outlineOffset")
-  );
-  const fontFamily = String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"));
-  const labelFontWeight = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.medium"));
-  const captionFontWeight = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.regular"));
-  const metrics = getSizeMetrics(brand, size);
-  const labelTypography = getTypography(brand, "label", size);
-  const captionTypography = getTypography(brand, "caption", size);
-  const surface = getSurface(brand, styleVariant, hoveredOrPressed, disabled);
+  useInsertionEffect(() => {
+    ensureStyleSheet(CAPTION_BUTTON_STYLESHEET_ID, CAPTION_BUTTON_STYLESHEET);
+  }, []);
 
-  const rootStyles: CSSProperties = {
-    alignItems: "center",
-    appearance: "none",
-    background: surface.background,
-    border: `${borderWidth}px solid ${surface.borderColor}`,
-    borderRadius: `${metrics.borderRadius}px`,
-    boxSizing: "border-box",
-    color: surface.foreground,
-    cursor: disabled ? "not-allowed" : "pointer",
-    display: "inline-flex",
-    flexDirection: "column",
-    height: `${metrics.height}px`,
-    justifyContent: "center",
-    minWidth: 0,
-    outline: focused ? `${focusOutlineWidth}px solid ${focusColor}` : "none",
-    outlineOffset: focused ? `${focusOutlineOffset}px` : undefined,
-    overflow: "hidden",
-    padding: `0 ${metrics.paddingInline}px`,
-    textAlign: "center",
-    transition:
-      "background-color 180ms cubic-bezier(0.2, 0, 0, 1), border-color 180ms cubic-bezier(0.2, 0, 0, 1), outline-color 180ms cubic-bezier(0.2, 0, 0, 1)",
-    ...style,
-    ...getTapFeedbackStyles({
-      disabled,
-      pressed,
-      transition: style?.transition,
-      transform: style?.transform
-    })
-  };
-
-  const labelStyles: CSSProperties = {
-    color: surface.foreground,
-    fontFamily: `${fontFamily}, sans-serif`,
-    fontSize: `${labelTypography.fontSize}px`,
-    fontWeight: labelFontWeight,
-    letterSpacing: `${labelTypography.letterSpacing}px`,
-    lineHeight: `${labelTypography.lineHeight}px`,
-    whiteSpace: "nowrap"
-  };
-
-  const captionStyles: CSSProperties = {
-    color: surface.foreground,
-    fontFamily: `${fontFamily}, sans-serif`,
-    fontSize: `${captionTypography.fontSize}px`,
-    fontWeight: captionFontWeight,
-    letterSpacing: `${captionTypography.letterSpacing}px`,
-    lineHeight: `${captionTypography.lineHeight}px`,
-    whiteSpace: "nowrap"
-  };
+  const normalizedBrand = normalizeBrandId(brand);
+  const isHovered = forceState === "Hover/Pressed" || hovered || pressed;
+  const isPressed = !disabled && (pressed || forceState === "Hover/Pressed");
+  const isFocused = focused;
+  const captionElement = caption ? <span className={CAPTION_BUTTON_CAPTION_CLASS}>{caption}</span> : null;
+  const labelElement = children ? <span className={CAPTION_BUTTON_LABEL_CLASS}>{children}</span> : null;
 
   function handleMouseEnter(event: MouseEvent<HTMLButtonElement>) {
     if (!disabled) {
@@ -225,12 +194,17 @@ export function CaptionButton({
     onMouseUp?.(event);
   }
 
-  const captionElement = caption ? <span style={captionStyles}>{caption}</span> : null;
-  const labelElement = children ? <span style={labelStyles}>{children}</span> : null;
-
   return (
     <button
       {...rest}
+      className={[CAPTION_BUTTON_ROOT_CLASS, className].filter(Boolean).join(" ")}
+      data-brand={normalizedBrand}
+      data-disabled={String(disabled)}
+      data-focused={String(isFocused)}
+      data-hovered={String(isHovered)}
+      data-pressed={String(isPressed)}
+      data-size={getTokenSizeKey(size)}
+      data-variant={getVariantKey(styleVariant)}
       disabled={disabled}
       type={type}
       onBlur={(event) => {
@@ -245,7 +219,7 @@ export function CaptionButton({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onMouseUp={handleMouseUp}
-      style={rootStyles}
+      style={style}
     >
       {captionPosition === "Up" ? (
         <>

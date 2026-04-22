@@ -17,7 +17,7 @@ import { designSystemRegistry } from "@geist/contracts";
 import { Icon } from "./icon";
 import { HelperText } from "./helper-text";
 import { Label } from "./label";
-import { getRequiredThemeTokenValue, getThemeTokenValue } from "../theme";
+import { getRequiredThemeTokenValue, getThemeTokenValue, pxToRem } from "../theme";
 
 export const canonicalPhoneInputWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.phoneInput"
@@ -179,10 +179,10 @@ function makeTypographyStyles(
   return {
     color,
     fontFamily: `${String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"))}, sans-serif`,
-    fontSize: `${typography.fontSize}px`,
+    fontSize: pxToRem(typography.fontSize),
     fontWeight: Number(getRequiredThemeTokenValue(brand, fontWeightPath)),
-    letterSpacing: `${typography.letterSpacing}px`,
-    lineHeight: `${typography.lineHeight}px`
+    letterSpacing: pxToRem(typography.letterSpacing),
+    lineHeight: pxToRem(typography.lineHeight)
   };
 }
 
@@ -354,10 +354,10 @@ export function PhoneInput({
   const fieldStyles: CSSProperties = {
     alignItems: "center",
     background: fieldColors.background,
-    border: `${borderWidth}px solid ${fieldColors.border}`,
-    borderRadius: `${fieldRadius}px`,
+    border: `${pxToRem(borderWidth)} solid ${fieldColors.border}`,
+    borderRadius: pxToRem(fieldRadius),
     display: "flex",
-    height: `${sizeTokens.height}px`,
+    height: pxToRem(sizeTokens.height),
     minWidth: 0,
     overflow: "visible",
     width: "100%"
@@ -368,7 +368,7 @@ export function PhoneInput({
     display: "flex",
     flexShrink: 0,
     position: "relative",
-    padding: `${sizeTokens.fieldPaddingBlock}px 0 ${sizeTokens.fieldPaddingBlock}px ${sizeTokens.fieldPaddingInline}px`
+    padding: `${pxToRem(sizeTokens.fieldPaddingBlock)} 0 ${pxToRem(sizeTokens.fieldPaddingBlock)} ${pxToRem(sizeTokens.fieldPaddingInline)}`
   };
 
   const countryButtonStyles: CSSProperties = {
@@ -381,7 +381,7 @@ export function PhoneInput({
     flexShrink: 0,
     gap: 0,
     margin: 0,
-    minHeight: `${inputTypography.lineHeight}px`,
+    minHeight: pxToRem(inputTypography.lineHeight),
     minWidth: 0,
     padding: 0,
     position: "relative"
@@ -391,9 +391,9 @@ export function PhoneInput({
     alignItems: "center",
     display: "flex",
     flex: "1 1 auto",
-    gap: `${sizeTokens.contentGap}px`,
+    gap: pxToRem(sizeTokens.contentGap),
     minWidth: 0,
-    padding: `${sizeTokens.fieldPaddingBlock}px ${sizeTokens.fieldPaddingInline}px`
+    padding: `${pxToRem(sizeTokens.fieldPaddingBlock)} ${pxToRem(sizeTokens.fieldPaddingInline)}`
   };
 
   const inputTextStyles = makeTypographyStyles(
@@ -429,16 +429,16 @@ export function PhoneInput({
     alignItems: "center",
     appearance: "none",
     background: "transparent",
-    border: `${borderWidth}px solid ${fieldColors.actionBorder}`,
-    borderRadius: `${actionRadius}px`,
+    border: `${pxToRem(borderWidth)} solid ${fieldColors.actionBorder}`,
+    borderRadius: pxToRem(actionRadius),
     cursor: disabled ? "not-allowed" : "pointer",
     display: "inline-flex",
     flexShrink: 0,
-    height: `${sizeTokens.actionSize}px`,
+    height: pxToRem(sizeTokens.actionSize),
     justifyContent: "center",
     margin: 0,
     padding: 0,
-    width: `${sizeTokens.actionSize}px`
+    width: pxToRem(sizeTokens.actionSize)
   };
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
@@ -541,7 +541,7 @@ export function PhoneInput({
   const prefixCountryCodeStyles: CSSProperties = {
     ...makeTypographyStyles(brand, inputTypography, fieldColors.countryCode, "typography.fontWeight.semibold"),
     textAlign: "right",
-    width: `${sizeTokens.countryCodeWidth}px`
+    width: pxToRem(sizeTokens.countryCodeWidth)
   };
 
   const previewTextValue =
@@ -553,7 +553,7 @@ export function PhoneInput({
     <div
       style={{
         display: "grid",
-        gap: `${sizeTokens.containerGap}px`,
+        gap: pxToRem(sizeTokens.containerGap),
         width: "100%",
         ...style
       }}
@@ -574,7 +574,7 @@ export function PhoneInput({
           htmlFor={inputId}
           style={{
             display: "block",
-            paddingInline: `${sizeTokens.labelPaddingInline}px`
+            paddingInline: pxToRem(sizeTokens.labelPaddingInline)
           }}
         >
           <Label
@@ -600,7 +600,7 @@ export function PhoneInput({
             style={countryButtonStyles}
             type="button"
           >
-            <Icon decorative name={resolvedCountryFlagIconName} style={{ fontSize: `${flagSize}px` }} />
+            <Icon decorative name={resolvedCountryFlagIconName} style={{ fontSize: pxToRem(flagSize) }} />
             <span style={prefixCountryCodeStyles}>{resolvedCountryCode}</span>
             {showCountryChevron ? (
               <Icon
@@ -608,7 +608,7 @@ export function PhoneInput({
                 name="chevron-down-small-outline"
                 style={{
                   color: fieldColors.chevron,
-                  fontSize: `${countryChevronSize}px`
+                  fontSize: pxToRem(countryChevronSize)
                 }}
               />
             ) : null}
@@ -621,15 +621,15 @@ export function PhoneInput({
               aria-label="Country code options"
               style={{
                 background: menuSurface,
-                border: `${borderWidth}px solid ${menuBorder}`,
-                borderRadius: `${fieldRadius}px`,
+                border: `${pxToRem(borderWidth)} solid ${menuBorder}`,
+                borderRadius: pxToRem(fieldRadius),
                 display: "grid",
                 gap: 0,
                 left: 0,
-                minWidth: `${menuMinWidth}px`,
-                padding: `${Math.max(0, sizeTokens.fieldPaddingBlock - borderWidth)}px 0`,
+                minWidth: pxToRem(menuMinWidth),
+                padding: `${pxToRem(Math.max(0, sizeTokens.fieldPaddingBlock - borderWidth))} 0`,
                 position: "absolute",
-                top: `calc(100% + ${sizeTokens.containerGap}px)`,
+                top: `calc(100% + ${pxToRem(sizeTokens.containerGap)})`,
                 zIndex: 1
               }}
             >
@@ -653,12 +653,12 @@ export function PhoneInput({
                       display: "flex",
                       gap: 0,
                       margin: 0,
-                      padding: `${sizeTokens.fieldPaddingBlock}px ${sizeTokens.fieldPaddingInline}px`,
+                      padding: `${pxToRem(sizeTokens.fieldPaddingBlock)} ${pxToRem(sizeTokens.fieldPaddingInline)}`,
                       width: "100%"
                     }}
                     type="button"
                   >
-                    <Icon decorative name={optionPreset.flagIconName} style={{ fontSize: `${flagSize}px` }} />
+                    <Icon decorative name={optionPreset.flagIconName} style={{ fontSize: pxToRem(flagSize) }} />
                     <span
                       style={{
                         ...prefixCountryCodeStyles,
@@ -673,7 +673,7 @@ export function PhoneInput({
                         name="chevron-down-small-outline"
                         style={{
                           color: fieldColors.chevron,
-                          fontSize: `${countryChevronSize}px`
+                          fontSize: pxToRem(countryChevronSize)
                         }}
                       />
                     ) : null}
@@ -711,7 +711,7 @@ export function PhoneInput({
                     background: fieldColors.caret || fieldColors.value,
                     display: "inline-block",
                     flexShrink: 0,
-                    height: `${inputTypography.lineHeight - 4}px`,
+                    height: pxToRem(inputTypography.lineHeight - 4),
                     marginLeft: previewTextValue.length > 0 ? "2px" : 0,
                     width: "1px"
                   }}
@@ -752,7 +752,7 @@ export function PhoneInput({
                 name="close-line"
                 style={{
                   color: fieldColors.actionIcon,
-                  fontSize: `${actionIconSize}px`
+                  fontSize: pxToRem(actionIconSize)
                 }}
               />
             </button>
@@ -767,7 +767,7 @@ export function PhoneInput({
           helperText={helperText}
           showIcon={showHelperIcon}
           size={size}
-          style={{ paddingInline: `${sizeTokens.labelPaddingInline}px` }}
+          style={{ paddingInline: pxToRem(sizeTokens.labelPaddingInline) }}
           tone={resolvedHelperTone === "Destructive" ? "Error" : "Default"}
         />
       ) : null}

@@ -1,17 +1,25 @@
 import {
   type ChangeEvent,
-  type CSSProperties,
   type FocusEvent,
   type InputHTMLAttributes,
   useEffect,
   useId,
+  useInsertionEffect,
   useRef,
   useState
 } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
+import { type DisplayBrandId, normalizeBrandId } from "@geist/tokens";
 import { Icon } from "./icon";
-import { getRequiredThemeTokenValue } from "../theme";
+import {
+  ensureStyleSheet,
+  ensureVisuallyHiddenStyles,
+  joinClassNames,
+  runtimeTokenVar,
+  runtimeTokenVarPx,
+  toCssRule,
+  VISUALLY_HIDDEN_CLASS
+} from "./runtime-styles";
 
 export const canonicalCheckboxWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.checkbox"
@@ -19,31 +27,10 @@ export const canonicalCheckboxWebContract = designSystemRegistry.components.find
 
 export type CheckboxSize = "Small" | "Medium" | "Large" | "Extra Large";
 
-type CheckboxSizeTokens = {
-  borderWidth: number;
-  boxSize: number;
-  disabledCheckedBorderWidth: number;
-  iconSize: number;
-};
-
-type CheckboxVisualColors = {
-  background: string;
-  border: string;
-  foreground: string;
-};
-
-const VISUALLY_HIDDEN_INPUT_STYLES: CSSProperties = {
-  border: 0,
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  margin: -1,
-  overflow: "hidden",
-  padding: 0,
-  position: "absolute",
-  whiteSpace: "nowrap",
-  width: 1
-};
+const CHECKBOX_ROOT_CLASS = "geist-checkbox";
+const CHECKBOX_BOX_CLASS = "geist-checkbox__box";
+const CHECKBOX_ICON_CLASS = "geist-checkbox__icon";
+const CHECKBOX_STYLESHEET_ID = "geist-checkbox-styles";
 
 function getSizeKey(size: CheckboxSize) {
   if (size === "Extra Large") {
@@ -61,75 +48,80 @@ function getSizeKey(size: CheckboxSize) {
   return "sm";
 }
 
-function getSizeTokens(brand: DisplayBrandId, size: CheckboxSize): CheckboxSizeTokens {
-  const tokenPrefix = `component.checkbox.size.${getSizeKey(size)}`;
-
-  return {
-    borderWidth: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.borderWidth`)),
-    boxSize: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.boxSize`)),
-    disabledCheckedBorderWidth: Number(
-      getRequiredThemeTokenValue(brand, `${tokenPrefix}.disabledCheckedBorderWidth`)
-    ),
-    iconSize: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.iconSize`))
-  };
+function getRadiusTokenPath(sizeKey: ReturnType<typeof getSizeKey>) {
+  return sizeKey === "xl" ? "radius.alt.sm" : "radius.alt.xs";
 }
 
-function getBorderRadius(brand: DisplayBrandId, size: CheckboxSize) {
-  const radiusTokenPath =
-    size === "Extra Large"
-      ? "radius.alt.sm"
-      : "radius.alt.xs";
+const CHECKBOX_SIZE_KEYS = ["sm", "md", "lg", "xl"] as const;
 
-  return Number(getRequiredThemeTokenValue(brand, radiusTokenPath));
-}
-
-function getVisualColors({
-  brand,
-  checked,
-  disabled,
-  size
-}: {
-  brand: DisplayBrandId;
-  checked: boolean;
-  disabled: boolean;
-  size: CheckboxSize;
-}): CheckboxVisualColors {
-  if (disabled) {
-    if (checked && size === "Extra Large") {
-      return {
-        background: String(
-          getRequiredThemeTokenValue(brand, "component.checkbox.color.disabled.rest.background")
-        ),
-        border: String(
-          getRequiredThemeTokenValue(brand, "component.checkbox.color.disabled.rest.border")
-        ),
-        foreground: String(
-          getRequiredThemeTokenValue(brand, "component.checkbox.color.disabled.checked.foreground")
-        )
-      };
-    }
-
-    const tokenPrefix = checked ? "component.checkbox.color.disabled.checked" : "component.checkbox.color.disabled.rest";
-
-    return {
-      background: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.background`)),
-      border: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.border`)),
-      foreground: checked
-        ? String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.foreground`))
-        : "transparent"
-    };
-  }
-
-  const tokenPrefix = checked ? "component.checkbox.color.checked" : "component.checkbox.color.rest";
-
-  return {
-    background: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.background`)),
-    border: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.border`)),
-    foreground: checked
-      ? String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.foreground`))
-      : "transparent"
-  };
-}
+const CHECKBOX_STYLESHEET = [
+  toCssRule(`.${CHECKBOX_ROOT_CLASS}`, {
+    cursor: "pointer",
+    display: "inline-flex",
+    "line-height": "0",
+    position: "relative",
+    "vertical-align": "top"
+  }),
+  toCssRule(`.${CHECKBOX_ROOT_CLASS}[data-disabled="true"]`, {
+    cursor: "not-allowed"
+  }),
+  toCssRule(`.${CHECKBOX_BOX_CLASS}`, {
+    "align-items": "center",
+    "box-sizing": "border-box",
+    display: "inline-flex",
+    "justify-content": "center",
+  }),
+  toCssRule(`.${CHECKBOX_ROOT_CLASS}[data-focused="true"] .${CHECKBOX_BOX_CLASS}`, {
+    outline: `${runtimeTokenVarPx("component.checkbox.focus.outlineWidth")} solid ${runtimeTokenVar("color.border.focus")}`,
+    "outline-offset": runtimeTokenVarPx("component.checkbox.focus.outlineOffset")
+  }),
+  toCssRule(`.${CHECKBOX_ROOT_CLASS}:focus-within .${CHECKBOX_BOX_CLASS}`, {
+    outline: `${runtimeTokenVarPx("component.checkbox.focus.outlineWidth")} solid ${runtimeTokenVar("color.border.focus")}`,
+    "outline-offset": runtimeTokenVarPx("component.checkbox.focus.outlineOffset")
+  }),
+  toCssRule(`.${CHECKBOX_ICON_CLASS}`, {
+    "align-items": "center",
+    color: "inherit",
+    display: "inline-flex",
+    "line-height": "0"
+  }),
+  ...CHECKBOX_SIZE_KEYS.flatMap((sizeKey) => [
+    toCssRule(`.${CHECKBOX_ROOT_CLASS}[data-size="${sizeKey}"] .${CHECKBOX_BOX_CLASS}`, {
+      "border-radius": runtimeTokenVarPx(getRadiusTokenPath(sizeKey)),
+      height: runtimeTokenVarPx(`component.checkbox.size.${sizeKey}.boxSize`),
+      width: runtimeTokenVarPx(`component.checkbox.size.${sizeKey}.boxSize`)
+    }),
+    toCssRule(`.${CHECKBOX_ROOT_CLASS}[data-size="${sizeKey}"] .${CHECKBOX_ICON_CLASS}`, {
+      "font-size": runtimeTokenVarPx(`component.checkbox.size.${sizeKey}.iconSize`)
+    }),
+    toCssRule(`.${CHECKBOX_ROOT_CLASS}[data-size="${sizeKey}"][data-disabled="false"][data-selected="false"] .${CHECKBOX_BOX_CLASS}`, {
+      background: runtimeTokenVar("component.checkbox.color.rest.background"),
+      border: `${runtimeTokenVarPx(`component.checkbox.size.${sizeKey}.borderWidth`)} solid ${runtimeTokenVar("component.checkbox.color.rest.border")}`,
+      color: "transparent"
+    }),
+    toCssRule(`.${CHECKBOX_ROOT_CLASS}[data-size="${sizeKey}"][data-disabled="false"][data-selected="true"] .${CHECKBOX_BOX_CLASS}`, {
+      background: runtimeTokenVar("component.checkbox.color.checked.background"),
+      border: `0 solid ${runtimeTokenVar("component.checkbox.color.checked.border")}`,
+      color: runtimeTokenVar("component.checkbox.color.checked.foreground")
+    }),
+    toCssRule(`.${CHECKBOX_ROOT_CLASS}[data-size="${sizeKey}"][data-disabled="true"][data-selected="false"] .${CHECKBOX_BOX_CLASS}`, {
+      background: runtimeTokenVar("component.checkbox.color.disabled.rest.background"),
+      border: `${runtimeTokenVarPx(`component.checkbox.size.${sizeKey}.borderWidth`)} solid ${runtimeTokenVar("component.checkbox.color.disabled.rest.border")}`,
+      color: "transparent"
+    }),
+    sizeKey === "xl"
+      ? toCssRule(`.${CHECKBOX_ROOT_CLASS}[data-size="xl"][data-disabled="true"][data-selected="true"] .${CHECKBOX_BOX_CLASS}`, {
+          background: runtimeTokenVar("component.checkbox.color.disabled.rest.background"),
+          border: `${runtimeTokenVarPx("component.checkbox.size.xl.disabledCheckedBorderWidth")} solid ${runtimeTokenVar("component.checkbox.color.disabled.rest.border")}`,
+          color: runtimeTokenVar("component.checkbox.color.disabled.checked.foreground")
+        })
+      : toCssRule(`.${CHECKBOX_ROOT_CLASS}[data-size="${sizeKey}"][data-disabled="true"][data-selected="true"] .${CHECKBOX_BOX_CLASS}`, {
+          background: runtimeTokenVar("component.checkbox.color.disabled.checked.background"),
+          border: `${runtimeTokenVarPx(`component.checkbox.size.${sizeKey}.disabledCheckedBorderWidth`)} solid ${runtimeTokenVar("component.checkbox.color.disabled.checked.border")}`,
+          color: runtimeTokenVar("component.checkbox.color.disabled.checked.foreground")
+        })
+  ])
+].join("");
 
 export interface CheckboxProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "type"> {
@@ -170,28 +162,13 @@ export function Checkbox({
   const showMixedState = resolvedIndeterminate;
   const showSelectedState = resolvedChecked || showMixedState;
   const resolvedId = id ?? generatedId;
+  const repoBrand = normalizeBrandId(brand);
+  const sizeKey = getSizeKey(size);
 
-  const sizeTokens = getSizeTokens(brand, size);
-  const borderRadius = getBorderRadius(brand, size);
-  const colors = getVisualColors({
-    brand,
-    checked: showSelectedState,
-    disabled,
-    size
-  });
-  const focusOutlineWidth = Number(
-    getRequiredThemeTokenValue(brand, "component.checkbox.focus.outlineWidth")
-  );
-  const focusOutlineOffset = Number(
-    getRequiredThemeTokenValue(brand, "component.checkbox.focus.outlineOffset")
-  );
-  const focusColor = String(getRequiredThemeTokenValue(brand, "color.border.focus"));
-  const borderWidth =
-    disabled && showSelectedState
-      ? sizeTokens.disabledCheckedBorderWidth
-      : showSelectedState
-        ? 0
-        : sizeTokens.borderWidth;
+  useInsertionEffect(() => {
+    ensureStyleSheet(CHECKBOX_STYLESHEET_ID, CHECKBOX_STYLESHEET);
+    ensureVisuallyHiddenStyles();
+  }, []);
 
   useEffect(() => {
     if (inputRef.current) {
@@ -223,66 +200,38 @@ export function Checkbox({
 
   return (
     <label
-      className={className}
+      className={joinClassNames(CHECKBOX_ROOT_CLASS, className)}
+      data-brand={repoBrand}
+      data-disabled={String(disabled)}
+      data-focused={String(focused)}
+      data-selected={String(showSelectedState)}
+      data-size={sizeKey}
       htmlFor={resolvedId}
-      style={{
-        cursor: disabled ? "not-allowed" : "pointer",
-        display: "inline-flex",
-        lineHeight: 0,
-        position: "relative",
-        verticalAlign: "top",
-        ...style
-      }}
+      style={style}
     >
       <input
         {...rest}
         ref={inputRef}
         aria-checked={showMixedState ? "mixed" : undefined}
         checked={resolvedChecked}
+        className={VISUALLY_HIDDEN_CLASS}
         disabled={disabled}
         id={resolvedId}
         onBlur={handleBlur}
         onChange={handleChange}
         onFocus={handleFocus}
-        style={VISUALLY_HIDDEN_INPUT_STYLES}
         type="checkbox"
       />
 
-      <span
-        aria-hidden="true"
-        style={{
-          alignItems: "center",
-          background: colors.background,
-          border: `${borderWidth}px solid ${colors.border}`,
-          borderRadius,
-          boxSizing: "border-box",
-          color: colors.foreground,
-          display: "inline-flex",
-          height: sizeTokens.boxSize,
-          justifyContent: "center",
-          outline: focused ? `${focusOutlineWidth}px solid ${focusColor}` : undefined,
-          outlineOffset: focused ? `${focusOutlineOffset}px` : undefined,
-          width: sizeTokens.boxSize
-        }}
-      >
+      <span aria-hidden="true" className={CHECKBOX_BOX_CLASS}>
         {showMixedState ? (
-          <Icon
-            decorative
-            name="minus-large-filled"
-            style={{
-              color: colors.foreground,
-              fontSize: sizeTokens.iconSize
-            }}
-          />
+          <span className={CHECKBOX_ICON_CLASS}>
+            <Icon decorative name="minus-large-filled" style={{ color: "inherit", fontSize: "inherit" }} />
+          </span>
         ) : resolvedChecked ? (
-          <Icon
-            decorative
-            name="checkmark-1-filled"
-            style={{
-              color: colors.foreground,
-              fontSize: sizeTokens.iconSize
-            }}
-          />
+          <span className={CHECKBOX_ICON_CLASS}>
+            <Icon decorative name="checkmark-1-filled" style={{ color: "inherit", fontSize: "inherit" }} />
+          </span>
         ) : null}
       </span>
     </label>

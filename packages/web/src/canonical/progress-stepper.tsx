@@ -1,7 +1,7 @@
 import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
 import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
-import { getRequiredThemeTokenValue } from "../theme";
+import { getRequiredThemeTokenValue, tokenValueToRem } from "../theme";
 import { Icon } from "./icon";
 
 export const canonicalProgressStepperWebContract = designSystemRegistry.components.find(
@@ -68,7 +68,7 @@ const PROGRESS_STEPPER_SPIN_KEYFRAMES = `
 `;
 
 function toPx(value: number) {
-  return `${value}px`;
+  return tokenValueToRem(value);
 }
 
 function getProgressStepperMetrics(brand: DisplayBrandId): ProgressStepperMetrics {

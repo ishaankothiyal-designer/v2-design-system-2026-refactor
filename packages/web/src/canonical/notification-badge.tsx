@@ -1,7 +1,7 @@
 import type { CSSProperties, HTMLAttributes } from "react";
 import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
-import { getRequiredThemeTokenValue } from "../theme";
+import { getRequiredThemeTokenValue, pxToRem } from "../theme";
 
 export const canonicalNotificationBadgeWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.notificationBadge"
@@ -53,7 +53,7 @@ export function NotificationBadge({
   ...rest
 }: NotificationBadgeProps) {
   const sizeConfig = NOTIFICATION_BADGE_SIZE_CONFIG[size];
-  const radius = `${Number(getRequiredThemeTokenValue(brand, "radius.pill"))}px`;
+  const radius = pxToRem(Number(getRequiredThemeTokenValue(brand, "radius.pill")));
   const resolvedAriaHidden = ariaHidden ?? (ariaLabel || ariaLabelledby ? undefined : true);
 
   const rootStyles: CSSProperties = {

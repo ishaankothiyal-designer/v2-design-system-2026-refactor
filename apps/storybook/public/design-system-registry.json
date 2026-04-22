@@ -122,23 +122,31 @@
         },
         {
           "slot": "size.xs.minWidth",
-          "token": "90px"
+          "token": "component.button.size.xs.minWidth"
         },
         {
           "slot": "size.xs.height",
-          "token": "28px"
+          "token": "component.button.size.xs.height"
         },
         {
           "slot": "size.xs.gap",
-          "token": "4px"
+          "token": "component.button.size.xs.gap"
         },
         {
           "slot": "size.xs.paddingInline",
-          "token": "12px"
+          "token": "component.button.size.xs.paddingInline"
         },
         {
           "slot": "size.xs.paddingBlock",
-          "token": "5px"
+          "token": "component.button.size.xs.paddingBlock"
+        },
+        {
+          "slot": "size.xs.iconSize",
+          "token": "component.button.size.xs.iconSize"
+        },
+        {
+          "slot": "size.xs.loaderSize",
+          "token": "component.button.size.xs.loaderSize"
         },
         {
           "slot": "size.xs.typography.fontSize",
@@ -154,23 +162,31 @@
         },
         {
           "slot": "size.sm.minWidth",
-          "token": "95px"
+          "token": "component.button.size.sm.minWidth"
         },
         {
           "slot": "size.sm.height",
-          "token": "32px"
+          "token": "component.button.size.sm.height"
         },
         {
           "slot": "size.sm.gap",
-          "token": "4px"
+          "token": "component.button.size.sm.gap"
         },
         {
           "slot": "size.sm.paddingInline",
-          "token": "12px"
+          "token": "component.button.size.sm.paddingInline"
         },
         {
           "slot": "size.sm.paddingBlock",
-          "token": "7px"
+          "token": "component.button.size.sm.paddingBlock"
+        },
+        {
+          "slot": "size.sm.iconSize",
+          "token": "component.button.size.sm.iconSize"
+        },
+        {
+          "slot": "size.sm.loaderSize",
+          "token": "component.button.size.sm.loaderSize"
         },
         {
           "slot": "size.sm.typography.fontSize",
@@ -186,23 +202,31 @@
         },
         {
           "slot": "size.md.minWidth",
-          "token": "112px"
+          "token": "component.button.size.md.minWidth"
         },
         {
           "slot": "size.md.height",
-          "token": "40px"
+          "token": "component.button.size.md.height"
         },
         {
           "slot": "size.md.gap",
-          "token": "6px"
+          "token": "component.button.size.md.gap"
         },
         {
           "slot": "size.md.paddingInline",
-          "token": "14px"
+          "token": "component.button.size.md.paddingInline"
         },
         {
           "slot": "size.md.paddingBlock",
-          "token": "10px"
+          "token": "component.button.size.md.paddingBlock"
+        },
+        {
+          "slot": "size.md.iconSize",
+          "token": "component.button.size.md.iconSize"
+        },
+        {
+          "slot": "size.md.loaderSize",
+          "token": "component.button.size.md.loaderSize"
         },
         {
           "slot": "size.md.typography.fontSize",
@@ -218,23 +242,31 @@
         },
         {
           "slot": "size.lg.minWidth",
-          "token": "124px"
+          "token": "component.button.size.lg.minWidth"
         },
         {
           "slot": "size.lg.height",
-          "token": "44px"
+          "token": "component.button.size.lg.height"
         },
         {
           "slot": "size.lg.gap",
-          "token": "6px"
+          "token": "component.button.size.lg.gap"
         },
         {
           "slot": "size.lg.paddingInline",
-          "token": "16px"
+          "token": "component.button.size.lg.paddingInline"
         },
         {
           "slot": "size.lg.paddingBlock",
-          "token": "12px"
+          "token": "component.button.size.lg.paddingBlock"
+        },
+        {
+          "slot": "size.lg.iconSize",
+          "token": "component.button.size.lg.iconSize"
+        },
+        {
+          "slot": "size.lg.loaderSize",
+          "token": "component.button.size.lg.loaderSize"
         },
         {
           "slot": "size.lg.typography.fontSize",
@@ -250,23 +282,31 @@
         },
         {
           "slot": "size.xl.minWidth",
-          "token": "130px"
+          "token": "component.button.size.xl.minWidth"
         },
         {
           "slot": "size.xl.height",
-          "token": "56px"
+          "token": "component.button.size.xl.height"
         },
         {
           "slot": "size.xl.gap",
-          "token": "6px"
+          "token": "component.button.size.xl.gap"
         },
         {
           "slot": "size.xl.paddingInline",
-          "token": "18px"
+          "token": "component.button.size.xl.paddingInline"
         },
         {
           "slot": "size.xl.paddingBlock",
-          "token": "18px"
+          "token": "component.button.size.xl.paddingBlock"
+        },
+        {
+          "slot": "size.xl.iconSize",
+          "token": "component.button.size.xl.iconSize"
+        },
+        {
+          "slot": "size.xl.loaderSize",
+          "token": "component.button.size.xl.loaderSize"
         },
         {
           "slot": "size.xl.typography.fontSize",
@@ -289,100 +329,192 @@
           "token": "typography.fontWeight.medium"
         },
         {
-          "slot": "focusRing",
+          "slot": "border.width",
+          "token": "component.button.border.width"
+        },
+        {
+          "slot": "focusRing.color",
           "token": "color.border.focus"
         },
         {
+          "slot": "focusRing.width",
+          "token": "component.button.focus.outlineWidth"
+        },
+        {
+          "slot": "focusRing.offset",
+          "token": "component.button.focus.outlineOffset"
+        },
+        {
+          "slot": "loading.strokeWidth",
+          "token": "component.button.loading.strokeWidth"
+        },
+        {
           "slot": "surface.light.solid.rest.background",
-          "token": "color.brand.alt.500"
+          "token": "component.button.color.light.solid.rest.background"
         },
         {
           "slot": "surface.light.solid.hover.background",
-          "token": "color.brand.alt.600"
+          "token": "component.button.color.light.solid.hover.background"
         },
         {
           "slot": "surface.light.solid.foreground",
-          "token": "color.text.inverse"
+          "token": "component.button.color.light.solid.rest.foreground"
+        },
+        {
+          "slot": "surface.light.outline.rest.background",
+          "token": "component.button.color.light.outline.rest.background"
         },
         {
           "slot": "surface.light.outline.rest.border",
-          "token": "color.brand.alt.500"
-        },
-        {
-          "slot": "surface.light.outline.hover.border",
-          "token": "color.brand.alt.500"
+          "token": "component.button.color.light.outline.rest.border"
         },
         {
           "slot": "surface.light.outline.hover.background",
-          "token": "color.brand.primary.100"
+          "token": "component.button.color.light.outline.hover.background"
+        },
+        {
+          "slot": "surface.light.outline.hover.border",
+          "token": "component.button.color.light.outline.hover.border"
         },
         {
           "slot": "surface.light.outline.foreground",
-          "token": "color.brand.alt.500"
+          "token": "component.button.color.light.outline.rest.foreground"
+        },
+        {
+          "slot": "surface.light.ghost.rest.background",
+          "token": "component.button.color.light.ghost.rest.background"
         },
         {
           "slot": "surface.light.ghost.hover.background",
-          "token": "color.brand.primary.50"
+          "token": "component.button.color.light.ghost.hover.background"
         },
         {
-          "slot": "surface.light.ghost.foreground",
-          "token": "color.brand.primary.600"
+          "slot": "surface.light.ghost.rest.foreground",
+          "token": "component.button.color.light.ghost.rest.foreground"
+        },
+        {
+          "slot": "surface.light.ghost.hover.foreground",
+          "token": "component.button.color.light.ghost.hover.foreground"
+        },
+        {
+          "slot": "surface.light.transparent.rest.background",
+          "token": "component.button.color.light.transparent.rest.background"
+        },
+        {
+          "slot": "surface.light.transparent.hover.background",
+          "token": "component.button.color.light.transparent.hover.background"
         },
         {
           "slot": "surface.light.transparent.foreground",
-          "token": "color.text.primary"
+          "token": "component.button.color.light.transparent.rest.foreground"
+        },
+        {
+          "slot": "surface.light.destructive.rest.background",
+          "token": "component.button.color.light.destructive.rest.background"
+        },
+        {
+          "slot": "surface.light.destructive.rest.border",
+          "token": "component.button.color.light.destructive.rest.border"
+        },
+        {
+          "slot": "surface.light.destructive.hover.background",
+          "token": "component.button.color.light.destructive.hover.background"
+        },
+        {
+          "slot": "surface.light.destructive.hover.border",
+          "token": "component.button.color.light.destructive.hover.border"
         },
         {
           "slot": "surface.light.destructive.foreground",
-          "token": "color.status.danger"
+          "token": "component.button.color.light.destructive.rest.foreground"
         },
         {
           "slot": "surface.light.disabled.background",
-          "token": "color.surface.subtle"
+          "token": "component.button.color.light.disabled.background"
+        },
+        {
+          "slot": "surface.light.disabled.border",
+          "token": "component.button.color.light.disabled.border"
         },
         {
           "slot": "surface.light.disabled.foreground",
-          "token": "color.text.primary"
+          "token": "component.button.color.light.disabled.foreground"
         },
         {
           "slot": "surface.dark.solid.rest.background",
-          "token": "color.surface.canvas"
+          "token": "component.button.color.dark.solid.rest.background"
         },
         {
           "slot": "surface.dark.solid.hover.background",
-          "token": "color.surface.subtle"
+          "token": "component.button.color.dark.solid.hover.background"
         },
         {
           "slot": "surface.dark.solid.foreground",
-          "token": "color.text.primary"
+          "token": "component.button.color.dark.solid.rest.foreground"
+        },
+        {
+          "slot": "surface.dark.outline.rest.background",
+          "token": "component.button.color.dark.outline.rest.background"
         },
         {
           "slot": "surface.dark.outline.rest.border",
-          "token": "color.text.inverse"
+          "token": "component.button.color.dark.outline.rest.border"
+        },
+        {
+          "slot": "surface.dark.outline.hover.background",
+          "token": "component.button.color.dark.outline.hover.background"
         },
         {
           "slot": "surface.dark.outline.foreground",
-          "token": "color.text.inverse"
+          "token": "component.button.color.dark.outline.rest.foreground"
+        },
+        {
+          "slot": "surface.dark.ghost.rest.background",
+          "token": "component.button.color.dark.ghost.rest.background"
+        },
+        {
+          "slot": "surface.dark.ghost.hover.background",
+          "token": "component.button.color.dark.ghost.hover.background"
         },
         {
           "slot": "surface.dark.ghost.foreground",
-          "token": "color.text.inverse"
+          "token": "component.button.color.dark.ghost.rest.foreground"
+        },
+        {
+          "slot": "surface.dark.transparent.rest.background",
+          "token": "component.button.color.dark.transparent.rest.background"
+        },
+        {
+          "slot": "surface.dark.transparent.hover.background",
+          "token": "component.button.color.dark.transparent.hover.background"
         },
         {
           "slot": "surface.dark.transparent.foreground",
-          "token": "color.text.inverse"
+          "token": "component.button.color.dark.transparent.rest.foreground"
         },
         {
           "slot": "surface.dark.destructive.rest.background",
-          "token": "color.status.danger"
+          "token": "component.button.color.dark.destructive.rest.background"
+        },
+        {
+          "slot": "surface.dark.destructive.hover.background",
+          "token": "component.button.color.dark.destructive.hover.background"
         },
         {
           "slot": "surface.dark.destructive.foreground",
-          "token": "color.text.inverse"
+          "token": "component.button.color.dark.destructive.rest.foreground"
+        },
+        {
+          "slot": "surface.dark.disabled.background",
+          "token": "component.button.color.dark.disabled.background"
+        },
+        {
+          "slot": "surface.dark.disabled.border",
+          "token": "component.button.color.dark.disabled.border"
         },
         {
           "slot": "surface.dark.disabled.foreground",
-          "token": "color.text.inverse"
+          "token": "component.button.color.dark.disabled.foreground"
         }
       ],
       "themeScopes": [
@@ -2943,7 +3075,7 @@
         },
         {
           "slot": "container.shadow",
-          "token": "drop-shadow/lg"
+          "token": "component.backToTopButton.shadow.lg"
         },
         {
           "slot": "border.width",
@@ -4772,7 +4904,7 @@
         },
         {
           "slot": "item.border.light.active",
-          "token": "var(--cars24-semantic-icon-brand-base, #4736FE)"
+          "token": "color.brand.primary.500"
         },
         {
           "slot": "item.border.light.disabled",
@@ -4812,7 +4944,7 @@
         },
         {
           "slot": "item.text.light.active",
-          "token": "var(--cars24-semantic-text-brand-base, #4736FE)"
+          "token": "color.brand.primary.500"
         },
         {
           "slot": "item.text.light.disabled",
@@ -7021,6 +7153,69 @@
         {
           "slot": "color.content",
           "token": "component.divider.color.content"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
+      "canonicalId": "component.lazyLoader",
+      "canonicalName": "Lazy Loader",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": "Lazy Loader",
+      "description": "Loading placeholder component used while content is still being prepared.",
+      "webExport": "@geist/web/canonical/lazy-loader",
+      "nativeExport": "",
+      "variants": [],
+      "states": [
+        "rest"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "container.width",
+          "token": "210px"
+        },
+        {
+          "slot": "container.height",
+          "token": "32px"
+        },
+        {
+          "slot": "container.radius",
+          "token": "radius.alt.xs"
+        },
+        {
+          "slot": "surface.gradient.angle",
+          "token": "98.66413131689013deg"
+        },
+        {
+          "slot": "surface.gradient.start",
+          "token": "var(--cars24-semantic-bg-tertiary)"
+        },
+        {
+          "slot": "surface.gradient.mid",
+          "token": "color.surface.canvas"
+        },
+        {
+          "slot": "surface.gradient.end",
+          "token": "var(--cars24-semantic-bg-tertiary)"
+        },
+        {
+          "slot": "surface.gradient.stop.start",
+          "token": "19.651%"
+        },
+        {
+          "slot": "surface.gradient.stop.mid",
+          "token": "50%"
+        },
+        {
+          "slot": "surface.gradient.stop.end",
+          "token": "80.104%"
         }
       ],
       "themeScopes": [

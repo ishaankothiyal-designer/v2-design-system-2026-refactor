@@ -1,0 +1,162 @@
+import type { Meta, StoryObj } from "@storybook/react";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
+import { Label, Text, type LabelProps, type LabelSize } from "@geist/web";
+import {
+  StoryMatrix,
+  StoryMatrixCornerCell,
+  StoryMatrixHeaderCell,
+  StoryMatrixRowLabelCell,
+  StoryMatrixValueCell
+} from "../storybook-matrix";
+import { StoryPage } from "../storybook-shell";
+
+type LabelStoryArgs = Omit<LabelProps, "label" | "description"> & {
+  label: string;
+  description: string;
+};
+
+const sizes: LabelSize[] = ["Large", "Medium", "Small", "Extra Small"];
+
+function HeaderCell({ brand, label }: { brand: DisplayBrandId; label: string }) {
+  return (
+    <Text brand={brand} as="strong" size="sm" tone="secondary" style={{ display: "block" }}>
+      {label}
+    </Text>
+  );
+}
+
+function PlaygroundStory(args: LabelStoryArgs) {
+  return (
+    <div style={{ width: 328 }}>
+      <Label {...args} description={args.description || undefined} label={args.label} />
+    </div>
+  );
+}
+
+function VariantMatrixStory({ brand }: { brand: DisplayBrandId }) {
+  return (
+    <StoryPage fullscreen>
+      <StoryMatrix columns="180px minmax(0, 376px)">
+        <StoryMatrixCornerCell />
+        <StoryMatrixHeaderCell>
+          <HeaderCell brand={brand} label="Preview" />
+        </StoryMatrixHeaderCell>
+
+        {sizes.flatMap((size) => [
+          <StoryMatrixRowLabelCell key={`${size}-label`} minHeight={112}>
+            <HeaderCell brand={brand} label={size} />
+          </StoryMatrixRowLabelCell>,
+          <StoryMatrixValueCell key={`${size}-preview`} minHeight={112}>
+            <div style={{ width: 328 }}>
+              <Label
+                brand={brand}
+                size={size}
+                label="Label"
+                description="Helpful description that could potentially wrap wrap to multiple lines"
+                required
+                showInfoIcon
+              />
+            </div>
+          </StoryMatrixValueCell>
+        ])}
+      </StoryMatrix>
+    </StoryPage>
+  );
+}
+
+const labelVariantsSourceCode = `<StoryPage fullscreen>
+  <Label
+    brand="Cars24"
+    size="Medium"
+    label="Label"
+    description="Helpful description that could potentially wrap to multiple lines"
+    required
+    showInfoIcon
+  />
+</StoryPage>`;
+
+const labelUiExampleSourceCode = `<Label
+  brand="Cars24"
+  size="Medium"
+  label="Label"
+  description="Helpful description that could potentially wrap to multiple lines"
+  required
+  showInfoIcon
+/>`;
+
+const meta: Meta<LabelStoryArgs> = {
+  title: "Components/Forms/Label",
+  component: Label,
+  tags: ["autodocs"],
+  parameters: {
+    layout: "fullscreen"
+  },
+  args: {
+    brand: "Cars24",
+    size: "Medium",
+    label: "Label",
+    description: "Helpful description that could potentially wrap wrap to multiple lines",
+    required: true,
+    showInfoIcon: true
+  },
+  argTypes: {
+    brand: {
+      control: "radio",
+      options: STORYBOOK_BRAND_OPTIONS
+    },
+    size: {
+      control: "inline-radio",
+      options: sizes
+    },
+    label: {
+      control: "text"
+    },
+    description: {
+      control: "text"
+    },
+    required: {
+      control: "boolean"
+    },
+    showInfoIcon: {
+      control: "boolean"
+    }
+  },
+  render: (args) => <PlaygroundStory {...args} />
+};
+
+export default meta;
+
+type Story = StoryObj<LabelStoryArgs>;
+
+export const Playground: Story = {
+  parameters: {
+    layout: "centered"
+  }
+};
+
+export const Variants: Story = {
+  render: ({ brand = "Cars24" }) => <VariantMatrixStory brand={brand} />,
+  parameters: {
+    controls: { include: ["brand"] },
+    docs: {
+      source: {
+        code: labelVariantsSourceCode
+      }
+    }
+  }
+};
+
+export const UIExample: Story = {
+  render: (args) => <PlaygroundStory {...args} />,
+  parameters: {
+    layout: "centered",
+    controls: {
+      include: ["brand"]
+    },
+    docs: {
+      source: {
+        code: labelUiExampleSourceCode
+      }
+    }
+  }
+};

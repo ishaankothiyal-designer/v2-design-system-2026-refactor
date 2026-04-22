@@ -35,7 +35,7 @@ type ButtonStoryArgs = Omit<ButtonProps, "children" | "leadingIcon" | "trailingI
 const buttonShapes: ButtonShape[] = ["Regular", "Pill"];
 const buttonStyles: ButtonStyleVariant[] = ["Solid", "Outline", "Ghost", "Transparent", "Destructive"];
 const buttonSizes: ButtonSize[] = ["Extra Small", "Small", "Medium", "Large", "Extra Large"];
-const previewStates: ButtonPreviewState[] = ["Rest", "Hover/Pressed"];
+const previewStates: ButtonPreviewState[] = ["Rest", "Hover/Pressed", "Focus"];
 const documentedStates: Array<{
   key: string;
   label: string;
@@ -45,6 +45,7 @@ const documentedStates: Array<{
 }> = [
   { key: "default", label: "Default" },
   { key: "hover", label: "Hover / Pressed", forceState: "Hover/Pressed" },
+  { key: "focus", label: "Focus", forceState: "Focus" },
   { key: "loading", label: "Loading", loading: true },
   { key: "disabled", label: "Disabled", disabled: true }
 ];
@@ -171,7 +172,10 @@ function StyleMatrix({
       <Text brand={brand} as="strong" size="sm" tone={onDark ? "inverse" : "primary"}>
         {size}
       </Text>
-      <StoryMatrix columns="180px repeat(4, minmax(180px, 1fr))" tone={onDark ? "inverse" : "canvas"}>
+      <StoryMatrix
+        columns={`180px repeat(${documentedStates.length}, minmax(180px, 1fr))`}
+        tone={onDark ? "inverse" : "canvas"}
+      >
         <StoryMatrixCornerCell tone={onDark ? "inverse" : "canvas"} />
         {documentedStates.map((state) => (
           <StoryMatrixHeaderCell

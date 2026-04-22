@@ -1,8 +1,14 @@
-import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
+import { type HTMLAttributes, type ReactNode, useInsertionEffect } from "react";
 import { designSystemRegistry } from "@geist/contracts";
+import { type DisplayBrandId, normalizeBrandId } from "@geist/tokens";
 import { Icon } from "./icon";
-import { getRequiredThemeTokenValue } from "../theme";
+import {
+  ensureStyleSheet,
+  joinClassNames,
+  runtimeTokenVar,
+  runtimeTokenVarPx,
+  toCssRule,
+} from "./runtime-styles";
 
 export const canonicalLabelWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.label"
@@ -10,11 +16,13 @@ export const canonicalLabelWebContract = designSystemRegistry.components.find(
 
 export type LabelSize = "Extra Small" | "Small" | "Medium" | "Large";
 
-type LabelTypography = {
-  fontSize: number;
-  letterSpacing: number;
-  lineHeight: number;
-};
+const LABEL_ROOT_CLASS = "geist-label";
+const LABEL_ROW_CLASS = "geist-label__row";
+const LABEL_TEXT_CLASS = "geist-label__text";
+const LABEL_REQUIRED_CLASS = "geist-label__required";
+const LABEL_INFO_CLASS = "geist-label__info";
+const LABEL_DESCRIPTION_CLASS = "geist-label__description";
+const LABEL_STYLESHEET_ID = "geist-label-styles";
 
 export interface LabelProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
   brand?: DisplayBrandId;
@@ -42,35 +50,77 @@ function getSizeKey(size: LabelSize) {
   return "xs";
 }
 
-function getTypography(brand: DisplayBrandId, path: string): LabelTypography {
-  return {
-    fontSize: Number(getRequiredThemeTokenValue(brand, `${path}.fontSize`)),
-    letterSpacing: Number(getRequiredThemeTokenValue(brand, `${path}.letterSpacing`)),
-    lineHeight: Number(getRequiredThemeTokenValue(brand, `${path}.lineHeight`))
-  };
-}
-
-function makeTypographyStyles({
-  brand,
-  color,
-  fontWeightPath,
-  typography
-}: {
-  brand: DisplayBrandId;
-  color: string;
-  fontWeightPath: string;
-  typography: LabelTypography;
-}): CSSProperties {
-  return {
-    color,
-    fontFamily: `${String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"))}, sans-serif`,
-    fontSize: typography.fontSize,
-    fontWeight: Number(getRequiredThemeTokenValue(brand, fontWeightPath)),
-    letterSpacing: typography.letterSpacing,
-    lineHeight: `${typography.lineHeight}px`,
-    margin: 0
-  };
-}
+const LABEL_STYLESHEET = [
+  toCssRule(`.${LABEL_ROOT_CLASS}`, {
+    display: "flex",
+    "flex-direction": "column",
+    "max-width": "100%",
+    "min-width": "0"
+  }),
+  toCssRule(`.${LABEL_ROOT_CLASS}[data-has-description="true"]`, {
+    gap: runtimeTokenVarPx("component.label.xs.stackGap")
+  }),
+  toCssRule(`.${LABEL_ROW_CLASS}`, {
+    "align-items": "center",
+    display: "inline-flex",
+    "max-width": "100%",
+    width: "fit-content"
+  }),
+  toCssRule(`.${LABEL_TEXT_CLASS}`, {
+    color: runtimeTokenVar("component.phoneInput.color.label.default"),
+    "font-family": `${runtimeTokenVar("typography.fontFamily.sans")}, sans-serif`,
+    "font-weight": runtimeTokenVar("typography.fontWeight.medium"),
+    margin: "0"
+  }),
+  toCssRule(`.${LABEL_REQUIRED_CLASS}`, {
+    color: runtimeTokenVar("component.phoneInput.color.label.required"),
+    "font-family": `${runtimeTokenVar("typography.fontFamily.sans")}, sans-serif`,
+    margin: "0"
+  }),
+  toCssRule(`.${LABEL_INFO_CLASS}`, {
+    color: runtimeTokenVar("component.phoneInput.color.label.info"),
+    display: "inline-flex",
+    "flex": "0 0 auto",
+    "line-height": "0"
+  }),
+  toCssRule(`.${LABEL_DESCRIPTION_CLASS}`, {
+    color: runtimeTokenVar("component.phoneInput.color.helper.default.text"),
+    "font-family": `${runtimeTokenVar("typography.fontFamily.sans")}, sans-serif`,
+    "font-weight": runtimeTokenVar("typography.fontWeight.regular"),
+    margin: "0",
+    "max-width": "100%"
+  }),
+  ...(["xs", "sm", "md", "lg"] as const).flatMap((sizeKey) => [
+    toCssRule(`.${LABEL_ROOT_CLASS}[data-size="${sizeKey}"][data-has-description="true"]`, {
+      gap: runtimeTokenVarPx(`component.label.${sizeKey}.stackGap`)
+    }),
+    toCssRule(`.${LABEL_ROOT_CLASS}[data-size="${sizeKey}"] .${LABEL_ROW_CLASS}`, {
+      gap: runtimeTokenVarPx(`component.label.${sizeKey}.slotGap`)
+    }),
+    toCssRule(`.${LABEL_ROOT_CLASS}[data-size="${sizeKey}"] .${LABEL_TEXT_CLASS}`, {
+      "font-size": runtimeTokenVarPx(`component.label.${sizeKey}.typography.label.fontSize`),
+      "letter-spacing": runtimeTokenVarPx(`component.label.${sizeKey}.typography.label.letterSpacing`),
+      "line-height": runtimeTokenVarPx(`component.label.${sizeKey}.typography.label.lineHeight`)
+    }),
+    toCssRule(`.${LABEL_ROOT_CLASS}[data-size="${sizeKey}"] .${LABEL_REQUIRED_CLASS}`, {
+      "font-size": runtimeTokenVarPx(`component.label.${sizeKey}.typography.label.fontSize`),
+      "font-weight":
+        sizeKey === "lg" || sizeKey === "md"
+          ? runtimeTokenVar("typography.fontWeight.medium")
+          : runtimeTokenVar("typography.fontWeight.regular"),
+      "letter-spacing": runtimeTokenVarPx(`component.label.${sizeKey}.typography.label.letterSpacing`),
+      "line-height": runtimeTokenVarPx(`component.label.${sizeKey}.typography.label.lineHeight`)
+    }),
+    toCssRule(`.${LABEL_ROOT_CLASS}[data-size="${sizeKey}"] .${LABEL_INFO_CLASS}`, {
+      "font-size": runtimeTokenVarPx(`component.label.${sizeKey}.iconSize`)
+    }),
+    toCssRule(`.${LABEL_ROOT_CLASS}[data-size="${sizeKey}"] .${LABEL_DESCRIPTION_CLASS}`, {
+      "font-size": runtimeTokenVarPx(`component.label.${sizeKey}.typography.description.fontSize`),
+      "letter-spacing": runtimeTokenVarPx(`component.label.${sizeKey}.typography.description.letterSpacing`),
+      "line-height": runtimeTokenVarPx(`component.label.${sizeKey}.typography.description.lineHeight`)
+    })
+  ])
+].join("");
 
 export function Label({
   brand = "Cars24",
@@ -80,91 +130,45 @@ export function Label({
   required = false,
   showInfoIcon = false,
   infoIconLabel,
+  className,
   style,
   ...rest
 }: LabelProps) {
+  const repoBrand = normalizeBrandId(brand);
   const sizeKey = getSizeKey(size);
-  const tokenPrefix = `component.label.${sizeKey}`;
-  const stackGap = Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.stackGap`));
-  const slotGap = Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.slotGap`));
-  const labelTypography = getTypography(brand, `${tokenPrefix}.typography.label`);
-  const descriptionTypography = getTypography(brand, `${tokenPrefix}.typography.description`);
-  const labelColor = String(getRequiredThemeTokenValue(brand, "component.phoneInput.color.label.default"));
-  const descriptionColor = String(
-    getRequiredThemeTokenValue(brand, "component.phoneInput.color.helper.default.text")
-  );
-  const requiredColor = String(
-    getRequiredThemeTokenValue(brand, "component.phoneInput.color.label.required")
-  );
-  const infoColor = String(getRequiredThemeTokenValue(brand, "component.phoneInput.color.label.info"));
-  const infoIconSize = Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.iconSize`));
 
-  const labelStyles = makeTypographyStyles({
-    brand,
-    color: labelColor,
-    fontWeightPath: "typography.fontWeight.medium",
-    typography: labelTypography
-  });
-  const requiredStyles = makeTypographyStyles({
-    brand,
-    color: requiredColor,
-    fontWeightPath:
-      sizeKey === "lg" || sizeKey === "md"
-        ? "typography.fontWeight.medium"
-        : "typography.fontWeight.regular",
-    typography: labelTypography
-  });
-  const descriptionStyles = {
-    ...makeTypographyStyles({
-      brand,
-      color: descriptionColor,
-      fontWeightPath: "typography.fontWeight.regular",
-      typography: descriptionTypography
-    }),
-    maxWidth: "100%"
-  } satisfies CSSProperties;
+  useInsertionEffect(() => {
+    ensureStyleSheet(LABEL_STYLESHEET_ID, LABEL_STYLESHEET);
+  }, []);
 
   return (
     <div
       {...rest}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: description ? stackGap : 0,
-        maxWidth: "100%",
-        minWidth: 0,
-        ...style
-      }}
+      className={joinClassNames(LABEL_ROOT_CLASS, className)}
+      data-brand={repoBrand}
+      data-has-description={String(Boolean(description))}
+      data-size={sizeKey}
+      style={style}
     >
-      <div
-        style={{
-          alignItems: "center",
-          display: "inline-flex",
-          gap: slotGap,
-          maxWidth: "100%",
-          width: "fit-content"
-        }}
-      >
-        <span style={labelStyles}>{label}</span>
+      <div className={LABEL_ROW_CLASS}>
+        <span className={LABEL_TEXT_CLASS}>{label}</span>
         {required ? (
-          <span aria-hidden="true" style={requiredStyles}>
+          <span aria-hidden="true" className={LABEL_REQUIRED_CLASS}>
             *
           </span>
         ) : null}
         {showInfoIcon ? (
-          <Icon
-            decorative={!infoIconLabel}
-            name="info-filled"
-            {...(infoIconLabel ? { label: infoIconLabel } : {})}
-            style={{
-              color: infoColor,
-              flex: "0 0 auto",
-              fontSize: infoIconSize
-            }}
-          />
+          <span className={LABEL_INFO_CLASS}>
+            <Icon
+              decorative={!infoIconLabel}
+              name="info-filled"
+              {...(infoIconLabel ? { label: infoIconLabel } : {})}
+              style={{ color: "inherit", fontSize: "inherit" }}
+            />
+          </span>
         ) : null}
       </div>
-      {description ? <p style={descriptionStyles}>{description}</p> : null}
+      {description ? <p className={LABEL_DESCRIPTION_CLASS}>{description}</p> : null}
     </div>
   );
 }

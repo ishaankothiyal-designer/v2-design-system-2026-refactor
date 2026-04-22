@@ -51,6 +51,7 @@ export * from "./canonical/elite-header";
 export * from "./canonical/page-header-l2";
 export * from "./canonical/section-header";
 export * from "./canonical/divider";
+export * from "./canonical/lazy-loader";
 export * from "./canonical/module";
 export * from "./canonical/horizontal-tab";
 export * from "./canonical/top-tab";

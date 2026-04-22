@@ -1,7 +1,7 @@
 import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
 import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
-import { getRequiredThemeTokenValue } from "../theme";
+import { getRequiredThemeTokenValue, pxToRem } from "../theme";
 import { Button, type ButtonProps, type ButtonShape } from "./button";
 import { LinkButton, type LinkButtonProps } from "./link-button";
 
@@ -104,7 +104,7 @@ export function ButtonGroup({
     display: "flex",
     flexDirection: isHorizontal ? "row" : "column",
     flexWrap: isHorizontal ? "wrap" : "nowrap",
-    gap: `${metrics.stackGap}px`,
+    gap: pxToRem(metrics.stackGap),
     width: "100%",
     ...style
   };
@@ -113,9 +113,9 @@ export function ButtonGroup({
     alignItems: "center",
     display: "flex",
     flexWrap: "wrap",
-    gap: `${metrics.inlineGap}px`,
+    gap: pxToRem(metrics.inlineGap),
     justifyContent: "center",
-    padding: `${metrics.contextualPaddingBlock}px 0`,
+    padding: `${pxToRem(metrics.contextualPaddingBlock)} 0`,
     textAlign: "center",
     width: "100%"
   };
@@ -123,10 +123,10 @@ export function ButtonGroup({
   const promptStyles: CSSProperties = {
     color: promptColor,
     fontFamily: `${fontFamily}, sans-serif`,
-    fontSize: `${metrics.promptFontSize}px`,
+    fontSize: pxToRem(metrics.promptFontSize),
     fontWeight,
-    letterSpacing: `${metrics.promptLetterSpacing}px`,
-    lineHeight: `${metrics.promptLineHeight}px`,
+    letterSpacing: pxToRem(metrics.promptLetterSpacing),
+    lineHeight: pxToRem(metrics.promptLineHeight),
     overflowWrap: "anywhere",
     whiteSpace: "normal"
   };
