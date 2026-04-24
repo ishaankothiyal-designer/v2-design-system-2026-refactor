@@ -1,7 +1,7 @@
 import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
 import type { DisplayBrandId } from "@geist/tokens";
 import { Icon } from "./icon";
-import { getRequiredThemeTokenValue } from "../theme";
+import { getRequiredThemeTokenValue, pxToRem } from "../theme";
 
 export type RatingsSize = "Small" | "Medium";
 export type RatingStateValue = "Default" | "Half Star" | "Full Star";
@@ -18,30 +18,29 @@ const RATING_BADGE_BACKGROUNDS: Record<RatingBadgeTone, string> = {
 };
 
 const RATING_LOCKUP_GAP: Record<RatingsSize, string> = {
-  Small: "var(--cars24-misc-gap-6, 6px)",
-  Medium: "var(--cars24-misc-gap-8, 8px)"
+  Small: "var(--cars24-misc-gap-6, 0.375rem)",
+  Medium: "var(--cars24-misc-gap-8, 0.5rem)"
 };
 
 const RATING_BADGE_HEIGHT: Record<RatingsSize, string> = {
-  Small: "var(--cars24-misc-size-16, 16px)",
-  Medium: "var(--cars24-misc-size-20, 20px)"
+  Small: "var(--cars24-misc-size-16, 1rem)",
+  Medium: "var(--cars24-misc-size-20, 1.25rem)"
 };
 
 const RATING_BADGE_PADDING_INLINE: Record<RatingsSize, string> = {
-  Small: "var(--cars24-misc-gap-6, 6px)",
-  Medium: "var(--cars24-misc-gap-8, 8px)"
+  Small: "var(--cars24-misc-gap-6, 0.375rem)",
+  Medium: "var(--cars24-misc-gap-8, 0.5rem)"
 };
 
 const RATING_BADGE_PADDING_BLOCK: Record<RatingsSize, string> = {
-  Small: "0px",
-  Medium: "var(--cars24-misc-gap-2, 2px)"
+  Small: "0",
+  Medium: "var(--cars24-misc-gap-2, 0.125rem)"
 };
 
-const RATING_BADGE_FONT_SIZE = "var(--cars24-typography-size-utility-label-4, 11px)";
-const RATING_BADGE_LINE_HEIGHT = "var(--cars24-typography-line-height-utility-label-4, 14px)";
-const RATING_BADGE_LETTER_SPACING = "var(--cars24-typography-letter-spacing-utility-label-4, 0px)";
+const RATING_BADGE_FONT_SIZE = "var(--cars24-typography-size-utility-label-4, 0.6875rem)";
+const RATING_BADGE_LINE_HEIGHT = "var(--cars24-typography-line-height-utility-label-4, 0.875rem)";
+const RATING_BADGE_LETTER_SPACING = "var(--cars24-typography-letter-spacing-utility-label-4, 0)";
 const LARGE_RATING_STATE_SIZE = 32;
-const RATING_STATE_GLYPH_SCALE = 0.6814;
 const DEFAULT_RATING = 0;
 const DEFAULT_MAX = 5;
 const RATING_STEP = 0.5;
@@ -134,7 +133,6 @@ export function RatingState({
   ...rest
 }: RatingStateProps) {
   const stateSize = getRatingStateSizePx(brand, size);
-  const iconSize = stateSize * RATING_STATE_GLYPH_SCALE;
 
   return (
     <span
@@ -144,18 +142,18 @@ export function RatingState({
         color: getRatingStateColor(state),
         display: "inline-flex",
         flexShrink: 0,
-        fontSize: `${stateSize}px`,
-        height: `${stateSize}px`,
+        fontSize: pxToRem(stateSize),
+        height: pxToRem(stateSize),
         justifyContent: "center",
         lineHeight: 1,
-        width: `${stateSize}px`,
+        width: pxToRem(stateSize),
         ...style
       }}
     >
       <Icon
         decorative
         name={getRatingStateIconName(state)}
-        style={{ color: getRatingStateColor(state), fontSize: `${iconSize}px` }}
+        style={{ color: getRatingStateColor(state), fontSize: pxToRem(stateSize) }}
       />
     </span>
   );
@@ -180,7 +178,7 @@ export function Ratings({
   const fontFamily = String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"));
   const fontWeight = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.medium"));
   const inverseText = String(getRequiredThemeTokenValue(brand, "color.text.inverse"));
-  const pillRadius = `${Number(getRequiredThemeTokenValue(brand, "radius.pill"))}px`;
+  const pillRadius = pxToRem(Number(getRequiredThemeTokenValue(brand, "radius.pill")));
   const stateSize = size === "Small" ? "Small" : "Medium";
   const ariaLabel = rest["aria-label"] ?? `Rating ${resolvedRating.toFixed(1)} out of ${resolvedMax}`;
 
@@ -227,7 +225,7 @@ export function Ratings({
           gap: RATING_LOCKUP_GAP[size]
         }}
       >
-        <div style={{ display: "inline-flex" }}>
+        <div style={{ display: "inline-flex", gap: 0 }}>
           {Array.from({ length: resolvedMax }, (_, index) => (
             <RatingState
               key={`rating-star-${index + 1}`}

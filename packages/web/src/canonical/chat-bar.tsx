@@ -1,20 +1,26 @@
 import {
   type ChangeEvent,
-  type CSSProperties,
   type InputHTMLAttributes,
   useId,
+  useInsertionEffect,
   useState
 } from "react";
 import type { IconName } from "@geist/icons";
-import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
+import { type DisplayBrandId, normalizeBrandId } from "@geist/tokens";
 import { Icon } from "./icon";
+import { ensureStyleSheet, joinClassNames, runtimeTokenVar, runtimeTokenVarPx, toCssRule } from "./runtime-styles";
 
 export const canonicalChatBarWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.chatBar"
 );
 
 export type ChatBarState = "Default" | "Message Typed";
+
+const CHAT_BAR_ROOT_CLASS = "geist-chat-bar";
+const CHAT_BAR_ACTION_CLASS = "geist-chat-bar__action";
+const CHAT_BAR_INPUT_CLASS = "geist-chat-bar__input";
+const CHAT_BAR_STYLESHEET_ID = "geist-chat-bar-styles";
 
 export interface ChatBarProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "children" | "defaultValue" | "size" | "value"> {
@@ -30,56 +36,6 @@ export interface ChatBarProps
   state?: ChatBarState;
   value?: string;
 }
-
-const CHAT_BAR_ROOT_STYLES: CSSProperties = {
-  alignItems: "center",
-  background: "var(--cars24-semantic-bg-primary, #FFFFFF)",
-  borderStyle: "solid",
-  borderWidth: "1px",
-  borderRadius: "var(--cars24-theme-radius-alt-lg, 14px)",
-  boxSizing: "border-box",
-  display: "flex",
-  gap: "var(--cars24-misc-gap-8, 8px)",
-  minHeight: 44,
-  minWidth: 0,
-  overflow: "hidden",
-  padding: "var(--cars24-misc-gap-10, 10px)",
-  width: "100%"
-};
-
-const CHAT_BAR_TEXT_BASE_STYLES: CSSProperties = {
-  fontFamily: 'var(--cars24-theme-font-family-primary, "Geist"), sans-serif',
-  fontWeight: "var(--cars24-theme-font-weight-regular, 400)",
-  margin: 0,
-  minWidth: 0
-};
-
-const CHAT_BAR_TEXT_STYLES: Record<ChatBarState, CSSProperties> = {
-  Default: {
-    color: "var(--cars24-semantic-text-tertiary, #94A3B8)",
-    fontSize: "var(--cars24-typography-size-utility-label-2, 14px)",
-    letterSpacing: "var(--cars24-typography-letter-spacing-utility-label-2, 0px)",
-    lineHeight: "var(--cars24-typography-line-height-utility-label-2, 18px)"
-  },
-  "Message Typed": {
-    color: "var(--cars24-semantic-text-primary, #020617)",
-    fontSize: "var(--cars24-typography-size-paragraph-body-2, 14px)",
-    letterSpacing: "var(--cars24-typography-letter-spacing-paragraph-body-2, 0px)",
-    lineHeight: "var(--cars24-typography-line-height-paragraph-body-2, 20px)"
-  }
-};
-
-const CHAT_BAR_BORDER_COLORS: Record<ChatBarState, string> = {
-  Default: "var(--cars24-semantic-border-secondary, #CBD5E1)",
-  "Message Typed": "var(--cars24-semantic-border-tertiary, #94A3B8)"
-};
-
-const CHAT_BAR_SEND_ICON_COLORS: Record<ChatBarState, string> = {
-  Default: "var(--cars24-semantic-icon-tertiary, #94A3B8)",
-  "Message Typed": "var(--cars24-semantic-icon-brand-base, #4736FE)"
-};
-
-const CHAT_BAR_ATTACHMENT_ICON_COLOR = "var(--cars24-semantic-icon-secondary, #64748B)";
 
 function resolveState({
   forceState,
@@ -101,6 +57,76 @@ function resolveState({
   return value.length > 0 ? "Message Typed" : "Default";
 }
 
+const CHAT_BAR_STYLESHEET = [
+  toCssRule(`.${CHAT_BAR_ROOT_CLASS}`, {
+    "align-items": "center",
+    background: runtimeTokenVar("color.surface.canvas"),
+    border: `1px solid ${runtimeTokenVar("component.textInput.color.field.rest.border")}`,
+    "border-radius": runtimeTokenVarPx("radius.alt.lg"),
+    "box-sizing": "border-box",
+    display: "flex",
+    gap: runtimeTokenVarPx("component.textInput.size.sm.fieldGap"),
+    "min-height": "2.75rem",
+    "min-width": "0",
+    overflow: "hidden",
+    padding: runtimeTokenVarPx("component.phoneInput.size.lg.fieldPaddingBlock"),
+    width: "100%"
+  }),
+  toCssRule(`.${CHAT_BAR_ROOT_CLASS}[data-state="typed"]`, {
+    border: `1px solid ${runtimeTokenVar("component.textInput.color.field.rest.placeholder")}`
+  }),
+  toCssRule(`.${CHAT_BAR_ACTION_CLASS}`, {
+    "align-items": "center",
+    appearance: "none",
+    background: "transparent",
+    border: "none",
+    color: runtimeTokenVar("component.phoneInput.color.helper.default.text"),
+    cursor: "pointer",
+    display: "inline-flex",
+    "flex": "0 0 auto",
+    "justify-content": "center",
+    margin: "0",
+    padding: "0"
+  }),
+  toCssRule(`.${CHAT_BAR_ROOT_CLASS}[data-disabled="true"] .${CHAT_BAR_ACTION_CLASS}`, {
+    cursor: "not-allowed"
+  }),
+  toCssRule(`.${CHAT_BAR_ACTION_CLASS}[data-role="send"]`, {
+    color: runtimeTokenVar("component.textInput.color.field.rest.placeholder")
+  }),
+  toCssRule(`.${CHAT_BAR_ROOT_CLASS}[data-state="typed"] .${CHAT_BAR_ACTION_CLASS}[data-role="send"]`, {
+    color: runtimeTokenVar("color.brand.alt.500")
+  }),
+  toCssRule(`.${CHAT_BAR_INPUT_CLASS}`, {
+    appearance: "none",
+    background: "transparent",
+    border: "none",
+    color: runtimeTokenVar("component.textInput.color.field.rest.placeholder"),
+    "flex": "1 1 auto",
+    "font-family": `${runtimeTokenVar("typography.fontFamily.sans")}, sans-serif`,
+    "font-size": runtimeTokenVarPx("component.textInput.typography.input.sm.fontSize"),
+    "font-weight": runtimeTokenVar("typography.fontWeight.regular"),
+    "letter-spacing": runtimeTokenVarPx("component.textInput.typography.input.sm.letterSpacing"),
+    "line-height": runtimeTokenVarPx("component.textInput.typography.input.sm.lineHeight"),
+    "min-width": "0",
+    outline: "none",
+    overflow: "hidden",
+    padding: "0",
+    "text-overflow": "ellipsis",
+    "white-space": "nowrap"
+  }),
+  toCssRule(`.${CHAT_BAR_ROOT_CLASS}[data-state="typed"] .${CHAT_BAR_INPUT_CLASS}`, {
+    color: runtimeTokenVar("component.textInput.color.field.rest.value"),
+    "font-size": runtimeTokenVarPx("typography.fontSize.sm"),
+    "letter-spacing": "0px",
+    "line-height": runtimeTokenVarPx("typography.lineHeight.sm")
+  }),
+  toCssRule(`.${CHAT_BAR_INPUT_CLASS}::placeholder`, {
+    color: runtimeTokenVar("component.textInput.color.field.rest.placeholder"),
+    opacity: "1"
+  })
+].join("");
+
 export function ChatBar({
   attachmentAriaLabel = "Add attachment",
   attachmentIconName = "circle-plus-outline",
@@ -121,52 +147,16 @@ export function ChatBar({
   value,
   ...rest
 }: ChatBarProps) {
-  const generatedId = useId();
-  const placeholderClassName = `geist-chat-bar-placeholder-${generatedId.replace(/[^a-zA-Z0-9_-]/g, "")}`;
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue ?? "");
   const currentValue = value ?? uncontrolledValue;
-  const previewMode = forceState !== undefined;
   const resolvedState = resolveState({ forceState, state, value: currentValue });
+  const repoBrand = normalizeBrandId(brand);
+  const dataState = resolvedState === "Message Typed" ? "typed" : "default";
+  const inputId = useId();
 
-  const rootStyles: CSSProperties = {
-    ...CHAT_BAR_ROOT_STYLES,
-    borderColor: CHAT_BAR_BORDER_COLORS[resolvedState],
-    ...style
-  };
-
-  const iconButtonStyles: CSSProperties = {
-    alignItems: "center",
-    appearance: "none",
-    background: "transparent",
-    border: "none",
-    color: CHAT_BAR_ATTACHMENT_ICON_COLOR,
-    cursor: disabled ? "not-allowed" : "pointer",
-    display: "inline-flex",
-    flex: "0 0 auto",
-    justifyContent: "center",
-    margin: 0,
-    padding: 0
-  };
-
-  const inputStyles: CSSProperties = {
-    ...CHAT_BAR_TEXT_BASE_STYLES,
-    ...CHAT_BAR_TEXT_STYLES[resolvedState],
-    appearance: "none",
-    background: "transparent",
-    border: "none",
-    flex: "1 1 auto",
-    outline: "none",
-    padding: 0
-  };
-
-  const previewTextStyles: CSSProperties = {
-    ...CHAT_BAR_TEXT_BASE_STYLES,
-    ...CHAT_BAR_TEXT_STYLES[resolvedState],
-    flex: "1 1 auto",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap"
-  };
+  useInsertionEffect(() => {
+    ensureStyleSheet(CHAT_BAR_STYLESHEET_ID, CHAT_BAR_STYLESHEET);
+  }, []);
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     if (value === undefined) {
@@ -176,66 +166,53 @@ export function ChatBar({
     onChange?.(event);
   }
 
-  const previewValue = resolvedState === "Message Typed" ? currentValue || placeholder : placeholder;
-
   return (
-    <div className={className} style={rootStyles}>
-      <style>{`
-        .${placeholderClassName}::placeholder {
-          color: var(--cars24-semantic-text-tertiary, #94A3B8);
-          opacity: 1;
-        }
-      `}</style>
+    <div
+      className={joinClassNames(CHAT_BAR_ROOT_CLASS, className)}
+      data-brand={repoBrand}
+      data-disabled={String(disabled)}
+      data-state={dataState}
+      style={style}
+    >
       <button
         aria-label={attachmentAriaLabel}
+        className={CHAT_BAR_ACTION_CLASS}
+        data-role="attachment"
         disabled={disabled}
         onClick={onAttachmentClick}
-        style={iconButtonStyles}
         type="button"
       >
         <Icon
           brand={brand}
           decorative
           name={attachmentIconName}
-          style={{
-            color: CHAT_BAR_ATTACHMENT_ICON_COLOR,
-            flex: "0 0 auto"
-          }}
+          style={{ color: "inherit", flex: "0 0 auto" }}
         />
       </button>
-      {previewMode ? (
-        <p style={previewTextStyles}>{previewValue}</p>
-      ) : (
-        <input
-          {...rest}
-          aria-disabled={disabled}
-          className={placeholderClassName}
-          disabled={disabled}
-          onChange={handleChange}
-          placeholder={placeholder}
-          style={inputStyles}
-          type={type}
-          value={currentValue}
-        />
-      )}
+      <input
+        {...rest}
+        aria-disabled={disabled}
+        className={CHAT_BAR_INPUT_CLASS}
+        disabled={disabled}
+        id={inputId}
+        onChange={handleChange}
+        placeholder={placeholder}
+        type={type}
+        value={currentValue}
+      />
       <button
         aria-label={sendAriaLabel}
+        className={CHAT_BAR_ACTION_CLASS}
+        data-role="send"
         disabled={disabled}
         onClick={onSendClick}
-        style={{
-          ...iconButtonStyles,
-          color: CHAT_BAR_SEND_ICON_COLORS[resolvedState]
-        }}
         type="button"
       >
         <Icon
           brand={brand}
           decorative
           name={sendIconName}
-          style={{
-            color: CHAT_BAR_SEND_ICON_COLORS[resolvedState],
-            flex: "0 0 auto"
-          }}
+          style={{ color: "inherit", flex: "0 0 auto" }}
         />
       </button>
     </div>

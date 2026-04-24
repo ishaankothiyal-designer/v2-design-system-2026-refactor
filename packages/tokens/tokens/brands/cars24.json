@@ -23,6 +23,42 @@
     }
   },
   "component": {
+    "button": {
+      "color": {
+        "light": {
+          "solid": {
+            "rest": {
+              "background": "#4736FE"
+            },
+            "hover": {
+              "background": "#351ED8"
+            }
+          },
+          "outline": {
+            "rest": {
+              "border": "#4736FE",
+              "foreground": "#4736FE"
+            },
+            "hover": {
+              "background": "#E1E3FD",
+              "border": "#4736FE",
+              "foreground": "#4736FE"
+            }
+          },
+          "ghost": {
+            "rest": {
+              "foreground": "#4736FE",
+              "loaderIndicator": "#4736FE"
+            },
+            "hover": {
+              "background": "#E1E3FD",
+              "foreground": "#351ED8",
+              "loaderIndicator": "#351ED8"
+            }
+          }
+        }
+      }
+    },
     "captionButton": {
       "color": {
         "light": {

@@ -8,14 +8,16 @@ import {
   type ReactElement,
   type ReactNode,
   useEffect,
+  useInsertionEffect,
   useRef,
   useState
 } from "react";
 import type { IconName } from "@geist/icons";
 import { designSystemRegistry } from "@geist/contracts";
-import type { DisplayBrandId } from "@geist/tokens";
-import { getRequiredThemeTokenValue } from "../theme";
+import { type DisplayBrandId, normalizeBrandId, REPO_BRAND_IDS, type RepoBrandId } from "@geist/tokens";
+import { getRequiredThemeTokenValue, tokenValueToRem } from "../theme";
 import { Icon } from "./icon";
+import { ensureStyleSheet, joinClassNames, toCssRule } from "./runtime-styles";
 
 export const canonicalBottomNavWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.bottomNav"
@@ -46,8 +48,35 @@ export interface BottomNavProps extends Omit<HTMLAttributes<HTMLElement>, "onCha
   showHomeIndicator?: boolean;
 }
 
+type StylableElement = ReactElement<{ style?: CSSProperties; className?: string; "aria-hidden"?: boolean }>;
+
+const BOTTOM_NAV_ROOT_CLASS = "geist-bottom-nav";
+const BOTTOM_NAV_RAIL_CLASS = "geist-bottom-nav__rail";
+const BOTTOM_NAV_ITEM_CLASS = "geist-bottom-nav__item";
+const BOTTOM_NAV_ICON_CLASS = "geist-bottom-nav__icon";
+const BOTTOM_NAV_LABEL_CLASS = "geist-bottom-nav__label";
+const BOTTOM_NAV_HOME_WRAPPER_CLASS = "geist-bottom-nav__home-wrapper";
+const BOTTOM_NAV_HOME_INDICATOR_CLASS = "geist-bottom-nav__home-indicator";
+const BOTTOM_NAV_STYLESHEET_ID = "geist-bottom-nav-styles";
+
 function getBottomNavToken(slot: string) {
   return canonicalBottomNavWebContract?.tokenBindings.find((binding) => binding.slot === slot)?.token;
+}
+
+function getDisplayBrandId(brandId: RepoBrandId): DisplayBrandId {
+  if (brandId === "cars24") {
+    return "Cars24";
+  }
+
+  if (brandId === "teambhp") {
+    return "Team BHP";
+  }
+
+  if (brandId === "carinfo") {
+    return "CarInfo";
+  }
+
+  return "VehicleInfo";
 }
 
 function withTokenFallback(token: string | undefined, fallback: string) {
@@ -84,44 +113,14 @@ function resolveBottomNavBindingValue(brand: DisplayBrandId, slot: string, fallb
 }
 
 function toPx(value: string | number) {
-  return typeof value === "number" ? `${value}px` : /^\d+(\.\d+)?$/.test(value) ? `${value}px` : value;
-}
-
-function toTransparent(color: string) {
-  const normalized = color.trim();
-
-  if (normalized.startsWith("#")) {
-    const hex = normalized.slice(1);
-    const value =
-      hex.length === 3
-        ? hex
-            .split("")
-            .map((char) => `${char}${char}`)
-            .join("")
-        : hex.length === 6
-          ? hex
-          : undefined;
-
-    if (value) {
-      const red = Number.parseInt(value.slice(0, 2), 16);
-      const green = Number.parseInt(value.slice(2, 4), 16);
-      const blue = Number.parseInt(value.slice(4, 6), 16);
-
-      return `rgba(${red}, ${green}, ${blue}, 0)`;
-    }
-  }
-
-  const rgbMatch = normalized.match(/^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/i);
-
-  if (rgbMatch) {
-    return `rgba(${rgbMatch[1]}, ${rgbMatch[2]}, ${rgbMatch[3]}, 0)`;
-  }
-
-  return "transparent";
+  return tokenValueToRem(value);
 }
 
 function getDefaultValue(items: BottomNavItem[]) {
-  return items.find((item) => !item.disabled && item.state === "Selected")?.value ?? items.find((item) => !item.disabled)?.value;
+  return (
+    items.find((item) => !item.disabled && item.state === "Selected")?.value ??
+    items.find((item) => !item.disabled)?.value
+  );
 }
 
 function resolveConfiguration(items: BottomNavItem[], configuration: BottomNavConfiguration | undefined) {
@@ -140,53 +139,6 @@ function resolveType(brand: DisplayBrandId, type: BottomNavType | undefined): Bo
   return brand === "VehicleInfo" ? "Floating" : "Sticky";
 }
 
-function renderItemIcon({
-  brand,
-  color,
-  icon,
-  iconName,
-  size
-}: {
-  brand: DisplayBrandId;
-  color: string;
-  icon: ReactNode | undefined;
-  iconName: IconName | undefined;
-  size: string;
-}) {
-  if (icon) {
-    if (isValidElement(icon)) {
-      const element = icon as ReactElement<{ style?: CSSProperties; "aria-hidden"?: boolean }>;
-
-      return cloneElement(element, {
-        "aria-hidden": true,
-        style: {
-          color,
-          fontSize: size,
-          ...element.props.style
-        }
-      });
-    }
-
-    return icon;
-  }
-
-  if (!iconName) {
-    return null;
-  }
-
-  return (
-    <Icon
-      brand={brand}
-      decorative
-      name={iconName}
-      style={{
-        color,
-        fontSize: size
-      }}
-    />
-  );
-}
-
 function getNextEnabledIndex(items: BottomNavItem[], startIndex: number, direction: 1 | -1) {
   if (!items.length) {
     return -1;
@@ -202,6 +154,395 @@ function getNextEnabledIndex(items: BottomNavItem[], startIndex: number, directi
 
   return -1;
 }
+
+function renderItemIcon({
+  brand,
+  icon,
+  iconName
+}: {
+  brand: DisplayBrandId;
+  icon: ReactNode | undefined;
+  iconName: IconName | undefined;
+}) {
+  if (icon) {
+    if (isValidElement(icon)) {
+      const element = icon as StylableElement;
+
+      return (
+        <span className={BOTTOM_NAV_ICON_CLASS}>
+          {cloneElement(element, {
+            "aria-hidden": true,
+            className: [element.props.className].filter(Boolean).join(" "),
+            style: {
+              color: "inherit",
+              fontSize: "inherit",
+              ...element.props.style
+            }
+          })}
+        </span>
+      );
+    }
+
+    return <span className={BOTTOM_NAV_ICON_CLASS}>{icon}</span>;
+  }
+
+  if (!iconName) {
+    return null;
+  }
+
+  return (
+    <span className={BOTTOM_NAV_ICON_CLASS}>
+      <Icon
+        brand={brand}
+        decorative
+        name={iconName}
+        style={{
+          color: "inherit",
+          fontSize: "inherit"
+        }}
+      />
+    </span>
+  );
+}
+
+function buildBottomNavBrandRules(brandId: RepoBrandId) {
+  const rootSelector = `.${BOTTOM_NAV_ROOT_CLASS}[data-brand="${brandId}"]`;
+  const displayBrand = getDisplayBrandId(brandId);
+  const canvasColor = String(getRequiredThemeTokenValue(displayBrand, "color.surface.canvas"));
+  const inverseSurfaceColor = String(getRequiredThemeTokenValue(displayBrand, "color.surface.inverse"));
+  const brandPrimaryColor = String(getRequiredThemeTokenValue(displayBrand, "color.brand.primary.500"));
+  const inverseTextColor = String(getRequiredThemeTokenValue(displayBrand, "color.text.inverse"));
+  const secondaryTextColor = String(getRequiredThemeTokenValue(displayBrand, "color.text.secondary"));
+  const brandTextColor = String(
+    getRequiredThemeTokenValue(displayBrand, "component.linkButton.color.light.brand.rest")
+  );
+  const defaultBorderColor = String(getRequiredThemeTokenValue(displayBrand, "color.border.default"));
+
+  return [
+    toCssRule(rootSelector, {
+      "--bottom-nav-floating-container-background": resolveBottomNavBindingValue(
+        displayBrand,
+        "container.floating.background",
+        brandPrimaryColor
+      ),
+      "--bottom-nav-floating-container-padding-block": toPx(
+        resolveBottomNavBindingValue(displayBrand, "container.floating.paddingBlock", "4px")
+      ),
+      "--bottom-nav-floating-container-padding-inline-end": toPx(
+        resolveBottomNavBindingValue(displayBrand, "container.floating.paddingInlineEnd", "12px")
+      ),
+      "--bottom-nav-floating-container-padding-inline-start": toPx(
+        resolveBottomNavBindingValue(displayBrand, "container.floating.paddingInlineStart", "4px")
+      ),
+      "--bottom-nav-floating-container-radius": toPx(
+        resolveBottomNavBindingValue(displayBrand, "container.floating.radius", "999px")
+      ),
+      "--bottom-nav-floating-gradient-canvas": resolveBottomNavBindingValue(
+        displayBrand,
+        "root.floating.gradient.canvas",
+        canvasColor
+      ),
+      "--bottom-nav-floating-selected-background": resolveBottomNavBindingValue(
+        displayBrand,
+        "item.background.floating.selected",
+        canvasColor
+      ),
+      "--bottom-nav-floating-wrapper-padding-block": toPx(
+        resolveBottomNavBindingValue(displayBrand, "root.floating.paddingBlock", "8px")
+      ),
+      "--bottom-nav-floating-wrapper-padding-inline": toPx(
+        resolveBottomNavBindingValue(displayBrand, "root.floating.paddingInline", "16px")
+      ),
+      "--bottom-nav-focus-outline-color": resolveBottomNavBindingValue(
+        displayBrand,
+        "item.focus.outlineColor",
+        "transparent"
+      ),
+      "--bottom-nav-focus-outline-offset": toPx(
+        resolveBottomNavBindingValue(displayBrand, "item.focus.outlineOffset", "2px")
+      ),
+      "--bottom-nav-focus-outline-width": toPx(
+        resolveBottomNavBindingValue(displayBrand, "item.focus.outlineWidth", "2px")
+      ),
+      "--bottom-nav-home-indicator-color": resolveBottomNavBindingValue(
+        displayBrand,
+        "homeIndicator.color",
+        inverseSurfaceColor
+      ),
+      "--bottom-nav-home-indicator-height": toPx(
+        resolveBottomNavBindingValue(displayBrand, "homeIndicator.height", "5px")
+      ),
+      "--bottom-nav-home-indicator-opacity": resolveBottomNavBindingValue(
+        displayBrand,
+        "homeIndicator.opacity",
+        "0.75"
+      ),
+      "--bottom-nav-home-indicator-width": toPx(
+        resolveBottomNavBindingValue(displayBrand, "homeIndicator.width", "134px")
+      ),
+      "--bottom-nav-item-color-floating-disabled": resolveBottomNavBindingValue(
+        displayBrand,
+        "item.color.dark.disabled",
+        inverseTextColor
+      ),
+      "--bottom-nav-item-color-floating-rest": resolveBottomNavBindingValue(
+        displayBrand,
+        "item.color.floating.rest",
+        inverseTextColor
+      ),
+      "--bottom-nav-item-color-floating-selected": resolveBottomNavBindingValue(
+        displayBrand,
+        "item.color.floating.selected",
+        brandTextColor
+      ),
+      "--bottom-nav-item-color-sticky-disabled": resolveBottomNavBindingValue(
+        displayBrand,
+        "item.color.light.disabled",
+        secondaryTextColor
+      ),
+      "--bottom-nav-item-color-sticky-rest": resolveBottomNavBindingValue(
+        displayBrand,
+        "item.color.sticky.rest",
+        secondaryTextColor
+      ),
+      "--bottom-nav-item-color-sticky-selected": resolveBottomNavBindingValue(
+        displayBrand,
+        "item.color.sticky.selected",
+        brandTextColor
+      ),
+      "--bottom-nav-item-content-gap": toPx(resolveBottomNavBindingValue(displayBrand, "item.contentGap", "4px")),
+      "--bottom-nav-item-height-floating": toPx(
+        resolveBottomNavBindingValue(displayBrand, "item.height.floating", "62px")
+      ),
+      "--bottom-nav-item-height-sticky": toPx(resolveBottomNavBindingValue(displayBrand, "item.height.sticky", "56px")),
+      "--bottom-nav-item-icon-size": toPx(
+        resolveBottomNavBindingValue(
+          displayBrand,
+          "item.icon.size",
+          String(getRequiredThemeTokenValue(displayBrand, "icon.size.lg"))
+        )
+      ),
+      "--bottom-nav-item-opacity-disabled": "0.4",
+      "--bottom-nav-item-overlap-floating": toPx(
+        resolveBottomNavBindingValue(
+          displayBrand,
+          "item.overlap.floating",
+          String(getRequiredThemeTokenValue(displayBrand, "spacing.2"))
+        )
+      ),
+      "--bottom-nav-item-radius-floating": toPx(
+        resolveBottomNavBindingValue(displayBrand, "item.radius.floating", "999px")
+      ),
+      "--bottom-nav-label-font-family": `${resolveBottomNavBindingValue(
+        displayBrand,
+        "item.typography.fontFamily",
+        "Geist"
+      )}, sans-serif`,
+      "--bottom-nav-label-font-size": toPx(
+        resolveBottomNavBindingValue(
+          displayBrand,
+          "item.typography.fontSize",
+          String(getRequiredThemeTokenValue(displayBrand, "component.linkButton.typography.xs.fontSize"))
+        )
+      ),
+      "--bottom-nav-label-font-weight": resolveBottomNavBindingValue(
+        displayBrand,
+        "item.typography.fontWeight",
+        "600"
+      ),
+      "--bottom-nav-label-letter-spacing": toPx(
+        resolveBottomNavBindingValue(
+          displayBrand,
+          "item.typography.letterSpacing",
+          String(getRequiredThemeTokenValue(displayBrand, "component.linkButton.typography.xs.letterSpacing"))
+        )
+      ),
+      "--bottom-nav-label-line-height": toPx(
+        resolveBottomNavBindingValue(displayBrand, "item.typography.lineHeight", "17px")
+      ),
+      "--bottom-nav-sticky-background": resolveBottomNavBindingValue(
+        displayBrand,
+        "container.sticky.background",
+        canvasColor
+      ),
+      "--bottom-nav-sticky-border-color": resolveBottomNavBindingValue(
+        displayBrand,
+        "container.sticky.borderColor",
+        defaultBorderColor
+      ),
+      "--bottom-nav-sticky-border-width": toPx(
+        resolveBottomNavBindingValue(displayBrand, "container.sticky.borderWidth", "1px")
+      ),
+      "--bottom-nav-sticky-indicator-height": toPx(
+        resolveBottomNavBindingValue(
+          displayBrand,
+          "item.indicator.sticky.height",
+          String(getRequiredThemeTokenValue(displayBrand, "component.switch.focus.outlineWidth"))
+        )
+      ),
+      "--bottom-nav-sticky-indicator-width": toPx(
+        resolveBottomNavBindingValue(
+          displayBrand,
+          "item.indicator.sticky.width",
+          String(getRequiredThemeTokenValue(displayBrand, "spacing.12"))
+        )
+      )
+    })
+  ].join("");
+}
+
+const BOTTOM_NAV_STYLESHEET = [
+  toCssRule(`.${BOTTOM_NAV_ROOT_CLASS}`, {
+    "box-sizing": "border-box",
+    display: "flex",
+    "flex-direction": "column",
+    width: "100%"
+  }),
+  toCssRule(`.${BOTTOM_NAV_ROOT_CLASS}[data-type="floating"]`, {
+    background:
+      "linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, var(--bottom-nav-floating-gradient-canvas) 100%)",
+    padding:
+      "var(--bottom-nav-floating-wrapper-padding-block) var(--bottom-nav-floating-wrapper-padding-inline)"
+  }),
+  toCssRule(`.${BOTTOM_NAV_ROOT_CLASS}[data-type="sticky"]`, {
+    background: "var(--bottom-nav-sticky-background)",
+    "border-top":
+      "var(--bottom-nav-sticky-border-width) solid var(--bottom-nav-sticky-border-color)"
+  }),
+  toCssRule(`.${BOTTOM_NAV_RAIL_CLASS}`, {
+    "align-items": "stretch",
+    "box-sizing": "border-box",
+    display: "flex",
+    width: "100%"
+  }),
+  toCssRule(`.${BOTTOM_NAV_ROOT_CLASS}[data-type="floating"] .${BOTTOM_NAV_RAIL_CLASS}`, {
+    background: "var(--bottom-nav-floating-container-background)",
+    "border-radius": "var(--bottom-nav-floating-container-radius)",
+    padding:
+      "var(--bottom-nav-floating-container-padding-block) var(--bottom-nav-floating-container-padding-inline-end) var(--bottom-nav-floating-container-padding-block) var(--bottom-nav-floating-container-padding-inline-start)"
+  }),
+  toCssRule(`.${BOTTOM_NAV_ROOT_CLASS}[data-type="sticky"] .${BOTTOM_NAV_RAIL_CLASS}`, {
+    background: "var(--bottom-nav-sticky-background)"
+  }),
+  toCssRule(`.${BOTTOM_NAV_ITEM_CLASS}`, {
+    "align-items": "center",
+    appearance: "none",
+    background: "transparent",
+    border: "none",
+    "box-sizing": "border-box",
+    color: "var(--bottom-nav-item-color)",
+    cursor: "pointer",
+    display: "flex",
+    flex: "1 1 0",
+    "flex-direction": "column",
+    "justify-content": "center",
+    "min-width": "0",
+    outline: "none",
+    padding: "0",
+    position: "relative"
+  }),
+  toCssRule(`.${BOTTOM_NAV_ITEM_CLASS}[data-show-label="true"]`, {
+    gap: "var(--bottom-nav-item-content-gap)"
+  }),
+  toCssRule(`.${BOTTOM_NAV_ITEM_CLASS}[data-disabled="true"]`, {
+    cursor: "not-allowed",
+    opacity: "var(--bottom-nav-item-opacity-disabled)"
+  }),
+  toCssRule(`.${BOTTOM_NAV_ITEM_CLASS}[data-type="sticky"]`, {
+    "min-height": "var(--bottom-nav-item-height-sticky)"
+  }),
+  toCssRule(`.${BOTTOM_NAV_ITEM_CLASS}[data-type="floating"]`, {
+    "min-height": "var(--bottom-nav-item-height-floating)"
+  }),
+  toCssRule(`.${BOTTOM_NAV_ITEM_CLASS}[data-type="floating"]:not(:last-child)`, {
+    "margin-inline-end": "calc(var(--bottom-nav-item-overlap-floating) * -1)"
+  }),
+  toCssRule(`.${BOTTOM_NAV_ITEM_CLASS}[data-type="floating"][data-selected="true"]`, {
+    background: "var(--bottom-nav-floating-selected-background)",
+    "border-radius": "var(--bottom-nav-item-radius-floating)",
+    "z-index": "1"
+  }),
+  toCssRule(`.${BOTTOM_NAV_ITEM_CLASS}[data-type="floating"][data-selected="false"]`, {
+    "z-index": "0"
+  }),
+  toCssRule(`.${BOTTOM_NAV_ITEM_CLASS}[data-type="sticky"][data-disabled="false"][data-selected="false"]`, {
+    "--bottom-nav-item-color": "var(--bottom-nav-item-color-sticky-rest)"
+  }),
+  toCssRule(`.${BOTTOM_NAV_ITEM_CLASS}[data-type="sticky"][data-disabled="false"][data-selected="true"]`, {
+    "--bottom-nav-item-color": "var(--bottom-nav-item-color-sticky-selected)"
+  }),
+  toCssRule(`.${BOTTOM_NAV_ITEM_CLASS}[data-type="sticky"][data-disabled="true"]`, {
+    "--bottom-nav-item-color": "var(--bottom-nav-item-color-sticky-disabled)"
+  }),
+  toCssRule(`.${BOTTOM_NAV_ITEM_CLASS}[data-type="floating"][data-disabled="false"][data-selected="false"]`, {
+    "--bottom-nav-item-color": "var(--bottom-nav-item-color-floating-rest)"
+  }),
+  toCssRule(`.${BOTTOM_NAV_ITEM_CLASS}[data-type="floating"][data-disabled="false"][data-selected="true"]`, {
+    "--bottom-nav-item-color": "var(--bottom-nav-item-color-floating-selected)"
+  }),
+  toCssRule(`.${BOTTOM_NAV_ITEM_CLASS}[data-type="floating"][data-disabled="true"]`, {
+    "--bottom-nav-item-color": "var(--bottom-nav-item-color-floating-disabled)"
+  }),
+  toCssRule(`.${BOTTOM_NAV_ITEM_CLASS}[data-focused="true"]`, {
+    outline: "var(--bottom-nav-focus-outline-width) solid var(--bottom-nav-focus-outline-color)",
+    "outline-offset": "var(--bottom-nav-focus-outline-offset)"
+  }),
+  toCssRule(`.${BOTTOM_NAV_ITEM_CLASS}:focus-visible`, {
+    outline: "var(--bottom-nav-focus-outline-width) solid var(--bottom-nav-focus-outline-color)",
+    "outline-offset": "var(--bottom-nav-focus-outline-offset)"
+  }),
+  toCssRule(`.${BOTTOM_NAV_ITEM_CLASS}[data-type="sticky"][data-selected="true"]::before`, {
+    background:
+      "linear-gradient(90deg, transparent 0%, currentColor 50%, transparent 100%)",
+    "border-radius": "999px",
+    content: "\"\"",
+    height: "var(--bottom-nav-sticky-indicator-height)",
+    left: "50%",
+    position: "absolute",
+    top: "0",
+    transform: "translateX(-50%)",
+    width: "var(--bottom-nav-sticky-indicator-width)"
+  }),
+  toCssRule(`.${BOTTOM_NAV_ICON_CLASS}`, {
+    color: "inherit",
+    display: "inline-flex",
+    "font-size": "var(--bottom-nav-item-icon-size)",
+    "line-height": "0"
+  }),
+  toCssRule(`.${BOTTOM_NAV_LABEL_CLASS}`, {
+    color: "inherit",
+    display: "block",
+    "font-family": "var(--bottom-nav-label-font-family)",
+    "font-size": "var(--bottom-nav-label-font-size)",
+    "font-weight": "var(--bottom-nav-label-font-weight)",
+    "letter-spacing": "var(--bottom-nav-label-letter-spacing)",
+    "line-height": "var(--bottom-nav-label-line-height)",
+    overflow: "hidden",
+    "text-align": "center",
+    "text-overflow": "ellipsis",
+    "white-space": "nowrap",
+    width: "100%"
+  }),
+  toCssRule(`.${BOTTOM_NAV_HOME_WRAPPER_CLASS}`, {
+    "align-items": "center",
+    "box-sizing": "border-box",
+    display: "flex",
+    "justify-content": "center",
+    padding: "12px 0 8px",
+    width: "100%"
+  }),
+  toCssRule(`.${BOTTOM_NAV_ROOT_CLASS}[data-type="floating"] .${BOTTOM_NAV_HOME_WRAPPER_CLASS}`, {
+    padding: "10px 0 8px"
+  }),
+  toCssRule(`.${BOTTOM_NAV_HOME_INDICATOR_CLASS}`, {
+    background: "var(--bottom-nav-home-indicator-color)",
+    "border-radius": "999px",
+    height: "var(--bottom-nav-home-indicator-height)",
+    opacity: "var(--bottom-nav-home-indicator-opacity)",
+    width: "var(--bottom-nav-home-indicator-width)"
+  }),
+  ...REPO_BRAND_IDS.map((brandId) => buildBottomNavBrandRules(brandId))
+].join("");
 
 /**
  * Canonical mobile bottom navigation with sticky and floating variants, driven by equal-width destinations.
@@ -226,6 +567,10 @@ export function BottomNav({
   const [focusedValue, setFocusedValue] = useState<string | undefined>(undefined);
   const buttonRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
+  useInsertionEffect(() => {
+    ensureStyleSheet(BOTTOM_NAV_STYLESHEET_ID, BOTTOM_NAV_STYLESHEET);
+  }, []);
+
   useEffect(() => {
     if (value !== undefined) {
       return;
@@ -240,179 +585,8 @@ export function BottomNav({
   const fallbackValue = getDefaultValue(items);
   const resolvedConfiguration = resolveConfiguration(items, configuration);
   const resolvedType = resolveType(brand, type);
-  const isFloating = resolvedType === "Floating";
-  const canvasColor = String(getRequiredThemeTokenValue(brand, "color.surface.canvas"));
-  const inverseSurfaceColor = String(getRequiredThemeTokenValue(brand, "color.surface.inverse"));
-  const brandPrimaryColor = String(getRequiredThemeTokenValue(brand, "color.brand.primary.500"));
-  const inverseTextColor = String(getRequiredThemeTokenValue(brand, "color.text.inverse"));
-  const secondaryTextColor = String(getRequiredThemeTokenValue(brand, "color.text.secondary"));
-  const brandTextColor = String(getRequiredThemeTokenValue(brand, "component.linkButton.color.light.brand.rest"));
-  const defaultBorderColor = String(getRequiredThemeTokenValue(brand, "color.border.default"));
-  const floatingWrapperPaddingInline = toPx(
-    resolveBottomNavBindingValue(brand, "root.floating.paddingInline", "16px")
-  );
-  const floatingWrapperPaddingBlock = toPx(
-    resolveBottomNavBindingValue(brand, "root.floating.paddingBlock", "8px")
-  );
-  const floatingGradientCanvas = resolveBottomNavBindingValue(
-    brand,
-    "root.floating.gradient.canvas",
-    "#FFFFFF"
-  );
-  const floatingContainerBackground = resolveBottomNavBindingValue(
-    brand,
-    "container.floating.background",
-    brandPrimaryColor
-  );
-  const floatingContainerRadius = toPx(
-    resolveBottomNavBindingValue(brand, "container.floating.radius", "999px")
-  );
-  const floatingContainerPaddingInlineStart = toPx(
-    resolveBottomNavBindingValue(brand, "container.floating.paddingInlineStart", "4px")
-  );
-  const floatingContainerPaddingInlineEnd = toPx(
-    resolveBottomNavBindingValue(brand, "container.floating.paddingInlineEnd", "12px")
-  );
-  const floatingContainerPaddingBlock = toPx(
-    resolveBottomNavBindingValue(brand, "container.floating.paddingBlock", "4px")
-  );
-  const stickyBackground = resolveBottomNavBindingValue(
-    brand,
-    "container.sticky.background",
-    canvasColor
-  );
-  const stickyBorderWidth = toPx(
-    resolveBottomNavBindingValue(brand, "container.sticky.borderWidth", "1px")
-  );
-  const stickyBorderColor = resolveBottomNavBindingValue(
-    brand,
-    "container.sticky.borderColor",
-    defaultBorderColor
-  );
-  const itemHeight = toPx(
-    resolveBottomNavBindingValue(
-      brand,
-      isFloating ? "item.height.floating" : "item.height.sticky",
-      isFloating ? "62px" : "56px"
-    )
-  );
-  const floatingItemRadius = toPx(
-    resolveBottomNavBindingValue(brand, "item.radius.floating", "999px")
-  );
-  const floatingItemOverlap = toPx(
-    resolveBottomNavBindingValue(
-      brand,
-      "item.overlap.floating",
-      String(getRequiredThemeTokenValue(brand, "spacing.2"))
-    )
-  );
-  const itemContentGap = toPx(resolveBottomNavBindingValue(brand, "item.contentGap", "4px"));
-  const itemIconSize = toPx(
-    resolveBottomNavBindingValue(
-      brand,
-      "item.icon.size",
-      String(getRequiredThemeTokenValue(brand, "icon.size.lg"))
-    )
-  );
-  const labelFontFamily = `${resolveBottomNavBindingValue(brand, "item.typography.fontFamily", "Geist")}, sans-serif`;
-  const labelFontWeight = Number(
-    resolveBottomNavBindingValue(brand, "item.typography.fontWeight", "600")
-  );
-  const labelFontSize = toPx(
-    resolveBottomNavBindingValue(
-      brand,
-      "item.typography.fontSize",
-      String(getRequiredThemeTokenValue(brand, "component.linkButton.typography.xs.fontSize"))
-    )
-  );
-  const labelLineHeight = toPx(resolveBottomNavBindingValue(brand, "item.typography.lineHeight", "17px"));
-  const labelLetterSpacing = toPx(
-    resolveBottomNavBindingValue(
-      brand,
-      "item.typography.letterSpacing",
-      String(getRequiredThemeTokenValue(brand, "component.linkButton.typography.xs.letterSpacing"))
-    )
-  );
-  const floatingSelectedBackground = resolveBottomNavBindingValue(
-    brand,
-    "item.background.floating.selected",
-    canvasColor
-  );
-  const stickyIndicatorWidth = toPx(
-    resolveBottomNavBindingValue(
-      brand,
-      "item.indicator.sticky.width",
-      String(getRequiredThemeTokenValue(brand, "spacing.12"))
-    )
-  );
-  const stickyIndicatorHeight = toPx(
-    resolveBottomNavBindingValue(
-      brand,
-      "item.indicator.sticky.height",
-      String(getRequiredThemeTokenValue(brand, "component.switch.focus.outlineWidth"))
-    )
-  );
-  const focusOutlineWidth = toPx(
-    resolveBottomNavBindingValue(brand, "item.focus.outlineWidth", "2px")
-  );
-  const focusOutlineOffset = toPx(
-    resolveBottomNavBindingValue(brand, "item.focus.outlineOffset", "2px")
-  );
-  const focusOutlineColor = resolveBottomNavBindingValue(
-    brand,
-    "item.focus.outlineColor",
-    "var(--cars24-semantic-border-focus, #3B82F6)"
-  );
-  const homeIndicatorColor = resolveBottomNavBindingValue(
-    brand,
-    "homeIndicator.color",
-    inverseSurfaceColor
-  );
-  const homeIndicatorWidth = toPx(resolveBottomNavBindingValue(brand, "homeIndicator.width", "134px"));
-  const homeIndicatorHeight = toPx(resolveBottomNavBindingValue(brand, "homeIndicator.height", "5px"));
-  const homeIndicatorOpacity = Number(
-    resolveBottomNavBindingValue(brand, "homeIndicator.opacity", "0.75")
-  );
-
-  const rootStyles: CSSProperties = {
-    background: isFloating
-      ? `linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, ${floatingGradientCanvas} 100%)`
-      : stickyBackground,
-    borderTop: isFloating ? undefined : `${stickyBorderWidth} solid ${stickyBorderColor}`,
-    boxSizing: "border-box",
-    display: "flex",
-    flexDirection: "column",
-    width: "100%",
-    ...(isFloating
-      ? {
-          padding: `${floatingWrapperPaddingBlock} ${floatingWrapperPaddingInline}`
-        }
-      : {}),
-    ...style
-  };
-
-  const railStyles: CSSProperties = {
-    alignItems: "stretch",
-    background: isFloating ? floatingContainerBackground : stickyBackground,
-    borderRadius: isFloating ? floatingContainerRadius : undefined,
-    boxSizing: "border-box",
-    display: "flex",
-    width: "100%",
-    ...(isFloating
-      ? {
-          padding: `${floatingContainerPaddingBlock} ${floatingContainerPaddingInlineEnd} ${floatingContainerPaddingBlock} ${floatingContainerPaddingInlineStart}`
-        }
-      : {})
-  };
-
-  const homeIndicatorStyles: CSSProperties = {
-    alignItems: "center",
-    boxSizing: "border-box",
-    display: "flex",
-    justifyContent: "center",
-    padding: isFloating ? "10px 0 8px" : "12px 0 8px",
-    width: "100%"
-  };
+  const typeKey = resolvedType === "Floating" ? "floating" : "sticky";
+  const repoBrand = normalizeBrandId(brand);
 
   function selectValue(nextValue: string) {
     if (value === undefined) {
@@ -489,19 +663,19 @@ export function BottomNav({
   }
 
   return (
-    <nav {...rest} aria-label={ariaLabel} className={className} style={rootStyles}>
-      <div style={railStyles}>
+    <nav
+      {...rest}
+      aria-label={ariaLabel}
+      className={joinClassNames(BOTTOM_NAV_ROOT_CLASS, className)}
+      data-brand={repoBrand}
+      data-type={typeKey}
+      style={style}
+    >
+      <div className={BOTTOM_NAV_RAIL_CLASS}>
         {items.map((item, index) => {
-          const selected = item.value === selectedValue || (value === undefined && selectedValue === undefined && item.state === "Selected");
-          const itemColor = resolveBottomNavBindingValue(
-            brand,
-            `item.color.${isFloating ? "floating" : "sticky"}.${selected ? "selected" : "rest"}`,
-            selected
-              ? brandTextColor
-              : isFloating
-                ? inverseTextColor
-                : secondaryTextColor
-          );
+          const selected =
+            item.value === selectedValue ||
+            (value === undefined && selectedValue === undefined && item.state === "Selected");
           const itemLabel = item.label ?? item.ariaLabel ?? item.value;
           const visualLabel = resolvedConfiguration === "Label + icon" ? itemLabel : null;
 
@@ -513,6 +687,12 @@ export function BottomNav({
               }}
               aria-label={item.ariaLabel ?? (typeof itemLabel === "string" ? itemLabel : item.value)}
               aria-pressed={selected}
+              className={BOTTOM_NAV_ITEM_CLASS}
+              data-disabled={String(Boolean(item.disabled))}
+              data-focused={String(focusedValue === item.value)}
+              data-selected={String(selected)}
+              data-show-label={String(Boolean(visualLabel))}
+              data-type={typeKey}
               disabled={item.disabled}
               onBlur={(event) => handleBlur(item.value, event)}
               onClick={() => {
@@ -525,90 +705,21 @@ export function BottomNav({
               onFocus={(event) => handleFocus(item.value, event)}
               onKeyDown={(event) => handleKeyDown(index, event)}
               tabIndex={selected || (!selectedValue && item.value === fallbackValue) ? 0 : -1}
-              style={{
-                alignItems: "center",
-                appearance: "none",
-                background: selected && isFloating ? floatingSelectedBackground : "transparent",
-                border: "none",
-                borderRadius: isFloating ? floatingItemRadius : 0,
-                boxSizing: "border-box",
-                color: itemColor,
-                cursor: item.disabled ? "not-allowed" : "pointer",
-                display: "flex",
-                flex: "1 1 0",
-                flexDirection: "column",
-                gap: visualLabel ? itemContentGap : 0,
-                justifyContent: "center",
-                marginInlineEnd: isFloating ? `calc(${floatingItemOverlap} * -1)` : undefined,
-                minHeight: itemHeight,
-                minWidth: 0,
-                opacity: item.disabled ? 0.4 : 1,
-                outline: focusedValue === item.value ? `${focusOutlineWidth} solid ${focusOutlineColor}` : undefined,
-                outlineOffset: focusedValue === item.value ? focusOutlineOffset : undefined,
-                padding: 0,
-                position: "relative",
-                zIndex: selected && isFloating ? 1 : 0
-              }}
               type="button"
             >
-              {selected && !isFloating ? (
-                <span
-                  aria-hidden="true"
-                  style={{
-                    background: `linear-gradient(90deg, ${toTransparent(itemColor)} 0%, ${itemColor} 50%, ${toTransparent(itemColor)} 100%)`,
-                    borderRadius: 999,
-                    height: stickyIndicatorHeight,
-                    left: "50%",
-                    position: "absolute",
-                    top: 0,
-                    transform: "translateX(-50%)",
-                    width: stickyIndicatorWidth
-                  }}
-                />
-              ) : null}
               {renderItemIcon({
                 brand,
-                color: itemColor,
                 icon: item.icon,
-                iconName: item.iconName,
-                size: itemIconSize
+                iconName: item.iconName
               })}
-              {visualLabel ? (
-                <span
-                  style={{
-                    color: itemColor,
-                    display: "block",
-                    fontFamily: labelFontFamily,
-                    fontSize: labelFontSize,
-                    fontWeight: labelFontWeight,
-                    letterSpacing: labelLetterSpacing,
-                    lineHeight: labelLineHeight,
-                    overflow: "hidden",
-                    textAlign: "center",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    width: "100%"
-                  }}
-                >
-                  {visualLabel}
-                </span>
-              ) : null}
+              {visualLabel ? <span className={BOTTOM_NAV_LABEL_CLASS}>{visualLabel}</span> : null}
             </button>
           );
         })}
       </div>
       {showHomeIndicator ? (
-        <div style={homeIndicatorStyles}>
-          <div
-            aria-hidden="true"
-            style={{
-              background: homeIndicatorColor,
-              borderRadius: 999,
-              height: homeIndicatorHeight,
-              opacity: homeIndicatorOpacity,
-              width: homeIndicatorWidth
-            }}
-          />
+        <div className={BOTTOM_NAV_HOME_WRAPPER_CLASS}>
+          <div aria-hidden="true" className={BOTTOM_NAV_HOME_INDICATOR_CLASS} />
         </div>
       ) : null}
     </nav>

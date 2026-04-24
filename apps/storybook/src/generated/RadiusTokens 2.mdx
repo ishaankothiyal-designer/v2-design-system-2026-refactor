@@ -1,0 +1,32 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import { DesignTokenDocBlock } from "storybook-design-token";
+import { RadiusPreviewGrid, RadiusBrandPreviewGrid } from "../storybook-layout-tokens";
+import { radiusBrandPreviews, radiusTokens } from "./radiusTokenData";
+
+<Meta title="Foundations/Radius Tokens" />
+
+# Radius Tokens
+
+Structured radius documentation generated from the repo token files. This page previews the base radius system and shows how brand overrides adjust those values.
+
+## Base Radius Scale
+
+<RadiusPreviewGrid tokens={radiusTokens} />
+
+## Brand Radius Overrides
+
+<RadiusBrandPreviewGrid brands={radiusBrandPreviews} />
+
+## Raw Token Catalog
+
+### Radius
+
+Base radius tokens covering standard corners, pill shapes, and alternate rounded geometry.
+
+<DesignTokenDocBlock
+  categoryName="Radius"
+  maxHeight={720}
+  pageSize={Number.MAX_VALUE}
+  showSearch={false}
+  viewType="card"
+/>

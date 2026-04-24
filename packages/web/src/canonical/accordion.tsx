@@ -1,15 +1,19 @@
 import {
   type CSSProperties,
+  type ReactElement,
   type ReactNode,
   useEffect,
   useId,
+  useInsertionEffect,
   useRef,
   useState
 } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
+import { normalizeBrandId, type DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
 import { Icon } from "./icon";
-import { getRequiredThemeTokenValue } from "../theme";
+import type { IconName } from "@geist/icons";
+import { ensureStyleSheet, joinClassNames, runtimeTokenVar, runtimeTokenVarPx, toCssRule } from "./runtime-styles";
+import { tokenValueToRem } from "../theme";
 
 export const canonicalAccordionWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.accordion"
@@ -19,93 +23,24 @@ export type AccordionSize = "sm" | "lg";
 export type AccordionInteractionState = "default" | "hover" | "focus" | "active";
 export type AccordionSelectionMode = "single" | "multiple";
 
-const FIGMA_ACCORDION_TOKENS = {
-  background: "#FFFFFF",
-  backgroundHover: "#F1F5F9",
-  border: "#E2E8F0",
-  textPrimary: "#020617",
-  textSecondary: "#64748B",
-  transition: {
-    duration: 180,
-    timing: "cubic-bezier(0.2, 0, 0, 1)"
-  }
-} as const;
+const ACCORDION_ROOT_CLASS = "geist-accordion";
+const ACCORDION_BUTTON_CLASS = "geist-accordion__button";
+const ACCORDION_HEADER_ROW_CLASS = "geist-accordion__header-row";
+const ACCORDION_LEADING_CLASS = "geist-accordion__leading";
+const ACCORDION_TEXT_STACK_CLASS = "geist-accordion__text-stack";
+const ACCORDION_TITLE_CLASS = "geist-accordion__title";
+const ACCORDION_SUPPORTING_CLASS = "geist-accordion__supporting";
+const ACCORDION_BADGE_CLASS = "geist-accordion__badge";
+const ACCORDION_CHEVRON_CLASS = "geist-accordion__chevron";
+const ACCORDION_PANEL_CLASS = "geist-accordion__panel";
+const ACCORDION_PANEL_INNER_CLASS = "geist-accordion__panel-inner";
+const ACCORDION_PANEL_INDENT_CLASS = "geist-accordion__panel-indent";
+const ACCORDION_BODY_CLASS = "geist-accordion__body";
+const ACCORDION_GROUP_CLASS = "geist-accordion-group";
+const ACCORDION_STYLESHEET_ID = "geist-accordion-styles";
 
-function hexToRgba(hex: string, alpha: number) {
-  const normalized = hex.replace("#", "");
-  const value =
-    normalized.length === 3
-      ? normalized
-          .split("")
-          .map((segment) => `${segment}${segment}`)
-          .join("")
-      : normalized;
-  const red = Number.parseInt(value.slice(0, 2), 16);
-  const green = Number.parseInt(value.slice(2, 4), 16);
-  const blue = Number.parseInt(value.slice(4, 6), 16);
-
-  return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
-}
-
-function getAccordionToken(slot: string) {
-  return canonicalAccordionWebContract?.tokenBindings.find((binding) => binding.slot === slot)?.token;
-}
-
-function withTokenFallback(token: string | undefined, fallback: string) {
-  if (!token) {
-    return fallback;
-  }
-
-  if (token.startsWith("var(") && !token.includes(",")) {
-    return token.replace(/\)$/, `, ${fallback})`);
-  }
-
-  return token;
-}
-
-function getAccordionMetrics(brand: DisplayBrandId, size: AccordionSize) {
-  return {
-    background: withTokenFallback(
-      getAccordionToken("container.background.rest"),
-      FIGMA_ACCORDION_TOKENS.background
-    ),
-    backgroundHover: withTokenFallback(
-      getAccordionToken("container.background.hover"),
-      FIGMA_ACCORDION_TOKENS.backgroundHover
-    ),
-    border: withTokenFallback(getAccordionToken("container.border"), FIGMA_ACCORDION_TOKENS.border),
-    textPrimary: withTokenFallback(
-      getAccordionToken("content.title.color"),
-      FIGMA_ACCORDION_TOKENS.textPrimary
-    ),
-    supportingColor: withTokenFallback(
-      getAccordionToken("content.supporting.color"),
-      FIGMA_ACCORDION_TOKENS.textSecondary
-    ),
-    bodyColor: withTokenFallback(
-      getAccordionToken("content.body.color"),
-      FIGMA_ACCORDION_TOKENS.textSecondary
-    ),
-    titleGap: withTokenFallback(getAccordionToken("spacing.titleGap"), "2px"),
-    contentGap: withTokenFallback(getAccordionToken("spacing.contentGap"), "6px"),
-    sectionGap: withTokenFallback(getAccordionToken("spacing.sectionGap"), "8px"),
-    headerGap: withTokenFallback(getAccordionToken("spacing.headerGap"), "12px"),
-    padding: withTokenFallback(getAccordionToken("spacing.padding"), "16px"),
-    contentStackGap: "10px",
-    contentIndent: "20px",
-    radius: `${Number(getRequiredThemeTokenValue(brand, size === "lg" ? "radius.lg" : "radius.md"))}px`,
-    iconSize:
-      size === "lg"
-        ? withTokenFallback(getAccordionToken("icon.size.lg"), "20px")
-        : withTokenFallback(getAccordionToken("icon.size.sm"), "18px"),
-    titleFontSize: size === "lg" ? "16px" : "14px",
-    titleLineHeight: size === "lg" ? "20px" : "18px",
-    supportingFontSize: "14px",
-    supportingLineHeight: "18px",
-    bodyFontSize: "14px",
-    bodyLineHeight: "20px"
-  };
-}
+const ACCORDION_TRANSITION = "180ms cubic-bezier(0.2, 0, 0, 1)";
+const ACCORDION_DEFAULT_ICON_NAME = "gift-1-present-outline" satisfies IconName;
 
 function resolveInteractiveState({
   disabled,
@@ -143,6 +78,203 @@ function resolveInteractiveState({
   return "default";
 }
 
+const ACCORDION_STYLESHEET = [
+  toCssRule(`.${ACCORDION_ROOT_CLASS}`, {
+    "align-items": "stretch",
+    background: runtimeTokenVar("component.accordion.color.rest.background"),
+    border: `${runtimeTokenVarPx("component.accordion.border.width")} solid ${runtimeTokenVar(
+      "component.accordion.color.rest.border"
+    )}`,
+    "border-radius": runtimeTokenVarPx("radius.md"),
+    "box-shadow": "none",
+    "box-sizing": "border-box",
+    display: "flex",
+    "flex-direction": "column",
+    gap: "0",
+    opacity: "1",
+    padding: runtimeTokenVarPx("component.accordion.size.sm.padding"),
+    transition: `background-color ${ACCORDION_TRANSITION}, box-shadow ${ACCORDION_TRANSITION}, opacity ${ACCORDION_TRANSITION}`,
+    width: runtimeTokenVarPx("component.accordion.layout.width")
+  }),
+  toCssRule(`.${ACCORDION_ROOT_CLASS}[data-size="lg"]`, {
+    "border-radius": runtimeTokenVarPx("radius.lg"),
+    padding: runtimeTokenVarPx("component.accordion.size.lg.padding")
+  }),
+  toCssRule(`.${ACCORDION_ROOT_CLASS}[data-disabled="true"]`, {
+    opacity: "0.52"
+  }),
+  toCssRule(`.${ACCORDION_ROOT_CLASS}[data-expanded="true"]`, {
+    gap: runtimeTokenVarPx("component.accordion.size.sm.sectionGap")
+  }),
+  toCssRule(`.${ACCORDION_ROOT_CLASS}[data-size="lg"][data-expanded="true"]`, {
+    gap: runtimeTokenVarPx("component.accordion.size.lg.sectionGap")
+  }),
+  toCssRule(`.${ACCORDION_ROOT_CLASS}[data-state="hover"], .${ACCORDION_ROOT_CLASS}[data-state="active"]`, {
+    background: runtimeTokenVar("component.accordion.color.hover.background")
+  }),
+  toCssRule(`.${ACCORDION_ROOT_CLASS}[data-state="focus"]`, {
+    outline: `${runtimeTokenVarPx("component.accordion.focus.outlineWidth")} solid ${runtimeTokenVar(
+      "color.border.focus"
+    )}`,
+    "outline-offset": runtimeTokenVarPx("component.accordion.focus.outlineOffset")
+  }),
+  toCssRule(`.${ACCORDION_BUTTON_CLASS}`, {
+    "align-items": "center",
+    background: "transparent",
+    border: "0",
+    "border-radius": "0",
+    cursor: "pointer",
+    display: "flex",
+    "font": "inherit",
+    gap: runtimeTokenVarPx("component.accordion.size.sm.headerGap"),
+    padding: "0",
+    "text-align": "left",
+    width: "100%"
+  }),
+  toCssRule(`.${ACCORDION_ROOT_CLASS}[data-size="lg"] .${ACCORDION_BUTTON_CLASS}`, {
+    gap: runtimeTokenVarPx("component.accordion.size.lg.headerGap")
+  }),
+  toCssRule(`.${ACCORDION_BUTTON_CLASS}[disabled]`, {
+    cursor: "not-allowed"
+  }),
+  toCssRule(`.${ACCORDION_HEADER_ROW_CLASS}`, {
+    "align-items": "center",
+    display: "flex",
+    flex: "1",
+    gap: runtimeTokenVarPx("component.accordion.size.sm.contentGap"),
+    "min-width": "0"
+  }),
+  toCssRule(`.${ACCORDION_ROOT_CLASS}[data-size="lg"] .${ACCORDION_HEADER_ROW_CLASS}`, {
+    gap: runtimeTokenVarPx("component.accordion.size.lg.contentGap")
+  }),
+  toCssRule(`.${ACCORDION_LEADING_CLASS}`, {
+    "align-items": "center",
+    color: runtimeTokenVar("component.accordion.color.rest.leadingIcon"),
+    display: "inline-flex",
+    "flex-shrink": "0",
+    "font-size": runtimeTokenVarPx("component.accordion.size.sm.iconSize"),
+    height: runtimeTokenVarPx("component.accordion.size.sm.iconSize"),
+    "justify-content": "center",
+    "line-height": "1",
+    width: runtimeTokenVarPx("component.accordion.size.sm.iconSize")
+  }),
+  toCssRule(`.${ACCORDION_ROOT_CLASS}[data-size="lg"] .${ACCORDION_LEADING_CLASS}`, {
+    "font-size": runtimeTokenVarPx("component.accordion.size.lg.iconSize"),
+    height: runtimeTokenVarPx("component.accordion.size.lg.iconSize"),
+    width: runtimeTokenVarPx("component.accordion.size.lg.iconSize")
+  }),
+  toCssRule(`.${ACCORDION_TEXT_STACK_CLASS}`, {
+    display: "flex",
+    "flex": "1",
+    "flex-direction": "column",
+    gap: runtimeTokenVarPx("component.accordion.size.sm.titleGap"),
+    "min-width": "0"
+  }),
+  toCssRule(`.${ACCORDION_ROOT_CLASS}[data-size="lg"] .${ACCORDION_TEXT_STACK_CLASS}`, {
+    gap: runtimeTokenVarPx("component.accordion.size.lg.titleGap")
+  }),
+  toCssRule(`.${ACCORDION_TITLE_CLASS}`, {
+    color: runtimeTokenVar("component.accordion.color.rest.title"),
+    "font-family": `${runtimeTokenVar("typography.fontFamily.sans")}, sans-serif`,
+    "font-size": runtimeTokenVarPx("component.accordion.typography.title.sm.fontSize"),
+    "font-weight": runtimeTokenVar("typography.fontWeight.semibold"),
+    "letter-spacing": runtimeTokenVarPx("component.accordion.typography.title.sm.letterSpacing"),
+    "line-height": runtimeTokenVarPx("component.accordion.typography.title.sm.lineHeight"),
+    margin: "0"
+  }),
+  toCssRule(`.${ACCORDION_ROOT_CLASS}[data-size="lg"] .${ACCORDION_TITLE_CLASS}`, {
+    "font-size": runtimeTokenVarPx("component.accordion.typography.title.lg.fontSize"),
+    "letter-spacing": runtimeTokenVarPx("component.accordion.typography.title.lg.letterSpacing"),
+    "line-height": runtimeTokenVarPx("component.accordion.typography.title.lg.lineHeight")
+  }),
+  toCssRule(`.${ACCORDION_SUPPORTING_CLASS}`, {
+    color: runtimeTokenVar("component.accordion.color.rest.supporting"),
+    "font-family": `${runtimeTokenVar("typography.fontFamily.sans")}, sans-serif`,
+    "font-size": runtimeTokenVarPx("component.accordion.typography.supporting.fontSize"),
+    "font-weight": runtimeTokenVar("typography.fontWeight.regular"),
+    "letter-spacing": runtimeTokenVarPx("component.accordion.typography.supporting.letterSpacing"),
+    "line-height": runtimeTokenVarPx("component.accordion.typography.supporting.lineHeight"),
+    margin: "0"
+  }),
+  toCssRule(`.${ACCORDION_BADGE_CLASS}`, {
+    "flex-shrink": "0"
+  }),
+  toCssRule(`.${ACCORDION_CHEVRON_CLASS}`, {
+    "align-items": "center",
+    color: runtimeTokenVar("component.accordion.color.rest.chevron"),
+    display: "inline-flex",
+    "flex-shrink": "0",
+    "font-size": runtimeTokenVarPx("component.accordion.size.sm.iconSize"),
+    height: runtimeTokenVarPx("component.accordion.size.sm.iconSize"),
+    "justify-content": "center",
+    "line-height": "1",
+    transition: `color ${ACCORDION_TRANSITION}`,
+    width: runtimeTokenVarPx("component.accordion.size.sm.iconSize")
+  }),
+  toCssRule(`.${ACCORDION_ROOT_CLASS}[data-size="lg"] .${ACCORDION_CHEVRON_CLASS}`, {
+    "font-size": runtimeTokenVarPx("component.accordion.size.lg.iconSize"),
+    height: runtimeTokenVarPx("component.accordion.size.lg.iconSize"),
+    width: runtimeTokenVarPx("component.accordion.size.lg.iconSize")
+  }),
+  toCssRule(`.${ACCORDION_PANEL_CLASS}`, {
+    opacity: "0",
+    overflow: "hidden",
+    "pointer-events": "none",
+    transition: `max-height ${ACCORDION_TRANSITION}, opacity ${ACCORDION_TRANSITION}`,
+    width: "100%"
+  }),
+  toCssRule(`.${ACCORDION_ROOT_CLASS}[data-expanded="true"] .${ACCORDION_PANEL_CLASS}`, {
+    opacity: "1",
+    "pointer-events": "auto"
+  }),
+  toCssRule(`.${ACCORDION_PANEL_INNER_CLASS}`, {
+    "align-items": "flex-start",
+    display: "flex",
+    gap: runtimeTokenVarPx("component.accordion.size.sm.contentGap"),
+    width: "100%"
+  }),
+  toCssRule(`.${ACCORDION_ROOT_CLASS}[data-size="lg"] .${ACCORDION_PANEL_INNER_CLASS}`, {
+    gap: runtimeTokenVarPx("component.accordion.size.lg.contentGap")
+  }),
+  toCssRule(`.${ACCORDION_PANEL_INDENT_CLASS}`, {
+    "flex-shrink": "0",
+    width: runtimeTokenVarPx("component.accordion.size.sm.indent")
+  }),
+  toCssRule(`.${ACCORDION_ROOT_CLASS}[data-size="lg"] .${ACCORDION_PANEL_INDENT_CLASS}`, {
+    width: runtimeTokenVarPx("component.accordion.size.lg.indent")
+  }),
+  toCssRule(`.${ACCORDION_ROOT_CLASS}[data-has-supporting="true"] .${ACCORDION_BUTTON_CLASS}`, {
+    "align-items": "flex-start"
+  }),
+  toCssRule(`.${ACCORDION_ROOT_CLASS}[data-has-supporting="true"] .${ACCORDION_HEADER_ROW_CLASS}`, {
+    "align-items": "flex-start"
+  }),
+  toCssRule(`.${ACCORDION_BODY_CLASS}`, {
+    color: runtimeTokenVar("component.accordion.color.rest.body"),
+    display: "flex",
+    "flex": "1",
+    "flex-direction": "column",
+    gap: runtimeTokenVarPx("component.accordion.size.sm.bodyGap"),
+    "min-width": "0"
+  }),
+  toCssRule(`.${ACCORDION_ROOT_CLASS}[data-size="lg"] .${ACCORDION_BODY_CLASS}`, {
+    gap: runtimeTokenVarPx("component.accordion.size.lg.bodyGap")
+  }),
+  toCssRule(`.${ACCORDION_BODY_CLASS} > p`, {
+    color: "inherit",
+    "font-family": `${runtimeTokenVar("typography.fontFamily.sans")}, sans-serif`,
+    "font-size": runtimeTokenVarPx("component.accordion.typography.body.fontSize"),
+    "font-weight": runtimeTokenVar("typography.fontWeight.regular"),
+    "letter-spacing": runtimeTokenVarPx("component.accordion.typography.body.letterSpacing"),
+    "line-height": runtimeTokenVarPx("component.accordion.typography.body.lineHeight"),
+    margin: "0"
+  }),
+  toCssRule(`.${ACCORDION_GROUP_CLASS}`, {
+    display: "grid",
+    width: "100%"
+  })
+].join("");
+
 export interface AccordionProps {
   brand?: DisplayBrandId;
   title: string;
@@ -159,6 +291,37 @@ export interface AccordionProps {
   forceState?: AccordionInteractionState;
   className?: string;
   style?: CSSProperties;
+}
+
+function resolveAccordionLeadingIcon(brand: DisplayBrandId, leadingIcon: ReactNode | false): ReactNode | null {
+  if (leadingIcon === false) {
+    return null;
+  }
+
+  if (leadingIcon) {
+    return leadingIcon;
+  }
+
+  return (
+    <Icon
+      brand={brand}
+      decorative
+      name={ACCORDION_DEFAULT_ICON_NAME}
+      style={{ color: "inherit", fontSize: "inherit" }}
+    />
+  );
+}
+
+function resolveAccordionChevron(brand: DisplayBrandId, expanded: boolean): ReactElement {
+  return (
+    <Icon
+      brand={brand}
+      className={ACCORDION_CHEVRON_CLASS}
+      decorative
+      name={expanded ? "chevron-large-top-outline" : "chevron-down-large-outline"}
+      style={{ color: "inherit", fontSize: "inherit" }}
+    />
+  );
 }
 
 export interface AccordionGroupItem
@@ -211,14 +374,14 @@ export function Accordion({
     focused,
     pressed
   });
-  const metrics = getAccordionMetrics(brand, size);
-  const fontFamily = String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"));
-  const semibold = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.semibold"));
-  const regular = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.regular"));
-  const focusColor = String(getRequiredThemeTokenValue(brand, "color.border.focus"));
-  const transition = `${FIGMA_ACCORDION_TOKENS.transition.duration}ms ${FIGMA_ACCORDION_TOKENS.transition.timing}`;
   const resolvedContent = children ?? content;
-  const usesLeadingIcon = leadingIcon !== false;
+  const repoBrand = normalizeBrandId(brand);
+  const resolvedLeadingIcon = resolveAccordionLeadingIcon(brand, leadingIcon);
+  const usesLeadingIcon = resolvedLeadingIcon !== null;
+
+  useInsertionEffect(() => {
+    ensureStyleSheet(ACCORDION_STYLESHEET_ID, ACCORDION_STYLESHEET);
+  }, []);
 
   useEffect(() => {
     const node = contentRef.current;
@@ -255,204 +418,69 @@ export function Accordion({
     onExpandedChange?.(nextExpanded);
   };
 
-  const rootStyles: CSSProperties = {
-    display: "flex",
-    flexDirection: "column",
-    width: 328,
-    boxSizing: "border-box",
-    alignItems: "center",
-    gap: isExpanded ? metrics.sectionGap : 0,
-    border: `1px solid ${metrics.border}`,
-    borderRadius: metrics.radius,
-    background:
-      activeState === "hover" || activeState === "active"
-        ? metrics.backgroundHover
-        : metrics.background,
-    boxShadow:
-      activeState === "focus" ? `0 0 0 3px ${hexToRgba(focusColor, 0.28)}` : "none",
-    opacity: disabled ? 0.52 : 1,
-    padding: metrics.padding,
-    transition: `background-color ${transition}, box-shadow ${transition}, opacity ${transition}`,
-    ...style
-  };
-
-  const headerButtonStyles: CSSProperties = {
-    width: "100%",
-    display: "flex",
-    alignItems: "center",
-    gap: metrics.headerGap,
-    padding: 0,
-    border: 0,
-    background: "transparent",
-    borderRadius: 0,
-    cursor: disabled ? "not-allowed" : "pointer",
-    font: "inherit",
-    textAlign: "left"
-  };
-
-  const leadingIconStyles: CSSProperties = {
-    flexShrink: 0,
-    color: withTokenFallback(getAccordionToken("icon.color.primary"), FIGMA_ACCORDION_TOKENS.textPrimary),
-    fontSize: metrics.iconSize,
-    lineHeight: 1,
-    width: metrics.iconSize,
-    height: metrics.iconSize,
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center"
-  };
-
-  const chevronStyles: CSSProperties = {
-    flexShrink: 0,
-    color: withTokenFallback(getAccordionToken("icon.color.secondary"), FIGMA_ACCORDION_TOKENS.textSecondary),
-    fontSize: metrics.iconSize,
-    lineHeight: 1,
-    width: metrics.iconSize,
-    height: metrics.iconSize,
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
-    transformOrigin: "center",
-    transition: `transform ${transition}, color ${transition}`
-  };
-
   return (
     <div
-      className={className}
-      style={rootStyles}
+      className={joinClassNames(ACCORDION_ROOT_CLASS, className)}
+      data-brand={repoBrand}
+      data-disabled={String(disabled)}
+      data-expanded={String(isExpanded)}
+      data-has-supporting={String(Boolean(supportingText))}
+      data-size={size}
+      data-state={activeState}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => {
         setHovered(false);
         setPressed(false);
       }}
+      style={{ ...style, width: "328px" }}
     >
       <button
-        type="button"
         aria-controls={panelId}
         aria-expanded={isExpanded}
+        className={ACCORDION_BUTTON_CLASS}
         disabled={disabled}
-        style={headerButtonStyles}
-        onClick={toggle}
-        onFocus={() => setFocused(true)}
         onBlur={() => {
           setFocused(false);
           setPressed(false);
         }}
-        onMouseDown={() => setPressed(true)}
-        onMouseUp={() => setPressed(false)}
+        onClick={toggle}
+        onFocus={() => setFocused(true)}
         onKeyDown={(event) => {
           if (event.key === "Enter" || event.key === " ") {
             setPressed(true);
           }
         }}
         onKeyUp={() => setPressed(false)}
+        onMouseDown={() => setPressed(true)}
+        onMouseUp={() => setPressed(false)}
+        type="button"
       >
-        <div style={{ display: "flex", alignItems: "flex-start", gap: metrics.contentGap, flex: 1, minWidth: 0 }}>
+        <div className={ACCORDION_HEADER_ROW_CLASS}>
           {usesLeadingIcon ? (
-            leadingIcon ?? (
-              <Icon
-                brand={brand}
-                name="calendar-edit-date-edit-outline"
-                decorative
-                style={leadingIconStyles}
-              />
-            )
+            <span className={ACCORDION_LEADING_CLASS}>{resolvedLeadingIcon}</span>
           ) : null}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: metrics.titleGap,
-              flex: 1,
-              minWidth: 0
-            }}
-          >
-            <span
-              style={{
-                margin: 0,
-                color: metrics.textPrimary,
-                fontFamily: `${fontFamily}, sans-serif`,
-                fontSize: metrics.titleFontSize,
-                lineHeight: metrics.titleLineHeight,
-                fontWeight: semibold
-              }}
-            >
-              {title}
-            </span>
-            {supportingText ? (
-              <span
-                style={{
-                  margin: 0,
-                  color: metrics.supportingColor,
-                  fontFamily: `${fontFamily}, sans-serif`,
-                  fontSize: metrics.supportingFontSize,
-                  lineHeight: metrics.supportingLineHeight,
-                  fontWeight: regular
-                }}
-              >
-                {supportingText}
-              </span>
-            ) : null}
+          <div className={ACCORDION_TEXT_STACK_CLASS}>
+            <span className={ACCORDION_TITLE_CLASS}>{title}</span>
+            {supportingText ? <span className={ACCORDION_SUPPORTING_CLASS}>{supportingText}</span> : null}
           </div>
         </div>
-        {badge ? <div style={{ flexShrink: 0 }}>{badge}</div> : null}
-        <Icon
-          brand={brand}
-          name="chevron-down-large-outline"
-          decorative
-          style={chevronStyles}
-        />
+        {badge ? <div className={ACCORDION_BADGE_CLASS}>{badge}</div> : null}
+        {resolveAccordionChevron(brand, isExpanded)}
       </button>
 
       <div
+        className={ACCORDION_PANEL_CLASS}
         id={panelId}
-        style={{
-          maxHeight: isExpanded ? contentHeight : 0,
-          opacity: isExpanded ? 1 : 0,
-          overflow: "hidden",
-          transition: `max-height ${transition}, opacity ${transition}`,
-          pointerEvents: isExpanded ? "auto" : "none"
-        }}
+        style={{ maxHeight: isExpanded ? contentHeight : 0 } satisfies CSSProperties}
       >
-        <div
-          ref={contentRef}
-          style={{
-            display: "flex",
-            alignItems: "flex-start",
-            gap: metrics.contentGap
-          }}
-        >
-          {usesLeadingIcon ? (
-            <div aria-hidden="true" style={{ width: metrics.contentIndent, flexShrink: 0 }} />
-          ) : null}
-          <div
-            style={{
-              flex: 1,
-              minWidth: 0,
-              display: "flex",
-              flexDirection: "column",
-              gap: metrics.contentStackGap
-            }}
-          >
-            {resolvedContent ? (
-              typeof resolvedContent === "string" ? (
-                <p
-                  style={{
-                    margin: 0,
-                    color: metrics.bodyColor,
-                    fontFamily: `${fontFamily}, sans-serif`,
-                    fontSize: metrics.bodyFontSize,
-                    lineHeight: metrics.bodyLineHeight,
-                    fontWeight: regular
-                  }}
-                >
-                  {resolvedContent}
-                </p>
-              ) : (
-                resolvedContent
-              )
-            ) : null}
+        <div className={ACCORDION_PANEL_INNER_CLASS} ref={contentRef}>
+          {usesLeadingIcon ? <div aria-hidden="true" className={ACCORDION_PANEL_INDENT_CLASS} /> : null}
+          <div className={ACCORDION_BODY_CLASS}>
+            {resolvedContent
+              ? typeof resolvedContent === "string"
+                ? <p>{resolvedContent}</p>
+                : resolvedContent
+              : null}
           </div>
         </div>
       </div>
@@ -473,6 +501,10 @@ export function AccordionGroup({
 }: AccordionGroupProps) {
   const [uncontrolledExpandedIds, setUncontrolledExpandedIds] = useState(defaultExpandedIds);
   const activeExpandedIds = expandedIds ?? uncontrolledExpandedIds;
+
+  useInsertionEffect(() => {
+    ensureStyleSheet(ACCORDION_STYLESHEET_ID, ACCORDION_STYLESHEET);
+  }, []);
 
   const setExpandedIds = (nextExpandedIds: string[]) => {
     if (expandedIds === undefined) {
@@ -496,13 +528,8 @@ export function AccordionGroup({
 
   return (
     <div
-      className={className}
-      style={{
-        display: "grid",
-        gap,
-        width: "100%",
-        ...style
-      }}
+      className={joinClassNames(ACCORDION_GROUP_CLASS, className)}
+      style={{ gap: tokenValueToRem(gap), ...style }}
     >
       {items.map((item) => (
         <Accordion

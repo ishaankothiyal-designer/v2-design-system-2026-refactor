@@ -1,0 +1,78 @@
+import { Meta, Typeset } from "@storybook/addon-docs/blocks";
+import { DesignTokenDocBlock } from "storybook-design-token";
+import { TypographyBrandPreviewGrid, TypographyStyleGallery, TypographyTrackingTable } from "../storybook-typography";
+import { typographyBrandPreviews, typographyExtraLetterSpacingTokens, typographyStyleSections } from "./typographyTokenData";
+
+<Meta title="Foundations/Typography Tokens" />
+
+# Typography Tokens
+
+Structured typography documentation generated from the repo token files and the shared typography export. This page combines brand font previews, named text styles, and the raw token catalog.
+
+## Brand Font Families
+
+<TypographyBrandPreviewGrid brands={typographyBrandPreviews} />
+
+## Core Type Scale
+
+Base size progression preview using the current Cars24 type family.
+
+<Typeset fontFamily="Geist" fontSizes={[9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 24, 32]} sampleText="Typography scale preview" />
+
+## Weight Scale
+
+<Typeset fontFamily={typographyBrandPreviews[0].fontFamily} fontSizes={[16, 20, 24]} fontWeight={400} sampleText="Regular / 400" />
+
+<Typeset fontFamily={typographyBrandPreviews[0].fontFamily} fontSizes={[16, 20, 24]} fontWeight={500} sampleText="Medium / 500" />
+
+<Typeset fontFamily={typographyBrandPreviews[0].fontFamily} fontSizes={[16, 20, 24]} fontWeight={600} sampleText="Semibold / 600" />
+
+<Typeset fontFamily={typographyBrandPreviews[0].fontFamily} fontSizes={[16, 20, 24]} fontWeight={700} sampleText="Bold / 700" />
+
+## Named Text Styles
+
+<TypographyStyleGallery sections={typographyStyleSections} fontFamily={typographyBrandPreviews[0].fontFamily} />
+
+## Tracking Modifiers
+
+Additional letter-spacing tokens that extend named styles, such as the caption extended variants.
+
+<TypographyTrackingTable tokens={typographyExtraLetterSpacingTokens} />
+
+## Raw Token Catalog
+
+### Typography / Size
+
+Named font-size tokens from the shared typography system.
+
+<DesignTokenDocBlock
+  categoryName="Typography / Size"
+  maxHeight={720}
+  pageSize={Number.MAX_VALUE}
+  showSearch={false}
+  viewType="card"
+/>
+
+### Typography / Line Height
+
+Named line-height tokens paired with the typography system.
+
+<DesignTokenDocBlock
+  categoryName="Typography / Line Height"
+  maxHeight={720}
+  pageSize={Number.MAX_VALUE}
+  showSearch={false}
+  viewType="card"
+/>
+
+### Typography / Letter Spacing
+
+Tracking tokens used by the typography system, including caption extensions.
+
+<DesignTokenDocBlock
+  categoryName="Typography / Letter Spacing"
+  maxHeight={720}
+  pageSize={Number.MAX_VALUE}
+  showSearch={false}
+  viewType="card"
+/>

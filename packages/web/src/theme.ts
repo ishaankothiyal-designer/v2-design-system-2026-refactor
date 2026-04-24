@@ -1,6 +1,7 @@
 import { coreTokenCatalog } from "@geist/tokens";
 import { deepMergeTokenTrees, getTokenValue } from "@geist/tokens";
 import { getBrandTokenSet } from "@geist/tokens";
+import { pxToRem, tokenValueToRem } from "@geist/tokens";
 import type { BrandId } from "@geist/tokens";
 
 export function getThemeTokens(brandId: BrandId) {
@@ -19,4 +20,15 @@ export function getRequiredThemeTokenValue(brandId: BrandId, path: string) {
   }
 
   return value;
+}
+
+export { pxToRem, tokenValueToRem };
+
+export function getThemeTokenRem(brandId: BrandId, path: string) {
+  const value = getThemeTokenValue(brandId, path);
+  return value === undefined ? undefined : tokenValueToRem(value);
+}
+
+export function getRequiredThemeTokenRem(brandId: BrandId, path: string) {
+  return tokenValueToRem(getRequiredThemeTokenValue(brandId, path));
 }

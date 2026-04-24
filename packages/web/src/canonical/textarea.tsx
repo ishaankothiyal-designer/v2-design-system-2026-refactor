@@ -13,7 +13,7 @@ import { designSystemRegistry } from "@geist/contracts";
 import { Icon } from "./icon";
 import { HelperText } from "./helper-text";
 import { Label } from "./label";
-import { getRequiredThemeTokenValue } from "../theme";
+import { getRequiredThemeTokenValue, pxToRem } from "../theme";
 
 export const canonicalTextareaWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.textarea"
@@ -233,10 +233,10 @@ function makeTypographyStyles({
   return {
     color,
     fontFamily: `${String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"))}, sans-serif`,
-    fontSize: `${typography.fontSize}px`,
+    fontSize: pxToRem(typography.fontSize),
     fontWeight: Number(getRequiredThemeTokenValue(brand, fontWeightPath)),
-    letterSpacing: `${typography.letterSpacing}px`,
-    lineHeight: `${typography.lineHeight}px`,
+    letterSpacing: pxToRem(typography.letterSpacing),
+    lineHeight: pxToRem(typography.lineHeight),
     margin: 0
   };
 }
@@ -330,15 +330,15 @@ export function Textarea({
   const fieldStyles: CSSProperties = {
     alignItems: "flex-start",
     background: fieldColors.background,
-    border: `${borderWidth}px solid ${fieldColors.border}`,
-    borderRadius: `${fieldRadius}px`,
+    border: `${pxToRem(borderWidth)} solid ${fieldColors.border}`,
+    borderRadius: pxToRem(fieldRadius),
     boxSizing: "border-box",
     display: "flex",
-    maxHeight: `${TEXTAREA_MAX_HEIGHT}px`,
-    minHeight: `${TEXTAREA_MIN_HEIGHT}px`,
+    maxHeight: pxToRem(TEXTAREA_MAX_HEIGHT),
+    minHeight: pxToRem(TEXTAREA_MIN_HEIGHT),
     minWidth: 0,
     overflow: "hidden",
-    padding: `${sizeTokens.fieldPaddingBlock}px ${sizeTokens.fieldPaddingInline}px`,
+    padding: `${pxToRem(sizeTokens.fieldPaddingBlock)} ${pxToRem(sizeTokens.fieldPaddingInline)}`,
     width: "100%"
   };
 
@@ -354,8 +354,8 @@ export function Textarea({
     border: "none",
     caretColor: fieldColors.border,
     flex: "1 1 auto",
-    maxHeight: `${contentMaxHeight}px`,
-    minHeight: `${contentMinHeight}px`,
+    maxHeight: pxToRem(contentMaxHeight),
+    minHeight: pxToRem(contentMinHeight),
     minWidth: 0,
     outline: "none",
     overflowY: "auto",
@@ -371,8 +371,8 @@ export function Textarea({
       typography: inputTypography
     }),
     flex: "1 1 auto",
-    maxHeight: `${contentMaxHeight}px`,
-    minHeight: `${contentMinHeight}px`,
+    maxHeight: pxToRem(contentMaxHeight),
+    minHeight: pxToRem(contentMinHeight),
     minWidth: 0,
     overflow: "hidden",
     whiteSpace: "pre-wrap",
@@ -421,7 +421,7 @@ export function Textarea({
     <div
       style={{
         display: "grid",
-        gap: `${sizeTokens.containerGap}px`,
+        gap: pxToRem(sizeTokens.containerGap),
         width: "100%",
         ...style
       }}
@@ -442,7 +442,7 @@ export function Textarea({
           <div
             style={{
               display: "block",
-              paddingInline: `${sizeTokens.labelPaddingInline}px`
+              paddingInline: pxToRem(sizeTokens.labelPaddingInline)
             }}
           >
             {labelNode}
@@ -452,7 +452,7 @@ export function Textarea({
             htmlFor={inputId}
             style={{
               display: "block",
-              paddingInline: `${sizeTokens.labelPaddingInline}px`
+              paddingInline: pxToRem(sizeTokens.labelPaddingInline)
             }}
           >
             {labelNode}
@@ -470,9 +470,9 @@ export function Textarea({
                 style={{
                   background: fieldColors.border,
                   display: "inline-block",
-                  height: `${inputTypography.lineHeight}px`,
+                  height: pxToRem(inputTypography.lineHeight),
                   verticalAlign: "top",
-                  width: `${caretWidth}px`
+                  width: pxToRem(caretWidth)
                 }}
               />
             ) : null}
@@ -501,9 +501,9 @@ export function Textarea({
           style={{
             alignItems: "center",
             display: "flex",
-            gap: `${sizeTokens.containerGap}px`,
+            gap: pxToRem(sizeTokens.containerGap),
             minWidth: 0,
-            paddingInline: `${sizeTokens.labelPaddingInline}px`,
+            paddingInline: pxToRem(sizeTokens.labelPaddingInline),
             width: "100%"
           }}
         >

@@ -14,7 +14,7 @@ import {
 import type { IconName } from "@geist/icons";
 import { designSystemRegistry } from "@geist/contracts";
 import type { DisplayBrandId } from "@geist/tokens";
-import { getRequiredThemeTokenValue } from "../theme";
+import { getRequiredThemeTokenValue, tokenValueToRem } from "../theme";
 import { Icon } from "./icon";
 import { Tag } from "./tag";
 
@@ -94,7 +94,7 @@ function resolveHorizontalTabBindingValue(brand: DisplayBrandId, slot: string, f
 }
 
 function toPx(value: string) {
-  return /^-?\d+(\.\d+)?$/.test(value) ? `${value}px` : value;
+  return tokenValueToRem(value);
 }
 
 function getFirstEnabledItemValue(items: HorizontalTabItem[], disabled: boolean) {

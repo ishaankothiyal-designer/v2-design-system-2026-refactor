@@ -1,9 +1,8 @@
-import type { CSSProperties, ReactNode } from "react";
-import { useId } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
+import { type CSSProperties, type ReactNode, useId, useInsertionEffect } from "react";
 import { designSystemRegistry } from "@geist/contracts";
+import { type DisplayBrandId, normalizeBrandId } from "@geist/tokens";
 import { Checkbox, type CheckboxProps, type CheckboxSize } from "./checkbox";
-import { getRequiredThemeTokenValue } from "../theme";
+import { ensureStyleSheet, joinClassNames, runtimeTokenVar, runtimeTokenVarPx, toCssRule } from "./runtime-styles";
 
 export const canonicalCheckboxLabelWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.checkboxLabel"
@@ -11,11 +10,11 @@ export const canonicalCheckboxLabelWebContract = designSystemRegistry.components
 
 export type CheckboxLabelSize = "Small" | "Medium" | "Large";
 
-type CheckboxLabelTypography = {
-  fontSize: number;
-  letterSpacing: number;
-  lineHeight: number;
-};
+const CHECKBOX_LABEL_ROOT_CLASS = "geist-checkbox-label";
+const CHECKBOX_LABEL_CONTENT_CLASS = "geist-checkbox-label__content";
+const CHECKBOX_LABEL_TEXT_CLASS = "geist-checkbox-label__text";
+const CHECKBOX_LABEL_DESCRIPTION_CLASS = "geist-checkbox-label__description";
+const CHECKBOX_LABEL_STYLESHEET_ID = "geist-checkbox-label-styles";
 
 export interface CheckboxLabelProps
   extends Omit<CheckboxProps, "className" | "size" | "style"> {
@@ -50,40 +49,72 @@ function getCheckboxSize(size: CheckboxLabelSize): CheckboxSize {
   return "Small";
 }
 
-function getTypography(brand: DisplayBrandId, path: string): CheckboxLabelTypography {
-  return {
-    fontSize: Number(getRequiredThemeTokenValue(brand, `${path}.fontSize`)),
-    letterSpacing: Number(getRequiredThemeTokenValue(brand, `${path}.letterSpacing`)),
-    lineHeight: Number(getRequiredThemeTokenValue(brand, `${path}.lineHeight`))
-  };
-}
-
-function makeTypographyStyles({
-  brand,
-  color,
-  fontWeightPath,
-  typography
-}: {
-  brand: DisplayBrandId;
-  color: string;
-  fontWeightPath: string;
-  typography: CheckboxLabelTypography;
-}): CSSProperties {
-  return {
-    color,
-    fontFamily: `${String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"))}, sans-serif`,
-    fontSize: typography.fontSize,
-    fontWeight: Number(getRequiredThemeTokenValue(brand, fontWeightPath)),
-    letterSpacing: typography.letterSpacing,
-    lineHeight: `${typography.lineHeight}px`,
-    margin: 0
-  };
-}
-
 function joinIds(...values: Array<string | undefined>) {
   const joined = values.filter(Boolean).join(" ");
   return joined.length > 0 ? joined : undefined;
 }
+
+const CHECKBOX_LABEL_STYLESHEET = [
+  toCssRule(`.${CHECKBOX_LABEL_ROOT_CLASS}`, {
+    "align-items": "flex-start",
+    display: "flex",
+    gap: runtimeTokenVarPx("component.checkboxLabel.layout.gap"),
+    "max-width": "100%"
+  }),
+  toCssRule(`.${CHECKBOX_LABEL_CONTENT_CLASS}`, {
+    cursor: "pointer",
+    display: "flex",
+    "flex": "1 1 auto",
+    "flex-direction": "column",
+    "max-width": "100%",
+    "min-width": "0",
+    "padding-inline": runtimeTokenVarPx("component.checkboxLabel.layout.contentPaddingInline")
+  }),
+  toCssRule(`.${CHECKBOX_LABEL_ROOT_CLASS}[data-disabled="true"] .${CHECKBOX_LABEL_CONTENT_CLASS}`, {
+    cursor: "not-allowed"
+  }),
+  toCssRule(`.${CHECKBOX_LABEL_ROOT_CLASS}[data-has-description="true"] .${CHECKBOX_LABEL_CONTENT_CLASS}`, {
+    gap: runtimeTokenVarPx("component.checkboxLabel.size.sm.contentGap")
+  }),
+  toCssRule(`.${CHECKBOX_LABEL_TEXT_CLASS}`, {
+    "font-family": `${runtimeTokenVar("typography.fontFamily.sans")}, sans-serif`,
+    "font-weight": "500",
+    margin: "0"
+  }),
+  toCssRule(`.${CHECKBOX_LABEL_DESCRIPTION_CLASS}`, {
+    "font-family": `${runtimeTokenVar("typography.fontFamily.sans")}, sans-serif`,
+    "font-weight": "400",
+    margin: "0",
+    "max-width": "100%"
+  }),
+  ...(["sm", "md", "lg"] as const).flatMap((sizeKey) => [
+    toCssRule(`.${CHECKBOX_LABEL_ROOT_CLASS}[data-size="${sizeKey}"][data-has-description="true"] .${CHECKBOX_LABEL_CONTENT_CLASS}`, {
+      gap: runtimeTokenVarPx(`component.checkboxLabel.size.${sizeKey}.contentGap`)
+    }),
+    toCssRule(`.${CHECKBOX_LABEL_ROOT_CLASS}[data-size="${sizeKey}"] .${CHECKBOX_LABEL_TEXT_CLASS}`, {
+      "font-size": runtimeTokenVarPx(`component.checkboxLabel.typography.label.${sizeKey}.fontSize`),
+      "letter-spacing": runtimeTokenVarPx(`component.checkboxLabel.typography.label.${sizeKey}.letterSpacing`),
+      "line-height": runtimeTokenVarPx(`component.checkboxLabel.typography.label.${sizeKey}.lineHeight`)
+    }),
+    toCssRule(`.${CHECKBOX_LABEL_ROOT_CLASS}[data-size="${sizeKey}"] .${CHECKBOX_LABEL_DESCRIPTION_CLASS}`, {
+      "font-size": runtimeTokenVarPx(`component.checkboxLabel.typography.description.${sizeKey}.fontSize`),
+      "letter-spacing": runtimeTokenVarPx(`component.checkboxLabel.typography.description.${sizeKey}.letterSpacing`),
+      "line-height": runtimeTokenVarPx(`component.checkboxLabel.typography.description.${sizeKey}.lineHeight`)
+    })
+  ]),
+  toCssRule(`.${CHECKBOX_LABEL_ROOT_CLASS}[data-disabled="false"] .${CHECKBOX_LABEL_TEXT_CLASS}`, {
+    color: runtimeTokenVar("component.checkboxLabel.color.label.default")
+  }),
+  toCssRule(`.${CHECKBOX_LABEL_ROOT_CLASS}[data-disabled="false"] .${CHECKBOX_LABEL_DESCRIPTION_CLASS}`, {
+    color: runtimeTokenVar("component.checkboxLabel.color.description.default")
+  }),
+  toCssRule(`.${CHECKBOX_LABEL_ROOT_CLASS}[data-disabled="true"] .${CHECKBOX_LABEL_TEXT_CLASS}`, {
+    color: runtimeTokenVar("component.checkboxLabel.color.label.disabled")
+  }),
+  toCssRule(`.${CHECKBOX_LABEL_ROOT_CLASS}[data-disabled="true"] .${CHECKBOX_LABEL_DESCRIPTION_CLASS}`, {
+    color: runtimeTokenVar("component.checkboxLabel.color.description.disabled")
+  })
+].join("");
 
 export function CheckboxLabel({
   brand = "Cars24",
@@ -101,65 +132,22 @@ export function CheckboxLabel({
   const sizeKey = getSizeKey(size);
   const labelId = `${resolvedId}-label`;
   const descriptionId = description ? `${resolvedId}-description` : undefined;
-  const layoutGap = Number(getRequiredThemeTokenValue(brand, "component.checkboxLabel.layout.gap"));
-  const contentPaddingInline = Number(
-    getRequiredThemeTokenValue(brand, "component.checkboxLabel.layout.contentPaddingInline")
-  );
-  const contentGap = Number(
-    getRequiredThemeTokenValue(brand, `component.checkboxLabel.size.${sizeKey}.contentGap`)
-  );
-  const labelTypography = getTypography(
-    brand,
-    `component.checkboxLabel.typography.label.${sizeKey}`
-  );
-  const descriptionTypography = getTypography(
-    brand,
-    `component.checkboxLabel.typography.description.${sizeKey}`
-  );
-  const labelColor = String(
-    getRequiredThemeTokenValue(
-      brand,
-      disabled
-        ? "component.checkboxLabel.color.label.disabled"
-        : "component.checkboxLabel.color.label.default"
-    )
-  );
-  const descriptionColor = String(
-    getRequiredThemeTokenValue(
-      brand,
-      disabled
-        ? "component.checkboxLabel.color.description.disabled"
-        : "component.checkboxLabel.color.description.default"
-    )
-  );
-  const labelStyles = makeTypographyStyles({
-    brand,
-    color: labelColor,
-    fontWeightPath: "typography.fontWeight.medium",
-    typography: labelTypography
-  });
-  const descriptionStyles = {
-    ...makeTypographyStyles({
-      brand,
-      color: descriptionColor,
-      fontWeightPath: "typography.fontWeight.regular",
-      typography: descriptionTypography
-    }),
-    maxWidth: "100%"
-  } satisfies CSSProperties;
   const ariaDescribedBy = joinIds(descriptionId, rest["aria-describedby"]);
   const ariaLabelledBy = joinIds(labelId, rest["aria-labelledby"]);
+  const repoBrand = normalizeBrandId(brand);
+
+  useInsertionEffect(() => {
+    ensureStyleSheet(CHECKBOX_LABEL_STYLESHEET_ID, CHECKBOX_LABEL_STYLESHEET);
+  }, []);
 
   return (
     <div
-      className={className}
-      style={{
-        alignItems: "flex-start",
-        display: "flex",
-        gap: layoutGap,
-        maxWidth: "100%",
-        ...style
-      }}
+      className={joinClassNames(CHECKBOX_LABEL_ROOT_CLASS, className)}
+      data-brand={repoBrand}
+      data-disabled={String(disabled)}
+      data-has-description={String(Boolean(description))}
+      data-size={sizeKey}
+      style={style}
     >
       <Checkbox
         {...rest}
@@ -171,24 +159,12 @@ export function CheckboxLabel({
         size={getCheckboxSize(size)}
       />
 
-      <label
-        htmlFor={resolvedId}
-        style={{
-          cursor: disabled ? "not-allowed" : "pointer",
-          display: "flex",
-          flex: "1 1 auto",
-          flexDirection: "column",
-          gap: description ? contentGap : 0,
-          maxWidth: "100%",
-          minWidth: 0,
-          paddingInline: contentPaddingInline
-        }}
-      >
-        <span id={labelId} style={labelStyles}>
+      <label className={CHECKBOX_LABEL_CONTENT_CLASS} htmlFor={resolvedId}>
+        <span className={CHECKBOX_LABEL_TEXT_CLASS} id={labelId}>
           {label}
         </span>
         {description ? (
-          <p id={descriptionId} style={descriptionStyles}>
+          <p className={CHECKBOX_LABEL_DESCRIPTION_CLASS} id={descriptionId}>
             {description}
           </p>
         ) : null}

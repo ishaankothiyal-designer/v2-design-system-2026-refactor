@@ -6,13 +6,13 @@ import {
   type MouseEvent,
   type ReactElement,
   type ReactNode,
+  useInsertionEffect,
   useState
 } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
-import { getRequiredThemeTokenValue } from "../theme";
+import { normalizeBrandId, type DisplayBrandId } from "@geist/tokens";
 import { Icon } from "./icon";
-import { getTapFeedbackStyles } from "./press-feedback";
+import { ensureStyleSheet, runtimeTokenVar, runtimeTokenVarPx, toCssRule } from "./runtime-styles";
 
 export const canonicalBackToTopButtonWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.backToTopButton"
@@ -20,119 +20,119 @@ export const canonicalBackToTopButtonWebContract = designSystemRegistry.componen
 
 export type BackToTopButtonPreviewState = "Rest" | "Hover";
 
-type BackToTopButtonMetrics = {
-  gap: number;
-  height: number;
-  iconSize: number;
-  paddingBlock: number;
-  paddingInline: number;
-};
+type StylableElement = ReactElement<{ style?: CSSProperties; className?: string }>;
 
-type BackToTopButtonTypography = {
-  fontSize: number;
-  letterSpacing: number;
-  lineHeight: number;
-};
+const BACK_TO_TOP_BUTTON_ROOT_CLASS = "geist-back-to-top-button";
+const BACK_TO_TOP_BUTTON_LABEL_CLASS = "geist-back-to-top-button__label";
+const BACK_TO_TOP_BUTTON_SLOT_CLASS = "geist-back-to-top-button__slot";
+const BACK_TO_TOP_BUTTON_STYLESHEET_ID = "geist-back-to-top-button-styles";
+const BACK_TO_TOP_BUTTON_TAP_TRANSFORM = "translateY(1px) scale(0.985)";
+const BACK_TO_TOP_BUTTON_TAP_TRANSITION = "transform 140ms cubic-bezier(0.2, 0, 0, 1)";
 
-type BackToTopButtonSurface = {
-  background: string;
-  border: string;
-  foreground: string;
-  icon: string;
-};
-
-type StylableIconElement = ReactElement<{ style?: CSSProperties }>;
-
-const BACK_TO_TOP_SHADOW_FALLBACK =
-  "0px 8px 28px -2px rgba(31, 41, 55, 0.04), 0px 18px 72px -2px rgba(31, 41, 55, 0.06)";
-
-function getMetrics(brand: DisplayBrandId): BackToTopButtonMetrics {
-  const tokenPrefix = "component.backToTopButton.size.md";
-
-  return {
-    gap: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.gap`)),
-    height: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.height`)),
-    iconSize: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.iconSize`)),
-    paddingBlock: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.paddingBlock`)),
-    paddingInline: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.paddingInline`))
-  };
-}
-
-function getTypography(brand: DisplayBrandId): BackToTopButtonTypography {
-  const tokenPrefix = "component.backToTopButton.typography.md";
-
-  return {
-    fontSize: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.fontSize`)),
-    letterSpacing: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.letterSpacing`)),
-    lineHeight: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.lineHeight`))
-  };
-}
-
-function getSurface(
-  brand: DisplayBrandId,
-  inverse: boolean,
-  active: boolean,
-  disabled: boolean
-): BackToTopButtonSurface {
-  const surfaceKey = inverse ? "dark" : "light";
-  const stateKey = disabled ? "disabled" : active ? "hover" : "rest";
-  const tokenPrefix = `component.backToTopButton.color.${surfaceKey}.${stateKey}`;
-
-  return {
-    background: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.background`)),
-    border: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.border`)),
-    foreground: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.foreground`)),
-    icon: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.icon`))
-  };
-}
-
-function getShadow() {
-  const shadowToken = canonicalBackToTopButtonWebContract?.tokenBindings.find(
-    (binding) => binding.slot === "container.shadow"
-  )?.token;
-
-  return shadowToken === "drop-shadow/lg" ? BACK_TO_TOP_SHADOW_FALLBACK : BACK_TO_TOP_SHADOW_FALLBACK;
-}
-
-function renderIcon(icon: ReactNode, color: string, size: number) {
-  const wrapperStyles: CSSProperties = {
-    alignItems: "center",
-    color,
+const BACK_TO_TOP_BUTTON_STYLESHEET = [
+  toCssRule(`.${BACK_TO_TOP_BUTTON_ROOT_CLASS}`, {
+    "align-items": "center",
+    appearance: "none",
+    border: `${runtimeTokenVarPx("component.backToTopButton.border.width")} solid transparent`,
+    "border-radius": runtimeTokenVarPx("radius.pill"),
+    "box-shadow": runtimeTokenVar("component.backToTopButton.shadow.lg"),
+    "box-sizing": "border-box",
+    cursor: "pointer",
     display: "inline-flex",
-    flexShrink: 0,
-    fontSize: `${size}px`,
-    height: `${size}px`,
-    justifyContent: "center",
-    lineHeight: 1,
-    width: `${size}px`
-  };
+    gap: runtimeTokenVarPx("component.backToTopButton.size.md.gap"),
+    "justify-content": "center",
+    "min-height": runtimeTokenVarPx("component.backToTopButton.size.md.height"),
+    "min-width": "0",
+    outline: "none",
+    "outline-offset": runtimeTokenVarPx("component.backToTopButton.focus.outlineOffset"),
+    padding: `${runtimeTokenVarPx("component.backToTopButton.size.md.paddingBlock")} ${runtimeTokenVarPx("component.backToTopButton.size.md.paddingInline")}`,
+    "text-decoration": "none",
+    "transform-origin": "center center",
+    transition: [
+      "background-color 180ms cubic-bezier(0.2, 0, 0, 1)",
+      "border-color 180ms cubic-bezier(0.2, 0, 0, 1)",
+      "box-shadow 180ms cubic-bezier(0.2, 0, 0, 1)",
+      "outline-color 180ms cubic-bezier(0.2, 0, 0, 1)",
+      BACK_TO_TOP_BUTTON_TAP_TRANSITION
+    ].join(", "),
+    "will-change": "transform"
+  }),
+  toCssRule(`.${BACK_TO_TOP_BUTTON_ROOT_CLASS}[data-focused="true"]`, {
+    outline: `${runtimeTokenVarPx("component.backToTopButton.focus.outlineWidth")} solid ${runtimeTokenVar("color.border.focus")}`
+  }),
+  toCssRule(`.${BACK_TO_TOP_BUTTON_ROOT_CLASS}:focus-visible`, {
+    outline: `${runtimeTokenVarPx("component.backToTopButton.focus.outlineWidth")} solid ${runtimeTokenVar("color.border.focus")}`
+  }),
+  toCssRule(`.${BACK_TO_TOP_BUTTON_ROOT_CLASS}[data-disabled="true"]`, {
+    cursor: "not-allowed",
+    "will-change": "auto"
+  }),
+  toCssRule(`.${BACK_TO_TOP_BUTTON_ROOT_CLASS}[data-pressed="true"][data-disabled="false"]`, {
+    transform: BACK_TO_TOP_BUTTON_TAP_TRANSFORM
+  }),
+  toCssRule(`.${BACK_TO_TOP_BUTTON_LABEL_CLASS}`, {
+    color: "inherit",
+    "font-family": `${runtimeTokenVar("typography.fontFamily.sans")}, sans-serif`,
+    "font-size": runtimeTokenVarPx("component.backToTopButton.typography.md.fontSize"),
+    "font-weight": runtimeTokenVar("typography.fontWeight.semibold"),
+    "letter-spacing": runtimeTokenVarPx("component.backToTopButton.typography.md.letterSpacing"),
+    "line-height": runtimeTokenVarPx("component.backToTopButton.typography.md.lineHeight"),
+    "white-space": "nowrap"
+  }),
+  toCssRule(`.${BACK_TO_TOP_BUTTON_SLOT_CLASS}`, {
+    "align-items": "center",
+    display: "inline-flex",
+    "flex-shrink": "0",
+    "font-size": runtimeTokenVarPx("component.backToTopButton.size.md.iconSize"),
+    height: runtimeTokenVarPx("component.backToTopButton.size.md.iconSize"),
+    "justify-content": "center",
+    "line-height": "1",
+    width: runtimeTokenVarPx("component.backToTopButton.size.md.iconSize")
+  }),
+  ...[false, true].flatMap((inverse) => {
+    const surfaceKey = inverse ? "dark" : "light";
+    const modeSelector = `.${BACK_TO_TOP_BUTTON_ROOT_CLASS}[data-inverse="${String(inverse)}"]`;
 
+    return (["rest", "hover", "disabled"] as const).flatMap((stateKey) => {
+      const selector =
+        stateKey === "disabled"
+          ? `${modeSelector}[data-disabled="true"]`
+          : `${modeSelector}[data-disabled="false"][data-hovered="${String(stateKey === "hover")}"]`;
+
+      return [
+        toCssRule(selector, {
+          background: runtimeTokenVar(`component.backToTopButton.color.${surfaceKey}.${stateKey}.background`),
+          "border-color": runtimeTokenVar(`component.backToTopButton.color.${surfaceKey}.${stateKey}.border`),
+          color: runtimeTokenVar(`component.backToTopButton.color.${surfaceKey}.${stateKey}.foreground`)
+        }),
+        toCssRule(`${selector} .${BACK_TO_TOP_BUTTON_SLOT_CLASS}`, {
+          color: runtimeTokenVar(`component.backToTopButton.color.${surfaceKey}.${stateKey}.icon`)
+        })
+      ];
+    });
+  })
+].join("");
+
+function renderIcon(icon: ReactNode) {
   if (!icon) {
     return (
-      <span aria-hidden style={wrapperStyles}>
-        <Icon decorative name="arrow-up-filled" style={{ color, fontSize: `${size}px` }} />
-      </span>
-    );
-  }
-
-  if (typeof icon === "string" || typeof icon === "number") {
-    return (
-      <span aria-hidden style={wrapperStyles}>
-        {icon}
+      <span aria-hidden className={BACK_TO_TOP_BUTTON_SLOT_CLASS}>
+        <Icon decorative name="arrow-up-filled" style={{ color: "inherit", fontSize: "inherit" }} />
       </span>
     );
   }
 
   if (isValidElement(icon)) {
-    const stylableIcon = icon as StylableIconElement;
+    const element = icon as StylableElement;
 
     return (
-      <span aria-hidden style={wrapperStyles}>
-        {cloneElement(stylableIcon, {
+      <span aria-hidden className={BACK_TO_TOP_BUTTON_SLOT_CLASS}>
+        {cloneElement(element, {
+          className: [element.props.className].filter(Boolean).join(" "),
           style: {
-            ...(stylableIcon.props.style ?? {}),
-            color,
-            fontSize: `${size}px`
+            color: "inherit",
+            fontSize: "inherit",
+            ...element.props.style
           }
         })}
       </span>
@@ -140,7 +140,7 @@ function renderIcon(icon: ReactNode, color: string, size: number) {
   }
 
   return (
-    <span aria-hidden style={wrapperStyles}>
+    <span aria-hidden className={BACK_TO_TOP_BUTTON_SLOT_CLASS}>
       {icon}
     </span>
   );
@@ -156,6 +156,7 @@ export interface BackToTopButtonProps extends Omit<ButtonHTMLAttributes<HTMLButt
 export function BackToTopButton({
   brand = "Cars24",
   children,
+  className,
   disabled = false,
   forceState,
   icon,
@@ -174,63 +175,14 @@ export function BackToTopButton({
   const [hovered, setHovered] = useState(false);
   const [pressed, setPressed] = useState(false);
 
-  const active = forceState === "Hover" || hovered || pressed;
-  const metrics = getMetrics(brand);
-  const typography = getTypography(brand);
-  const surface = getSurface(brand, inverse, active, disabled);
-  const fontFamily = String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"));
-  const fontWeight = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.semibold"));
-  const borderWidth = Number(getRequiredThemeTokenValue(brand, "component.backToTopButton.border.width"));
-  const borderRadius = Number(getRequiredThemeTokenValue(brand, "radius.pill"));
-  const focusColor = String(getRequiredThemeTokenValue(brand, "color.border.focus"));
-  const focusOutlineWidth = Number(
-    getRequiredThemeTokenValue(brand, "component.backToTopButton.focus.outlineWidth")
-  );
-  const focusOutlineOffset = Number(
-    getRequiredThemeTokenValue(brand, "component.backToTopButton.focus.outlineOffset")
-  );
+  useInsertionEffect(() => {
+    ensureStyleSheet(BACK_TO_TOP_BUTTON_STYLESHEET_ID, BACK_TO_TOP_BUTTON_STYLESHEET);
+  }, []);
 
-  const rootStyles: CSSProperties = {
-    alignItems: "center",
-    appearance: "none",
-    background: surface.background,
-    border: "none",
-    borderRadius: `${borderRadius}px`,
-    boxShadow: [getShadow(), surface.border !== "transparent" ? `inset 0 0 0 ${borderWidth}px ${surface.border}` : null]
-      .filter(Boolean)
-      .join(", "),
-    boxSizing: "border-box",
-    color: surface.foreground,
-    cursor: disabled ? "not-allowed" : "pointer",
-    display: "inline-flex",
-    gap: `${metrics.gap}px`,
-    justifyContent: "center",
-    minHeight: `${metrics.height}px`,
-    minWidth: 0,
-    outline: focused ? `${focusOutlineWidth}px solid ${focusColor}` : "none",
-    outlineOffset: focused ? `${focusOutlineOffset}px` : undefined,
-    padding: `${metrics.paddingBlock}px ${metrics.paddingInline}px`,
-    textDecoration: "none",
-    transition:
-      "background-color 180ms cubic-bezier(0.2, 0, 0, 1), box-shadow 180ms cubic-bezier(0.2, 0, 0, 1), outline-color 180ms cubic-bezier(0.2, 0, 0, 1)",
-    ...style,
-    ...getTapFeedbackStyles({
-      disabled,
-      pressed,
-      transition: style?.transition,
-      transform: style?.transform
-    })
-  };
-
-  const labelStyles: CSSProperties = {
-    color: surface.foreground,
-    fontFamily: `${fontFamily}, sans-serif`,
-    fontSize: `${typography.fontSize}px`,
-    fontWeight,
-    letterSpacing: `${typography.letterSpacing}px`,
-    lineHeight: `${typography.lineHeight}px`,
-    whiteSpace: "nowrap"
-  };
+  const normalizedBrand = normalizeBrandId(brand);
+  const isHovered = forceState === "Hover" || hovered || pressed;
+  const isPressed = !disabled && (pressed || forceState === "Hover");
+  const isFocused = focused;
 
   function handleMouseEnter(event: MouseEvent<HTMLButtonElement>) {
     if (!disabled) {
@@ -260,6 +212,13 @@ export function BackToTopButton({
   return (
     <button
       {...rest}
+      className={[BACK_TO_TOP_BUTTON_ROOT_CLASS, className].filter(Boolean).join(" ")}
+      data-brand={normalizedBrand}
+      data-disabled={String(disabled)}
+      data-focused={String(isFocused)}
+      data-hovered={String(isHovered)}
+      data-inverse={String(inverse)}
+      data-pressed={String(isPressed)}
       disabled={disabled}
       type={type}
       onBlur={(event) => {
@@ -275,10 +234,10 @@ export function BackToTopButton({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onMouseUp={handleMouseUp}
-      style={rootStyles}
+      style={style}
     >
-      {renderIcon(icon, surface.icon, metrics.iconSize)}
-      {children ? <span style={labelStyles}>{children}</span> : null}
+      {renderIcon(icon)}
+      {children ? <span className={BACK_TO_TOP_BUTTON_LABEL_CLASS}>{children}</span> : null}
     </button>
   );
 }

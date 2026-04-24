@@ -1,7 +1,7 @@
 import type { CSSProperties, HTMLAttributes } from "react";
 import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
-import { getRequiredThemeTokenValue } from "../theme";
+import { getRequiredThemeTokenValue, pxToRem } from "../theme";
 
 export const canonicalStepperBarWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.stepperBar"
@@ -59,7 +59,7 @@ function hexToRgba(hex: string, alpha: number) {
 }
 
 function toCssDimension(value: number | string) {
-  return typeof value === "number" ? `${value}px` : value;
+  return typeof value === "number" ? pxToRem(value) : value;
 }
 
 function resolveStepCount(stepCount: number | undefined, segmentStates: StepperBarSegmentState[] | undefined) {
@@ -138,7 +138,7 @@ function getStepperBarMetrics(
     gap: Number(getRequiredThemeTokenValue(brand, "spacing.2")),
     rootWidth: width ?? DEFAULT_WIDTH,
     segmentHeight: Number(getRequiredThemeTokenValue(brand, "spacing.1")),
-    segmentRadius: `${Number(getRequiredThemeTokenValue(brand, "radius.pill"))}px`,
+    segmentRadius: pxToRem(Number(getRequiredThemeTokenValue(brand, "radius.pill"))),
     trackColor: variant === "Continuous" ? hexToRgba(inverseText, 0.4) : primaryTrack
   };
 }
@@ -153,7 +153,7 @@ function getSegmentStyles(
     borderRadius: metrics.segmentRadius,
     boxSizing: "border-box",
     flex: "1 1 0",
-    height: `${metrics.segmentHeight}px`,
+    height: pxToRem(metrics.segmentHeight),
     minWidth: 0,
     overflow: "hidden",
     position: "relative"
@@ -204,8 +204,8 @@ export function StepperBar({
         : metrics.containerBackground,
     boxSizing: "border-box",
     display: "flex",
-    gap: `${metrics.gap}px`,
-    padding: `${metrics.containerPaddingBlock}px ${metrics.containerPaddingInline}px`,
+    gap: pxToRem(metrics.gap),
+    padding: `${pxToRem(metrics.containerPaddingBlock)} ${pxToRem(metrics.containerPaddingInline)}`,
     position: "relative",
     width: toCssDimension(metrics.rootWidth),
     ...style

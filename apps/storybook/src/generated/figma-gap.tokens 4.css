@@ -1,0 +1,31 @@
+:root {
+  /* Generated from apps/storybook/token-data/Tokens-variables-full-x.json */
+  /**
+   * @tokens Gap
+   */
+  --cars24-misc-gap-2: 2px; /* Gap.gap.2 | WEB: var(--cars24-misc-gap-2) | @presenter Spacing */
+  --cars24-misc-gap-4: 4px; /* Gap.gap.4 | WEB: var(--cars24-misc-gap-4) | @presenter Spacing */
+  --cars24-misc-gap-6: 6px; /* Gap.gap.6 | WEB: var(--cars24-misc-gap-6) | @presenter Spacing */
+  --cars24-misc-gap-8: 8px; /* Gap.gap.8 | WEB: var(--cars24-misc-gap-8) | @presenter Spacing */
+  --cars24-misc-gap-10: 10px; /* Gap.gap.10 | WEB: var(--cars24-misc-gap-10) | @presenter Spacing */
+  --cars24-misc-gap-12: 12px; /* Gap.gap.12 | WEB: var(--cars24-misc-gap-12) | @presenter Spacing */
+  --cars24-misc-gap-14: 14px; /* Gap.gap.14 | WEB: var(--cars24-misc-gap-14) | @presenter Spacing */
+  --cars24-misc-gap-16: 16px; /* Gap.gap.16 | WEB: var(--cars24-misc-gap-16) | @presenter Spacing */
+  --cars24-misc-gap-18: 18px; /* Gap.gap.18 | WEB: var(--cars24-misc-gap-18) | @presenter Spacing */
+  --cars24-misc-gap-20: 20px; /* Gap.gap.20 | WEB: var(--cars24-misc-gap-20) | @presenter Spacing */
+  --cars24-misc-gap-24: 24px; /* Gap.gap.24 | WEB: var(--cars24-misc-gap-24) | @presenter Spacing */
+  --cars24-misc-gap-28: 28px; /* Gap.gap.28 | WEB: var(--cars24-misc-gap-28) | @presenter Spacing */
+  --cars24-misc-gap-32: 32px; /* Gap.gap.32 | WEB: var(--cars24-misc-gap-32) | @presenter Spacing */
+  --cars24-misc-gap-36: 36px; /* Gap.gap.36 | WEB: var(--cars24-misc-gap-36) | @presenter Spacing */
+  --cars24-misc-gap-40: 40px; /* Gap.gap.40 | WEB: var(--cars24-misc-gap-40) | @presenter Spacing */
+  --cars24-misc-gap-48: 48px; /* Gap.gap.48 | WEB: var(--cars24-misc-gap-48) | @presenter Spacing */
+  --cars24-misc-gap-56: 56px; /* Gap.gap.56 | WEB: var(--cars24-misc-gap-56) | @presenter Spacing */
+  --cars24-misc-gap-64: 64px; /* Gap.gap.64 | WEB: var(--cars24-misc-gap-64) | @presenter Spacing */
+  --cars24-misc-gap-72: 72px; /* Gap.gap.72 | WEB: var(--cars24-misc-gap-72) | @presenter Spacing */
+  --cars24-misc-gap-80: 80px; /* Gap.gap.80 | WEB: var(--cars24-misc-gap-80) | @presenter Spacing */
+  --cars24-misc-gap-88: 88px; /* Gap.gap.88 | WEB: var(--cars24-misc-gap-88) | @presenter Spacing */
+  --cars24-misc-gap-96: 96px; /* Gap.gap.96 | WEB: var(--cars24-misc-gap-96) | @presenter Spacing */
+  --cars24-misc-gap-100: 100px; /* Gap.gap.100 | WEB: var(--cars24-misc-gap-100) | @presenter Spacing */
+  --cars24-misc-gap-none: 0px; /* Gap.gap.none | WEB: var(--cars24-misc-gap-none) | @presenter Spacing */
+
+}

@@ -47,8 +47,13 @@ const accordionSizes = [
   { key: "lg", label: "Large", size: "lg" as const }
 ] as const;
 
+const accordionConnectedCopy = {
+  sm: "With an accordion, users can click to expand or collapse content areas, making it simple to access details without overwhelming the screen.",
+  lg: "Accordions help manage space by letting users expand sections to view additional info. This keeps the layout tidy and improves user experience."
+} as const;
+
 const ACCORDION_FIGMA_URL =
-  "https://www.figma.com/design/AZgWt0KHVuVeWBAcQ6Jcy4/branch/yxI5H0FhaUg0YR0uhNuqR6/%F0%9F%9A%80-v2.0-Global-Component-Library?node-id=77-2187&t=1zgOyFpiLYMyM4XM-11";
+  "https://www.figma.com/design/skMLeeIF8mbzAT265CI8nP/-TEST--Design-Language-System--DLS-v2.0-2026-?node-id=77-2187&t=mYprHpRuZtMoNQg1-11";
 
 const cars24FaqItems = [
   {
@@ -228,7 +233,7 @@ function AccordionStateDocument({
                 brand={brand}
                 size={row.size}
                 title="Additional Insights"
-                content={sampleItems[0].content}
+                content={accordionConnectedCopy[row.size]}
                 disabled={disabled}
                 {...(forceState ? { forceState } : {})}
               />
@@ -238,7 +243,7 @@ function AccordionStateDocument({
                 brand={brand}
                 size={row.size}
                 title="Additional Insights"
-                content={sampleItems[0].content}
+                content={accordionConnectedCopy[row.size]}
                 expanded
                 disabled={disabled}
                 {...(forceState ? { forceState } : {})}

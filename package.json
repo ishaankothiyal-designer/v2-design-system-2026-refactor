@@ -6,12 +6,15 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
-    "storybook": "pnpm --filter @geist/storybook storybook",
+    "storybook": "corepack pnpm --filter @geist/storybook storybook",
+    "registry:sync": "tsx ./scripts/sync-design-system-registry.ts",
+    "design-system:api": "corepack pnpm --filter v2-design-system-cli serve",
     "storybook:add": "corepack pnpm --filter @geist/storybook exec storybook add --config-dir .storybook",
     "typecheck": "turbo run typecheck",
-    "validate:registry": "pnpm --filter @geist/contracts validate:registry"
+    "validate:registry": "corepack pnpm --filter @geist/contracts validate:registry"
   },
   "devDependencies": {
+    "@types/node": "*",
     "@types/react": "*",
     "@types/react-dom": "*",
     "tsx": "*",

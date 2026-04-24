@@ -6,12 +6,12 @@ import {
   type ReactElement,
   type ReactNode,
   isValidElement,
+  useInsertionEffect,
   useState
 } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
-import { getRequiredThemeTokenValue } from "../theme";
-import { getTapFeedbackStyles } from "./press-feedback";
+import { normalizeBrandId, type DisplayBrandId } from "@geist/tokens";
+import { ensureStyleSheet, runtimeTokenVar, runtimeTokenVarPx, toCssRule } from "./runtime-styles";
 
 export const canonicalLinkButtonWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.linkButton"
@@ -21,19 +21,18 @@ export type LinkButtonTone = "Brand" | "Black";
 export type LinkButtonSize = "Extra Small" | "Small" | "Medium" | "Large";
 export type LinkButtonPreviewState = "Rest" | "Hover";
 
-type LinkButtonSizeMetrics = {
-  height: number;
-  gap: number;
-  iconSize: number;
-};
+type StylableElement = ReactElement<{ style?: CSSProperties; className?: string }>;
+type LinkButtonSizeKey = "xs" | "sm" | "md" | "lg";
 
-type LinkButtonTypography = {
-  fontSize: number;
-  lineHeight: number;
-  letterSpacing: number;
-};
+const LINK_BUTTON_ROOT_CLASS = "geist-link-button";
+const LINK_BUTTON_CONTENT_CLASS = "geist-link-button__content";
+const LINK_BUTTON_LABEL_CLASS = "geist-link-button__label";
+const LINK_BUTTON_SLOT_CLASS = "geist-link-button__slot";
+const LINK_BUTTON_STYLESHEET_ID = "geist-link-button-styles";
+const LINK_BUTTON_TAP_TRANSFORM = "translateY(1px) scale(0.985)";
+const LINK_BUTTON_TAP_TRANSITION = "transform 140ms cubic-bezier(0.2, 0, 0, 1)";
 
-function getTokenSizeKey(size: LinkButtonSize) {
+function getTokenSizeKey(size: LinkButtonSize): LinkButtonSizeKey {
   if (size === "Extra Small") {
     return "xs";
   }
@@ -47,96 +46,137 @@ function getTokenSizeKey(size: LinkButtonSize) {
   return "md";
 }
 
-function getSizeMetrics(brand: DisplayBrandId, size: LinkButtonSize): LinkButtonSizeMetrics {
-  const tokenSizeKey = getTokenSizeKey(size);
-  const tokenPrefix = `component.linkButton.size.${tokenSizeKey}`;
-
-  return {
-    height: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.height`)),
-    gap: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.gap`)),
-    iconSize: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.iconSize`))
-  };
+function getToneKey(tone: LinkButtonTone) {
+  return tone === "Black" ? "black" : "brand";
 }
 
-function getTypography(brand: DisplayBrandId, size: LinkButtonSize): LinkButtonTypography {
-  const tokenSizeKey = getTokenSizeKey(size);
-  const tokenPrefix = `component.linkButton.typography.${tokenSizeKey}`;
+const LINK_BUTTON_SIZE_KEYS = ["xs", "sm", "md", "lg"] as const;
 
-  return {
-    fontSize: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.fontSize`)),
-    lineHeight: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.lineHeight`)),
-    letterSpacing: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.letterSpacing`))
-  };
-}
+const LINK_BUTTON_STYLESHEET = [
+  toCssRule(`.${LINK_BUTTON_ROOT_CLASS}`, {
+    "align-items": "center",
+    appearance: "none",
+    background: "transparent",
+    border: "none",
+    cursor: "pointer",
+    display: "inline-flex",
+    font: "inherit",
+    "justify-content": "center",
+    outline: "none",
+    "outline-offset": runtimeTokenVarPx("component.linkButton.focus.outlineOffset"),
+    padding: "0",
+    "text-decoration": "none",
+    "transform-origin": "center center",
+    transition: [
+      "color 180ms cubic-bezier(0.2, 0, 0, 1)",
+      "box-shadow 180ms cubic-bezier(0.2, 0, 0, 1)",
+      "outline-color 180ms cubic-bezier(0.2, 0, 0, 1)",
+      LINK_BUTTON_TAP_TRANSITION
+    ].join(", "),
+    "will-change": "transform"
+  }),
+  toCssRule(`.${LINK_BUTTON_ROOT_CLASS}[data-focused="true"]`, {
+    outline: `${runtimeTokenVarPx("component.linkButton.focus.outlineWidth")} solid ${runtimeTokenVar("color.border.focus")}`
+  }),
+  toCssRule(`.${LINK_BUTTON_ROOT_CLASS}:focus-visible`, {
+    outline: `${runtimeTokenVarPx("component.linkButton.focus.outlineWidth")} solid ${runtimeTokenVar("color.border.focus")}`
+  }),
+  toCssRule(`.${LINK_BUTTON_ROOT_CLASS}[data-disabled="true"]`, {
+    cursor: "not-allowed",
+    "will-change": "auto"
+  }),
+  toCssRule(`.${LINK_BUTTON_ROOT_CLASS}[data-pressed="true"][data-disabled="false"]`, {
+    transform: LINK_BUTTON_TAP_TRANSFORM
+  }),
+  toCssRule(`.${LINK_BUTTON_CONTENT_CLASS}`, {
+    "align-items": "center",
+    display: "inline-flex",
+    "justify-content": "center",
+    "min-width": "0"
+  }),
+  toCssRule(`.${LINK_BUTTON_ROOT_CLASS}[data-underline="true"] .${LINK_BUTTON_CONTENT_CLASS}`, {
+    "box-shadow": `inset 0 calc(${runtimeTokenVar("component.linkButton.decoration.underlineThickness")} * -1px) 0 0 currentColor`
+  }),
+  toCssRule(`.${LINK_BUTTON_LABEL_CLASS}`, {
+    color: "inherit",
+    "font-family": `${runtimeTokenVar("typography.fontFamily.sans")}, sans-serif`,
+    "font-weight": runtimeTokenVar("typography.fontWeight.medium"),
+    "white-space": "nowrap"
+  }),
+  toCssRule(`.${LINK_BUTTON_SLOT_CLASS}`, {
+    "align-items": "center",
+    color: "inherit",
+    display: "inline-flex",
+    "line-height": "0"
+  }),
+  ...LINK_BUTTON_SIZE_KEYS.flatMap((sizeKey) => [
+    toCssRule(`.${LINK_BUTTON_ROOT_CLASS}[data-size="${sizeKey}"]`, {
+      "min-height": runtimeTokenVarPx(`component.linkButton.size.${sizeKey}.height`)
+    }),
+    toCssRule(`.${LINK_BUTTON_ROOT_CLASS}[data-size="${sizeKey}"] .${LINK_BUTTON_CONTENT_CLASS}`, {
+      gap: runtimeTokenVarPx(`component.linkButton.size.${sizeKey}.gap`),
+      "min-height": runtimeTokenVarPx(`component.linkButton.size.${sizeKey}.height`)
+    }),
+    toCssRule(`.${LINK_BUTTON_ROOT_CLASS}[data-size="${sizeKey}"] .${LINK_BUTTON_LABEL_CLASS}`, {
+      "font-size": runtimeTokenVarPx(`component.linkButton.typography.${sizeKey}.fontSize`),
+      "letter-spacing": runtimeTokenVarPx(`component.linkButton.typography.${sizeKey}.letterSpacing`),
+      "line-height": runtimeTokenVarPx(`component.linkButton.typography.${sizeKey}.lineHeight`)
+    }),
+    toCssRule(`.${LINK_BUTTON_ROOT_CLASS}[data-size="${sizeKey}"] .${LINK_BUTTON_SLOT_CLASS}`, {
+      "font-size": runtimeTokenVarPx(`component.linkButton.size.${sizeKey}.iconSize`)
+    })
+  ]),
+  ...[false, true].flatMap((onDark) => {
+    const modeKey = onDark ? "dark" : "light";
+    const modeSelector = `.${LINK_BUTTON_ROOT_CLASS}[data-on-dark="${String(onDark)}"]`;
 
-function getForegroundColor(
-  brand: DisplayBrandId,
-  tone: LinkButtonTone,
-  onDark: boolean,
-  hoveredOrPressed: boolean,
-  disabled: boolean
-) {
-  const surfaceKey = onDark ? "dark" : "light";
-  const stateKey = hoveredOrPressed ? "hover" : "rest";
+    return [
+      toCssRule(`${modeSelector}[data-disabled="true"]`, {
+        color: runtimeTokenVar(`component.linkButton.color.${modeKey}.disabled`)
+      }),
+      ...(["brand", "black"] as const).flatMap((toneKey) =>
+        (["rest", "hover"] as const).map((stateKey) => {
+          const selector =
+            stateKey === "hover"
+              ? `${modeSelector}[data-tone="${toneKey}"][data-disabled="false"][data-hovered="true"]`
+              : `${modeSelector}[data-tone="${toneKey}"][data-disabled="false"][data-hovered="false"]`;
 
-  if (disabled) {
-    return String(getRequiredThemeTokenValue(brand, `component.linkButton.color.${surfaceKey}.disabled`));
-  }
+          return toCssRule(selector, {
+            color: runtimeTokenVar(`component.linkButton.color.${modeKey}.${toneKey}.${stateKey}`)
+          });
+        })
+      )
+    ];
+  })
+].join("");
 
-  return String(
-    getRequiredThemeTokenValue(
-      brand,
-      `component.linkButton.color.${surfaceKey}.${tone === "Black" ? "black" : "brand"}.${stateKey}`
-    )
-  );
-}
-
-function renderSlot(content: ReactNode, color: string, size: number) {
+function renderSlot(content: ReactNode) {
   if (!content) {
     return null;
   }
 
   if (typeof content === "string" || typeof content === "number") {
+    return <span className={LINK_BUTTON_SLOT_CLASS}>{content}</span>;
+  }
+
+  if (isValidElement(content)) {
+    const element = content as StylableElement;
+
     return (
-      <span
-        aria-hidden="true"
-        style={{
-          color,
-          display: "inline-flex",
-          fontSize: `${size}px`,
-          lineHeight: 0
-        }}
-      >
-        {content}
+      <span className={LINK_BUTTON_SLOT_CLASS}>
+        {cloneElement(element, {
+          className: [element.props.className].filter(Boolean).join(" "),
+          style: {
+            color: "inherit",
+            fontSize: "inherit",
+            ...element.props.style
+          }
+        })}
       </span>
     );
   }
 
-  if (isValidElement(content)) {
-    const element = content as ReactElement<{ style?: CSSProperties }>;
-
-    return cloneElement(element, {
-      style: {
-        color,
-        fontSize: `${size}px`,
-        ...element.props.style
-      }
-    });
-  }
-
-  return (
-    <span
-      aria-hidden="true"
-      style={{
-        color,
-        display: "inline-flex",
-        fontSize: `${size}px`,
-        lineHeight: 0
-      }}
-    >
-      {content}
-    </span>
-  );
+  return <span className={LINK_BUTTON_SLOT_CLASS}>{content}</span>;
 }
 
 export interface LinkButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "size"> {
@@ -152,6 +192,7 @@ export interface LinkButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonEle
 
 export function LinkButton({
   brand = "Cars24",
+  className,
   tone = "Brand",
   size = "Extra Small",
   onDark = false,
@@ -175,67 +216,14 @@ export function LinkButton({
   const [pressed, setPressed] = useState(false);
   const [focused, setFocused] = useState(false);
 
-  const hoveredOrPressed = forceState === "Hover" || hovered || pressed;
-  const metrics = getSizeMetrics(brand, size);
-  const typography = getTypography(brand, size);
-  const foreground = getForegroundColor(brand, tone, onDark, hoveredOrPressed, disabled);
-  const fontFamily = String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"));
-  const fontWeight = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.medium"));
-  const underlineThickness = Number(
-    getRequiredThemeTokenValue(brand, "component.linkButton.decoration.underlineThickness")
-  );
-  const focusColor = String(getRequiredThemeTokenValue(brand, "color.border.focus"));
-  const focusOutlineWidth = Number(
-    getRequiredThemeTokenValue(brand, "component.linkButton.focus.outlineWidth")
-  );
-  const focusOutlineOffset = Number(
-    getRequiredThemeTokenValue(brand, "component.linkButton.focus.outlineOffset")
-  );
+  useInsertionEffect(() => {
+    ensureStyleSheet(LINK_BUTTON_STYLESHEET_ID, LINK_BUTTON_STYLESHEET);
+  }, []);
 
-  const rootStyles: CSSProperties = {
-    alignItems: "center",
-    appearance: "none",
-    background: "transparent",
-    border: "none",
-    color: foreground,
-    cursor: disabled ? "not-allowed" : "pointer",
-    display: "inline-flex",
-    font: "inherit",
-    justifyContent: "center",
-    minHeight: `${metrics.height}px`,
-    padding: 0,
-    textDecoration: "none",
-    outline: focused ? `${focusOutlineWidth}px solid ${focusColor}` : "none",
-    outlineOffset: focused ? `${focusOutlineOffset}px` : undefined,
-    transition: "color 180ms cubic-bezier(0.2, 0, 0, 1), box-shadow 180ms cubic-bezier(0.2, 0, 0, 1)",
-    ...style,
-    ...getTapFeedbackStyles({
-      disabled,
-      pressed,
-      transition: style?.transition,
-      transform: style?.transform
-    })
-  };
-
-  const contentStyles: CSSProperties = {
-    alignItems: "center",
-    boxShadow: underline ? `inset 0 -${underlineThickness}px 0 0 ${foreground}` : "none",
-    display: "inline-flex",
-    gap: `${metrics.gap}px`,
-    justifyContent: "center",
-    minHeight: `${metrics.height}px`,
-    minWidth: 0
-  };
-
-  const labelStyles: CSSProperties = {
-    color: foreground,
-    fontFamily: `${fontFamily}, sans-serif`,
-    fontSize: `${typography.fontSize}px`,
-    fontWeight,
-    letterSpacing: `${typography.letterSpacing}px`,
-    lineHeight: `${typography.lineHeight}px`,
-    whiteSpace: "nowrap"
-  };
+  const normalizedBrand = normalizeBrandId(brand);
+  const isHovered = forceState === "Hover" || hovered || pressed;
+  const isPressed = !disabled && (pressed || forceState === "Hover");
+  const isFocused = focused;
 
   function handleMouseEnter(event: MouseEvent<HTMLButtonElement>) {
     if (!disabled) {
@@ -265,6 +253,16 @@ export function LinkButton({
   return (
     <button
       {...rest}
+      className={[LINK_BUTTON_ROOT_CLASS, className].filter(Boolean).join(" ")}
+      data-brand={normalizedBrand}
+      data-disabled={String(disabled)}
+      data-focused={String(isFocused)}
+      data-hovered={String(isHovered)}
+      data-on-dark={String(onDark)}
+      data-pressed={String(isPressed)}
+      data-size={getTokenSizeKey(size)}
+      data-tone={getToneKey(tone)}
+      data-underline={String(underline)}
       disabled={disabled}
       type={type}
       onBlur={(event) => {
@@ -279,12 +277,12 @@ export function LinkButton({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onMouseUp={handleMouseUp}
-      style={rootStyles}
+      style={style}
     >
-      <span style={contentStyles}>
-        {renderSlot(leadingIcon, foreground, metrics.iconSize)}
-        {children ? <span style={labelStyles}>{children}</span> : null}
-        {renderSlot(trailingIcon, foreground, metrics.iconSize)}
+      <span className={LINK_BUTTON_CONTENT_CLASS}>
+        {renderSlot(leadingIcon)}
+        {children ? <span className={LINK_BUTTON_LABEL_CLASS}>{children}</span> : null}
+        {renderSlot(trailingIcon)}
       </span>
     </button>
   );

@@ -8,7 +8,7 @@ import {
 } from "react";
 import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
-import { getRequiredThemeTokenValue } from "../theme";
+import { getRequiredThemeTokenValue, tokenValueToRem } from "../theme";
 
 export const canonicalDividerWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.divider"
@@ -29,7 +29,7 @@ export interface DividerProps extends Omit<HTMLAttributes<HTMLDivElement>, "cont
 }
 
 function toPx(value: number) {
-  return `${value}px`;
+  return tokenValueToRem(value);
 }
 
 function renderDecorativeSlot(content: ReactNode, color: string, size: number) {

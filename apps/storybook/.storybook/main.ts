@@ -5,7 +5,9 @@ const config: StorybookConfig = {
     name: "@storybook/react-vite",
     options: {}
   },
-  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(ts|tsx)"],
+  // Ignore Finder-style duplicate copies like "IconLibrary 2.mdx" so Storybook
+  // doesn't index the same docs page twice.
+  stories: ["../src/**/!(* [0-9]*).mdx", "../src/**/*.stories.@(ts|tsx)"],
   addons: [
     "@storybook/addon-docs",
     "@storybook/addon-designs",

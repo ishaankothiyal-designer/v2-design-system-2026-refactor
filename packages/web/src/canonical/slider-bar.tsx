@@ -10,7 +10,7 @@ import {
 } from "react";
 import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
-import { getRequiredThemeTokenValue } from "../theme";
+import { getRequiredThemeTokenValue, pxToRem } from "../theme";
 import { TooltipStem } from "./tooltip-shape";
 
 export const canonicalSliderBarWebContract = designSystemRegistry.components.find(
@@ -195,7 +195,7 @@ function normalizePointerCount(pointerCount: number | undefined) {
 }
 
 function toPixelDimension(value: number | string) {
-  return typeof value === "number" ? `${value}px` : value;
+  return typeof value === "number" ? pxToRem(value) : value;
 }
 
 function getValueText(value: number, tooltipFormatter: SliderBarProps["tooltipFormatter"]) {
@@ -277,14 +277,14 @@ function SliderTooltip({
         display: "inline-flex",
         flex: "0 0 auto",
         fontFamily: `${metrics.fontFamily}, sans-serif`,
-        fontSize: metrics.tooltipFontSize,
+        fontSize: pxToRem(metrics.tooltipFontSize),
         fontWeight: metrics.fontWeightRegular,
         justifyContent: "center",
-        letterSpacing: metrics.tooltipLetterSpacing,
-        lineHeight: `${metrics.tooltipLineHeight}px`,
-        minHeight: `${metrics.tooltipLineHeight + metrics.tooltipBodyPaddingBlock * 2}px`,
-        paddingBlock: metrics.tooltipBodyPaddingBlock,
-        paddingInline: metrics.tooltipBodyPaddingInline,
+        letterSpacing: pxToRem(metrics.tooltipLetterSpacing),
+        lineHeight: pxToRem(metrics.tooltipLineHeight),
+        minHeight: pxToRem(metrics.tooltipLineHeight + metrics.tooltipBodyPaddingBlock * 2),
+        paddingBlock: pxToRem(metrics.tooltipBodyPaddingBlock),
+        paddingInline: pxToRem(metrics.tooltipBodyPaddingInline),
         textAlign: "center",
         whiteSpace: "nowrap",
         width: "max-content"
@@ -352,28 +352,32 @@ function SliderHandleGlyph({
         alignItems: "center",
         display: "inline-flex",
         flexDirection: orientation === "Horizontal" ? "column" : "row",
-        gap: `${HANDLE_ICON_LINE_GAP}px`,
-        height: orientation === "Horizontal" ? "6px" : `${HANDLE_ICON_LINE_HEIGHT}px`,
+        gap: pxToRem(HANDLE_ICON_LINE_GAP),
+        height: orientation === "Horizontal" ? pxToRem(6) : pxToRem(HANDLE_ICON_LINE_HEIGHT),
         justifyContent: "center",
-        width: orientation === "Horizontal" ? `${HANDLE_ICON_LINE_HEIGHT}px` : "6px"
+        width: orientation === "Horizontal" ? pxToRem(HANDLE_ICON_LINE_HEIGHT) : pxToRem(6)
       }}
     >
       <span
         style={{
           background: color,
-          borderRadius: "999px",
+          borderRadius: pxToRem(999),
           display: "block",
-          height: orientation === "Horizontal" ? `${HANDLE_ICON_LINE_WIDTH}px` : `${HANDLE_ICON_LINE_HEIGHT}px`,
-          width: orientation === "Horizontal" ? `${HANDLE_ICON_LINE_HEIGHT}px` : `${HANDLE_ICON_LINE_WIDTH}px`
+          height:
+            orientation === "Horizontal" ? pxToRem(HANDLE_ICON_LINE_WIDTH) : pxToRem(HANDLE_ICON_LINE_HEIGHT),
+          width:
+            orientation === "Horizontal" ? pxToRem(HANDLE_ICON_LINE_HEIGHT) : pxToRem(HANDLE_ICON_LINE_WIDTH)
         }}
       />
       <span
         style={{
           background: color,
-          borderRadius: "999px",
+          borderRadius: pxToRem(999),
           display: "block",
-          height: orientation === "Horizontal" ? `${HANDLE_ICON_LINE_WIDTH}px` : `${HANDLE_ICON_LINE_HEIGHT}px`,
-          width: orientation === "Horizontal" ? `${HANDLE_ICON_LINE_HEIGHT}px` : `${HANDLE_ICON_LINE_WIDTH}px`
+          height:
+            orientation === "Horizontal" ? pxToRem(HANDLE_ICON_LINE_WIDTH) : pxToRem(HANDLE_ICON_LINE_HEIGHT),
+          width:
+            orientation === "Horizontal" ? pxToRem(HANDLE_ICON_LINE_HEIGHT) : pxToRem(HANDLE_ICON_LINE_WIDTH)
         }}
       />
     </span>
@@ -486,20 +490,20 @@ function SliderHandle({
         appearance: "none",
         background: metrics.handleBackground,
         border: `1px solid ${isActive ? metrics.handleBorderActive : metrics.handleBorderDefault}`,
-        borderRadius: "999px",
+        borderRadius: pxToRem(999),
         boxShadow: metrics.handleShadow,
         cursor: isDisabled ? "default" : "grab",
         display: "inline-flex",
-        height: `${metrics.handleSize}px`,
+        height: pxToRem(metrics.handleSize),
         justifyContent: "center",
-        left: orientation === "Horizontal" ? `${position}px` : "50%",
+        left: orientation === "Horizontal" ? pxToRem(position) : "50%",
         outline: focusVisible ? `${metrics.focusWidth} solid ${metrics.focusColor}` : "none",
         outlineOffset: focusVisible ? metrics.focusOffset : "0px",
         padding: 0,
         position: "absolute",
-        top: orientation === "Horizontal" ? "50%" : `${position}px`,
+        top: orientation === "Horizontal" ? "50%" : pxToRem(position),
         transform: "translate(-50%, -50%)",
-        width: `${metrics.handleSize}px`,
+        width: pxToRem(metrics.handleSize),
         zIndex: isActive ? 3 : 2
       }}
     >
@@ -903,9 +907,9 @@ export function SliderBar({
 
   const trackStyles = {
     background: metrics.trackBackground,
-    borderRadius: "999px",
+    borderRadius: pxToRem(999),
     cursor: isDisabled ? "default" : "pointer",
-    height: orientation === "Vertical" ? `${trackLength}px` : `${metrics.trackHeight}px`,
+    height: orientation === "Vertical" ? pxToRem(trackLength) : pxToRem(metrics.trackHeight),
     position: "relative",
     width: orientation === "Vertical" ? `${metrics.trackHeight}px` : toPixelDimension(metrics.rootWidth)
   } satisfies CSSProperties;
@@ -915,12 +919,12 @@ export function SliderBar({
     display: "flex",
     flexDirection: orientation === "Vertical" ? "column-reverse" : "row",
     fontFamily: `${metrics.fontFamily}, sans-serif`,
-    fontSize: `${metrics.labelFontSize}px`,
+    fontSize: pxToRem(metrics.labelFontSize),
     fontWeight: metrics.fontWeightRegular,
-    height: orientation === "Vertical" ? `${trackLength}px` : undefined,
+    height: orientation === "Vertical" ? pxToRem(trackLength) : undefined,
     justifyContent: "space-between",
-    letterSpacing: `${metrics.labelLetterSpacing}px`,
-    lineHeight: `${metrics.labelLineHeight}px`,
+    letterSpacing: pxToRem(metrics.labelLetterSpacing),
+    lineHeight: pxToRem(metrics.labelLineHeight),
     textAlign: orientation === "Vertical" ? "left" : "center",
     whiteSpace: "nowrap",
     width: orientation === "Vertical" ? "fit-content" : "100%"
@@ -929,18 +933,18 @@ export function SliderBar({
   const markersStyles = {
     alignItems: "center",
     display: orientation === "Vertical" ? "block" : "flex",
-    height: orientation === "Vertical" ? `${trackLength}px` : undefined,
+    height: orientation === "Vertical" ? pxToRem(trackLength) : undefined,
     justifyContent: "space-between",
-    marginInline: orientation === "Vertical" ? undefined : `${metrics.handleInset}px`,
+    marginInline: orientation === "Vertical" ? undefined : pxToRem(metrics.handleInset),
     position: orientation === "Vertical" ? "relative" : undefined,
-    width: orientation === "Vertical" ? "12px" : `calc(100% - ${metrics.handleInset * 2}px)`
+    width: orientation === "Vertical" ? pxToRem(12) : `calc(100% - ${pxToRem(metrics.handleInset * 2)})`
   } satisfies CSSProperties;
 
   const railStyles = {
     display: "grid",
-    gap: orientation === "Vertical" ? 0 : showPointers ? 6 : 0,
+    gap: orientation === "Vertical" ? 0 : showPointers ? pxToRem(6) : 0,
     justifyItems: orientation === "Vertical" ? "center" : "stretch",
-    minHeight: orientation === "Vertical" ? `${trackLength}px` : undefined,
+    minHeight: orientation === "Vertical" ? pxToRem(trackLength) : undefined,
     position: "relative"
   } satisfies CSSProperties;
 
@@ -961,13 +965,13 @@ export function SliderBar({
               aria-hidden="true"
               style={{
                 background: isDisabled ? metrics.trackFillDisabled : metrics.trackFill,
-                borderRadius: "999px",
+                borderRadius: pxToRem(999),
                 bottom: orientation === "Vertical" ? 0 : undefined,
-                height: orientation === "Vertical" ? `${singleFillWidth}px` : "100%",
+                height: orientation === "Vertical" ? pxToRem(singleFillWidth) : "100%",
                 left: 0,
                 position: "absolute",
                 top: orientation === "Vertical" ? undefined : 0,
-                width: orientation === "Vertical" ? "100%" : `${singleFillWidth}px`
+                width: orientation === "Vertical" ? "100%" : pxToRem(singleFillWidth)
               }}
             />
           ) : (
@@ -975,19 +979,20 @@ export function SliderBar({
               aria-hidden="true"
               style={{
                 background: isDisabled ? metrics.trackFillDisabled : metrics.trackFill,
-                borderRadius: "999px",
-                bottom: orientation === "Vertical" ? `${rangeFillMin}px` : undefined,
+                borderRadius: pxToRem(999),
+                bottom: orientation === "Vertical" ? pxToRem(rangeFillMin) : undefined,
                 height:
                   orientation === "Vertical"
-                    ? `${Math.max(metrics.trackHeight, rangeFillMax - rangeFillMin)}px`
+                    ? pxToRem(Math.max(metrics.trackHeight, rangeFillMax - rangeFillMin))
                     : "100%",
-                left: orientation === "Vertical" ? 0 : `${Math.min(leadingHandleCenter, trailingHandleCenter)}px`,
+                left:
+                  orientation === "Vertical" ? 0 : pxToRem(Math.min(leadingHandleCenter, trailingHandleCenter)),
                 position: "absolute",
                 top: orientation === "Vertical" ? undefined : 0,
                 width:
                   orientation === "Vertical"
                     ? "100%"
-                    : `${Math.max(metrics.trackHeight, Math.abs(trailingHandleCenter - leadingHandleCenter))}px`
+                    : pxToRem(Math.max(metrics.trackHeight, Math.abs(trailingHandleCenter - leadingHandleCenter)))
               }}
             />
           )}
@@ -1062,10 +1067,10 @@ export function SliderBar({
                 key={`slider-bar-pointer-${index + 1}`}
                 style={{
                   background: metrics.markerColor,
-                  borderRadius: "999px",
+                  borderRadius: pxToRem(999),
                   display: "block",
-                  height: `${metrics.markerHeight}px`,
-                  width: `${metrics.markerWidth}px`
+                  height: pxToRem(metrics.markerHeight),
+                  width: pxToRem(metrics.markerWidth)
                 }}
               />
             ))}
@@ -1086,13 +1091,13 @@ export function SliderBar({
                 key={`slider-bar-pointer-${index + 1}`}
                 style={{
                   background: metrics.markerColor,
-                  borderRadius: "999px",
-                  bottom: `${markerPosition - metrics.markerWidth / 2}px`,
+                  borderRadius: pxToRem(999),
+                  bottom: pxToRem(markerPosition - metrics.markerWidth / 2),
                   display: "block",
-                  height: `${metrics.markerWidth}px`,
+                  height: pxToRem(metrics.markerWidth),
                   left: 0,
                   position: "absolute",
-                  width: `${metrics.markerHeight}px`
+                  width: pxToRem(metrics.markerHeight)
                 }}
               />
             );

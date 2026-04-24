@@ -8,7 +8,7 @@ const storySansFontFamily = `var(--typography-font-family-sans, ${String(coreTok
 const pageStyles: CSSProperties = {
   minHeight: "auto",
   width: "100%",
-  padding: 40,
+  padding: "clamp(16px, 4vw, 40px)",
   boxSizing: "border-box",
   background: "transparent",
   color: String(coreTokenCatalog.color.text.primary),
@@ -17,7 +17,7 @@ const pageStyles: CSSProperties = {
 
 const pageInnerStyles: CSSProperties = {
   display: "grid",
-  gap: 24,
+  gap: "clamp(16px, 3vw, 24px)",
   width: "100%",
   maxWidth: "none",
   margin: 0
@@ -51,7 +51,7 @@ const badgeStyles: CSSProperties = {
 const previewSurfaceStyles: CSSProperties = {
   width: "100%",
   maxWidth: "100%",
-  minWidth: "100%",
+  minWidth: 0,
   height: "100%",
   minHeight: "100%",
   display: "flex",
@@ -59,8 +59,9 @@ const previewSurfaceStyles: CSSProperties = {
   justifyContent: "center",
   alignSelf: "stretch",
   justifySelf: "stretch",
-  padding: 40,
-  boxSizing: "border-box"
+  padding: "clamp(16px, 4vw, 40px)",
+  boxSizing: "border-box",
+  overflow: "auto"
 };
 
 export function StoryPage({ children, fullscreen = false }: { children: ReactNode; fullscreen?: boolean }) {

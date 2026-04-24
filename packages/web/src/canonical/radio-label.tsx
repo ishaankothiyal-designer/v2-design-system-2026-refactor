@@ -1,9 +1,8 @@
-import type { CSSProperties, ReactNode } from "react";
-import { useId } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
+import { type CSSProperties, type ReactNode, useId, useInsertionEffect } from "react";
 import { designSystemRegistry } from "@geist/contracts";
+import { type DisplayBrandId, normalizeBrandId } from "@geist/tokens";
 import { Radio, type RadioProps, type RadioSize } from "./radio";
-import { getRequiredThemeTokenValue } from "../theme";
+import { ensureStyleSheet, joinClassNames, runtimeTokenVar, runtimeTokenVarPx, toCssRule } from "./runtime-styles";
 
 export const canonicalRadioLabelWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.radioLabel"
@@ -11,11 +10,11 @@ export const canonicalRadioLabelWebContract = designSystemRegistry.components.fi
 
 export type RadioLabelSize = RadioSize;
 
-type RadioLabelTypography = {
-  fontSize: number;
-  letterSpacing: number;
-  lineHeight: number;
-};
+const RADIO_LABEL_ROOT_CLASS = "geist-radio-label";
+const RADIO_LABEL_CONTENT_CLASS = "geist-radio-label__content";
+const RADIO_LABEL_TEXT_CLASS = "geist-radio-label__text";
+const RADIO_LABEL_DESCRIPTION_CLASS = "geist-radio-label__description";
+const RADIO_LABEL_STYLESHEET_ID = "geist-radio-label-styles";
 
 export interface RadioLabelProps extends Omit<RadioProps, "className" | "size" | "style"> {
   brand?: DisplayBrandId;
@@ -30,40 +29,72 @@ function getSizeKey(size: RadioLabelSize) {
   return size === "Medium" ? "md" : "sm";
 }
 
-function getTypography(brand: DisplayBrandId, path: string): RadioLabelTypography {
-  return {
-    fontSize: Number(getRequiredThemeTokenValue(brand, `${path}.fontSize`)),
-    letterSpacing: Number(getRequiredThemeTokenValue(brand, `${path}.letterSpacing`)),
-    lineHeight: Number(getRequiredThemeTokenValue(brand, `${path}.lineHeight`))
-  };
-}
-
-function makeTypographyStyles({
-  brand,
-  color,
-  fontWeightPath,
-  typography
-}: {
-  brand: DisplayBrandId;
-  color: string;
-  fontWeightPath: string;
-  typography: RadioLabelTypography;
-}): CSSProperties {
-  return {
-    color,
-    fontFamily: `${String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"))}, sans-serif`,
-    fontSize: typography.fontSize,
-    fontWeight: Number(getRequiredThemeTokenValue(brand, fontWeightPath)),
-    letterSpacing: typography.letterSpacing,
-    lineHeight: `${typography.lineHeight}px`,
-    margin: 0
-  };
-}
-
 function joinIds(...values: Array<string | undefined>) {
   const joined = values.filter(Boolean).join(" ");
   return joined.length > 0 ? joined : undefined;
 }
+
+const RADIO_LABEL_STYLESHEET = [
+  toCssRule(`.${RADIO_LABEL_ROOT_CLASS}`, {
+    "align-items": "flex-start",
+    display: "flex",
+    gap: runtimeTokenVarPx("component.radioLabel.layout.gap"),
+    "max-width": "100%"
+  }),
+  toCssRule(`.${RADIO_LABEL_CONTENT_CLASS}`, {
+    cursor: "pointer",
+    display: "flex",
+    "flex": "1 1 auto",
+    "flex-direction": "column",
+    "max-width": "100%",
+    "min-width": "0",
+    "padding-inline": runtimeTokenVarPx("component.radioLabel.layout.contentPaddingInline")
+  }),
+  toCssRule(`.${RADIO_LABEL_ROOT_CLASS}[data-disabled="true"] .${RADIO_LABEL_CONTENT_CLASS}`, {
+    cursor: "not-allowed"
+  }),
+  toCssRule(`.${RADIO_LABEL_ROOT_CLASS}[data-has-description="true"] .${RADIO_LABEL_CONTENT_CLASS}`, {
+    gap: runtimeTokenVarPx("component.radioLabel.size.sm.contentGap")
+  }),
+  toCssRule(`.${RADIO_LABEL_TEXT_CLASS}`, {
+    "font-family": `${runtimeTokenVar("typography.fontFamily.sans")}, sans-serif`,
+    "font-weight": "500",
+    margin: "0"
+  }),
+  toCssRule(`.${RADIO_LABEL_DESCRIPTION_CLASS}`, {
+    "font-family": `${runtimeTokenVar("typography.fontFamily.sans")}, sans-serif`,
+    "font-weight": "400",
+    margin: "0",
+    "max-width": "100%"
+  }),
+  ...(["sm", "md"] as const).flatMap((sizeKey) => [
+    toCssRule(`.${RADIO_LABEL_ROOT_CLASS}[data-size="${sizeKey}"][data-has-description="true"] .${RADIO_LABEL_CONTENT_CLASS}`, {
+      gap: runtimeTokenVarPx(`component.radioLabel.size.${sizeKey}.contentGap`)
+    }),
+    toCssRule(`.${RADIO_LABEL_ROOT_CLASS}[data-size="${sizeKey}"] .${RADIO_LABEL_TEXT_CLASS}`, {
+      "font-size": runtimeTokenVarPx(`component.radioLabel.typography.label.${sizeKey}.fontSize`),
+      "letter-spacing": runtimeTokenVarPx(`component.radioLabel.typography.label.${sizeKey}.letterSpacing`),
+      "line-height": runtimeTokenVarPx(`component.radioLabel.typography.label.${sizeKey}.lineHeight`)
+    }),
+    toCssRule(`.${RADIO_LABEL_ROOT_CLASS}[data-size="${sizeKey}"] .${RADIO_LABEL_DESCRIPTION_CLASS}`, {
+      "font-size": runtimeTokenVarPx(`component.radioLabel.typography.description.${sizeKey}.fontSize`),
+      "letter-spacing": runtimeTokenVarPx(`component.radioLabel.typography.description.${sizeKey}.letterSpacing`),
+      "line-height": runtimeTokenVarPx(`component.radioLabel.typography.description.${sizeKey}.lineHeight`)
+    })
+  ]),
+  toCssRule(`.${RADIO_LABEL_ROOT_CLASS}[data-disabled="false"] .${RADIO_LABEL_TEXT_CLASS}`, {
+    color: runtimeTokenVar("component.radioLabel.color.label.default")
+  }),
+  toCssRule(`.${RADIO_LABEL_ROOT_CLASS}[data-disabled="false"] .${RADIO_LABEL_DESCRIPTION_CLASS}`, {
+    color: runtimeTokenVar("component.radioLabel.color.description.default")
+  }),
+  toCssRule(`.${RADIO_LABEL_ROOT_CLASS}[data-disabled="true"] .${RADIO_LABEL_TEXT_CLASS}`, {
+    color: runtimeTokenVar("component.radioLabel.color.label.disabled")
+  }),
+  toCssRule(`.${RADIO_LABEL_ROOT_CLASS}[data-disabled="true"] .${RADIO_LABEL_DESCRIPTION_CLASS}`, {
+    color: runtimeTokenVar("component.radioLabel.color.description.disabled")
+  })
+].join("");
 
 export function RadioLabel({
   brand = "Cars24",
@@ -81,60 +112,22 @@ export function RadioLabel({
   const sizeKey = getSizeKey(size);
   const labelId = `${resolvedId}-label`;
   const descriptionId = description ? `${resolvedId}-description` : undefined;
-  const layoutGap = Number(getRequiredThemeTokenValue(brand, "component.radioLabel.layout.gap"));
-  const contentPaddingInline = Number(
-    getRequiredThemeTokenValue(brand, "component.radioLabel.layout.contentPaddingInline")
-  );
-  const contentGap = Number(
-    getRequiredThemeTokenValue(brand, `component.radioLabel.size.${sizeKey}.contentGap`)
-  );
-  const labelTypography = getTypography(brand, `component.radioLabel.typography.label.${sizeKey}`);
-  const descriptionTypography = getTypography(
-    brand,
-    `component.radioLabel.typography.description.${sizeKey}`
-  );
-  const labelColor = String(
-    getRequiredThemeTokenValue(
-      brand,
-      disabled ? "component.radioLabel.color.label.disabled" : "component.radioLabel.color.label.default"
-    )
-  );
-  const descriptionColor = String(
-    getRequiredThemeTokenValue(
-      brand,
-      disabled
-        ? "component.radioLabel.color.description.disabled"
-        : "component.radioLabel.color.description.default"
-    )
-  );
-  const labelStyles = makeTypographyStyles({
-    brand,
-    color: labelColor,
-    fontWeightPath: "typography.fontWeight.medium",
-    typography: labelTypography
-  });
-  const descriptionStyles = {
-    ...makeTypographyStyles({
-      brand,
-      color: descriptionColor,
-      fontWeightPath: "typography.fontWeight.regular",
-      typography: descriptionTypography
-    }),
-    maxWidth: "100%"
-  } satisfies CSSProperties;
   const ariaDescribedBy = joinIds(descriptionId, rest["aria-describedby"]);
   const ariaLabelledBy = joinIds(labelId, rest["aria-labelledby"]);
+  const repoBrand = normalizeBrandId(brand);
+
+  useInsertionEffect(() => {
+    ensureStyleSheet(RADIO_LABEL_STYLESHEET_ID, RADIO_LABEL_STYLESHEET);
+  }, []);
 
   return (
     <div
-      className={className}
-      style={{
-        alignItems: "flex-start",
-        display: "flex",
-        gap: layoutGap,
-        maxWidth: "100%",
-        ...style
-      }}
+      className={joinClassNames(RADIO_LABEL_ROOT_CLASS, className)}
+      data-brand={repoBrand}
+      data-disabled={String(disabled)}
+      data-has-description={String(Boolean(description))}
+      data-size={sizeKey}
+      style={style}
     >
       <Radio
         {...rest}
@@ -146,24 +139,12 @@ export function RadioLabel({
         size={size}
       />
 
-      <label
-        htmlFor={resolvedId}
-        style={{
-          cursor: disabled ? "not-allowed" : "pointer",
-          display: "flex",
-          flex: "1 1 auto",
-          flexDirection: "column",
-          gap: description ? contentGap : 0,
-          maxWidth: "100%",
-          minWidth: 0,
-          paddingInline: contentPaddingInline
-        }}
-      >
-        <span id={labelId} style={labelStyles}>
+      <label className={RADIO_LABEL_CONTENT_CLASS} htmlFor={resolvedId}>
+        <span className={RADIO_LABEL_TEXT_CLASS} id={labelId}>
           {label}
         </span>
         {description ? (
-          <p id={descriptionId} style={descriptionStyles}>
+          <p className={RADIO_LABEL_DESCRIPTION_CLASS} id={descriptionId}>
             {description}
           </p>
         ) : null}

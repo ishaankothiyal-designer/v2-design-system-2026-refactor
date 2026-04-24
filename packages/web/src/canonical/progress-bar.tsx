@@ -1,7 +1,7 @@
 import type { CSSProperties, HTMLAttributes } from "react";
 import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
-import { getRequiredThemeTokenValue } from "../theme";
+import { getRequiredThemeTokenValue, pxToRem, tokenValueToRem } from "../theme";
 
 export const canonicalProgressBarWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.progressBar"
@@ -43,11 +43,11 @@ function clamp(value: number, min: number, max: number) {
 }
 
 function toCssDimension(value: number | string) {
-  return typeof value === "number" ? `${value}px` : value;
+  return typeof value === "number" ? pxToRem(value) : value;
 }
 
 function toPx(value: number) {
-  return `${value}px`;
+  return tokenValueToRem(value);
 }
 
 function formatPercentage(percentage: number) {
@@ -65,7 +65,7 @@ function getVisualFillPercentage(percentage: number) {
 function getProgressBarMetrics(brand: DisplayBrandId): ProgressBarMetrics {
   return {
     fillColor: String(getRequiredThemeTokenValue(brand, "component.switch.color.selected.track")),
-    fillRadius: `${Number(getRequiredThemeTokenValue(brand, "radius.pill"))}px`,
+    fillRadius: pxToRem(Number(getRequiredThemeTokenValue(brand, "radius.pill"))),
     fontFamily: String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans")),
     fontWeightRegular: Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.regular")),
     labelColor: String(getRequiredThemeTokenValue(brand, "component.textInput.color.helper.default.text")),
@@ -76,7 +76,7 @@ function getProgressBarMetrics(brand: DisplayBrandId): ProgressBarMetrics {
     labelLineHeight: Number(getRequiredThemeTokenValue(brand, "component.label.sm.typography.label.lineHeight")),
     trackColor: String(getRequiredThemeTokenValue(brand, "component.iconButton.color.light.outline.black.rest.border")),
     trackHeight: Number(getRequiredThemeTokenValue(brand, "spacing.2")),
-    trackRadius: `${Number(getRequiredThemeTokenValue(brand, "radius.alt.xs"))}px`
+    trackRadius: pxToRem(Number(getRequiredThemeTokenValue(brand, "radius.alt.xs")))
   };
 }
 

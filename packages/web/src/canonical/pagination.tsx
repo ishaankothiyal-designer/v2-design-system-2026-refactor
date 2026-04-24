@@ -1,7 +1,7 @@
 import type { CSSProperties, HTMLAttributes } from "react";
 import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
-import { getRequiredThemeTokenValue } from "../theme";
+import { getRequiredThemeTokenValue, pxToRem } from "../theme";
 import { Icon } from "./icon";
 
 export const canonicalPaginationWebContract = designSystemRegistry.components.find(
@@ -99,13 +99,17 @@ function getMetrics(brand: DisplayBrandId, platform: PaginationPlatform): Pagina
   const fontWeight = String(getRequiredThemeTokenValue(brand, "typography.fontWeight.medium"));
   const typographySizeKey = platform === "Desktop" ? "md" : "sm";
   const itemSizeKey = platform === "Desktop" ? "md" : "sm";
-  const fontSize = `${Number(getRequiredThemeTokenValue(brand, `component.linkButton.typography.${typographySizeKey}.fontSize`))}px`;
-  const lineHeight = `${Number(getRequiredThemeTokenValue(brand, `component.linkButton.typography.${typographySizeKey}.lineHeight`))}px`;
-  const letterSpacing = `${Number(
-    getRequiredThemeTokenValue(brand, `component.linkButton.typography.${typographySizeKey}.letterSpacing`)
-  )}px`;
-  const itemSize = `${Number(getRequiredThemeTokenValue(brand, `component.iconButton.size.${itemSizeKey}.boxSize`))}px`;
-  const borderWidth = `${Number(getRequiredThemeTokenValue(brand, "component.iconButton.border.width"))}px`;
+  const fontSize = pxToRem(
+    Number(getRequiredThemeTokenValue(brand, `component.linkButton.typography.${typographySizeKey}.fontSize`))
+  );
+  const lineHeight = pxToRem(
+    Number(getRequiredThemeTokenValue(brand, `component.linkButton.typography.${typographySizeKey}.lineHeight`))
+  );
+  const letterSpacing = pxToRem(
+    Number(getRequiredThemeTokenValue(brand, `component.linkButton.typography.${typographySizeKey}.letterSpacing`))
+  );
+  const itemSize = pxToRem(Number(getRequiredThemeTokenValue(brand, `component.iconButton.size.${itemSizeKey}.boxSize`)));
+  const borderWidth = pxToRem(Number(getRequiredThemeTokenValue(brand, "component.iconButton.border.width")));
   const pageBackground = String(
     getRequiredThemeTokenValue(brand, "component.iconButton.color.light.outline.black.rest.background")
   );
@@ -116,10 +120,10 @@ function getMetrics(brand: DisplayBrandId, platform: PaginationPlatform): Pagina
     getRequiredThemeTokenValue(brand, "component.iconButton.color.light.outline.black.rest.foreground")
   );
   const iconColorDisabled = String(getRequiredThemeTokenValue(brand, "component.iconButton.color.light.disabled.foreground"));
-  const iconSize = `${Number(getRequiredThemeTokenValue(brand, "component.phoneInput.icon.countryChevronSize"))}px`;
+  const iconSize = pxToRem(Number(getRequiredThemeTokenValue(brand, "component.phoneInput.icon.countryChevronSize")));
   const activeBackground = String(getRequiredThemeTokenValue(brand, "color.brand.alt.500"));
   const inverseTextColor = String(getRequiredThemeTokenValue(brand, "color.text.inverse"));
-  const pillRadius = `${Number(getRequiredThemeTokenValue(brand, "radius.pill"))}px`;
+  const pillRadius = pxToRem(Number(getRequiredThemeTokenValue(brand, "radius.pill")));
 
   return {
     borderColor,
@@ -127,7 +131,7 @@ function getMetrics(brand: DisplayBrandId, platform: PaginationPlatform): Pagina
     fontFamily,
     fontSize,
     fontWeight,
-    gap: "6px",
+    gap: pxToRem(6),
     iconColor: textColor,
     iconColorDisabled,
     iconSize,

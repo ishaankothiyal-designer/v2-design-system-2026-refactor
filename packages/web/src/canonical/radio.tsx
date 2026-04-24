@@ -1,16 +1,24 @@
 import {
   type ChangeEvent,
-  type CSSProperties,
   type FocusEvent,
   type InputHTMLAttributes,
   useEffect,
   useId,
+  useInsertionEffect,
   useRef,
   useState
 } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
-import { getRequiredThemeTokenValue } from "../theme";
+import { type DisplayBrandId, normalizeBrandId } from "@geist/tokens";
+import {
+  ensureStyleSheet,
+  ensureVisuallyHiddenStyles,
+  joinClassNames,
+  runtimeTokenVar,
+  runtimeTokenVarPx,
+  toCssRule,
+  VISUALLY_HIDDEN_CLASS
+} from "./runtime-styles";
 
 export const canonicalRadioWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.radio"
@@ -18,78 +26,80 @@ export const canonicalRadioWebContract = designSystemRegistry.components.find(
 
 export type RadioSize = "Small" | "Medium";
 
-type RadioSizeTokens = {
-  borderWidth: number;
-  boxSize: number;
-  disabledSelectedBorderWidth: number;
-  dotSize: number;
-  selectedBorderWidth: number;
-};
-
-type RadioVisualColors = {
-  background: string;
-  border: string;
-  foreground: string;
-};
-
-const VISUALLY_HIDDEN_INPUT_STYLES: CSSProperties = {
-  border: 0,
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  margin: -1,
-  overflow: "hidden",
-  padding: 0,
-  position: "absolute",
-  whiteSpace: "nowrap",
-  width: 1
-};
+const RADIO_ROOT_CLASS = "geist-radio";
+const RADIO_BOX_CLASS = "geist-radio__box";
+const RADIO_DOT_CLASS = "geist-radio__dot";
+const RADIO_STYLESHEET_ID = "geist-radio-styles";
 
 function getSizeKey(size: RadioSize) {
   return size === "Medium" ? "md" : "sm";
 }
 
-function getSizeTokens(brand: DisplayBrandId, size: RadioSize): RadioSizeTokens {
-  const tokenPrefix = `component.radio.size.${getSizeKey(size)}`;
+const RADIO_SIZE_KEYS = ["sm", "md"] as const;
 
-  return {
-    borderWidth: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.borderWidth`)),
-    boxSize: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.boxSize`)),
-    disabledSelectedBorderWidth: Number(
-      getRequiredThemeTokenValue(brand, `${tokenPrefix}.disabledSelectedBorderWidth`)
-    ),
-    dotSize: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.dotSize`)),
-    selectedBorderWidth: Number(
-      getRequiredThemeTokenValue(brand, `${tokenPrefix}.selectedBorderWidth`)
-    )
-  };
-}
-
-function getVisualColors({
-  brand,
-  checked,
-  disabled
-}: {
-  brand: DisplayBrandId;
-  checked: boolean;
-  disabled: boolean;
-}): RadioVisualColors {
-  const tokenPrefix = disabled
-    ? checked
-      ? "component.radio.color.disabled.selected"
-      : "component.radio.color.disabled.rest"
-    : checked
-      ? "component.radio.color.selected"
-      : "component.radio.color.rest";
-
-  return {
-    background: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.background`)),
-    border: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.border`)),
-    foreground: checked
-      ? String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.foreground`))
-      : "transparent"
-  };
-}
+const RADIO_STYLESHEET = [
+  toCssRule(`.${RADIO_ROOT_CLASS}`, {
+    cursor: "pointer",
+    display: "inline-flex",
+    "line-height": "0",
+    position: "relative",
+    "vertical-align": "top"
+  }),
+  toCssRule(`.${RADIO_ROOT_CLASS}[data-disabled="true"]`, {
+    cursor: "not-allowed"
+  }),
+  toCssRule(`.${RADIO_BOX_CLASS}`, {
+    "align-items": "center",
+    "box-sizing": "border-box",
+    display: "inline-flex",
+    "justify-content": "center",
+  }),
+  toCssRule(`.${RADIO_ROOT_CLASS}[data-focused="true"] .${RADIO_BOX_CLASS}`, {
+    outline: `${runtimeTokenVarPx("component.radio.focus.outlineWidth")} solid ${runtimeTokenVar("color.border.focus")}`,
+    "outline-offset": runtimeTokenVarPx("component.radio.focus.outlineOffset")
+  }),
+  toCssRule(`.${RADIO_ROOT_CLASS}:focus-within .${RADIO_BOX_CLASS}`, {
+    outline: `${runtimeTokenVarPx("component.radio.focus.outlineWidth")} solid ${runtimeTokenVar("color.border.focus")}`,
+    "outline-offset": runtimeTokenVarPx("component.radio.focus.outlineOffset")
+  }),
+  toCssRule(`.${RADIO_DOT_CLASS}`, {
+    display: "block",
+    "border-radius": runtimeTokenVarPx("radius.pill")
+  }),
+  ...RADIO_SIZE_KEYS.flatMap((sizeKey) => [
+    toCssRule(`.${RADIO_ROOT_CLASS}[data-size="${sizeKey}"] .${RADIO_BOX_CLASS}`, {
+      "border-radius": runtimeTokenVarPx("radius.pill"),
+      height: runtimeTokenVarPx(`component.radio.size.${sizeKey}.boxSize`),
+      width: runtimeTokenVarPx(`component.radio.size.${sizeKey}.boxSize`)
+    }),
+    toCssRule(`.${RADIO_ROOT_CLASS}[data-size="${sizeKey}"] .${RADIO_DOT_CLASS}`, {
+      height: runtimeTokenVarPx(`component.radio.size.${sizeKey}.dotSize`),
+      width: runtimeTokenVarPx(`component.radio.size.${sizeKey}.dotSize`)
+    }),
+    toCssRule(`.${RADIO_ROOT_CLASS}[data-size="${sizeKey}"][data-disabled="false"][data-selected="false"] .${RADIO_BOX_CLASS}`, {
+      background: runtimeTokenVar("component.radio.color.rest.background"),
+      border: `${runtimeTokenVarPx(`component.radio.size.${sizeKey}.borderWidth`)} solid ${runtimeTokenVar("component.radio.color.rest.border")}`
+    }),
+    toCssRule(`.${RADIO_ROOT_CLASS}[data-size="${sizeKey}"][data-disabled="false"][data-selected="true"] .${RADIO_BOX_CLASS}`, {
+      background: runtimeTokenVar("component.radio.color.selected.background"),
+      border: `${runtimeTokenVarPx(`component.radio.size.${sizeKey}.selectedBorderWidth`)} solid ${runtimeTokenVar("component.radio.color.selected.border")}`
+    }),
+    toCssRule(`.${RADIO_ROOT_CLASS}[data-size="${sizeKey}"][data-disabled="false"][data-selected="true"] .${RADIO_DOT_CLASS}`, {
+      background: runtimeTokenVar("component.radio.color.selected.foreground")
+    }),
+    toCssRule(`.${RADIO_ROOT_CLASS}[data-size="${sizeKey}"][data-disabled="true"][data-selected="false"] .${RADIO_BOX_CLASS}`, {
+      background: runtimeTokenVar("component.radio.color.disabled.rest.background"),
+      border: `${runtimeTokenVarPx(`component.radio.size.${sizeKey}.borderWidth`)} solid ${runtimeTokenVar("component.radio.color.disabled.rest.border")}`
+    }),
+    toCssRule(`.${RADIO_ROOT_CLASS}[data-size="${sizeKey}"][data-disabled="true"][data-selected="true"] .${RADIO_BOX_CLASS}`, {
+      background: runtimeTokenVar("component.radio.color.disabled.selected.background"),
+      border: `${runtimeTokenVarPx(`component.radio.size.${sizeKey}.disabledSelectedBorderWidth`)} solid ${runtimeTokenVar("component.radio.color.disabled.selected.border")}`
+    }),
+    toCssRule(`.${RADIO_ROOT_CLASS}[data-size="${sizeKey}"][data-disabled="true"][data-selected="true"] .${RADIO_DOT_CLASS}`, {
+      background: runtimeTokenVar("component.radio.color.disabled.selected.foreground")
+    })
+  ])
+].join("");
 
 export interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "type"> {
   brand?: DisplayBrandId;
@@ -118,24 +128,13 @@ export function Radio({
   const isCheckedControlled = checked !== undefined;
   const resolvedChecked = isCheckedControlled ? Boolean(checked) : internalChecked;
   const resolvedId = id ?? generatedId;
+  const repoBrand = normalizeBrandId(brand);
+  const sizeKey = getSizeKey(size);
 
-  const sizeTokens = getSizeTokens(brand, size);
-  const colors = getVisualColors({
-    brand,
-    checked: resolvedChecked,
-    disabled
-  });
-  const borderRadius = Number(getRequiredThemeTokenValue(brand, "radius.pill"));
-  const focusOutlineWidth = Number(getRequiredThemeTokenValue(brand, "component.radio.focus.outlineWidth"));
-  const focusOutlineOffset = Number(
-    getRequiredThemeTokenValue(brand, "component.radio.focus.outlineOffset")
-  );
-  const focusColor = String(getRequiredThemeTokenValue(brand, "color.border.focus"));
-  const borderWidth = resolvedChecked
-    ? disabled
-      ? sizeTokens.disabledSelectedBorderWidth
-      : sizeTokens.selectedBorderWidth
-    : sizeTokens.borderWidth;
+  useInsertionEffect(() => {
+    ensureStyleSheet(RADIO_STYLESHEET_ID, RADIO_STYLESHEET);
+    ensureVisuallyHiddenStyles();
+  }, []);
 
   useEffect(() => {
     if (isCheckedControlled) {
@@ -174,57 +173,30 @@ export function Radio({
 
   return (
     <label
-      className={className}
+      className={joinClassNames(RADIO_ROOT_CLASS, className)}
+      data-brand={repoBrand}
+      data-disabled={String(disabled)}
+      data-focused={String(focused)}
+      data-selected={String(resolvedChecked)}
+      data-size={sizeKey}
       htmlFor={resolvedId}
-      style={{
-        cursor: disabled ? "not-allowed" : "pointer",
-        display: "inline-flex",
-        lineHeight: 0,
-        position: "relative",
-        verticalAlign: "top",
-        ...style
-      }}
+      style={style}
     >
       <input
         {...rest}
         ref={inputRef}
         checked={resolvedChecked}
+        className={VISUALLY_HIDDEN_CLASS}
         disabled={disabled}
         id={resolvedId}
         onBlur={handleBlur}
         onChange={handleChange}
         onFocus={handleFocus}
-        style={VISUALLY_HIDDEN_INPUT_STYLES}
         type="radio"
       />
 
-      <span
-        aria-hidden="true"
-        style={{
-          alignItems: "center",
-          background: colors.background,
-          border: `${borderWidth}px solid ${colors.border}`,
-          borderRadius,
-          boxSizing: "border-box",
-          display: "inline-flex",
-          height: sizeTokens.boxSize,
-          justifyContent: "center",
-          outline: focused ? `${focusOutlineWidth}px solid ${focusColor}` : undefined,
-          outlineOffset: focused ? `${focusOutlineOffset}px` : undefined,
-          width: sizeTokens.boxSize
-        }}
-      >
-        {resolvedChecked ? (
-          <span
-            style={{
-              background: colors.foreground,
-              borderRadius,
-              display: "block",
-              height: sizeTokens.dotSize,
-              width: sizeTokens.dotSize
-            }}
-          />
-        ) : null}
+      <span aria-hidden="true" className={RADIO_BOX_CLASS}>
+        {resolvedChecked ? <span className={RADIO_DOT_CLASS} /> : null}
       </span>
     </label>
   );

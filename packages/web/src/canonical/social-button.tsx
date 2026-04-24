@@ -6,12 +6,12 @@ import {
   type MouseEvent,
   type ReactElement,
   type ReactNode,
+  useInsertionEffect,
   useState
 } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
-import { getRequiredThemeTokenValue } from "../theme";
-import { getTapFeedbackStyles } from "./press-feedback";
+import { normalizeBrandId, type DisplayBrandId } from "@geist/tokens";
+import { ensureStyleSheet, runtimeTokenVar, runtimeTokenVarPx, toCssRule } from "./runtime-styles";
 
 export const canonicalSocialButtonWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.socialButton"
@@ -20,101 +20,121 @@ export const canonicalSocialButtonWebContract = designSystemRegistry.components.
 export type SocialButtonSize = "Medium" | "Large";
 export type SocialButtonPreviewState = "Rest" | "Hover";
 
-type SocialButtonMetrics = {
-  gap: number;
-  height: number;
-  iconSize: number;
-  paddingInline: number;
-};
+type StylableElement = ReactElement<{ style?: CSSProperties; className?: string }>;
+type SocialButtonSizeKey = "md" | "lg";
 
-type SocialButtonTypography = {
-  fontSize: number;
-  letterSpacing: number;
-  lineHeight: number;
-};
+const SOCIAL_BUTTON_ROOT_CLASS = "geist-social-button";
+const SOCIAL_BUTTON_LABEL_CLASS = "geist-social-button__label";
+const SOCIAL_BUTTON_SLOT_CLASS = "geist-social-button__slot";
+const SOCIAL_BUTTON_STYLESHEET_ID = "geist-social-button-styles";
+const SOCIAL_BUTTON_TAP_TRANSFORM = "translateY(1px) scale(0.985)";
+const SOCIAL_BUTTON_TAP_TRANSITION = "transform 140ms cubic-bezier(0.2, 0, 0, 1)";
 
-type SocialButtonSurface = {
-  background: string;
-  border: string;
-  foreground: string;
-  icon: string;
-};
-
-type StylableIconElement = ReactElement<{ style?: CSSProperties }>;
-
-function getTokenSizeKey(size: SocialButtonSize) {
+function getTokenSizeKey(size: SocialButtonSize): SocialButtonSizeKey {
   return size === "Large" ? "lg" : "md";
 }
 
-function getMetrics(brand: DisplayBrandId, size: SocialButtonSize): SocialButtonMetrics {
-  const tokenSizeKey = getTokenSizeKey(size);
-  const tokenPrefix = `component.socialButton.size.${tokenSizeKey}`;
+const SOCIAL_BUTTON_STYLESHEET = [
+  toCssRule(`.${SOCIAL_BUTTON_ROOT_CLASS}`, {
+    "align-items": "center",
+    appearance: "none",
+    border: `${runtimeTokenVarPx("component.socialButton.border.width")} solid transparent`,
+    "box-sizing": "border-box",
+    cursor: "pointer",
+    display: "inline-flex",
+    "justify-content": "center",
+    "min-width": "0",
+    outline: "none",
+    "outline-offset": runtimeTokenVarPx("component.socialButton.focus.outlineOffset"),
+    "text-decoration": "none",
+    "transform-origin": "center center",
+    transition: [
+      "background-color 180ms cubic-bezier(0.2, 0, 0, 1)",
+      "border-color 180ms cubic-bezier(0.2, 0, 0, 1)",
+      "outline-color 180ms cubic-bezier(0.2, 0, 0, 1)",
+      SOCIAL_BUTTON_TAP_TRANSITION
+    ].join(", "),
+    "will-change": "transform"
+  }),
+  toCssRule(`.${SOCIAL_BUTTON_ROOT_CLASS}[data-focused="true"]`, {
+    outline: `${runtimeTokenVarPx("component.socialButton.focus.outlineWidth")} solid ${runtimeTokenVar("color.border.focus")}`
+  }),
+  toCssRule(`.${SOCIAL_BUTTON_ROOT_CLASS}:focus-visible`, {
+    outline: `${runtimeTokenVarPx("component.socialButton.focus.outlineWidth")} solid ${runtimeTokenVar("color.border.focus")}`
+  }),
+  toCssRule(`.${SOCIAL_BUTTON_ROOT_CLASS}[data-disabled="true"]`, {
+    cursor: "not-allowed",
+    "will-change": "auto"
+  }),
+  toCssRule(`.${SOCIAL_BUTTON_ROOT_CLASS}[data-pressed="true"][data-disabled="false"]`, {
+    transform: SOCIAL_BUTTON_TAP_TRANSFORM
+  }),
+  toCssRule(`.${SOCIAL_BUTTON_LABEL_CLASS}`, {
+    color: "inherit",
+    "font-family": `${runtimeTokenVar("typography.fontFamily.sans")}, sans-serif`,
+    "font-weight": runtimeTokenVar("typography.fontWeight.medium"),
+    "text-align": "center",
+    "white-space": "nowrap"
+  }),
+  toCssRule(`.${SOCIAL_BUTTON_SLOT_CLASS}`, {
+    "align-items": "center",
+    color: "inherit",
+    display: "inline-flex",
+    "justify-content": "center",
+    "line-height": "1"
+  }),
+  ...(["md", "lg"] as const).flatMap((sizeKey) => {
+    const radiusKey = sizeKey === "lg" ? "lg" : "md";
 
-  return {
-    gap: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.gap`)),
-    height: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.height`)),
-    iconSize: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.iconSize`)),
-    paddingInline: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.paddingInline`))
-  };
-}
+    return [
+      toCssRule(`.${SOCIAL_BUTTON_ROOT_CLASS}[data-size="${sizeKey}"]`, {
+        "border-radius": runtimeTokenVarPx(`radius.alt.${radiusKey}`),
+        gap: runtimeTokenVarPx(`component.socialButton.size.${sizeKey}.gap`),
+        height: runtimeTokenVarPx(`component.socialButton.size.${sizeKey}.height`),
+        padding: `0 ${runtimeTokenVarPx(`component.socialButton.size.${sizeKey}.paddingInline`)}`
+      }),
+      toCssRule(`.${SOCIAL_BUTTON_ROOT_CLASS}[data-size="${sizeKey}"] .${SOCIAL_BUTTON_LABEL_CLASS}`, {
+        "font-size": runtimeTokenVarPx(`component.socialButton.typography.${sizeKey}.fontSize`),
+        "letter-spacing": runtimeTokenVarPx(`component.socialButton.typography.${sizeKey}.letterSpacing`),
+        "line-height": runtimeTokenVarPx(`component.socialButton.typography.${sizeKey}.lineHeight`)
+      }),
+      toCssRule(`.${SOCIAL_BUTTON_ROOT_CLASS}[data-size="${sizeKey}"] .${SOCIAL_BUTTON_SLOT_CLASS}`, {
+        "font-size": runtimeTokenVarPx(`component.socialButton.size.${sizeKey}.iconSize`),
+        height: runtimeTokenVarPx(`component.socialButton.size.${sizeKey}.iconSize`),
+        width: runtimeTokenVarPx(`component.socialButton.size.${sizeKey}.iconSize`)
+      })
+    ];
+  }),
+  ...(["rest", "hover", "disabled"] as const).map((stateKey) => {
+    const selector =
+      stateKey === "disabled"
+        ? `.${SOCIAL_BUTTON_ROOT_CLASS}[data-disabled="true"]`
+        : `.${SOCIAL_BUTTON_ROOT_CLASS}[data-disabled="false"][data-hovered="${String(stateKey === "hover")}"]`;
 
-function getTypography(brand: DisplayBrandId, size: SocialButtonSize): SocialButtonTypography {
-  const tokenSizeKey = getTokenSizeKey(size);
-  const tokenPrefix = `component.socialButton.typography.${tokenSizeKey}`;
+    return toCssRule(selector, {
+      background: runtimeTokenVar(`component.socialButton.color.light.${stateKey}.background`),
+      "border-color": runtimeTokenVar(`component.socialButton.color.light.${stateKey}.border`),
+      color: runtimeTokenVar(`component.socialButton.color.light.${stateKey}.foreground`)
+    });
+  })
+].join("");
 
-  return {
-    fontSize: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.fontSize`)),
-    letterSpacing: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.letterSpacing`)),
-    lineHeight: Number(getRequiredThemeTokenValue(brand, `${tokenPrefix}.lineHeight`))
-  };
-}
-
-function getBorderRadius(brand: DisplayBrandId, size: SocialButtonSize) {
-  return Number(getRequiredThemeTokenValue(brand, `radius.alt.${size === "Large" ? "lg" : "md"}`));
-}
-
-function getSurface(
-  brand: DisplayBrandId,
-  active: boolean,
-  disabled: boolean
-): SocialButtonSurface {
-  const stateKey = disabled ? "disabled" : active ? "hover" : "rest";
-  const tokenPrefix = `component.socialButton.color.light.${stateKey}`;
-
-  return {
-    background: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.background`)),
-    border: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.border`)),
-    foreground: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.foreground`)),
-    icon: String(getRequiredThemeTokenValue(brand, `${tokenPrefix}.icon`))
-  };
-}
-
-function renderIcon(icon: ReactNode, color: string, size: number) {
+function renderIcon(icon: ReactNode) {
   if (!icon) {
     return null;
   }
 
-  const wrapperStyles: CSSProperties = {
-    alignItems: "center",
-    color,
-    display: "inline-flex",
-    fontSize: `${size}px`,
-    height: `${size}px`,
-    justifyContent: "center",
-    lineHeight: 1,
-    width: `${size}px`
-  };
-
   if (isValidElement(icon)) {
-    const stylableIcon = icon as StylableIconElement;
+    const element = icon as StylableElement;
 
     return (
-      <span aria-hidden style={wrapperStyles}>
-        {cloneElement(stylableIcon, {
+      <span aria-hidden className={SOCIAL_BUTTON_SLOT_CLASS}>
+        {cloneElement(element, {
+          className: [element.props.className].filter(Boolean).join(" "),
           style: {
-            ...(stylableIcon.props.style ?? {}),
-            color,
-            fontSize: `${size}px`
+            color: "inherit",
+            fontSize: "inherit",
+            ...element.props.style
           }
         })}
       </span>
@@ -122,7 +142,7 @@ function renderIcon(icon: ReactNode, color: string, size: number) {
   }
 
   return (
-    <span aria-hidden style={wrapperStyles}>
+    <span aria-hidden className={SOCIAL_BUTTON_SLOT_CLASS}>
       {icon}
     </span>
   );
@@ -138,6 +158,7 @@ export interface SocialButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonE
 export function SocialButton({
   brand = "Cars24",
   children,
+  className,
   disabled = false,
   forceState,
   icon,
@@ -156,57 +177,14 @@ export function SocialButton({
   const [pressed, setPressed] = useState(false);
   const [focused, setFocused] = useState(false);
 
-  const active = forceState === "Hover" || hovered || pressed;
-  const metrics = getMetrics(brand, size);
-  const typography = getTypography(brand, size);
-  const surface = getSurface(brand, active, disabled);
-  const borderRadius = getBorderRadius(brand, size);
-  const borderWidth = Number(getRequiredThemeTokenValue(brand, "component.socialButton.border.width"));
-  const fontFamily = String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"));
-  const fontWeight = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.medium"));
-  const focusColor = String(getRequiredThemeTokenValue(brand, "color.border.focus"));
-  const focusOutlineWidth = Number(getRequiredThemeTokenValue(brand, "component.socialButton.focus.outlineWidth"));
-  const focusOutlineOffset = Number(getRequiredThemeTokenValue(brand, "component.socialButton.focus.outlineOffset"));
+  useInsertionEffect(() => {
+    ensureStyleSheet(SOCIAL_BUTTON_STYLESHEET_ID, SOCIAL_BUTTON_STYLESHEET);
+  }, []);
 
-  const rootStyles: CSSProperties = {
-    alignItems: "center",
-    appearance: "none",
-    background: surface.background,
-    border: `${borderWidth}px solid ${surface.border}`,
-    borderRadius: `${borderRadius}px`,
-    boxSizing: "border-box",
-    color: surface.foreground,
-    cursor: disabled ? "not-allowed" : "pointer",
-    display: "inline-flex",
-    gap: `${metrics.gap}px`,
-    height: `${metrics.height}px`,
-    justifyContent: "center",
-    minWidth: 0,
-    outline: focused ? `${focusOutlineWidth}px solid ${focusColor}` : "none",
-    outlineOffset: focused ? `${focusOutlineOffset}px` : undefined,
-    padding: `0 ${metrics.paddingInline}px`,
-    textDecoration: "none",
-    transition:
-      "background-color 180ms cubic-bezier(0.2, 0, 0, 1), border-color 180ms cubic-bezier(0.2, 0, 0, 1), outline-color 180ms cubic-bezier(0.2, 0, 0, 1)",
-    ...style,
-    ...getTapFeedbackStyles({
-      disabled,
-      pressed,
-      transition: style?.transition,
-      transform: style?.transform
-    })
-  };
-
-  const labelStyles: CSSProperties = {
-    color: surface.foreground,
-    fontFamily: `${fontFamily}, sans-serif`,
-    fontSize: `${typography.fontSize}px`,
-    fontWeight,
-    letterSpacing: `${typography.letterSpacing}px`,
-    lineHeight: `${typography.lineHeight}px`,
-    textAlign: "center",
-    whiteSpace: "nowrap"
-  };
+  const normalizedBrand = normalizeBrandId(brand);
+  const isHovered = forceState === "Hover" || hovered || pressed;
+  const isPressed = !disabled && (pressed || forceState === "Hover");
+  const isFocused = focused;
 
   function handleMouseEnter(event: MouseEvent<HTMLButtonElement>) {
     if (!disabled) {
@@ -236,25 +214,32 @@ export function SocialButton({
   return (
     <button
       {...rest}
-      type={type}
+      className={[SOCIAL_BUTTON_ROOT_CLASS, className].filter(Boolean).join(" ")}
+      data-brand={normalizedBrand}
+      data-disabled={String(disabled)}
+      data-focused={String(isFocused)}
+      data-hovered={String(isHovered)}
+      data-pressed={String(isPressed)}
+      data-size={getTokenSizeKey(size)}
       disabled={disabled}
-      style={rootStyles}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      onFocus={(event) => {
-        setFocused(true);
-        onFocus?.(event);
-      }}
+      type={type}
       onBlur={(event) => {
         setFocused(false);
         setPressed(false);
         onBlur?.(event);
       }}
+      onFocus={(event) => {
+        setFocused(true);
+        onFocus?.(event);
+      }}
+      onMouseDown={handleMouseDown}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onMouseUp={handleMouseUp}
+      style={style}
     >
-      {renderIcon(icon, surface.icon, metrics.iconSize)}
-      {children ? <span style={labelStyles}>{children}</span> : null}
+      {renderIcon(icon)}
+      {children ? <span className={SOCIAL_BUTTON_LABEL_CLASS}>{children}</span> : null}
     </button>
   );
 }

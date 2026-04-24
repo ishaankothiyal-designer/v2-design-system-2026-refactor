@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node ./scripts/generate-design-token-css.mjs && storybook build",
-    "storybook": "node ./scripts/generate-design-token-css.mjs && LAUNCH_EDITOR='/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' storybook dev -p 6008",
+    "build": "tsx ../../scripts/sync-design-system-registry.ts && node ./scripts/generate-design-token-css.mjs && storybook build",
+    "storybook": "tsx ../../scripts/sync-design-system-registry.ts && node ./scripts/generate-design-token-css.mjs && LAUNCH_EDITOR='/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' storybook dev -p 6008",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {

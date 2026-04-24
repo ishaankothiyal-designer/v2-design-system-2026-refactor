@@ -1,7 +1,7 @@
 import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
 import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
-import { getRequiredThemeTokenValue } from "../theme";
+import { getRequiredThemeTokenValue, pxToRem } from "../theme";
 import { Button, type ButtonProps, type ButtonShape } from "./button";
 import { LinkButton, type LinkButtonProps } from "./link-button";
 
@@ -61,9 +61,9 @@ function getLayoutMetrics(brand: DisplayBrandId, size: ButtonGroupSize) {
 function getButtonLayoutStyle(type: ButtonGroupType): CSSProperties {
   if (type === "Horizontal") {
     return {
-      flex: "1 1 0",
+      flex: "1 1 180px",
       minWidth: 0,
-      width: "100%"
+      width: "auto"
     };
   }
 
@@ -103,28 +103,32 @@ export function ButtonGroup({
     alignItems: "stretch",
     display: "flex",
     flexDirection: isHorizontal ? "row" : "column",
-    gap: `${metrics.stackGap}px`,
+    flexWrap: isHorizontal ? "wrap" : "nowrap",
+    gap: pxToRem(metrics.stackGap),
     width: "100%",
     ...style
   };
 
   const contextualRowStyles: CSSProperties = {
     alignItems: "center",
-    display: "inline-flex",
-    gap: `${metrics.inlineGap}px`,
+    display: "flex",
+    flexWrap: "wrap",
+    gap: pxToRem(metrics.inlineGap),
     justifyContent: "center",
-    padding: `${metrics.contextualPaddingBlock}px 0`,
+    padding: `${pxToRem(metrics.contextualPaddingBlock)} 0`,
+    textAlign: "center",
     width: "100%"
   };
 
   const promptStyles: CSSProperties = {
     color: promptColor,
     fontFamily: `${fontFamily}, sans-serif`,
-    fontSize: `${metrics.promptFontSize}px`,
+    fontSize: pxToRem(metrics.promptFontSize),
     fontWeight,
-    letterSpacing: `${metrics.promptLetterSpacing}px`,
-    lineHeight: `${metrics.promptLineHeight}px`,
-    whiteSpace: "nowrap"
+    letterSpacing: pxToRem(metrics.promptLetterSpacing),
+    lineHeight: pxToRem(metrics.promptLineHeight),
+    overflowWrap: "anywhere",
+    whiteSpace: "normal"
   };
 
   const {

@@ -26,6 +26,42 @@
     }
   },
   "component": {
+    "button": {
+      "color": {
+        "light": {
+          "solid": {
+            "rest": {
+              "background": "#FB2C36"
+            },
+            "hover": {
+              "background": "#C91D27"
+            }
+          },
+          "outline": {
+            "rest": {
+              "border": "#FB2C36",
+              "foreground": "#FB2C36"
+            },
+            "hover": {
+              "background": "#F1F5F9",
+              "border": "#FB2C36",
+              "foreground": "#FB2C36"
+            }
+          },
+          "ghost": {
+            "rest": {
+              "foreground": "#FB2C36",
+              "loaderIndicator": "#FB2C36"
+            },
+            "hover": {
+              "background": "#F1F5F9",
+              "foreground": "#C91D27",
+              "loaderIndicator": "#C91D27"
+            }
+          }
+        }
+      }
+    },
     "captionButton": {
       "color": {
         "light": {
