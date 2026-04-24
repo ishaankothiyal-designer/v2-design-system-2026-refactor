@@ -1,0 +1,15 @@
+interface:
+  display_name: "Figma Component Implementer"
+  short_description: "Implement Figma components with repo tokens and Storybook"
+  default_prompt: "Use $figma-component-implementer to turn a Figma component node into an exact Geist repo implementation by checking existing canonical components first, mapping tokens exactly, and updating Storybook."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "figma"
+      description: "Figma MCP server"
+      transport: "streamable_http"
+      url: "https://mcp.figma.com/mcp"
+
+policy:
+  allow_implicit_invocation: true

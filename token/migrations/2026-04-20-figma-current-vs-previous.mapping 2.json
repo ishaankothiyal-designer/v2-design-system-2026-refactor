@@ -1,0 +1,179 @@
+{
+  "source": {
+    "previous": "token/token.json",
+    "current": "Figma local variables: skMLeeIF8mbzAT265CI8nP"
+  },
+  "summary": {
+    "no_collection_moves": true,
+    "direct_semantic_edits": true,
+    "theme_value_changes": true,
+    "primitive_additions_only": true,
+    "utility_additions_only": true
+  },
+  "collections": {
+    "Theme": {
+      "same_token_set": true,
+      "changed_values": [
+        {
+          "token": "radius/md",
+          "mode": "CarInfo",
+          "old": 8,
+          "new": 4
+        },
+        {
+          "token": "radius/lg",
+          "mode": "CarInfo",
+          "old": 12,
+          "new": 4
+        },
+        {
+          "token": "radius/xl",
+          "mode": "CarInfo",
+          "old": 12,
+          "new": 8
+        },
+        {
+          "token": "radius/xxl",
+          "mode": "CarInfo",
+          "old": 20,
+          "new": 8
+        },
+        {
+          "token": "radius/alt/md",
+          "mode": "CarInfo",
+          "old": 8,
+          "new": 4
+        },
+        {
+          "token": "radius/alt/lg",
+          "mode": "CarInfo",
+          "old": 12,
+          "new": 8
+        },
+        {
+          "token": "radius/alt/xl",
+          "mode": "CarInfo",
+          "old": 12,
+          "new": 8
+        }
+      ]
+    },
+    "Primitive": {
+      "added_tokens": [
+        "cool-mint/950",
+        "drive-pink/950",
+        "orange/950",
+        "pop-purple/950"
+      ],
+      "removed_tokens": [],
+      "renamed_tokens": []
+    },
+    "Utility": {
+      "added_tokens": [
+        "service/buy-car/base",
+        "service/buy-car/bold",
+        "service/buy-car/subtle",
+        "service/car-check/base",
+        "service/car-check/bold",
+        "service/car-check/subtle",
+        "service/challan/base",
+        "service/challan/bold",
+        "service/challan/subtle",
+        "service/garage/base",
+        "service/garage/bold",
+        "service/garage/subtle",
+        "service/insurance/base",
+        "service/insurance/bold",
+        "service/insurance/subtle",
+        "service/loan/base",
+        "service/loan/bold",
+        "service/loan/subtle",
+        "service/sell-car/base",
+        "service/sell-car/bold",
+        "service/sell-car/subtle"
+      ],
+      "removed_tokens": [],
+      "renamed_tokens": []
+    },
+    "Semantic": {
+      "rename_same_value": [
+        {
+          "old": "border/secondary-alt",
+          "new": "border/secondary-alpha"
+        },
+        {
+          "old": "border/secondary-alt-hover",
+          "new": "border/secondary-alpha-hover"
+        },
+        {
+          "old": "border/secondary-inverse-alt",
+          "new": "border/secondary-inverse-alpha"
+        },
+        {
+          "old": "border/secondary-inverse-alt-hover",
+          "new": "border/secondary-inverse-alpha-hover"
+        },
+        {
+          "old": "border/tertiary-alt",
+          "new": "border/tertiary-alpha"
+        },
+        {
+          "old": "border/tertiary-alt-hover",
+          "new": "border/tertiary-alpha-hover"
+        }
+      ],
+      "added_new_tokens": [
+        "bg/brand/bolder",
+        "bg/brand/bolder-hover",
+        "bg/brand/bolder-alt",
+        "bg/brand/bolder-alt-hover",
+        "border/primary-inverse",
+        "border/primary-inverse-hover",
+        "text/placeholder",
+        "text/placeholder-inverse",
+        "text/placeholder-subtle"
+      ],
+      "removed_without_direct_rename": [
+        "border/on-color"
+      ]
+    }
+  },
+  "safe_commit_mapping": {
+    "rename_references_first": [
+      {
+        "from": "border/secondary-alt",
+        "to": "border/secondary-alpha"
+      },
+      {
+        "from": "border/secondary-alt-hover",
+        "to": "border/secondary-alpha-hover"
+      },
+      {
+        "from": "border/secondary-inverse-alt",
+        "to": "border/secondary-inverse-alpha"
+      },
+      {
+        "from": "border/secondary-inverse-alt-hover",
+        "to": "border/secondary-inverse-alpha-hover"
+      },
+      {
+        "from": "border/tertiary-alt",
+        "to": "border/tertiary-alpha"
+      },
+      {
+        "from": "border/tertiary-alt-hover",
+        "to": "border/tertiary-alpha-hover"
+      }
+    ],
+    "do_not_remove_in_same_commit_if_still_referenced": [
+      "border/on-color"
+    ],
+    "component_safety_rules": [
+      "Treat -alt to -alpha semantic border changes as rename-only because underlying values stayed same.",
+      "Apply component and documentation reference updates before deleting old semantic names from any source-of-truth file.",
+      "Keep primitive and utility additions additive-only in this commit. They do not require component remapping unless explicitly consumed.",
+      "Review CarInfo radius usage in components that read Theme tokens because those values changed and can alter component shape without any semantic rename.",
+      "Do not change collection membership for any existing token in this commit."
+    ]
+  }
+}

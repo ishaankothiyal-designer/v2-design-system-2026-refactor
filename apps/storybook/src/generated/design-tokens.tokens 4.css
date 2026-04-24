@@ -1,0 +1,880 @@
+:root {
+  /* Generated from packages/tokens/tokens/base.json */
+  /**
+   * @tokens Colors
+   */
+  --color-brand-primary-50: #F6F6FF; /* color.brand.primary.50 | @presenter Color */
+  --color-brand-primary-100: #E1E3FD; /* color.brand.primary.100 | @presenter Color */
+  --color-brand-primary-500: #4736FE; /* color.brand.primary.500 | @presenter Color */
+  --color-brand-primary-600: #351ED8; /* color.brand.primary.600 | @presenter Color */
+  --color-brand-primary-700: #2A15AA; /* color.brand.primary.700 | @presenter Color */
+  --color-brand-alt-50: #F6F6FF; /* color.brand.alt.50 | @presenter Color */
+  --color-brand-alt-100: #E1E3FD; /* color.brand.alt.100 | @presenter Color */
+  --color-brand-alt-500: #4736FE; /* color.brand.alt.500 | @presenter Color */
+  --color-brand-alt-600: #351ED8; /* color.brand.alt.600 | @presenter Color */
+  --color-brand-alt-700: #2A15AA; /* color.brand.alt.700 | @presenter Color */
+  --color-brand-secondary-50: #F4ECF7; /* color.brand.secondary.50 | @presenter Color */
+  --color-brand-secondary-100: #E9D7FE; /* color.brand.secondary.100 | @presenter Color */
+  --color-brand-secondary-600: #7F56D9; /* color.brand.secondary.600 | @presenter Color */
+  --color-surface-canvas: #FFFFFF; /* color.surface.canvas | @presenter Color */
+  --color-surface-subtle: #F9FAFB; /* color.surface.subtle | @presenter Color */
+  --color-surface-raised: #FFFFFF; /* color.surface.raised | @presenter Color */
+  --color-surface-inverse: #101828; /* color.surface.inverse | @presenter Color */
+  --color-text-primary: #101828; /* color.text.primary | @presenter Color */
+  --color-text-secondary: #475467; /* color.text.secondary | @presenter Color */
+  --color-text-inverse: #FFFFFF; /* color.text.inverse | @presenter Color */
+  --color-text-muted: #667085; /* color.text.muted | @presenter Color */
+  --color-text-disabled: #94A3B8; /* color.text.disabled | @presenter Color */
+  --color-text-disabled-inverse: rgba(255, 255, 255, 0.3); /* color.text.disabledInverse | @presenter Color */
+  --color-border-default: #D0D5DD; /* color.border.default | @presenter Color */
+  --color-border-strong: #98A2B3; /* color.border.strong | @presenter Color */
+  --color-border-focus: #84CAFF; /* color.border.focus | @presenter Color */
+  --color-status-success: #12B76A; /* color.status.success | @presenter Color */
+  --color-status-warning: #F79009; /* color.status.warning | @presenter Color */
+  --color-status-danger: #F04438; /* color.status.danger | @presenter Color */
+  --color-status-info: #2E90FA; /* color.status.info | @presenter Color */
+
+  /**
+   * @tokens Typography
+   */
+  --typography-font-family-sans: Inter; /* typography.fontFamily.sans | @presenter FontFamily */
+  --typography-font-family-mono: ui-monospace; /* typography.fontFamily.mono | @presenter FontFamily */
+  --typography-font-size-xs: 12px; /* typography.fontSize.xs | @presenter FontSize */
+  --typography-font-size-sm: 14px; /* typography.fontSize.sm | @presenter FontSize */
+  --typography-font-size-md: 16px; /* typography.fontSize.md | @presenter FontSize */
+  --typography-font-size-lg: 18px; /* typography.fontSize.lg | @presenter FontSize */
+  --typography-font-size-xl: 20px; /* typography.fontSize.xl | @presenter FontSize */
+  --typography-font-size-2xl: 24px; /* typography.fontSize.2xl | @presenter FontSize */
+  --typography-line-height-xs: 16px; /* typography.lineHeight.xs | @presenter LineHeight */
+  --typography-line-height-sm: 20px; /* typography.lineHeight.sm | @presenter LineHeight */
+  --typography-line-height-md: 24px; /* typography.lineHeight.md | @presenter LineHeight */
+  --typography-line-height-lg: 28px; /* typography.lineHeight.lg | @presenter LineHeight */
+  --typography-line-height-xl: 30px; /* typography.lineHeight.xl | @presenter LineHeight */
+  --typography-line-height-2xl: 36px; /* typography.lineHeight.2xl | @presenter LineHeight */
+  --typography-font-weight-regular: 400; /* typography.fontWeight.regular | @presenter FontWeight */
+  --typography-font-weight-medium: 500; /* typography.fontWeight.medium | @presenter FontWeight */
+  --typography-font-weight-semibold: 600; /* typography.fontWeight.semibold | @presenter FontWeight */
+  --typography-font-weight-bold: 700; /* typography.fontWeight.bold | @presenter FontWeight */
+
+  /**
+   * @tokens Button Tokens
+   */
+  --component-button-typography-xs-font-size: 12px; /* component.button.typography.xs.fontSize | @presenter FontSize */
+  --component-button-typography-xs-line-height: 16px; /* component.button.typography.xs.lineHeight | @presenter LineHeight */
+  --component-button-typography-xs-letter-spacing: 0px; /* component.button.typography.xs.letterSpacing | @presenter LetterSpacing */
+  --component-button-typography-sm-font-size: 14px; /* component.button.typography.sm.fontSize | @presenter FontSize */
+  --component-button-typography-sm-line-height: 18px; /* component.button.typography.sm.lineHeight | @presenter LineHeight */
+  --component-button-typography-sm-letter-spacing: 0px; /* component.button.typography.sm.letterSpacing | @presenter LetterSpacing */
+  --component-button-typography-md-font-size: 16px; /* component.button.typography.md.fontSize | @presenter FontSize */
+  --component-button-typography-md-line-height: 20px; /* component.button.typography.md.lineHeight | @presenter LineHeight */
+  --component-button-typography-md-letter-spacing: 0px; /* component.button.typography.md.letterSpacing | @presenter LetterSpacing */
+  --component-button-typography-lg-font-size: 16px; /* component.button.typography.lg.fontSize | @presenter FontSize */
+  --component-button-typography-lg-line-height: 20px; /* component.button.typography.lg.lineHeight | @presenter LineHeight */
+  --component-button-typography-lg-letter-spacing: 0px; /* component.button.typography.lg.letterSpacing | @presenter LetterSpacing */
+  --component-button-typography-xl-font-size: 18px; /* component.button.typography.xl.fontSize | @presenter FontSize */
+  --component-button-typography-xl-line-height: 20px; /* component.button.typography.xl.lineHeight | @presenter LineHeight */
+  --component-button-typography-xl-letter-spacing: 0px; /* component.button.typography.xl.letterSpacing | @presenter LetterSpacing */
+
+  /**
+   * @tokens Link Button Tokens
+   */
+  --component-link-button-color-light-brand-rest: #4736FE; /* component.linkButton.color.light.brand.rest | @presenter Color */
+  --component-link-button-color-light-brand-hover: #4736FE; /* component.linkButton.color.light.brand.hover | @presenter Color */
+  --component-link-button-color-light-black-rest: #020617; /* component.linkButton.color.light.black.rest | @presenter Color */
+  --component-link-button-color-light-black-hover: #020617; /* component.linkButton.color.light.black.hover | @presenter Color */
+  --component-link-button-color-light-disabled: #94A3B8; /* component.linkButton.color.light.disabled | @presenter Color */
+  --component-link-button-color-dark-brand-rest: #FFFFFF; /* component.linkButton.color.dark.brand.rest | @presenter Color */
+  --component-link-button-color-dark-brand-hover: #FFFFFF; /* component.linkButton.color.dark.brand.hover | @presenter Color */
+  --component-link-button-color-dark-black-rest: #FFFFFF; /* component.linkButton.color.dark.black.rest | @presenter Color */
+  --component-link-button-color-dark-black-hover: #FFFFFF; /* component.linkButton.color.dark.black.hover | @presenter Color */
+  --component-link-button-color-dark-disabled: rgba(255, 255, 255, 0.3); /* component.linkButton.color.dark.disabled | @presenter Color */
+  --component-link-button-typography-xs-font-size: 11px; /* component.linkButton.typography.xs.fontSize | @presenter FontSize */
+  --component-link-button-typography-xs-line-height: 14px; /* component.linkButton.typography.xs.lineHeight | @presenter LineHeight */
+  --component-link-button-typography-xs-letter-spacing: 0px; /* component.linkButton.typography.xs.letterSpacing | @presenter LetterSpacing */
+  --component-link-button-typography-sm-font-size: 12px; /* component.linkButton.typography.sm.fontSize | @presenter FontSize */
+  --component-link-button-typography-sm-line-height: 16px; /* component.linkButton.typography.sm.lineHeight | @presenter LineHeight */
+  --component-link-button-typography-sm-letter-spacing: 0px; /* component.linkButton.typography.sm.letterSpacing | @presenter LetterSpacing */
+  --component-link-button-typography-md-font-size: 14px; /* component.linkButton.typography.md.fontSize | @presenter FontSize */
+  --component-link-button-typography-md-line-height: 18px; /* component.linkButton.typography.md.lineHeight | @presenter LineHeight */
+  --component-link-button-typography-md-letter-spacing: 0px; /* component.linkButton.typography.md.letterSpacing | @presenter LetterSpacing */
+  --component-link-button-typography-lg-font-size: 16px; /* component.linkButton.typography.lg.fontSize | @presenter FontSize */
+  --component-link-button-typography-lg-line-height: 20px; /* component.linkButton.typography.lg.lineHeight | @presenter LineHeight */
+  --component-link-button-typography-lg-letter-spacing: 0px; /* component.linkButton.typography.lg.letterSpacing | @presenter LetterSpacing */
+  --component-link-button-size-xs-height: 16px; /* component.linkButton.size.xs.height | @presenter Spacing */
+  --component-link-button-size-xs-gap: 2px; /* component.linkButton.size.xs.gap | @presenter Spacing */
+  --component-link-button-size-xs-icon-size: 12px; /* component.linkButton.size.xs.iconSize | @presenter Spacing */
+  --component-link-button-size-sm-height: 18px; /* component.linkButton.size.sm.height | @presenter Spacing */
+  --component-link-button-size-sm-gap: 2px; /* component.linkButton.size.sm.gap | @presenter Spacing */
+  --component-link-button-size-sm-icon-size: 12px; /* component.linkButton.size.sm.iconSize | @presenter Spacing */
+  --component-link-button-size-md-height: 20px; /* component.linkButton.size.md.height | @presenter Spacing */
+  --component-link-button-size-md-gap: 4px; /* component.linkButton.size.md.gap | @presenter Spacing */
+  --component-link-button-size-md-icon-size: 14px; /* component.linkButton.size.md.iconSize | @presenter Spacing */
+  --component-link-button-size-lg-height: 24px; /* component.linkButton.size.lg.height | @presenter Spacing */
+  --component-link-button-size-lg-gap: 4px; /* component.linkButton.size.lg.gap | @presenter Spacing */
+  --component-link-button-size-lg-icon-size: 14px; /* component.linkButton.size.lg.iconSize | @presenter Spacing */
+  --component-link-button-decoration-underline-thickness: 1px; /* component.linkButton.decoration.underlineThickness | @presenter Spacing */
+  --component-link-button-focus-outline-width: 2px; /* component.linkButton.focus.outlineWidth | @presenter Spacing */
+  --component-link-button-focus-outline-offset: 2px; /* component.linkButton.focus.outlineOffset | @presenter Spacing */
+
+  /**
+   * @tokens Phone Input Tokens
+   */
+  --component-phone-input-color-label-default: #020617; /* component.phoneInput.color.label.default | @presenter Color */
+  --component-phone-input-color-label-required: #DC2626; /* component.phoneInput.color.label.required | @presenter Color */
+  --component-phone-input-color-label-info: #94A3B8; /* component.phoneInput.color.label.info | @presenter Color */
+  --component-phone-input-color-helper-default-text: #64748B; /* component.phoneInput.color.helper.default.text | @presenter Color */
+  --component-phone-input-color-helper-default-icon: #94A3B8; /* component.phoneInput.color.helper.default.icon | @presenter Color */
+  --component-phone-input-color-helper-destructive-text: #DC2626; /* component.phoneInput.color.helper.destructive.text | @presenter Color */
+  --component-phone-input-color-helper-destructive-icon: #DC2626; /* component.phoneInput.color.helper.destructive.icon | @presenter Color */
+  --component-phone-input-color-field-rest-background: #FFFFFF; /* component.phoneInput.color.field.rest.background | @presenter Color */
+  --component-phone-input-color-field-rest-border: #CBD5E1; /* component.phoneInput.color.field.rest.border | @presenter Color */
+  --component-phone-input-color-field-rest-placeholder: #94A3B8; /* component.phoneInput.color.field.rest.placeholder | @presenter Color */
+  --component-phone-input-color-field-rest-value: #020617; /* component.phoneInput.color.field.rest.value | @presenter Color */
+  --component-phone-input-color-field-rest-country-code: #020617; /* component.phoneInput.color.field.rest.countryCode | @presenter Color */
+  --component-phone-input-color-field-rest-chevron: #020617; /* component.phoneInput.color.field.rest.chevron | @presenter Color */
+  --component-phone-input-color-field-rest-action-border: #CBD5E1; /* component.phoneInput.color.field.rest.actionBorder | @presenter Color */
+  --component-phone-input-color-field-rest-action-icon: #94A3B8; /* component.phoneInput.color.field.rest.actionIcon | @presenter Color */
+  --component-phone-input-color-field-hover-background: #FFFFFF; /* component.phoneInput.color.field.hover.background | @presenter Color */
+  --component-phone-input-color-field-hover-border: #64748B; /* component.phoneInput.color.field.hover.border | @presenter Color */
+  --component-phone-input-color-field-hover-placeholder: #94A3B8; /* component.phoneInput.color.field.hover.placeholder | @presenter Color */
+  --component-phone-input-color-field-hover-value: #020617; /* component.phoneInput.color.field.hover.value | @presenter Color */
+  --component-phone-input-color-field-hover-country-code: #020617; /* component.phoneInput.color.field.hover.countryCode | @presenter Color */
+  --component-phone-input-color-field-hover-chevron: #020617; /* component.phoneInput.color.field.hover.chevron | @presenter Color */
+  --component-phone-input-color-field-hover-action-border: #CBD5E1; /* component.phoneInput.color.field.hover.actionBorder | @presenter Color */
+  --component-phone-input-color-field-hover-action-icon: #94A3B8; /* component.phoneInput.color.field.hover.actionIcon | @presenter Color */
+  --component-phone-input-color-field-active-background: #FFFFFF; /* component.phoneInput.color.field.active.background | @presenter Color */
+  --component-phone-input-color-field-active-border: #4736FE; /* component.phoneInput.color.field.active.border | @presenter Color */
+  --component-phone-input-color-field-active-placeholder: #94A3B8; /* component.phoneInput.color.field.active.placeholder | @presenter Color */
+  --component-phone-input-color-field-active-value: #020617; /* component.phoneInput.color.field.active.value | @presenter Color */
+  --component-phone-input-color-field-active-country-code: #020617; /* component.phoneInput.color.field.active.countryCode | @presenter Color */
+  --component-phone-input-color-field-active-chevron: #020617; /* component.phoneInput.color.field.active.chevron | @presenter Color */
+  --component-phone-input-color-field-active-caret: #64748B; /* component.phoneInput.color.field.active.caret | @presenter Color */
+  --component-phone-input-color-field-active-action-border: #CBD5E1; /* component.phoneInput.color.field.active.actionBorder | @presenter Color */
+  --component-phone-input-color-field-active-action-icon: #94A3B8; /* component.phoneInput.color.field.active.actionIcon | @presenter Color */
+  --component-phone-input-color-field-filled-background: #FFFFFF; /* component.phoneInput.color.field.filled.background | @presenter Color */
+  --component-phone-input-color-field-filled-border: #94A3B8; /* component.phoneInput.color.field.filled.border | @presenter Color */
+  --component-phone-input-color-field-filled-placeholder: #94A3B8; /* component.phoneInput.color.field.filled.placeholder | @presenter Color */
+  --component-phone-input-color-field-filled-value: #020617; /* component.phoneInput.color.field.filled.value | @presenter Color */
+  --component-phone-input-color-field-filled-country-code: #020617; /* component.phoneInput.color.field.filled.countryCode | @presenter Color */
+  --component-phone-input-color-field-filled-chevron: #020617; /* component.phoneInput.color.field.filled.chevron | @presenter Color */
+  --component-phone-input-color-field-filled-action-border: #CBD5E1; /* component.phoneInput.color.field.filled.actionBorder | @presenter Color */
+  --component-phone-input-color-field-filled-action-icon: #94A3B8; /* component.phoneInput.color.field.filled.actionIcon | @presenter Color */
+  --component-phone-input-color-field-destructive-background: #FFFFFF; /* component.phoneInput.color.field.destructive.background | @presenter Color */
+  --component-phone-input-color-field-destructive-border: #DC2626; /* component.phoneInput.color.field.destructive.border | @presenter Color */
+  --component-phone-input-color-field-destructive-placeholder: #94A3B8; /* component.phoneInput.color.field.destructive.placeholder | @presenter Color */
+  --component-phone-input-color-field-destructive-value: #020617; /* component.phoneInput.color.field.destructive.value | @presenter Color */
+  --component-phone-input-color-field-destructive-country-code: #020617; /* component.phoneInput.color.field.destructive.countryCode | @presenter Color */
+  --component-phone-input-color-field-destructive-chevron: #020617; /* component.phoneInput.color.field.destructive.chevron | @presenter Color */
+  --component-phone-input-color-field-destructive-action-border: #CBD5E1; /* component.phoneInput.color.field.destructive.actionBorder | @presenter Color */
+  --component-phone-input-color-field-destructive-action-icon: #94A3B8; /* component.phoneInput.color.field.destructive.actionIcon | @presenter Color */
+  --component-phone-input-color-field-disabled-background: #E2E8F0; /* component.phoneInput.color.field.disabled.background | @presenter Color */
+  --component-phone-input-color-field-disabled-border: #CBD5E1; /* component.phoneInput.color.field.disabled.border | @presenter Color */
+  --component-phone-input-color-field-disabled-placeholder: #94A3B8; /* component.phoneInput.color.field.disabled.placeholder | @presenter Color */
+  --component-phone-input-color-field-disabled-value: #94A3B8; /* component.phoneInput.color.field.disabled.value | @presenter Color */
+  --component-phone-input-color-field-disabled-country-code: #94A3B8; /* component.phoneInput.color.field.disabled.countryCode | @presenter Color */
+  --component-phone-input-color-field-disabled-chevron: #94A3B8; /* component.phoneInput.color.field.disabled.chevron | @presenter Color */
+  --component-phone-input-color-field-disabled-action-border: #94A3B8; /* component.phoneInput.color.field.disabled.actionBorder | @presenter Color */
+  --component-phone-input-color-field-disabled-action-icon: #94A3B8; /* component.phoneInput.color.field.disabled.actionIcon | @presenter Color */
+  --component-phone-input-size-sm-height: 44px; /* component.phoneInput.size.sm.height | @presenter Spacing */
+  --component-phone-input-size-sm-container-gap: 6px; /* component.phoneInput.size.sm.containerGap | @presenter Spacing */
+  --component-phone-input-size-sm-label-padding-inline: 2px; /* component.phoneInput.size.sm.labelPaddingInline | @presenter Spacing */
+  --component-phone-input-size-sm-field-padding-inline: 12px; /* component.phoneInput.size.sm.fieldPaddingInline | @presenter Spacing */
+  --component-phone-input-size-sm-field-padding-block: 10px; /* component.phoneInput.size.sm.fieldPaddingBlock | @presenter Spacing */
+  --component-phone-input-size-sm-content-gap: 8px; /* component.phoneInput.size.sm.contentGap | @presenter Spacing */
+  --component-phone-input-size-sm-country-code-width: 46px; /* component.phoneInput.size.sm.countryCodeWidth | @presenter Spacing */
+  --component-phone-input-size-sm-action-size: 24px; /* component.phoneInput.size.sm.actionSize | @presenter Spacing */
+  --component-phone-input-size-lg-height: 48px; /* component.phoneInput.size.lg.height | @presenter Spacing */
+  --component-phone-input-size-lg-container-gap: 8px; /* component.phoneInput.size.lg.containerGap | @presenter Spacing */
+  --component-phone-input-size-lg-label-padding-inline: 2px; /* component.phoneInput.size.lg.labelPaddingInline | @presenter Spacing */
+  --component-phone-input-size-lg-field-padding-inline: 12px; /* component.phoneInput.size.lg.fieldPaddingInline | @presenter Spacing */
+  --component-phone-input-size-lg-field-padding-block: 10px; /* component.phoneInput.size.lg.fieldPaddingBlock | @presenter Spacing */
+  --component-phone-input-size-lg-content-gap: 8px; /* component.phoneInput.size.lg.contentGap | @presenter Spacing */
+  --component-phone-input-size-lg-country-code-width: 46px; /* component.phoneInput.size.lg.countryCodeWidth | @presenter Spacing */
+  --component-phone-input-size-lg-action-size: 24px; /* component.phoneInput.size.lg.actionSize | @presenter Spacing */
+  --component-phone-input-typography-label-sm-font-size: 14px; /* component.phoneInput.typography.label.sm.fontSize | @presenter FontSize */
+  --component-phone-input-typography-label-sm-line-height: 18px; /* component.phoneInput.typography.label.sm.lineHeight | @presenter LineHeight */
+  --component-phone-input-typography-label-sm-letter-spacing: 0px; /* component.phoneInput.typography.label.sm.letterSpacing | @presenter LetterSpacing */
+  --component-phone-input-typography-label-lg-font-size: 16px; /* component.phoneInput.typography.label.lg.fontSize | @presenter FontSize */
+  --component-phone-input-typography-label-lg-line-height: 20px; /* component.phoneInput.typography.label.lg.lineHeight | @presenter LineHeight */
+  --component-phone-input-typography-label-lg-letter-spacing: 0px; /* component.phoneInput.typography.label.lg.letterSpacing | @presenter LetterSpacing */
+  --component-phone-input-typography-input-font-size: 19px; /* component.phoneInput.typography.input.fontSize | @presenter FontSize */
+  --component-phone-input-typography-input-line-height: 24px; /* component.phoneInput.typography.input.lineHeight | @presenter LineHeight */
+  --component-phone-input-typography-input-letter-spacing: -0.03px; /* component.phoneInput.typography.input.letterSpacing | @presenter LetterSpacing */
+  --component-phone-input-typography-helper-font-size: 12px; /* component.phoneInput.typography.helper.fontSize | @presenter FontSize */
+  --component-phone-input-typography-helper-line-height: 18px; /* component.phoneInput.typography.helper.lineHeight | @presenter LineHeight */
+  --component-phone-input-typography-helper-letter-spacing: 0px; /* component.phoneInput.typography.helper.letterSpacing | @presenter LetterSpacing */
+  --component-phone-input-icon-flag-size: 24px; /* component.phoneInput.icon.flagSize | @presenter Spacing */
+  --component-phone-input-icon-label-info-size: 16px; /* component.phoneInput.icon.labelInfoSize | @presenter Spacing */
+  --component-phone-input-icon-helper-size: 14px; /* component.phoneInput.icon.helperSize | @presenter Spacing */
+  --component-phone-input-icon-country-chevron-size: 14px; /* component.phoneInput.icon.countryChevronSize | @presenter Spacing */
+  --component-phone-input-icon-action-size: 12px; /* component.phoneInput.icon.actionSize | @presenter Spacing */
+  --component-phone-input-border-width: 1px; /* component.phoneInput.border.width | @presenter Spacing */
+
+  /**
+   * @tokens Text Input Tokens
+   */
+  --component-text-input-color-field-rest-background: #FFFFFF; /* component.textInput.color.field.rest.background | @presenter Color */
+  --component-text-input-color-field-rest-border: #CBD5E1; /* component.textInput.color.field.rest.border | @presenter Color */
+  --component-text-input-color-field-rest-placeholder: #94A3B8; /* component.textInput.color.field.rest.placeholder | @presenter Color */
+  --component-text-input-color-field-rest-value: #020617; /* component.textInput.color.field.rest.value | @presenter Color */
+  --component-text-input-color-field-rest-affix: #94A3B8; /* component.textInput.color.field.rest.affix | @presenter Color */
+  --component-text-input-color-field-hover-background: #F6F6FF; /* component.textInput.color.field.hover.background | @presenter Color */
+  --component-text-input-color-field-hover-border: #C8CCFB; /* component.textInput.color.field.hover.border | @presenter Color */
+  --component-text-input-color-field-hover-placeholder: #94A3B8; /* component.textInput.color.field.hover.placeholder | @presenter Color */
+  --component-text-input-color-field-hover-value: #020617; /* component.textInput.color.field.hover.value | @presenter Color */
+  --component-text-input-color-field-hover-affix: #94A3B8; /* component.textInput.color.field.hover.affix | @presenter Color */
+  --component-text-input-color-field-active-background: #FFFFFF; /* component.textInput.color.field.active.background | @presenter Color */
+  --component-text-input-color-field-active-border: #4736FE; /* component.textInput.color.field.active.border | @presenter Color */
+  --component-text-input-color-field-active-placeholder: #94A3B8; /* component.textInput.color.field.active.placeholder | @presenter Color */
+  --component-text-input-color-field-active-value: #020617; /* component.textInput.color.field.active.value | @presenter Color */
+  --component-text-input-color-field-active-affix: #94A3B8; /* component.textInput.color.field.active.affix | @presenter Color */
+  --component-text-input-color-field-typed-background: #FFFFFF; /* component.textInput.color.field.typed.background | @presenter Color */
+  --component-text-input-color-field-typed-border: #CBD5E1; /* component.textInput.color.field.typed.border | @presenter Color */
+  --component-text-input-color-field-typed-placeholder: #94A3B8; /* component.textInput.color.field.typed.placeholder | @presenter Color */
+  --component-text-input-color-field-typed-value: #020617; /* component.textInput.color.field.typed.value | @presenter Color */
+  --component-text-input-color-field-typed-affix: #94A3B8; /* component.textInput.color.field.typed.affix | @presenter Color */
+  --component-text-input-color-field-error-background: #FFFFFF; /* component.textInput.color.field.error.background | @presenter Color */
+  --component-text-input-color-field-error-border: #DC2626; /* component.textInput.color.field.error.border | @presenter Color */
+  --component-text-input-color-field-error-placeholder: #94A3B8; /* component.textInput.color.field.error.placeholder | @presenter Color */
+  --component-text-input-color-field-error-value: #020617; /* component.textInput.color.field.error.value | @presenter Color */
+  --component-text-input-color-field-error-affix: #94A3B8; /* component.textInput.color.field.error.affix | @presenter Color */
+  --component-text-input-color-field-success-background: #FFFFFF; /* component.textInput.color.field.success.background | @presenter Color */
+  --component-text-input-color-field-success-border: #1C9C1C; /* component.textInput.color.field.success.border | @presenter Color */
+  --component-text-input-color-field-success-placeholder: #94A3B8; /* component.textInput.color.field.success.placeholder | @presenter Color */
+  --component-text-input-color-field-success-value: #020617; /* component.textInput.color.field.success.value | @presenter Color */
+  --component-text-input-color-field-success-affix: #94A3B8; /* component.textInput.color.field.success.affix | @presenter Color */
+  --component-text-input-color-field-disabled-background: #F1F5F9; /* component.textInput.color.field.disabled.background | @presenter Color */
+  --component-text-input-color-field-disabled-border: #CBD5E1; /* component.textInput.color.field.disabled.border | @presenter Color */
+  --component-text-input-color-field-disabled-placeholder: #94A3B8; /* component.textInput.color.field.disabled.placeholder | @presenter Color */
+  --component-text-input-color-field-disabled-value: #94A3B8; /* component.textInput.color.field.disabled.value | @presenter Color */
+  --component-text-input-color-field-disabled-affix: #94A3B8; /* component.textInput.color.field.disabled.affix | @presenter Color */
+  --component-text-input-color-helper-default-text: #64748B; /* component.textInput.color.helper.default.text | @presenter Color */
+  --component-text-input-color-helper-default-icon: #64748B; /* component.textInput.color.helper.default.icon | @presenter Color */
+  --component-text-input-color-helper-error-text: #DC2626; /* component.textInput.color.helper.error.text | @presenter Color */
+  --component-text-input-color-helper-error-icon: #DC2626; /* component.textInput.color.helper.error.icon | @presenter Color */
+  --component-text-input-color-helper-success-text: #215F23; /* component.textInput.color.helper.success.text | @presenter Color */
+  --component-text-input-color-helper-success-icon: #215F23; /* component.textInput.color.helper.success.icon | @presenter Color */
+  --component-text-input-size-sm-affix-box-size: 20px; /* component.textInput.size.sm.affixBoxSize | @presenter Spacing */
+  --component-text-input-size-sm-container-gap: 8px; /* component.textInput.size.sm.containerGap | @presenter Spacing */
+  --component-text-input-size-sm-field-gap: 8px; /* component.textInput.size.sm.fieldGap | @presenter Spacing */
+  --component-text-input-size-sm-field-padding-block: 10px; /* component.textInput.size.sm.fieldPaddingBlock | @presenter Spacing */
+  --component-text-input-size-sm-field-padding-inline: 12px; /* component.textInput.size.sm.fieldPaddingInline | @presenter Spacing */
+  --component-text-input-size-sm-height: 40px; /* component.textInput.size.sm.height | @presenter Spacing */
+  --component-text-input-size-sm-helper-gap: 4px; /* component.textInput.size.sm.helperGap | @presenter Spacing */
+  --component-text-input-size-sm-label-padding-inline: 2px; /* component.textInput.size.sm.labelPaddingInline | @presenter Spacing */
+  --component-text-input-size-lg-affix-box-size: 20px; /* component.textInput.size.lg.affixBoxSize | @presenter Spacing */
+  --component-text-input-size-lg-container-gap: 8px; /* component.textInput.size.lg.containerGap | @presenter Spacing */
+  --component-text-input-size-lg-field-gap: 8px; /* component.textInput.size.lg.fieldGap | @presenter Spacing */
+  --component-text-input-size-lg-field-padding-block: 10px; /* component.textInput.size.lg.fieldPaddingBlock | @presenter Spacing */
+  --component-text-input-size-lg-field-padding-inline: 12px; /* component.textInput.size.lg.fieldPaddingInline | @presenter Spacing */
+  --component-text-input-size-lg-height: 44px; /* component.textInput.size.lg.height | @presenter Spacing */
+  --component-text-input-size-lg-helper-gap: 4px; /* component.textInput.size.lg.helperGap | @presenter Spacing */
+  --component-text-input-size-lg-label-padding-inline: 2px; /* component.textInput.size.lg.labelPaddingInline | @presenter Spacing */
+  --component-text-input-typography-input-sm-font-size: 14px; /* component.textInput.typography.input.sm.fontSize | @presenter FontSize */
+  --component-text-input-typography-input-sm-line-height: 18px; /* component.textInput.typography.input.sm.lineHeight | @presenter LineHeight */
+  --component-text-input-typography-input-sm-letter-spacing: 0px; /* component.textInput.typography.input.sm.letterSpacing | @presenter LetterSpacing */
+  --component-text-input-typography-input-lg-font-size: 16px; /* component.textInput.typography.input.lg.fontSize | @presenter FontSize */
+  --component-text-input-typography-input-lg-line-height: 20px; /* component.textInput.typography.input.lg.lineHeight | @presenter LineHeight */
+  --component-text-input-typography-input-lg-letter-spacing: 0px; /* component.textInput.typography.input.lg.letterSpacing | @presenter LetterSpacing */
+  --component-text-input-typography-helper-sm-font-size: 12px; /* component.textInput.typography.helper.sm.fontSize | @presenter FontSize */
+  --component-text-input-typography-helper-sm-line-height: 18px; /* component.textInput.typography.helper.sm.lineHeight | @presenter LineHeight */
+  --component-text-input-typography-helper-sm-letter-spacing: 0px; /* component.textInput.typography.helper.sm.letterSpacing | @presenter LetterSpacing */
+  --component-text-input-typography-helper-lg-font-size: 14px; /* component.textInput.typography.helper.lg.fontSize | @presenter FontSize */
+  --component-text-input-typography-helper-lg-line-height: 20px; /* component.textInput.typography.helper.lg.lineHeight | @presenter LineHeight */
+  --component-text-input-typography-helper-lg-letter-spacing: 0px; /* component.textInput.typography.helper.lg.letterSpacing | @presenter LetterSpacing */
+  --component-text-input-icon-affix-size: 18px; /* component.textInput.icon.affixSize | @presenter Spacing */
+  --component-text-input-icon-helper-size: 14px; /* component.textInput.icon.helperSize | @presenter Spacing */
+  --component-text-input-border-width: 1px; /* component.textInput.border.width | @presenter Spacing */
+  --component-text-input-caret-gap: 2px; /* component.textInput.caret.gap | @presenter Spacing */
+  --component-text-input-caret-width: 1px; /* component.textInput.caret.width | @presenter Spacing */
+
+  /**
+   * @tokens Otp Input Tokens
+   */
+  --component-otp-input-size-sm-box-size: 40px; /* component.otpInput.size.sm.boxSize | @presenter Spacing */
+  --component-otp-input-size-sm-box-gap: 8px; /* component.otpInput.size.sm.boxGap | @presenter Spacing */
+  --component-otp-input-size-sm-container-gap: 8px; /* component.otpInput.size.sm.containerGap | @presenter Spacing */
+  --component-otp-input-size-sm-helper-gap: 4px; /* component.otpInput.size.sm.helperGap | @presenter Spacing */
+  --component-otp-input-size-sm-label-padding-inline: 2px; /* component.otpInput.size.sm.labelPaddingInline | @presenter Spacing */
+  --component-otp-input-size-sm-supporting-padding-inline: 2px; /* component.otpInput.size.sm.supportingPaddingInline | @presenter Spacing */
+  --component-otp-input-size-lg-box-size: 44px; /* component.otpInput.size.lg.boxSize | @presenter Spacing */
+  --component-otp-input-size-lg-box-gap: 8px; /* component.otpInput.size.lg.boxGap | @presenter Spacing */
+  --component-otp-input-size-lg-container-gap: 8px; /* component.otpInput.size.lg.containerGap | @presenter Spacing */
+  --component-otp-input-size-lg-helper-gap: 4px; /* component.otpInput.size.lg.helperGap | @presenter Spacing */
+  --component-otp-input-size-lg-label-padding-inline: 2px; /* component.otpInput.size.lg.labelPaddingInline | @presenter Spacing */
+  --component-otp-input-size-lg-supporting-padding-inline: 2px; /* component.otpInput.size.lg.supportingPaddingInline | @presenter Spacing */
+  --component-otp-input-typography-code-sm-font-size: 14px; /* component.otpInput.typography.code.sm.fontSize | @presenter FontSize */
+  --component-otp-input-typography-code-sm-line-height: 18px; /* component.otpInput.typography.code.sm.lineHeight | @presenter LineHeight */
+  --component-otp-input-typography-code-sm-letter-spacing: 0px; /* component.otpInput.typography.code.sm.letterSpacing | @presenter LetterSpacing */
+  --component-otp-input-typography-code-lg-font-size: 16px; /* component.otpInput.typography.code.lg.fontSize | @presenter FontSize */
+  --component-otp-input-typography-code-lg-line-height: 20px; /* component.otpInput.typography.code.lg.lineHeight | @presenter LineHeight */
+  --component-otp-input-typography-code-lg-letter-spacing: 0px; /* component.otpInput.typography.code.lg.letterSpacing | @presenter LetterSpacing */
+  --component-otp-input-typography-helper-sm-font-size: 12px; /* component.otpInput.typography.helper.sm.fontSize | @presenter FontSize */
+  --component-otp-input-typography-helper-sm-line-height: 18px; /* component.otpInput.typography.helper.sm.lineHeight | @presenter LineHeight */
+  --component-otp-input-typography-helper-sm-letter-spacing: 0px; /* component.otpInput.typography.helper.sm.letterSpacing | @presenter LetterSpacing */
+  --component-otp-input-typography-helper-lg-font-size: 14px; /* component.otpInput.typography.helper.lg.fontSize | @presenter FontSize */
+  --component-otp-input-typography-helper-lg-line-height: 20px; /* component.otpInput.typography.helper.lg.lineHeight | @presenter LineHeight */
+  --component-otp-input-typography-helper-lg-letter-spacing: 0px; /* component.otpInput.typography.helper.lg.letterSpacing | @presenter LetterSpacing */
+  --component-otp-input-icon-helper-size: 14px; /* component.otpInput.icon.helperSize | @presenter Spacing */
+  --component-otp-input-border-width: 1px; /* component.otpInput.border.width | @presenter Spacing */
+
+  /**
+   * @tokens Checkbox Tokens
+   */
+  --component-checkbox-color-rest-background: #FFFFFF; /* component.checkbox.color.rest.background | @presenter Color */
+  --component-checkbox-color-rest-border: #CBD5E1; /* component.checkbox.color.rest.border | @presenter Color */
+  --component-checkbox-color-checked-background: #4736FE; /* component.checkbox.color.checked.background | @presenter Color */
+  --component-checkbox-color-checked-border: #4736FE; /* component.checkbox.color.checked.border | @presenter Color */
+  --component-checkbox-color-checked-foreground: #FFFFFF; /* component.checkbox.color.checked.foreground | @presenter Color */
+  --component-checkbox-color-disabled-rest-background: #F1F5F9; /* component.checkbox.color.disabled.rest.background | @presenter Color */
+  --component-checkbox-color-disabled-rest-border: #CBD5E1; /* component.checkbox.color.disabled.rest.border | @presenter Color */
+  --component-checkbox-color-disabled-checked-background: #E2E8F0; /* component.checkbox.color.disabled.checked.background | @presenter Color */
+  --component-checkbox-color-disabled-checked-border: #E2E8F0; /* component.checkbox.color.disabled.checked.border | @presenter Color */
+  --component-checkbox-color-disabled-checked-foreground: #94A3B8; /* component.checkbox.color.disabled.checked.foreground | @presenter Color */
+  --component-checkbox-size-sm-box-size: 16px; /* component.checkbox.size.sm.boxSize | @presenter Spacing */
+  --component-checkbox-size-sm-icon-size: 10px; /* component.checkbox.size.sm.iconSize | @presenter Spacing */
+  --component-checkbox-size-sm-border-width: 1.5px; /* component.checkbox.size.sm.borderWidth | @presenter Spacing */
+  --component-checkbox-size-sm-disabled-checked-border-width: 0px; /* component.checkbox.size.sm.disabledCheckedBorderWidth | @presenter Spacing */
+  --component-checkbox-size-md-box-size: 20px; /* component.checkbox.size.md.boxSize | @presenter Spacing */
+  --component-checkbox-size-md-icon-size: 12px; /* component.checkbox.size.md.iconSize | @presenter Spacing */
+  --component-checkbox-size-md-border-width: 1.5px; /* component.checkbox.size.md.borderWidth | @presenter Spacing */
+  --component-checkbox-size-md-disabled-checked-border-width: 0px; /* component.checkbox.size.md.disabledCheckedBorderWidth | @presenter Spacing */
+  --component-checkbox-size-lg-box-size: 24px; /* component.checkbox.size.lg.boxSize | @presenter Spacing */
+  --component-checkbox-size-lg-icon-size: 14px; /* component.checkbox.size.lg.iconSize | @presenter Spacing */
+  --component-checkbox-size-lg-border-width: 1.5px; /* component.checkbox.size.lg.borderWidth | @presenter Spacing */
+  --component-checkbox-size-lg-disabled-checked-border-width: 0px; /* component.checkbox.size.lg.disabledCheckedBorderWidth | @presenter Spacing */
+  --component-checkbox-size-xl-box-size: 32px; /* component.checkbox.size.xl.boxSize | @presenter Spacing */
+  --component-checkbox-size-xl-icon-size: 20px; /* component.checkbox.size.xl.iconSize | @presenter Spacing */
+  --component-checkbox-size-xl-border-width: 2px; /* component.checkbox.size.xl.borderWidth | @presenter Spacing */
+  --component-checkbox-size-xl-disabled-checked-border-width: 2px; /* component.checkbox.size.xl.disabledCheckedBorderWidth | @presenter Spacing */
+  --component-checkbox-focus-outline-width: 2px; /* component.checkbox.focus.outlineWidth | @presenter Spacing */
+  --component-checkbox-focus-outline-offset: 2px; /* component.checkbox.focus.outlineOffset | @presenter Spacing */
+
+  /**
+   * @tokens Checkbox Label Tokens
+   */
+  --component-checkbox-label-layout-gap: 8px; /* component.checkboxLabel.layout.gap | @presenter Spacing */
+  --component-checkbox-label-layout-content-padding-inline: 2px; /* component.checkboxLabel.layout.contentPaddingInline | @presenter Spacing */
+  --component-checkbox-label-color-label-default: #020617; /* component.checkboxLabel.color.label.default | @presenter Color */
+  --component-checkbox-label-color-label-disabled: #94A3B8; /* component.checkboxLabel.color.label.disabled | @presenter Color */
+  --component-checkbox-label-color-description-default: #64748B; /* component.checkboxLabel.color.description.default | @presenter Color */
+  --component-checkbox-label-color-description-disabled: #94A3B8; /* component.checkboxLabel.color.description.disabled | @presenter Color */
+  --component-checkbox-label-size-sm-content-gap: 2px; /* component.checkboxLabel.size.sm.contentGap | @presenter Spacing */
+  --component-checkbox-label-size-md-content-gap: 4px; /* component.checkboxLabel.size.md.contentGap | @presenter Spacing */
+  --component-checkbox-label-size-lg-content-gap: 4px; /* component.checkboxLabel.size.lg.contentGap | @presenter Spacing */
+  --component-checkbox-label-typography-label-sm-font-size: 12px; /* component.checkboxLabel.typography.label.sm.fontSize | @presenter FontSize */
+  --component-checkbox-label-typography-label-sm-line-height: 16px; /* component.checkboxLabel.typography.label.sm.lineHeight | @presenter LineHeight */
+  --component-checkbox-label-typography-label-sm-letter-spacing: 0px; /* component.checkboxLabel.typography.label.sm.letterSpacing | @presenter LetterSpacing */
+  --component-checkbox-label-typography-label-md-font-size: 16px; /* component.checkboxLabel.typography.label.md.fontSize | @presenter FontSize */
+  --component-checkbox-label-typography-label-md-line-height: 20px; /* component.checkboxLabel.typography.label.md.lineHeight | @presenter LineHeight */
+  --component-checkbox-label-typography-label-md-letter-spacing: 0px; /* component.checkboxLabel.typography.label.md.letterSpacing | @presenter LetterSpacing */
+  --component-checkbox-label-typography-label-lg-font-size: 16px; /* component.checkboxLabel.typography.label.lg.fontSize | @presenter FontSize */
+  --component-checkbox-label-typography-label-lg-line-height: 20px; /* component.checkboxLabel.typography.label.lg.lineHeight | @presenter LineHeight */
+  --component-checkbox-label-typography-label-lg-letter-spacing: 0px; /* component.checkboxLabel.typography.label.lg.letterSpacing | @presenter LetterSpacing */
+  --component-checkbox-label-typography-description-sm-font-size: 12px; /* component.checkboxLabel.typography.description.sm.fontSize | @presenter FontSize */
+  --component-checkbox-label-typography-description-sm-line-height: 16px; /* component.checkboxLabel.typography.description.sm.lineHeight | @presenter LineHeight */
+  --component-checkbox-label-typography-description-sm-letter-spacing: 0px; /* component.checkboxLabel.typography.description.sm.letterSpacing | @presenter LetterSpacing */
+  --component-checkbox-label-typography-description-md-font-size: 14px; /* component.checkboxLabel.typography.description.md.fontSize | @presenter FontSize */
+  --component-checkbox-label-typography-description-md-line-height: 18px; /* component.checkboxLabel.typography.description.md.lineHeight | @presenter LineHeight */
+  --component-checkbox-label-typography-description-md-letter-spacing: 0px; /* component.checkboxLabel.typography.description.md.letterSpacing | @presenter LetterSpacing */
+  --component-checkbox-label-typography-description-lg-font-size: 14px; /* component.checkboxLabel.typography.description.lg.fontSize | @presenter FontSize */
+  --component-checkbox-label-typography-description-lg-line-height: 18px; /* component.checkboxLabel.typography.description.lg.lineHeight | @presenter LineHeight */
+  --component-checkbox-label-typography-description-lg-letter-spacing: 0px; /* component.checkboxLabel.typography.description.lg.letterSpacing | @presenter LetterSpacing */
+
+  /**
+   * @tokens Radio Label Tokens
+   */
+  --component-radio-label-layout-gap: 8px; /* component.radioLabel.layout.gap | @presenter Spacing */
+  --component-radio-label-layout-content-padding-inline: 2px; /* component.radioLabel.layout.contentPaddingInline | @presenter Spacing */
+  --component-radio-label-color-label-default: #020617; /* component.radioLabel.color.label.default | @presenter Color */
+  --component-radio-label-color-label-disabled: #94A3B8; /* component.radioLabel.color.label.disabled | @presenter Color */
+  --component-radio-label-color-description-default: #64748B; /* component.radioLabel.color.description.default | @presenter Color */
+  --component-radio-label-color-description-disabled: #94A3B8; /* component.radioLabel.color.description.disabled | @presenter Color */
+  --component-radio-label-size-sm-content-gap: 2px; /* component.radioLabel.size.sm.contentGap | @presenter Spacing */
+  --component-radio-label-size-md-content-gap: 4px; /* component.radioLabel.size.md.contentGap | @presenter Spacing */
+  --component-radio-label-typography-label-sm-font-size: 12px; /* component.radioLabel.typography.label.sm.fontSize | @presenter FontSize */
+  --component-radio-label-typography-label-sm-line-height: 16px; /* component.radioLabel.typography.label.sm.lineHeight | @presenter LineHeight */
+  --component-radio-label-typography-label-sm-letter-spacing: 0px; /* component.radioLabel.typography.label.sm.letterSpacing | @presenter LetterSpacing */
+  --component-radio-label-typography-label-md-font-size: 16px; /* component.radioLabel.typography.label.md.fontSize | @presenter FontSize */
+  --component-radio-label-typography-label-md-line-height: 20px; /* component.radioLabel.typography.label.md.lineHeight | @presenter LineHeight */
+  --component-radio-label-typography-label-md-letter-spacing: 0px; /* component.radioLabel.typography.label.md.letterSpacing | @presenter LetterSpacing */
+  --component-radio-label-typography-description-sm-font-size: 12px; /* component.radioLabel.typography.description.sm.fontSize | @presenter FontSize */
+  --component-radio-label-typography-description-sm-line-height: 16px; /* component.radioLabel.typography.description.sm.lineHeight | @presenter LineHeight */
+  --component-radio-label-typography-description-sm-letter-spacing: 0px; /* component.radioLabel.typography.description.sm.letterSpacing | @presenter LetterSpacing */
+  --component-radio-label-typography-description-md-font-size: 14px; /* component.radioLabel.typography.description.md.fontSize | @presenter FontSize */
+  --component-radio-label-typography-description-md-line-height: 18px; /* component.radioLabel.typography.description.md.lineHeight | @presenter LineHeight */
+  --component-radio-label-typography-description-md-letter-spacing: 0px; /* component.radioLabel.typography.description.md.letterSpacing | @presenter LetterSpacing */
+
+  /**
+   * @tokens Switch Label Tokens
+   */
+  --component-switch-label-layout-gap: 8px; /* component.switchLabel.layout.gap | @presenter Spacing */
+  --component-switch-label-layout-content-padding-inline: 2px; /* component.switchLabel.layout.contentPaddingInline | @presenter Spacing */
+  --component-switch-label-color-label-default: #020617; /* component.switchLabel.color.label.default | @presenter Color */
+  --component-switch-label-color-label-disabled: #94A3B8; /* component.switchLabel.color.label.disabled | @presenter Color */
+  --component-switch-label-color-description-default: #64748B; /* component.switchLabel.color.description.default | @presenter Color */
+  --component-switch-label-color-description-disabled: #94A3B8; /* component.switchLabel.color.description.disabled | @presenter Color */
+  --component-switch-label-size-sm-content-gap: 2px; /* component.switchLabel.size.sm.contentGap | @presenter Spacing */
+  --component-switch-label-size-default-content-gap: 4px; /* component.switchLabel.size.default.contentGap | @presenter Spacing */
+  --component-switch-label-typography-label-sm-font-size: 12px; /* component.switchLabel.typography.label.sm.fontSize | @presenter FontSize */
+  --component-switch-label-typography-label-sm-line-height: 16px; /* component.switchLabel.typography.label.sm.lineHeight | @presenter LineHeight */
+  --component-switch-label-typography-label-sm-letter-spacing: 0px; /* component.switchLabel.typography.label.sm.letterSpacing | @presenter LetterSpacing */
+  --component-switch-label-typography-label-default-font-size: 16px; /* component.switchLabel.typography.label.default.fontSize | @presenter FontSize */
+  --component-switch-label-typography-label-default-line-height: 20px; /* component.switchLabel.typography.label.default.lineHeight | @presenter LineHeight */
+  --component-switch-label-typography-label-default-letter-spacing: 0px; /* component.switchLabel.typography.label.default.letterSpacing | @presenter LetterSpacing */
+  --component-switch-label-typography-description-sm-font-size: 12px; /* component.switchLabel.typography.description.sm.fontSize | @presenter FontSize */
+  --component-switch-label-typography-description-sm-line-height: 16px; /* component.switchLabel.typography.description.sm.lineHeight | @presenter LineHeight */
+  --component-switch-label-typography-description-sm-letter-spacing: 0px; /* component.switchLabel.typography.description.sm.letterSpacing | @presenter LetterSpacing */
+  --component-switch-label-typography-description-default-font-size: 14px; /* component.switchLabel.typography.description.default.fontSize | @presenter FontSize */
+  --component-switch-label-typography-description-default-line-height: 18px; /* component.switchLabel.typography.description.default.lineHeight | @presenter LineHeight */
+  --component-switch-label-typography-description-default-letter-spacing: 0px; /* component.switchLabel.typography.description.default.letterSpacing | @presenter LetterSpacing */
+
+  /**
+   * @tokens Consent Tokens
+   */
+  --component-consent-layout-gap: 8px; /* component.consent.layout.gap | @presenter Spacing */
+  --component-consent-layout-padding-inline: 16px; /* component.consent.layout.paddingInline | @presenter Spacing */
+  --component-consent-layout-padding-block: 12px; /* component.consent.layout.paddingBlock | @presenter Spacing */
+  --component-consent-layout-inside-card-background: #F1F5F9; /* component.consent.layout.insideCard.background | @presenter Color */
+  --component-consent-layout-inside-card-sm-padding: 8px; /* component.consent.layout.insideCard.sm.padding | @presenter Spacing */
+  --component-consent-layout-inside-card-sm-radius: 8px; /* component.consent.layout.insideCard.sm.radius | @presenter BorderRadius */
+  --component-consent-layout-inside-card-md-padding: 8px; /* component.consent.layout.insideCard.md.padding | @presenter Spacing */
+  --component-consent-layout-inside-card-md-radius: 8px; /* component.consent.layout.insideCard.md.radius | @presenter BorderRadius */
+  --component-consent-layout-inside-card-lg-padding: 12px; /* component.consent.layout.insideCard.lg.padding | @presenter Spacing */
+  --component-consent-layout-inside-card-lg-radius: 12px; /* component.consent.layout.insideCard.lg.radius | @presenter BorderRadius */
+  --component-consent-content-color-default: #64748B; /* component.consent.content.color.default | @presenter Color */
+  --component-consent-content-color-disabled: #94A3B8; /* component.consent.content.color.disabled | @presenter Color */
+  --component-consent-content-size-sm-font-size: 9px; /* component.consent.content.size.sm.fontSize | @presenter FontSize */
+  --component-consent-content-size-sm-line-height: 13px; /* component.consent.content.size.sm.lineHeight | @presenter LineHeight */
+  --component-consent-content-size-sm-letter-spacing: 0px; /* component.consent.content.size.sm.letterSpacing | @presenter LetterSpacing */
+  --component-consent-content-size-sm-padding-top: 2px; /* component.consent.content.size.sm.paddingTop | @presenter Spacing */
+  --component-consent-content-size-sm-padding-bottom: 2px; /* component.consent.content.size.sm.paddingBottom | @presenter Spacing */
+  --component-consent-content-size-sm-inside-card-padding-top: 2px; /* component.consent.content.size.sm.insideCardPaddingTop | @presenter Spacing */
+  --component-consent-content-size-sm-inside-card-padding-bottom: 0px; /* component.consent.content.size.sm.insideCardPaddingBottom | @presenter Spacing */
+  --component-consent-content-size-md-font-size: 12px; /* component.consent.content.size.md.fontSize | @presenter FontSize */
+  --component-consent-content-size-md-line-height: 18px; /* component.consent.content.size.md.lineHeight | @presenter LineHeight */
+  --component-consent-content-size-md-letter-spacing: 0px; /* component.consent.content.size.md.letterSpacing | @presenter LetterSpacing */
+  --component-consent-content-size-md-padding-top: 0px; /* component.consent.content.size.md.paddingTop | @presenter Spacing */
+  --component-consent-content-size-md-padding-bottom: 0px; /* component.consent.content.size.md.paddingBottom | @presenter Spacing */
+  --component-consent-content-size-md-inside-card-padding-top: 0px; /* component.consent.content.size.md.insideCardPaddingTop | @presenter Spacing */
+  --component-consent-content-size-md-inside-card-padding-bottom: 0px; /* component.consent.content.size.md.insideCardPaddingBottom | @presenter Spacing */
+  --component-consent-content-size-lg-font-size: 14px; /* component.consent.content.size.lg.fontSize | @presenter FontSize */
+  --component-consent-content-size-lg-line-height: 20px; /* component.consent.content.size.lg.lineHeight | @presenter LineHeight */
+  --component-consent-content-size-lg-letter-spacing: 0px; /* component.consent.content.size.lg.letterSpacing | @presenter LetterSpacing */
+  --component-consent-content-size-lg-padding-top: 0px; /* component.consent.content.size.lg.paddingTop | @presenter Spacing */
+  --component-consent-content-size-lg-padding-bottom: 0px; /* component.consent.content.size.lg.paddingBottom | @presenter Spacing */
+  --component-consent-content-size-lg-inside-card-padding-top: 0px; /* component.consent.content.size.lg.insideCardPaddingTop | @presenter Spacing */
+  --component-consent-content-size-lg-inside-card-padding-bottom: 0px; /* component.consent.content.size.lg.insideCardPaddingBottom | @presenter Spacing */
+
+  /**
+   * @tokens Radio Tokens
+   */
+  --component-radio-color-rest-background: #FFFFFF; /* component.radio.color.rest.background | @presenter Color */
+  --component-radio-color-rest-border: #94A3B8; /* component.radio.color.rest.border | @presenter Color */
+  --component-radio-color-selected-background: #4736FE; /* component.radio.color.selected.background | @presenter Color */
+  --component-radio-color-selected-border: #4736FE; /* component.radio.color.selected.border | @presenter Color */
+  --component-radio-color-selected-foreground: #FFFFFF; /* component.radio.color.selected.foreground | @presenter Color */
+  --component-radio-color-disabled-rest-background: #F1F5F9; /* component.radio.color.disabled.rest.background | @presenter Color */
+  --component-radio-color-disabled-rest-border: #CBD5E1; /* component.radio.color.disabled.rest.border | @presenter Color */
+  --component-radio-color-disabled-selected-background: #F1F5F9; /* component.radio.color.disabled.selected.background | @presenter Color */
+  --component-radio-color-disabled-selected-border: #CBD5E1; /* component.radio.color.disabled.selected.border | @presenter Color */
+  --component-radio-color-disabled-selected-foreground: #CBD5E1; /* component.radio.color.disabled.selected.foreground | @presenter Color */
+  --component-radio-size-sm-box-size: 16px; /* component.radio.size.sm.boxSize | @presenter Spacing */
+  --component-radio-size-sm-dot-size: 6px; /* component.radio.size.sm.dotSize | @presenter Spacing */
+  --component-radio-size-sm-border-width: 1px; /* component.radio.size.sm.borderWidth | @presenter Spacing */
+  --component-radio-size-sm-selected-border-width: 0px; /* component.radio.size.sm.selectedBorderWidth | @presenter Spacing */
+  --component-radio-size-sm-disabled-selected-border-width: 1px; /* component.radio.size.sm.disabledSelectedBorderWidth | @presenter Spacing */
+  --component-radio-size-md-box-size: 20px; /* component.radio.size.md.boxSize | @presenter Spacing */
+  --component-radio-size-md-dot-size: 8px; /* component.radio.size.md.dotSize | @presenter Spacing */
+  --component-radio-size-md-border-width: 1px; /* component.radio.size.md.borderWidth | @presenter Spacing */
+  --component-radio-size-md-selected-border-width: 0px; /* component.radio.size.md.selectedBorderWidth | @presenter Spacing */
+  --component-radio-size-md-disabled-selected-border-width: 1px; /* component.radio.size.md.disabledSelectedBorderWidth | @presenter Spacing */
+  --component-radio-focus-outline-width: 2px; /* component.radio.focus.outlineWidth | @presenter Spacing */
+  --component-radio-focus-outline-offset: 2px; /* component.radio.focus.outlineOffset | @presenter Spacing */
+
+  /**
+   * @tokens Switch Tokens
+   */
+  --component-switch-color-rest-track: #E2E8F0; /* component.switch.color.rest.track | @presenter Color */
+  --component-switch-color-rest-thumb: #FFFFFF; /* component.switch.color.rest.thumb | @presenter Color */
+  --component-switch-color-selected-track: #4736FE; /* component.switch.color.selected.track | @presenter Color */
+  --component-switch-color-selected-thumb: #FFFFFF; /* component.switch.color.selected.thumb | @presenter Color */
+  --component-switch-color-disabled-rest-track: #E2E8F0; /* component.switch.color.disabled.rest.track | @presenter Color */
+  --component-switch-color-disabled-rest-thumb: rgba(26, 26, 26, 0.1); /* component.switch.color.disabled.rest.thumb | @presenter Color */
+  --component-switch-color-disabled-selected-track: #E1E3FD; /* component.switch.color.disabled.selected.track | @presenter Color */
+  --component-switch-color-disabled-selected-thumb: #FFFFFF; /* component.switch.color.disabled.selected.thumb | @presenter Color */
+  --component-switch-size-default-track-width: 32px; /* component.switch.size.default.trackWidth | @presenter Spacing */
+  --component-switch-size-default-track-height: 20px; /* component.switch.size.default.trackHeight | @presenter Spacing */
+  --component-switch-size-default-thumb-size: 16px; /* component.switch.size.default.thumbSize | @presenter Spacing */
+  --component-switch-size-default-padding: 2px; /* component.switch.size.default.padding | @presenter Spacing */
+  --component-switch-size-default-thumb-translate-x: 12px; /* component.switch.size.default.thumbTranslateX | @presenter Spacing */
+  --component-switch-size-sm-track-width: 24px; /* component.switch.size.sm.trackWidth | @presenter Spacing */
+  --component-switch-size-sm-track-height: 16px; /* component.switch.size.sm.trackHeight | @presenter Spacing */
+  --component-switch-size-sm-thumb-size: 12px; /* component.switch.size.sm.thumbSize | @presenter Spacing */
+  --component-switch-size-sm-padding: 2px; /* component.switch.size.sm.padding | @presenter Spacing */
+  --component-switch-size-sm-thumb-translate-x: 8px; /* component.switch.size.sm.thumbTranslateX | @presenter Spacing */
+  --component-switch-thumb-shadow: 0px 0px 4px rgba(31, 41, 55, 0.02), 0px 4px 4px rgba(31, 41, 55, 0.04); /* component.switch.thumb.shadow | @presenter Shadow */
+  --component-switch-focus-outline-width: 2px; /* component.switch.focus.outlineWidth | @presenter Spacing */
+  --component-switch-focus-outline-offset: 2px; /* component.switch.focus.outlineOffset | @presenter Spacing */
+
+  /**
+   * @tokens Label Tokens
+   */
+  --component-label-xs-stack-gap: 2px; /* component.label.xs.stackGap | @presenter Spacing */
+  --component-label-xs-slot-gap: 2px; /* component.label.xs.slotGap | @presenter Spacing */
+  --component-label-xs-icon-size: 16px; /* component.label.xs.iconSize | @presenter Spacing */
+  --component-label-xs-typography-label-font-size: 11px; /* component.label.xs.typography.label.fontSize | @presenter FontSize */
+  --component-label-xs-typography-label-line-height: 14px; /* component.label.xs.typography.label.lineHeight | @presenter LineHeight */
+  --component-label-xs-typography-label-letter-spacing: 0px; /* component.label.xs.typography.label.letterSpacing | @presenter LetterSpacing */
+  --component-label-xs-typography-description-font-size: 9px; /* component.label.xs.typography.description.fontSize | @presenter FontSize */
+  --component-label-xs-typography-description-line-height: 13px; /* component.label.xs.typography.description.lineHeight | @presenter LineHeight */
+  --component-label-xs-typography-description-letter-spacing: 0px; /* component.label.xs.typography.description.letterSpacing | @presenter LetterSpacing */
+  --component-label-sm-stack-gap: 4px; /* component.label.sm.stackGap | @presenter Spacing */
+  --component-label-sm-slot-gap: 4px; /* component.label.sm.slotGap | @presenter Spacing */
+  --component-label-sm-icon-size: 16px; /* component.label.sm.iconSize | @presenter Spacing */
+  --component-label-sm-typography-label-font-size: 12px; /* component.label.sm.typography.label.fontSize | @presenter FontSize */
+  --component-label-sm-typography-label-line-height: 16px; /* component.label.sm.typography.label.lineHeight | @presenter LineHeight */
+  --component-label-sm-typography-label-letter-spacing: 0px; /* component.label.sm.typography.label.letterSpacing | @presenter LetterSpacing */
+  --component-label-sm-typography-description-font-size: 12px; /* component.label.sm.typography.description.fontSize | @presenter FontSize */
+  --component-label-sm-typography-description-line-height: 18px; /* component.label.sm.typography.description.lineHeight | @presenter LineHeight */
+  --component-label-sm-typography-description-letter-spacing: 0px; /* component.label.sm.typography.description.letterSpacing | @presenter LetterSpacing */
+  --component-label-md-stack-gap: 4px; /* component.label.md.stackGap | @presenter Spacing */
+  --component-label-md-slot-gap: 4px; /* component.label.md.slotGap | @presenter Spacing */
+  --component-label-md-icon-size: 16px; /* component.label.md.iconSize | @presenter Spacing */
+  --component-label-md-typography-label-font-size: 14px; /* component.label.md.typography.label.fontSize | @presenter FontSize */
+  --component-label-md-typography-label-line-height: 18px; /* component.label.md.typography.label.lineHeight | @presenter LineHeight */
+  --component-label-md-typography-label-letter-spacing: 0px; /* component.label.md.typography.label.letterSpacing | @presenter LetterSpacing */
+  --component-label-md-typography-description-font-size: 12px; /* component.label.md.typography.description.fontSize | @presenter FontSize */
+  --component-label-md-typography-description-line-height: 18px; /* component.label.md.typography.description.lineHeight | @presenter LineHeight */
+  --component-label-md-typography-description-letter-spacing: 0px; /* component.label.md.typography.description.letterSpacing | @presenter LetterSpacing */
+  --component-label-lg-stack-gap: 6px; /* component.label.lg.stackGap | @presenter Spacing */
+  --component-label-lg-slot-gap: 4px; /* component.label.lg.slotGap | @presenter Spacing */
+  --component-label-lg-icon-size: 16px; /* component.label.lg.iconSize | @presenter Spacing */
+  --component-label-lg-typography-label-font-size: 16px; /* component.label.lg.typography.label.fontSize | @presenter FontSize */
+  --component-label-lg-typography-label-line-height: 20px; /* component.label.lg.typography.label.lineHeight | @presenter LineHeight */
+  --component-label-lg-typography-label-letter-spacing: 0px; /* component.label.lg.typography.label.letterSpacing | @presenter LetterSpacing */
+  --component-label-lg-typography-description-font-size: 12px; /* component.label.lg.typography.description.fontSize | @presenter FontSize */
+  --component-label-lg-typography-description-line-height: 18px; /* component.label.lg.typography.description.lineHeight | @presenter LineHeight */
+  --component-label-lg-typography-description-letter-spacing: 0px; /* component.label.lg.typography.description.letterSpacing | @presenter LetterSpacing */
+
+  /**
+   * @tokens Section Header Tokens
+   */
+  --component-section-header-layout-variant: split; /* component.sectionHeader.layout.variant */
+  --component-section-header-color-light-title: #020617; /* component.sectionHeader.color.light.title | @presenter Color */
+  --component-section-header-color-light-description: #64748B; /* component.sectionHeader.color.light.description | @presenter Color */
+  --component-section-header-color-light-divider: rgba(26, 26, 26, 0.15); /* component.sectionHeader.color.light.divider | @presenter Color */
+  --component-section-header-color-light-divider-opaque: rgba(26, 26, 26, 0.15); /* component.sectionHeader.color.light.dividerOpaque | @presenter Color */
+  --component-section-header-color-light-divider-transparent: rgba(26, 26, 26, 0); /* component.sectionHeader.color.light.dividerTransparent | @presenter Color */
+  --component-section-header-color-dark-title: #FFFFFF; /* component.sectionHeader.color.dark.title | @presenter Color */
+  --component-section-header-color-dark-description: rgba(255, 255, 255, 0.7); /* component.sectionHeader.color.dark.description | @presenter Color */
+  --component-section-header-color-dark-divider: rgba(255, 255, 255, 0.6); /* component.sectionHeader.color.dark.divider | @presenter Color */
+  --component-section-header-color-dark-divider-opaque: rgba(255, 255, 255, 0.6); /* component.sectionHeader.color.dark.dividerOpaque | @presenter Color */
+  --component-section-header-color-dark-divider-transparent: rgba(255, 255, 255, 0); /* component.sectionHeader.color.dark.dividerTransparent | @presenter Color */
+  --component-section-header-color-tag-background: #DC2626; /* component.sectionHeader.color.tag.background | @presenter Color */
+  --component-section-header-color-tag-foreground: #FFFFFF; /* component.sectionHeader.color.tag.foreground | @presenter Color */
+  --component-section-header-size-width: 336px; /* component.sectionHeader.size.width | @presenter Spacing */
+  --component-section-header-size-gap: 8px; /* component.sectionHeader.size.gap | @presenter Spacing */
+  --component-section-header-size-row-gap: 24px; /* component.sectionHeader.size.rowGap | @presenter Spacing */
+  --component-section-header-size-content-gap: 4px; /* component.sectionHeader.size.contentGap | @presenter Spacing */
+  --component-section-header-size-title-row-gap: 8px; /* component.sectionHeader.size.titleRowGap | @presenter Spacing */
+  --component-section-header-size-title-stack-gap: 0px; /* component.sectionHeader.size.titleStackGap | @presenter Spacing */
+  --component-section-header-size-action-gap: 6px; /* component.sectionHeader.size.actionGap | @presenter Spacing */
+  --component-section-header-size-action-stack-gap: 10px; /* component.sectionHeader.size.actionStackGap | @presenter Spacing */
+  --component-section-header-size-padding-bottom: 0px; /* component.sectionHeader.size.paddingBottom | @presenter Spacing */
+  --component-section-header-size-divider-gap: 12px; /* component.sectionHeader.size.dividerGap | @presenter Spacing */
+  --component-section-header-size-divider-thickness: 1px; /* component.sectionHeader.size.dividerThickness | @presenter Spacing */
+  --component-section-header-size-icon-size: 16px; /* component.sectionHeader.size.iconSize | @presenter Spacing */
+  --component-section-header-size-tag-height: 20px; /* component.sectionHeader.size.tagHeight | @presenter Spacing */
+  --component-section-header-size-tag-padding-inline: 8px; /* component.sectionHeader.size.tagPaddingInline | @presenter Spacing */
+  --component-section-header-size-tag-padding-block: 2px; /* component.sectionHeader.size.tagPaddingBlock | @presenter Spacing */
+  --component-section-header-typography-title-font-size: 17px; /* component.sectionHeader.typography.title.fontSize | @presenter FontSize */
+  --component-section-header-typography-title-line-height: 22px; /* component.sectionHeader.typography.title.lineHeight | @presenter LineHeight */
+  --component-section-header-typography-title-letter-spacing: -0.02px; /* component.sectionHeader.typography.title.letterSpacing | @presenter LetterSpacing */
+  --component-section-header-typography-description-font-size: 14px; /* component.sectionHeader.typography.description.fontSize | @presenter FontSize */
+  --component-section-header-typography-description-line-height: 20px; /* component.sectionHeader.typography.description.lineHeight | @presenter LineHeight */
+  --component-section-header-typography-description-letter-spacing: 0px; /* component.sectionHeader.typography.description.letterSpacing | @presenter LetterSpacing */
+  --component-section-header-typography-tag-font-size: 11px; /* component.sectionHeader.typography.tag.fontSize | @presenter FontSize */
+  --component-section-header-typography-tag-line-height: 14px; /* component.sectionHeader.typography.tag.lineHeight | @presenter LineHeight */
+  --component-section-header-typography-tag-letter-spacing: 0px; /* component.sectionHeader.typography.tag.letterSpacing | @presenter LetterSpacing */
+
+  /**
+   * @tokens Divider Tokens
+   */
+  --component-divider-color-line: #E2E8F0; /* component.divider.color.line | @presenter Color */
+  --component-divider-color-content: #020617; /* component.divider.color.content | @presenter Color */
+  --component-divider-size-width: 430px; /* component.divider.size.width | @presenter Spacing */
+  --component-divider-size-short-segment-length: 16px; /* component.divider.size.shortSegmentLength | @presenter Spacing */
+  --component-divider-size-content-gap: 6px; /* component.divider.size.contentGap | @presenter Spacing */
+  --component-divider-size-content-padding-inline: 8px; /* component.divider.size.contentPaddingInline | @presenter Spacing */
+  --component-divider-size-content-padding-block: 0px; /* component.divider.size.contentPaddingBlock | @presenter Spacing */
+  --component-divider-size-icon-size: 12px; /* component.divider.size.iconSize | @presenter Spacing */
+  --component-divider-size-thickness-regular: 1px; /* component.divider.size.thickness.regular | @presenter Spacing */
+  --component-divider-size-thickness-thin: 0.5px; /* component.divider.size.thickness.thin | @presenter Spacing */
+  --component-divider-size-content-radius-regular: 8px; /* component.divider.size.contentRadius.regular | @presenter BorderRadius */
+  --component-divider-size-content-radius-thin: 0px; /* component.divider.size.contentRadius.thin | @presenter BorderRadius */
+  --component-divider-typography-label-font-size: 12px; /* component.divider.typography.label.fontSize | @presenter FontSize */
+  --component-divider-typography-label-line-height: 16px; /* component.divider.typography.label.lineHeight | @presenter LineHeight */
+  --component-divider-typography-label-letter-spacing: 0px; /* component.divider.typography.label.letterSpacing | @presenter LetterSpacing */
+
+  /**
+   * @tokens Caption Button Tokens
+   */
+  --component-caption-button-color-light-primary-rest-background: #155EEF; /* component.captionButton.color.light.primary.rest.background | @presenter Color */
+  --component-caption-button-color-light-primary-rest-foreground: #FFFFFF; /* component.captionButton.color.light.primary.rest.foreground | @presenter Color */
+  --component-caption-button-color-light-primary-hover-background: #004EEB; /* component.captionButton.color.light.primary.hover.background | @presenter Color */
+  --component-caption-button-color-light-primary-hover-foreground: #FFFFFF; /* component.captionButton.color.light.primary.hover.foreground | @presenter Color */
+  --component-caption-button-color-light-secondary-rest-background: transparent; /* component.captionButton.color.light.secondary.rest.background */
+  --component-caption-button-color-light-secondary-rest-border: #155EEF; /* component.captionButton.color.light.secondary.rest.border | @presenter Color */
+  --component-caption-button-color-light-secondary-rest-foreground: #155EEF; /* component.captionButton.color.light.secondary.rest.foreground | @presenter Color */
+  --component-caption-button-color-light-secondary-hover-background: transparent; /* component.captionButton.color.light.secondary.hover.background */
+  --component-caption-button-color-light-secondary-hover-border: #155EEF; /* component.captionButton.color.light.secondary.hover.border | @presenter Color */
+  --component-caption-button-color-light-secondary-hover-foreground: #155EEF; /* component.captionButton.color.light.secondary.hover.foreground | @presenter Color */
+  --component-caption-button-color-light-disabled-background: #F9FAFB; /* component.captionButton.color.light.disabled.background | @presenter Color */
+  --component-caption-button-color-light-disabled-border: transparent; /* component.captionButton.color.light.disabled.border */
+  --component-caption-button-color-light-disabled-foreground: #94A3B8; /* component.captionButton.color.light.disabled.foreground | @presenter Color */
+  --component-caption-button-size-md-height: 40px; /* component.captionButton.size.md.height | @presenter Spacing */
+  --component-caption-button-size-md-padding-inline: 20px; /* component.captionButton.size.md.paddingInline | @presenter Spacing */
+  --component-caption-button-size-md-border-radius: 12px; /* component.captionButton.size.md.borderRadius | @presenter BorderRadius */
+  --component-caption-button-size-lg-height: 48px; /* component.captionButton.size.lg.height | @presenter Spacing */
+  --component-caption-button-size-lg-padding-inline: 20px; /* component.captionButton.size.lg.paddingInline | @presenter Spacing */
+  --component-caption-button-size-lg-border-radius: 14px; /* component.captionButton.size.lg.borderRadius | @presenter BorderRadius */
+  --component-caption-button-typography-label-md-font-size: 14px; /* component.captionButton.typography.label.md.fontSize | @presenter FontSize */
+  --component-caption-button-typography-label-md-line-height: 18px; /* component.captionButton.typography.label.md.lineHeight | @presenter LineHeight */
+  --component-caption-button-typography-label-md-letter-spacing: 0px; /* component.captionButton.typography.label.md.letterSpacing | @presenter LetterSpacing */
+  --component-caption-button-typography-label-lg-font-size: 16px; /* component.captionButton.typography.label.lg.fontSize | @presenter FontSize */
+  --component-caption-button-typography-label-lg-line-height: 20px; /* component.captionButton.typography.label.lg.lineHeight | @presenter LineHeight */
+  --component-caption-button-typography-label-lg-letter-spacing: 0px; /* component.captionButton.typography.label.lg.letterSpacing | @presenter LetterSpacing */
+  --component-caption-button-typography-caption-md-font-size: 11px; /* component.captionButton.typography.caption.md.fontSize | @presenter FontSize */
+  --component-caption-button-typography-caption-md-line-height: 14px; /* component.captionButton.typography.caption.md.lineHeight | @presenter LineHeight */
+  --component-caption-button-typography-caption-md-letter-spacing: 0px; /* component.captionButton.typography.caption.md.letterSpacing | @presenter LetterSpacing */
+  --component-caption-button-typography-caption-lg-font-size: 12px; /* component.captionButton.typography.caption.lg.fontSize | @presenter FontSize */
+  --component-caption-button-typography-caption-lg-line-height: 16px; /* component.captionButton.typography.caption.lg.lineHeight | @presenter LineHeight */
+  --component-caption-button-typography-caption-lg-letter-spacing: 0px; /* component.captionButton.typography.caption.lg.letterSpacing | @presenter LetterSpacing */
+  --component-caption-button-border-width: 1px; /* component.captionButton.border.width | @presenter Spacing */
+  --component-caption-button-focus-outline-width: 2px; /* component.captionButton.focus.outlineWidth | @presenter Spacing */
+  --component-caption-button-focus-outline-offset: 2px; /* component.captionButton.focus.outlineOffset | @presenter Spacing */
+
+  /**
+   * @tokens Social Button Tokens
+   */
+  --component-social-button-color-light-rest-background: #FFFFFF; /* component.socialButton.color.light.rest.background | @presenter Color */
+  --component-social-button-color-light-rest-border: #CBD5E1; /* component.socialButton.color.light.rest.border | @presenter Color */
+  --component-social-button-color-light-rest-foreground: #020617; /* component.socialButton.color.light.rest.foreground | @presenter Color */
+  --component-social-button-color-light-rest-icon: #020617; /* component.socialButton.color.light.rest.icon | @presenter Color */
+  --component-social-button-color-light-hover-background: #F1F5F9; /* component.socialButton.color.light.hover.background | @presenter Color */
+  --component-social-button-color-light-hover-border: #94A3B8; /* component.socialButton.color.light.hover.border | @presenter Color */
+  --component-social-button-color-light-hover-foreground: #020617; /* component.socialButton.color.light.hover.foreground | @presenter Color */
+  --component-social-button-color-light-hover-icon: #020617; /* component.socialButton.color.light.hover.icon | @presenter Color */
+  --component-social-button-color-light-disabled-background: #F1F5F9; /* component.socialButton.color.light.disabled.background | @presenter Color */
+  --component-social-button-color-light-disabled-border: transparent; /* component.socialButton.color.light.disabled.border */
+  --component-social-button-color-light-disabled-foreground: #94A3B8; /* component.socialButton.color.light.disabled.foreground | @presenter Color */
+  --component-social-button-color-light-disabled-icon: #94A3B8; /* component.socialButton.color.light.disabled.icon | @presenter Color */
+  --component-social-button-size-md-height: 40px; /* component.socialButton.size.md.height | @presenter Spacing */
+  --component-social-button-size-md-gap: 6px; /* component.socialButton.size.md.gap | @presenter Spacing */
+  --component-social-button-size-md-padding-inline: 12px; /* component.socialButton.size.md.paddingInline | @presenter Spacing */
+  --component-social-button-size-md-icon-size: 18px; /* component.socialButton.size.md.iconSize | @presenter Spacing */
+  --component-social-button-size-lg-height: 44px; /* component.socialButton.size.lg.height | @presenter Spacing */
+  --component-social-button-size-lg-gap: 8px; /* component.socialButton.size.lg.gap | @presenter Spacing */
+  --component-social-button-size-lg-padding-inline: 16px; /* component.socialButton.size.lg.paddingInline | @presenter Spacing */
+  --component-social-button-size-lg-icon-size: 20px; /* component.socialButton.size.lg.iconSize | @presenter Spacing */
+  --component-social-button-typography-md-font-size: 14px; /* component.socialButton.typography.md.fontSize | @presenter FontSize */
+  --component-social-button-typography-md-line-height: 18px; /* component.socialButton.typography.md.lineHeight | @presenter LineHeight */
+  --component-social-button-typography-md-letter-spacing: 0px; /* component.socialButton.typography.md.letterSpacing | @presenter LetterSpacing */
+  --component-social-button-typography-lg-font-size: 16px; /* component.socialButton.typography.lg.fontSize | @presenter FontSize */
+  --component-social-button-typography-lg-line-height: 20px; /* component.socialButton.typography.lg.lineHeight | @presenter LineHeight */
+  --component-social-button-typography-lg-letter-spacing: 0px; /* component.socialButton.typography.lg.letterSpacing | @presenter LetterSpacing */
+  --component-social-button-border-width: 1px; /* component.socialButton.border.width | @presenter Spacing */
+  --component-social-button-focus-outline-width: 2px; /* component.socialButton.focus.outlineWidth | @presenter Spacing */
+  --component-social-button-focus-outline-offset: 2px; /* component.socialButton.focus.outlineOffset | @presenter Spacing */
+
+  /**
+   * @tokens Back To Top Button Tokens
+   */
+  --component-back-to-top-button-color-light-rest-background: #FFFFFF; /* component.backToTopButton.color.light.rest.background | @presenter Color */
+  --component-back-to-top-button-color-light-rest-border: #D0D5DD; /* component.backToTopButton.color.light.rest.border | @presenter Color */
+  --component-back-to-top-button-color-light-rest-foreground: #020617; /* component.backToTopButton.color.light.rest.foreground | @presenter Color */
+  --component-back-to-top-button-color-light-rest-icon: #020617; /* component.backToTopButton.color.light.rest.icon | @presenter Color */
+  --component-back-to-top-button-color-light-hover-background: #FFFFFF; /* component.backToTopButton.color.light.hover.background | @presenter Color */
+  --component-back-to-top-button-color-light-hover-border: #D0D5DD; /* component.backToTopButton.color.light.hover.border | @presenter Color */
+  --component-back-to-top-button-color-light-hover-foreground: #020617; /* component.backToTopButton.color.light.hover.foreground | @presenter Color */
+  --component-back-to-top-button-color-light-hover-icon: #020617; /* component.backToTopButton.color.light.hover.icon | @presenter Color */
+  --component-back-to-top-button-color-light-disabled-background: #F9FAFB; /* component.backToTopButton.color.light.disabled.background | @presenter Color */
+  --component-back-to-top-button-color-light-disabled-border: transparent; /* component.backToTopButton.color.light.disabled.border */
+  --component-back-to-top-button-color-light-disabled-foreground: #94A3B8; /* component.backToTopButton.color.light.disabled.foreground | @presenter Color */
+  --component-back-to-top-button-color-light-disabled-icon: #94A3B8; /* component.backToTopButton.color.light.disabled.icon | @presenter Color */
+  --component-back-to-top-button-color-dark-rest-background: #0A0A0A; /* component.backToTopButton.color.dark.rest.background | @presenter Color */
+  --component-back-to-top-button-color-dark-rest-border: transparent; /* component.backToTopButton.color.dark.rest.border */
+  --component-back-to-top-button-color-dark-rest-foreground: #FFFFFF; /* component.backToTopButton.color.dark.rest.foreground | @presenter Color */
+  --component-back-to-top-button-color-dark-rest-icon: #FFFFFF; /* component.backToTopButton.color.dark.rest.icon | @presenter Color */
+  --component-back-to-top-button-color-dark-hover-background: #0A0A0A; /* component.backToTopButton.color.dark.hover.background | @presenter Color */
+  --component-back-to-top-button-color-dark-hover-border: transparent; /* component.backToTopButton.color.dark.hover.border */
+  --component-back-to-top-button-color-dark-hover-foreground: #FFFFFF; /* component.backToTopButton.color.dark.hover.foreground | @presenter Color */
+  --component-back-to-top-button-color-dark-hover-icon: #FFFFFF; /* component.backToTopButton.color.dark.hover.icon | @presenter Color */
+  --component-back-to-top-button-color-dark-disabled-background: rgba(255, 255, 255, 0.12); /* component.backToTopButton.color.dark.disabled.background | @presenter Color */
+  --component-back-to-top-button-color-dark-disabled-border: transparent; /* component.backToTopButton.color.dark.disabled.border */
+  --component-back-to-top-button-color-dark-disabled-foreground: rgba(255, 255, 255, 0.3); /* component.backToTopButton.color.dark.disabled.foreground | @presenter Color */
+  --component-back-to-top-button-color-dark-disabled-icon: rgba(255, 255, 255, 0.3); /* component.backToTopButton.color.dark.disabled.icon | @presenter Color */
+  --component-back-to-top-button-size-md-height: 34px; /* component.backToTopButton.size.md.height | @presenter Spacing */
+  --component-back-to-top-button-size-md-gap: 4px; /* component.backToTopButton.size.md.gap | @presenter Spacing */
+  --component-back-to-top-button-size-md-padding-inline: 12px; /* component.backToTopButton.size.md.paddingInline | @presenter Spacing */
+  --component-back-to-top-button-size-md-padding-block: 8px; /* component.backToTopButton.size.md.paddingBlock | @presenter Spacing */
+  --component-back-to-top-button-size-md-icon-size: 14px; /* component.backToTopButton.size.md.iconSize | @presenter Spacing */
+  --component-back-to-top-button-typography-md-font-size: 14px; /* component.backToTopButton.typography.md.fontSize | @presenter FontSize */
+  --component-back-to-top-button-typography-md-line-height: 18px; /* component.backToTopButton.typography.md.lineHeight | @presenter LineHeight */
+  --component-back-to-top-button-typography-md-letter-spacing: 0px; /* component.backToTopButton.typography.md.letterSpacing | @presenter LetterSpacing */
+  --component-back-to-top-button-border-width: 0.5px; /* component.backToTopButton.border.width | @presenter Spacing */
+  --component-back-to-top-button-focus-outline-width: 2px; /* component.backToTopButton.focus.outlineWidth | @presenter Spacing */
+  --component-back-to-top-button-focus-outline-offset: 2px; /* component.backToTopButton.focus.outlineOffset | @presenter Spacing */
+
+  /**
+   * @tokens Icon Button Tokens
+   */
+  --component-icon-button-color-light-solid-primary-rest-background: #155EEF; /* component.iconButton.color.light.solid.primary.rest.background | @presenter Color */
+  --component-icon-button-color-light-solid-primary-rest-foreground: #FFFFFF; /* component.iconButton.color.light.solid.primary.rest.foreground | @presenter Color */
+  --component-icon-button-color-light-solid-primary-hover-background: #004EEB; /* component.iconButton.color.light.solid.primary.hover.background | @presenter Color */
+  --component-icon-button-color-light-solid-primary-hover-foreground: #FFFFFF; /* component.iconButton.color.light.solid.primary.hover.foreground | @presenter Color */
+  --component-icon-button-color-light-solid-black-rest-background: #262626; /* component.iconButton.color.light.solid.black.rest.background | @presenter Color */
+  --component-icon-button-color-light-solid-black-rest-foreground: #FFFFFF; /* component.iconButton.color.light.solid.black.rest.foreground | @presenter Color */
+  --component-icon-button-color-light-solid-black-hover-background: #404040; /* component.iconButton.color.light.solid.black.hover.background | @presenter Color */
+  --component-icon-button-color-light-solid-black-hover-foreground: #FFFFFF; /* component.iconButton.color.light.solid.black.hover.foreground | @presenter Color */
+  --component-icon-button-color-light-outline-primary-rest-background: transparent; /* component.iconButton.color.light.outline.primary.rest.background */
+  --component-icon-button-color-light-outline-primary-rest-border: #155EEF; /* component.iconButton.color.light.outline.primary.rest.border | @presenter Color */
+  --component-icon-button-color-light-outline-primary-rest-foreground: #155EEF; /* component.iconButton.color.light.outline.primary.rest.foreground | @presenter Color */
+  --component-icon-button-color-light-outline-primary-hover-background: #EEF4FF; /* component.iconButton.color.light.outline.primary.hover.background | @presenter Color */
+  --component-icon-button-color-light-outline-primary-hover-border: #155EEF; /* component.iconButton.color.light.outline.primary.hover.border | @presenter Color */
+  --component-icon-button-color-light-outline-primary-hover-foreground: #155EEF; /* component.iconButton.color.light.outline.primary.hover.foreground | @presenter Color */
+  --component-icon-button-color-light-outline-black-rest-background: #FFFFFF; /* component.iconButton.color.light.outline.black.rest.background | @presenter Color */
+  --component-icon-button-color-light-outline-black-rest-border: #E2E8F0; /* component.iconButton.color.light.outline.black.rest.border | @presenter Color */
+  --component-icon-button-color-light-outline-black-rest-foreground: #020617; /* component.iconButton.color.light.outline.black.rest.foreground | @presenter Color */
+  --component-icon-button-color-light-outline-black-hover-background: #F1F5F9; /* component.iconButton.color.light.outline.black.hover.background | @presenter Color */
+  --component-icon-button-color-light-outline-black-hover-border: #CBD5E1; /* component.iconButton.color.light.outline.black.hover.border | @presenter Color */
+  --component-icon-button-color-light-outline-black-hover-foreground: #020617; /* component.iconButton.color.light.outline.black.hover.foreground | @presenter Color */
+  --component-icon-button-color-light-subtle-primary-rest-background: #EEF4FF; /* component.iconButton.color.light.subtle.primary.rest.background | @presenter Color */
+  --component-icon-button-color-light-subtle-primary-rest-foreground: #155EEF; /* component.iconButton.color.light.subtle.primary.rest.foreground | @presenter Color */
+  --component-icon-button-color-light-subtle-primary-hover-background: #D1E0FF; /* component.iconButton.color.light.subtle.primary.hover.background | @presenter Color */
+  --component-icon-button-color-light-subtle-primary-hover-foreground: #155EEF; /* component.iconButton.color.light.subtle.primary.hover.foreground | @presenter Color */
+  --component-icon-button-color-light-subtle-black-rest-background: #F1F5F9; /* component.iconButton.color.light.subtle.black.rest.background | @presenter Color */
+  --component-icon-button-color-light-subtle-black-rest-foreground: #020617; /* component.iconButton.color.light.subtle.black.rest.foreground | @presenter Color */
+  --component-icon-button-color-light-subtle-black-hover-background: #E2E8F0; /* component.iconButton.color.light.subtle.black.hover.background | @presenter Color */
+  --component-icon-button-color-light-subtle-black-hover-foreground: #020617; /* component.iconButton.color.light.subtle.black.hover.foreground | @presenter Color */
+  --component-icon-button-color-light-ghost-primary-rest-background: transparent; /* component.iconButton.color.light.ghost.primary.rest.background */
+  --component-icon-button-color-light-ghost-primary-rest-foreground: #155EEF; /* component.iconButton.color.light.ghost.primary.rest.foreground | @presenter Color */
+  --component-icon-button-color-light-ghost-primary-hover-background: transparent; /* component.iconButton.color.light.ghost.primary.hover.background */
+  --component-icon-button-color-light-ghost-primary-hover-foreground: #155EEF; /* component.iconButton.color.light.ghost.primary.hover.foreground | @presenter Color */
+  --component-icon-button-color-light-ghost-black-rest-background: transparent; /* component.iconButton.color.light.ghost.black.rest.background */
+  --component-icon-button-color-light-ghost-black-rest-foreground: #020617; /* component.iconButton.color.light.ghost.black.rest.foreground | @presenter Color */
+  --component-icon-button-color-light-ghost-black-hover-background: transparent; /* component.iconButton.color.light.ghost.black.hover.background */
+  --component-icon-button-color-light-ghost-black-hover-foreground: #020617; /* component.iconButton.color.light.ghost.black.hover.foreground | @presenter Color */
+  --component-icon-button-color-light-transparent-rest-background: transparent; /* component.iconButton.color.light.transparent.rest.background */
+  --component-icon-button-color-light-transparent-rest-foreground: #020617; /* component.iconButton.color.light.transparent.rest.foreground | @presenter Color */
+  --component-icon-button-color-light-transparent-hover-background: #CBD5E1; /* component.iconButton.color.light.transparent.hover.background | @presenter Color */
+  --component-icon-button-color-light-transparent-hover-foreground: #020617; /* component.iconButton.color.light.transparent.hover.foreground | @presenter Color */
+  --component-icon-button-color-light-disabled-background: #F1F5F9; /* component.iconButton.color.light.disabled.background | @presenter Color */
+  --component-icon-button-color-light-disabled-border: transparent; /* component.iconButton.color.light.disabled.border */
+  --component-icon-button-color-light-disabled-foreground: #94A3B8; /* component.iconButton.color.light.disabled.foreground | @presenter Color */
+  --component-icon-button-color-dark-solid-primary-rest-background: #FFFFFF; /* component.iconButton.color.dark.solid.primary.rest.background | @presenter Color */
+  --component-icon-button-color-dark-solid-primary-rest-foreground: #020617; /* component.iconButton.color.dark.solid.primary.rest.foreground | @presenter Color */
+  --component-icon-button-color-dark-solid-primary-hover-background: #F1F5F9; /* component.iconButton.color.dark.solid.primary.hover.background | @presenter Color */
+  --component-icon-button-color-dark-solid-primary-hover-foreground: #020617; /* component.iconButton.color.dark.solid.primary.hover.foreground | @presenter Color */
+  --component-icon-button-color-dark-solid-black-rest-background: #F1F5F9; /* component.iconButton.color.dark.solid.black.rest.background | @presenter Color */
+  --component-icon-button-color-dark-solid-black-rest-foreground: #020617; /* component.iconButton.color.dark.solid.black.rest.foreground | @presenter Color */
+  --component-icon-button-color-dark-solid-black-hover-background: #E2E8F0; /* component.iconButton.color.dark.solid.black.hover.background | @presenter Color */
+  --component-icon-button-color-dark-solid-black-hover-foreground: #020617; /* component.iconButton.color.dark.solid.black.hover.foreground | @presenter Color */
+  --component-icon-button-color-dark-outline-primary-rest-background: transparent; /* component.iconButton.color.dark.outline.primary.rest.background */
+  --component-icon-button-color-dark-outline-primary-rest-border: #FFFFFF4D; /* component.iconButton.color.dark.outline.primary.rest.border | @presenter Color */
+  --component-icon-button-color-dark-outline-primary-rest-foreground: #FFFFFF; /* component.iconButton.color.dark.outline.primary.rest.foreground | @presenter Color */
+  --component-icon-button-color-dark-outline-primary-hover-background: transparent; /* component.iconButton.color.dark.outline.primary.hover.background */
+  --component-icon-button-color-dark-outline-primary-hover-border: #FFFFFF66; /* component.iconButton.color.dark.outline.primary.hover.border | @presenter Color */
+  --component-icon-button-color-dark-outline-primary-hover-foreground: #FFFFFF; /* component.iconButton.color.dark.outline.primary.hover.foreground | @presenter Color */
+  --component-icon-button-color-dark-outline-black-rest-background: transparent; /* component.iconButton.color.dark.outline.black.rest.background */
+  --component-icon-button-color-dark-outline-black-rest-border: #FFFFFF4D; /* component.iconButton.color.dark.outline.black.rest.border | @presenter Color */
+  --component-icon-button-color-dark-outline-black-rest-foreground: #FFFFFF; /* component.iconButton.color.dark.outline.black.rest.foreground | @presenter Color */
+  --component-icon-button-color-dark-outline-black-hover-background: transparent; /* component.iconButton.color.dark.outline.black.hover.background */
+  --component-icon-button-color-dark-outline-black-hover-border: #FFFFFF66; /* component.iconButton.color.dark.outline.black.hover.border | @presenter Color */
+  --component-icon-button-color-dark-outline-black-hover-foreground: #FFFFFF; /* component.iconButton.color.dark.outline.black.hover.foreground | @presenter Color */
+  --component-icon-button-color-dark-subtle-primary-rest-background: #FFFFFF26; /* component.iconButton.color.dark.subtle.primary.rest.background | @presenter Color */
+  --component-icon-button-color-dark-subtle-primary-rest-foreground: #FFFFFF; /* component.iconButton.color.dark.subtle.primary.rest.foreground | @presenter Color */
+  --component-icon-button-color-dark-subtle-primary-hover-background: #FFFFFF26; /* component.iconButton.color.dark.subtle.primary.hover.background | @presenter Color */
+  --component-icon-button-color-dark-subtle-primary-hover-foreground: #FFFFFF; /* component.iconButton.color.dark.subtle.primary.hover.foreground | @presenter Color */
+  --component-icon-button-color-dark-subtle-black-rest-background: #FFFFFF26; /* component.iconButton.color.dark.subtle.black.rest.background | @presenter Color */
+  --component-icon-button-color-dark-subtle-black-rest-foreground: #FFFFFF; /* component.iconButton.color.dark.subtle.black.rest.foreground | @presenter Color */
+  --component-icon-button-color-dark-subtle-black-hover-background: #FFFFFF26; /* component.iconButton.color.dark.subtle.black.hover.background | @presenter Color */
+  --component-icon-button-color-dark-subtle-black-hover-foreground: #FFFFFF; /* component.iconButton.color.dark.subtle.black.hover.foreground | @presenter Color */
+  --component-icon-button-color-dark-ghost-primary-rest-background: transparent; /* component.iconButton.color.dark.ghost.primary.rest.background */
+  --component-icon-button-color-dark-ghost-primary-rest-foreground: #FFFFFF; /* component.iconButton.color.dark.ghost.primary.rest.foreground | @presenter Color */
+  --component-icon-button-color-dark-ghost-primary-hover-background: transparent; /* component.iconButton.color.dark.ghost.primary.hover.background */
+  --component-icon-button-color-dark-ghost-primary-hover-foreground: #FFFFFF; /* component.iconButton.color.dark.ghost.primary.hover.foreground | @presenter Color */
+  --component-icon-button-color-dark-ghost-black-rest-background: transparent; /* component.iconButton.color.dark.ghost.black.rest.background */
+  --component-icon-button-color-dark-ghost-black-rest-foreground: #FFFFFF; /* component.iconButton.color.dark.ghost.black.rest.foreground | @presenter Color */
+  --component-icon-button-color-dark-ghost-black-hover-background: transparent; /* component.iconButton.color.dark.ghost.black.hover.background */
+  --component-icon-button-color-dark-ghost-black-hover-foreground: #FFFFFF; /* component.iconButton.color.dark.ghost.black.hover.foreground | @presenter Color */
+  --component-icon-button-color-dark-transparent-rest-background: transparent; /* component.iconButton.color.dark.transparent.rest.background */
+  --component-icon-button-color-dark-transparent-rest-foreground: #FFFFFF; /* component.iconButton.color.dark.transparent.rest.foreground | @presenter Color */
+  --component-icon-button-color-dark-transparent-hover-background: #FFFFFF26; /* component.iconButton.color.dark.transparent.hover.background | @presenter Color */
+  --component-icon-button-color-dark-transparent-hover-foreground: #FFFFFF; /* component.iconButton.color.dark.transparent.hover.foreground | @presenter Color */
+  --component-icon-button-color-dark-disabled-background: rgba(255, 255, 255, 0.1); /* component.iconButton.color.dark.disabled.background | @presenter Color */
+  --component-icon-button-color-dark-disabled-border: transparent; /* component.iconButton.color.dark.disabled.border */
+  --component-icon-button-color-dark-disabled-foreground: rgba(255, 255, 255, 0.3); /* component.iconButton.color.dark.disabled.foreground | @presenter Color */
+  --component-icon-button-size-xxxs-border-radius: 6px; /* component.iconButton.size.xxxs.borderRadius | @presenter BorderRadius */
+  --component-icon-button-size-xxxs-box-size: 20px; /* component.iconButton.size.xxxs.boxSize | @presenter Spacing */
+  --component-icon-button-size-xxxs-icon-size: 10px; /* component.iconButton.size.xxxs.iconSize | @presenter Spacing */
+  --component-icon-button-size-xxs-border-radius: 6px; /* component.iconButton.size.xxs.borderRadius | @presenter BorderRadius */
+  --component-icon-button-size-xxs-box-size: 24px; /* component.iconButton.size.xxs.boxSize | @presenter Spacing */
+  --component-icon-button-size-xxs-icon-size: 12px; /* component.iconButton.size.xxs.iconSize | @presenter Spacing */
+  --component-icon-button-size-xs-border-radius: 8px; /* component.iconButton.size.xs.borderRadius | @presenter BorderRadius */
+  --component-icon-button-size-xs-box-size: 28px; /* component.iconButton.size.xs.boxSize | @presenter Spacing */
+  --component-icon-button-size-xs-icon-size: 16px; /* component.iconButton.size.xs.iconSize | @presenter Spacing */
+  --component-icon-button-size-sm-border-radius: 8px; /* component.iconButton.size.sm.borderRadius | @presenter BorderRadius */
+  --component-icon-button-size-sm-box-size: 32px; /* component.iconButton.size.sm.boxSize | @presenter Spacing */
+  --component-icon-button-size-sm-icon-size: 20px; /* component.iconButton.size.sm.iconSize | @presenter Spacing */
+  --component-icon-button-size-md-border-radius: 12px; /* component.iconButton.size.md.borderRadius | @presenter BorderRadius */
+  --component-icon-button-size-md-box-size: 40px; /* component.iconButton.size.md.boxSize | @presenter Spacing */
+  --component-icon-button-size-md-icon-size: 20px; /* component.iconButton.size.md.iconSize | @presenter Spacing */
+  --component-icon-button-size-lg-border-radius: 14px; /* component.iconButton.size.lg.borderRadius | @presenter BorderRadius */
+  --component-icon-button-size-lg-box-size: 44px; /* component.iconButton.size.lg.boxSize | @presenter Spacing */
+  --component-icon-button-size-lg-icon-size: 24px; /* component.iconButton.size.lg.iconSize | @presenter Spacing */
+  --component-icon-button-border-width: 1px; /* component.iconButton.border.width | @presenter Spacing */
+  --component-icon-button-focus-outline-width: 2px; /* component.iconButton.focus.outlineWidth | @presenter Spacing */
+  --component-icon-button-focus-outline-offset: 2px; /* component.iconButton.focus.outlineOffset | @presenter Spacing */
+
+  /**
+   * @tokens Spacing
+   */
+  --spacing-0: 0px; /* spacing.0 | @presenter Spacing */
+  --spacing-1: 4px; /* spacing.1 | @presenter Spacing */
+  --spacing-2: 8px; /* spacing.2 | @presenter Spacing */
+  --spacing-3: 12px; /* spacing.3 | @presenter Spacing */
+  --spacing-4: 16px; /* spacing.4 | @presenter Spacing */
+  --spacing-5: 20px; /* spacing.5 | @presenter Spacing */
+  --spacing-6: 24px; /* spacing.6 | @presenter Spacing */
+  --spacing-8: 32px; /* spacing.8 | @presenter Spacing */
+  --spacing-10: 40px; /* spacing.10 | @presenter Spacing */
+  --spacing-12: 48px; /* spacing.12 | @presenter Spacing */
+  --spacing-16: 64px; /* spacing.16 | @presenter Spacing */
+
+  /**
+   * @tokens Radius
+   */
+  --radius-none: 0px; /* radius.none | @presenter BorderRadius */
+  --radius-sm: 4px; /* radius.sm | @presenter BorderRadius */
+  --radius-md: 8px; /* radius.md | @presenter BorderRadius */
+  --radius-lg: 12px; /* radius.lg | @presenter BorderRadius */
+  --radius-xl: 16px; /* radius.xl | @presenter BorderRadius */
+  --radius-pill: 999px; /* radius.pill | @presenter BorderRadius */
+  --radius-alt-xs: 6px; /* radius.alt.xs | @presenter BorderRadius */
+  --radius-alt-sm: 8px; /* radius.alt.sm | @presenter BorderRadius */
+  --radius-alt-md: 12px; /* radius.alt.md | @presenter BorderRadius */
+  --radius-alt-lg: 14px; /* radius.alt.lg | @presenter BorderRadius */
+  --radius-alt-xl: 16px; /* radius.alt.xl | @presenter BorderRadius */
+
+  /**
+   * @tokens Icon
+   */
+  --icon-style: line; /* icon.style */
+  --icon-stroke-width: 1.5px; /* icon.strokeWidth | @presenter Spacing */
+  --icon-size-sm: 16px; /* icon.size.sm | @presenter Spacing */
+  --icon-size-md: 20px; /* icon.size.md | @presenter Spacing */
+  --icon-size-lg: 24px; /* icon.size.lg | @presenter Spacing */
+
+}

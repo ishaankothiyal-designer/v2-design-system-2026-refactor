@@ -6103,6 +6103,167 @@
       ]
     },
     {
+      "canonicalId": "component.gridCard",
+      "canonicalName": "Grid Card",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": "Grid Cards",
+      "description": "Fixed-dimension discovery card that adapts its content density to the intended grid column count.",
+      "webExport": "@geist/web/canonical/grid-card",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "columnCount",
+          "values": [
+            "2 Column",
+            "3 Column",
+            "4 Column",
+            "5 Column"
+          ]
+        },
+        {
+          "name": "type",
+          "values": [
+            "Text Inside",
+            "Text Outside",
+            "With Icon"
+          ]
+        },
+        {
+          "name": "size",
+          "values": [
+            "Large",
+            "Medium",
+            "Small"
+          ]
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "container.inside.gap",
+          "token": "var(--cars24-misc-gap-10)"
+        },
+        {
+          "slot": "container.outside.gap.2col",
+          "token": "spacing.2"
+        },
+        {
+          "slot": "container.outside.gap.3colPlus",
+          "token": "spacing.1"
+        },
+        {
+          "slot": "container.padding.2col",
+          "token": "spacing.3"
+        },
+        {
+          "slot": "container.padding.3colPlus",
+          "token": "var(--cars24-misc-gap-10)"
+        },
+        {
+          "slot": "slot.background",
+          "token": "var(--cars24-primitive-drive-pink-50)"
+        },
+        {
+          "slot": "slot.radius.standard",
+          "token": "radius.xl"
+        },
+        {
+          "slot": "slot.radius.compact",
+          "token": "radius.lg"
+        },
+        {
+          "slot": "content.title.color",
+          "token": "color.text.primary"
+        },
+        {
+          "slot": "content.description.color",
+          "token": "color.text.secondary"
+        },
+        {
+          "slot": "content.title.fontFamily",
+          "token": "var(--cars24-theme-font-family-primary)"
+        },
+        {
+          "slot": "content.title.fontWeight",
+          "token": "var(--cars24-theme-font-weight-semibold)"
+        },
+        {
+          "slot": "content.title.lg",
+          "token": "utility/label-1/semibold"
+        },
+        {
+          "slot": "content.title.md",
+          "token": "utility/label-2/semibold"
+        },
+        {
+          "slot": "content.title.sm",
+          "token": "utility/label-3/semibold"
+        },
+        {
+          "slot": "content.description.fontFamily",
+          "token": "var(--cars24-theme-font-family-primary)"
+        },
+        {
+          "slot": "content.description.fontWeight",
+          "token": "var(--cars24-theme-font-weight-regular)"
+        },
+        {
+          "slot": "content.description.lg",
+          "token": "paragraph/body-2"
+        },
+        {
+          "slot": "content.description.md",
+          "token": "paragraph/body-3"
+        },
+        {
+          "slot": "tag.background",
+          "token": "var(--cars24-semantic-bg-danger-base)"
+        },
+        {
+          "slot": "tag.foreground",
+          "token": "var(--cars24-semantic-text-primary-inverse)"
+        },
+        {
+          "slot": "tag.typography",
+          "token": "utility/label-4/medium"
+        },
+        {
+          "slot": "tag.radius",
+          "token": "var(--cars24-theme-radius-full)"
+        },
+        {
+          "slot": "icon.color",
+          "token": "color.text.primary"
+        },
+        {
+          "slot": "icon.size.2col",
+          "token": "var(--cars24-misc-size-32)"
+        },
+        {
+          "slot": "icon.size.3col.lg",
+          "token": "var(--cars24-misc-size-28)"
+        },
+        {
+          "slot": "icon.size.3col.compact",
+          "token": "var(--cars24-misc-size-24)"
+        },
+        {
+          "slot": "icon.size.4colPlus",
+          "token": "var(--cars24-misc-size-20)"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
       "canonicalId": "component.notificationBadge",
       "canonicalName": "Notification Badge",
       "layer": "component",
@@ -7670,6 +7831,22 @@
         "component.sectionHeader",
         "component.socialButton",
         "component.textInput"
+      ]
+    },
+    {
+      "canonicalId": "widget.gridWidget",
+      "canonicalName": "Grid Widget",
+      "layer": "widget",
+      "status": "approved",
+      "platform": "web",
+      "description": "Discovery widget that packages a section header, a two-card grid row, and a single primary CTA.",
+      "composition": [
+        "component.sectionHeader",
+        "component.gridCard",
+        "component.buttonGroup"
+      ],
+      "allowedChildren": [
+        "component.gridCard"
       ]
     },
     {

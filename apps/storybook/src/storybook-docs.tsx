@@ -243,6 +243,12 @@ function ControlsWithRemarks({
   return <div ref={wrapperRef}>{story ? <Controls of={story as never} /> : <Controls />}</div>;
 }
 
+type ResolvedStoryEntry = {
+  moduleExport?: unknown;
+  name: string;
+  argTypes?: unknown;
+};
+
 function resolveStory(moduleExports: Record<string, unknown>, exportName?: string) {
   if (!exportName) {
     return undefined;
@@ -250,13 +256,28 @@ function resolveStory(moduleExports: Record<string, unknown>, exportName?: strin
 
   const storyName = exportName.replace(/([a-z0-9])([A-Z])/g, "$1 $2");
   return Object.values(moduleExports).find(
-    (story): story is { moduleExport: unknown; name: string } =>
+    (story): story is ResolvedStoryEntry =>
       typeof story === "object" &&
       story !== null &&
-      "moduleExport" in story &&
       "name" in story &&
       (story as { name: string }).name === storyName
-  )?.moduleExport;
+  );
+}
+
+function getStoryArgTypes(story: unknown): ArgTypeMap {
+  if (typeof story !== "object" || story === null) {
+    return {};
+  }
+
+  const directArgTypes = (story as { argTypes?: unknown }).argTypes;
+  if (typeof directArgTypes === "object" && directArgTypes !== null) {
+    return directArgTypes as ArgTypeMap;
+  }
+
+  const moduleExportArgTypes = (story as { moduleExport?: { argTypes?: unknown } }).moduleExport?.argTypes;
+  return typeof moduleExportArgTypes === "object" && moduleExportArgTypes !== null
+    ? (moduleExportArgTypes as ArgTypeMap)
+    : {};
 }
 
 export function ComponentDocsPage() {
@@ -270,6 +291,11 @@ export function ComponentDocsPage() {
 
   const stories = resolvedMeta.csfFile.stories as Record<string, unknown>;
   const playgroundStory = resolveStory(stories, "Playground");
+  const playgroundStoryExport = playgroundStory?.moduleExport;
+  const mergedArgTypes = {
+    ...((preparedMeta.argTypes ?? {}) as ArgTypeMap),
+    ...getStoryArgTypes(playgroundStory)
+  };
 
   return (
     <>
@@ -278,29 +304,29 @@ export function ComponentDocsPage() {
 
       <Description of="meta" />
 
-      {playgroundStory ? (
+      {playgroundStoryExport ? (
         <>
           <Text as="strong" brand="Cars24" size="xl" tone="primary" style={{ display: "block", ...sectionHeadingStyles }}>
             Playground
           </Text>
-          <Canvas of={playgroundStory as never} sourceState="shown" story={{ height: "400px" }} />
+          <Canvas of={playgroundStoryExport as never} sourceState="shown" story={{ height: "400px" }} />
         </>
       ) : null}
 
       <Text as="strong" brand="Cars24" size="xl" tone="primary" style={{ display: "block", ...sectionHeadingStyles }}>
         Docs
       </Text>
-      {playgroundStory ? (
+      {playgroundStoryExport ? (
         <ControlsWithRemarks
-          argTypes={(preparedMeta.argTypes ?? {}) as ArgTypeMap}
-          story={playgroundStory}
+          argTypes={mergedArgTypes}
+          story={playgroundStoryExport}
           title={title}
         />
       ) : (
         <ControlsWithRemarks argTypes={(preparedMeta.argTypes ?? {}) as ArgTypeMap} title={title} />
       )}
 
-      <Stories includePrimary={!playgroundStory} />
+      <Stories includePrimary={!playgroundStoryExport} />
     </>
   );
 }

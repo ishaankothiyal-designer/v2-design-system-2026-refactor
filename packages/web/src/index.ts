@@ -36,6 +36,8 @@ export * from "./canonical/label";
 export * from "./canonical/helper-text";
 export * from "./canonical/badge";
 export * from "./canonical/decoration-badge";
+export * from "./canonical/grid-card";
+export * from "./canonical/grid-widget";
 export * from "./canonical/tooltip";
 export * from "./canonical/counter-badge";
 export * from "./canonical/notification-badge";
