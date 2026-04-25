@@ -72,6 +72,9 @@ Examples:
 Rule:
 Use Theme collection only for values that can change by brand.
 
+Additional rule:
+Use `brand/alt/*` tokens only for solid buttons, outline buttons, and approved input-field or text-field components.
+
 ### 2. Typography
 
 Responsive type scale tokens.
@@ -220,6 +223,7 @@ Guidelines:
 - use Primitive tokens as base building blocks only
 - keep token paths stable after adoption
 - add new tokens only when existing path cannot express need
+- use `brand/alt/*` only in solid button, outline button, and approved field components
 
 ### Do Not
 
@@ -228,6 +232,7 @@ Guidelines:
 - do not create duplicate tokens for same meaning
 - do not encode one-off component names into shared token paths
 - do not change token names casually after code or Figma starts depending on them
+- do not use `brand/alt/*` on badges, tabs, pagination, chat bars, icon-only actions, or other non-field/non-button surfaces
 
 ## Update Workflow
 

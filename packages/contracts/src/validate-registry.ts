@@ -10,6 +10,25 @@ const allEntityIds = new Set<string>();
 const componentIds = new Set<string>();
 const widgetIds = new Set<string>();
 const pageIds = new Set<string>();
+const brandAltTokenPrefix = "color.brand.alt.";
+const brandAltAllowedFieldComponents = new Set([
+  "component.phoneInput",
+  "component.textInput",
+  "component.dropdown",
+  "component.otpInput"
+]);
+
+function isAllowedBrandAltBinding(componentId: string, slot: string, token: string) {
+  if (!token.startsWith(brandAltTokenPrefix)) {
+    return true;
+  }
+
+  if (componentId === "component.button") {
+    return slot.includes(".solid.") || slot.includes(".outline.");
+  }
+
+  return brandAltAllowedFieldComponents.has(componentId);
+}
 
 for (const component of designSystemRegistry.components) {
   assert(
@@ -20,6 +39,12 @@ for (const component of designSystemRegistry.components) {
   componentIds.add(component.canonicalId);
   assert(component.figmaComponentName.length > 0, `Missing Figma mapping for ${component.canonicalId}`);
   assert(component.tokenBindings.length > 0, `Missing token bindings for ${component.canonicalId}`);
+  for (const binding of component.tokenBindings) {
+    assert(
+      isAllowedBrandAltBinding(component.canonicalId, binding.slot, binding.token),
+      `Brand alt token ${binding.token} is not allowed on ${component.canonicalId}.${binding.slot}. Restrict alt colors to solid/outline buttons and approved input-field or text-field components.`
+    );
+  }
 }
 
 for (const widget of designSystemRegistry.widgets) {

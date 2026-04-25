@@ -23,6 +23,11 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "description": "Theme and brand overrides may adjust approved token scopes only. They must not break canonical contracts."
     },
     {
+      "id": "rule.brand-alt-scope",
+      "title": "Brand alt scope",
+      "description": "Brand alt color tokens are reserved for solid and outline button treatments plus approved input-field and text-field components only."
+    },
+    {
       "id": "rule.registry-first",
       "title": "Registry first",
       "description": "Storybook and the contracts package must expose queryable metadata for future AI composition workflows."
