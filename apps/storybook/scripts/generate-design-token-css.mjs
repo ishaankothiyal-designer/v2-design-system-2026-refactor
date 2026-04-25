@@ -409,6 +409,38 @@ function generateFigmaColorDocs() {
   const { resolveColorValue } = createFigmaResolvers(figmaExport);
   const groups = [];
 
+  function pushCollectionSections(collection, options) {
+    if (!collection) {
+      return;
+    }
+
+    const sectionRoots = options.sectionRoots ?? [];
+
+    for (const section of sectionRoots) {
+      const sectionVariables = (collection.variables ?? [])
+        .filter((variable) => variable.resolvedType === "COLOR" && variable.name.startsWith(`${section.root}/`))
+        .sort((left, right) => compareNaturally(left.name, right.name));
+
+      if (sectionVariables.length === 0) {
+        continue;
+      }
+
+      groups.push({
+        category: section.title,
+        heading: section.title,
+        description: section.description,
+        tokens: sectionVariables.map((variable) => ({
+          cssName: `--${options.cssPrefix}-${variable.name.split("/").map(toKebabCase).join("-")}`,
+          path: `${collection.name}.${variable.name.replace(/\//g, ".")}`,
+          description: variable.description,
+          codeSyntax: variable.codeSyntax?.WEB,
+          presenter: "Color",
+          value: resolveColorValue(variable, collection.defaultModeId, options.defaultModeName)
+        }))
+      });
+    }
+  }
+
   const themeCollection = (figmaExport.collections ?? []).find((collection) => collection.name === "Theme");
 
   if (themeCollection) {
@@ -435,38 +467,55 @@ function generateFigmaColorDocs() {
 
   const semanticCollection = (figmaExport.collections ?? []).find((collection) => collection.name === "Semantic");
 
-  if (semanticCollection) {
-    const semanticSections = [
+  pushCollectionSections(semanticCollection, {
+    cssPrefix: "figma-semantic",
+    defaultModeName: "Value",
+    sectionRoots: [
       { root: "bg", title: "Semantic / Background", description: "Background fills and overlays across surface, brand, and feedback states." },
       { root: "text", title: "Semantic / Text", description: "Readable foreground text colors for default, inverse, brand, and feedback usage." },
       { root: "icon", title: "Semantic / Icon", description: "Icon foreground colors aligned with the semantic text and feedback system." },
       { root: "border", title: "Semantic / Border", description: "Border and outline colors for default, brand, inverse, and status surfaces." }
-    ];
+    ]
+  });
 
-    for (const section of semanticSections) {
-      const sectionVariables = (semanticCollection.variables ?? [])
-        .filter((variable) => variable.resolvedType === "COLOR" && variable.name.startsWith(`${section.root}/`))
-        .sort((left, right) => compareNaturally(left.name, right.name));
+  const primitiveCollection = (figmaExport.collections ?? []).find((collection) => collection.name === "Primitive");
 
-      if (sectionVariables.length === 0) {
-        continue;
-      }
+  pushCollectionSections(primitiveCollection, {
+    cssPrefix: "figma-primitive",
+    defaultModeName: "Value",
+    sectionRoots: [
+      { root: "base", title: "Primitive / Base", description: "Raw foundational black and white primitives used as palette anchors." },
+      { root: "amber", title: "Primitive / Amber", description: "Raw amber palette ramp from lightest tint to strongest tone." },
+      { root: "bright-blue", title: "Primitive / Bright Blue", description: "Raw bright blue palette ramp for informational and accent building blocks." },
+      { root: "cobalt-blue", title: "Primitive / Cobalt Blue", description: "Raw cobalt blue palette ramp for saturated brand-adjacent usage." },
+      { root: "cool-mint", title: "Primitive / Cool Mint", description: "Raw cool mint palette ramp for fresh green-blue tonal steps." },
+      { root: "cream-beige", title: "Primitive / Cream Beige", description: "Raw cream beige palette ramp for warm neutral tonal steps." },
+      { root: "crimson-red", title: "Primitive / Crimson Red", description: "Raw crimson red palette ramp for strong red tonal steps." },
+      { root: "drive-pink", title: "Primitive / Drive Pink", description: "Raw drive pink palette ramp for vivid magenta tonal steps." },
+      { root: "electric-violet", title: "Primitive / Electric Violet", description: "Raw electric violet palette ramp for vibrant purple tonal steps." },
+      { root: "green", title: "Primitive / Green", description: "Raw green palette ramp for success and natural tonal steps." },
+      { root: "lotus-blue", title: "Primitive / Lotus Blue", description: "Raw lotus blue palette ramp for softer blue tonal steps." },
+      { root: "mint-green", title: "Primitive / Mint Green", description: "Raw mint green palette ramp for light green tonal steps." },
+      { root: "neutral", title: "Primitive / Neutral", description: "Raw neutral grayscale palette ramp for non-brand tonal steps." },
+      { root: "orange", title: "Primitive / Orange", description: "Raw orange palette ramp for warning and warm accent tonal steps." },
+      { root: "pop-purple", title: "Primitive / Pop Purple", description: "Raw pop purple palette ramp for expressive purple tonal steps." },
+      { root: "red", title: "Primitive / Red", description: "Raw red palette ramp for danger and alert tonal steps." },
+      { root: "sky-surge", title: "Primitive / Sky Surge", description: "Raw sky surge palette ramp for energetic blue tonal steps." },
+      { root: "slate", title: "Primitive / Slate", description: "Raw slate palette ramp for cool neutral tonal steps." },
+      { root: "teal", title: "Primitive / Teal", description: "Raw teal palette ramp for blue-green tonal steps." }
+    ]
+  });
 
-      groups.push({
-        category: section.title,
-        heading: section.title,
-        description: section.description,
-        tokens: sectionVariables.map((variable) => ({
-          cssName: `--figma-semantic-${variable.name.split("/").map(toKebabCase).join("-")}`,
-          path: `Semantic.${variable.name.replace(/\//g, ".")}`,
-          description: variable.description,
-          codeSyntax: variable.codeSyntax?.WEB,
-          presenter: "Color",
-          value: resolveColorValue(variable, semanticCollection.defaultModeId, "Value")
-        }))
-      });
-    }
-  }
+  const utilityCollection = (figmaExport.collections ?? []).find((collection) => collection.name === "Utility");
+
+  pushCollectionSections(utilityCollection, {
+    cssPrefix: "figma-utility",
+    defaultModeName: "Mode 1",
+    sectionRoots: [
+      { root: "alpha", title: "Utility / Alpha", description: "Alpha overlays for black and white transparency steps used across surfaces and states." },
+      { root: "service", title: "Utility / Service", description: "Service-specific utility ramps for buy, sell, insurance, loan, and related service surfaces." }
+    ]
+  });
 
   writeFileSync(
     figmaCssOutputPath,
@@ -481,7 +530,7 @@ function generateFigmaColorDocs() {
     "",
     "# Color Tokens",
     "",
-    "Complete structural color documentation generated from the full Figma token export. This page covers every exported color token across theme modes and semantic token families.",
+    "Complete structural color documentation generated from the full Figma token export. This page covers theme, semantic, primitive, and utility color tokens.",
     ""
   ];
 
