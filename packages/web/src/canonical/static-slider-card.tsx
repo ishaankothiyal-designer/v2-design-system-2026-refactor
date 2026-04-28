@@ -6,21 +6,22 @@ import { getRequiredThemeTokenValue, pxToRem } from "../theme";
 import { Icon } from "./icon";
 import { Tag } from "./tag";
 
-export const canonicalGridCardWebContract = designSystemRegistry.components.find(
-  (component) => component.canonicalId === "component.gridCard"
+export const canonicalStaticSliderCardWebContract = designSystemRegistry.components.find(
+  (component) => component.canonicalId === "component.staticSliderCard"
 );
 
-export type GridCardColumnCount = "2 Column" | "3 Column" | "4 Column" | "5 Column";
-export type GridCardType = "Text Inside" | "Text Outside" | "With Icon";
-export type GridCardSize = "Large" | "Medium" | "Small";
+export type StaticSliderCardColumnCount = "1+" | "2+" | "3+" | "4+";
+export type StaticSliderCardType = "Text Inside" | "Text Outside" | "With Icon";
+export type StaticSliderCardSize = "Large" | "Medium" | "Small";
 
-type GridCardTextScale = "L" | "S" | "XS";
+type StaticSliderCardTextScale = "L" | "S";
 
-export interface GridCardProps extends Omit<HTMLAttributes<HTMLDivElement>, "children" | "title"> {
+export interface StaticSliderCardProps
+  extends Omit<HTMLAttributes<HTMLDivElement>, "children" | "title"> {
   brand?: DisplayBrandId;
-  columnCount?: GridCardColumnCount;
-  type?: GridCardType;
-  size?: GridCardSize;
+  columnCount?: StaticSliderCardColumnCount;
+  type?: StaticSliderCardType;
+  size?: StaticSliderCardSize;
   title?: string;
   description?: string;
   tagLabel?: string;
@@ -28,18 +29,17 @@ export interface GridCardProps extends Omit<HTMLAttributes<HTMLDivElement>, "chi
   children?: ReactNode;
 }
 
-type GridCardMetrics = {
+type StaticSliderCardMetrics = {
   width: number;
-  slotHeight: number;
-  outsideGap: number;
+  height: number;
+  textOutsideMediaHeight: number | null;
   contentInset: number;
-  outsideTagInset: number;
   iconSize: number;
-  textScale: GridCardTextScale;
+  textScale: StaticSliderCardTextScale;
 };
 
 const TITLE_TYPOGRAPHY: Record<
-  GridCardTextScale,
+  StaticSliderCardTextScale,
   { fontSize: number; lineHeight: number; letterSpacing: number }
 > = {
   L: {
@@ -51,16 +51,11 @@ const TITLE_TYPOGRAPHY: Record<
     fontSize: 14,
     lineHeight: 18,
     letterSpacing: 0
-  },
-  XS: {
-    fontSize: 12,
-    lineHeight: 16,
-    letterSpacing: 0
   }
 };
 
 const DESCRIPTION_TYPOGRAPHY: Record<
-  Exclude<GridCardTextScale, "XS">,
+  StaticSliderCardTextScale,
   { fontSize: number; lineHeight: number; letterSpacing: number }
 > = {
   L: {
@@ -75,176 +70,185 @@ const DESCRIPTION_TYPOGRAPHY: Record<
   }
 };
 
-const GRID_CARD_METRICS: Record<
-  GridCardColumnCount,
-  Partial<Record<GridCardSize, GridCardMetrics>>
+const STATIC_SLIDER_CARD_METRICS: Record<
+  StaticSliderCardColumnCount,
+  Partial<Record<StaticSliderCardSize, StaticSliderCardMetrics>>
 > = {
-  "2 Column": {
+  "1+": {
     Large: {
-      width: 162,
-      slotHeight: 194,
-      outsideGap: 8,
+      width: 200,
+      height: 240,
+      textOutsideMediaHeight: 200,
       contentInset: 12,
-      outsideTagInset: 10,
       iconSize: 32,
       textScale: "L"
     },
     Medium: {
-      width: 162,
-      slotHeight: 162,
-      outsideGap: 8,
+      width: 200,
+      height: 200,
+      textOutsideMediaHeight: 156,
       contentInset: 12,
-      outsideTagInset: 10,
       iconSize: 32,
       textScale: "L"
     },
     Small: {
-      width: 162,
-      slotHeight: 108,
-      outsideGap: 8,
+      width: 200,
+      height: 120,
+      textOutsideMediaHeight: 80,
       contentInset: 12,
-      outsideTagInset: 10,
       iconSize: 32,
       textScale: "L"
     }
   },
-  "3 Column": {
+  "2+": {
     Large: {
-      width: 104,
-      slotHeight: 125,
-      outsideGap: 4,
+      width: 140,
+      height: 168,
+      textOutsideMediaHeight: 128,
+      contentInset: 12,
+      iconSize: 24,
+      textScale: "L"
+    },
+    Medium: {
+      width: 140,
+      height: 140,
+      textOutsideMediaHeight: 96,
+      contentInset: 12,
+      iconSize: 24,
+      textScale: "L"
+    },
+    Small: {
+      width: 140,
+      height: 84,
+      textOutsideMediaHeight: null,
+      contentInset: 12,
+      iconSize: 24,
+      textScale: "L"
+    }
+  },
+  "3+": {
+    Large: {
+      width: 92,
+      height: 110,
+      textOutsideMediaHeight: 73,
       contentInset: 10,
-      outsideTagInset: 8,
-      iconSize: 28,
+      iconSize: 20,
       textScale: "S"
     },
     Medium: {
-      width: 104,
-      slotHeight: 104,
-      outsideGap: 4,
+      width: 92,
+      height: 92,
+      textOutsideMediaHeight: 66,
       contentInset: 10,
-      outsideTagInset: 8,
-      iconSize: 24,
+      iconSize: 20,
       textScale: "S"
     },
     Small: {
-      width: 104,
-      slotHeight: 69,
-      outsideGap: 4,
+      width: 92,
+      height: 55,
+      textOutsideMediaHeight: null,
       contentInset: 10,
-      outsideTagInset: 8,
-      iconSize: 24,
-      textScale: "S"
+      iconSize: 20,
+      textScale: "L"
     }
   },
-  "4 Column": {
+  "4+": {
     Large: {
-      width: 75,
-      slotHeight: 90,
-      outsideGap: 4,
+      width: 70,
+      height: 84,
+      textOutsideMediaHeight: 62,
       contentInset: 10,
-      outsideTagInset: 8,
-      iconSize: 20,
+      iconSize: 16,
       textScale: "S"
     },
     Medium: {
-      width: 75,
-      slotHeight: 75,
-      outsideGap: 4,
+      width: 70,
+      height: 70,
+      textOutsideMediaHeight: 44,
       contentInset: 10,
-      outsideTagInset: 8,
-      iconSize: 20,
+      iconSize: 16,
       textScale: "S"
     }
-  },
-  "5 Column": {
-    Large: {
-      width: 60,
-      slotHeight: 81,
-      outsideGap: 4,
-      contentInset: 10,
-      outsideTagInset: 8,
-      iconSize: 20,
-      textScale: "XS"
-    }
   }
 };
 
-const TEXT_OUTSIDE_SLOT_HEIGHT: Record<
-  GridCardColumnCount,
-  Partial<Record<GridCardSize, number>>
-> = {
-  "2 Column": {
-    Large: 150,
-    Medium: 122,
-    Small: 84
-  },
-  "3 Column": {
-    Large: 89,
-    Medium: 68,
-    Small: 49
-  },
-  "4 Column": {
-    Large: 70,
-    Medium: 55
-  },
-  "5 Column": {
-    Large: 43
-  }
-};
+function getInsideRadiusTokenPath(columnCount: StaticSliderCardColumnCount) {
+  return columnCount === "1+" || columnCount === "2+" ? "radius.xl" : "radius.lg";
+}
 
-function resolveMetrics(columnCount: GridCardColumnCount, size: GridCardSize, type: GridCardType) {
-  const metrics = GRID_CARD_METRICS[columnCount][size];
+function getOutsideRadiusTokenPath(columnCount: StaticSliderCardColumnCount) {
+  if (columnCount === "4+") {
+    return "radius.md";
+  }
+
+  return columnCount === "1+" || columnCount === "2+" ? "radius.xl" : "radius.lg";
+}
+
+function resolveMetrics(
+  columnCount: StaticSliderCardColumnCount,
+  size: StaticSliderCardSize,
+  type: StaticSliderCardType
+) {
+  const metrics = STATIC_SLIDER_CARD_METRICS[columnCount][size];
 
   if (!metrics) {
     throw new Error(
-      `GridCard does not support the Figma-invisible combination: ${columnCount} / ${type} / ${size}.`
+      `StaticSliderCard does not support the Figma-invisible combination: ${columnCount} / ${type} / ${size}.`
     );
   }
 
-  if (type === "Text Outside") {
-    const outsideSlotHeight = TEXT_OUTSIDE_SLOT_HEIGHT[columnCount][size];
+  if (type === "Text Outside" && metrics.textOutsideMediaHeight === null) {
+    throw new Error(
+      `StaticSliderCard does not support the Figma-invisible combination: ${columnCount} / ${type} / ${size}.`
+    );
+  }
 
-    if (!outsideSlotHeight) {
-      throw new Error(
-        `GridCard does not support the Figma-invisible combination: ${columnCount} / ${type} / ${size}.`
-      );
-    }
-
-    return {
-      ...metrics,
-      slotHeight: outsideSlotHeight
-    };
+  if (columnCount === "3+" && size === "Small" && type !== "Text Inside") {
+    throw new Error(
+      `StaticSliderCard does not support the Figma-invisible combination: ${columnCount} / ${type} / ${size}.`
+    );
   }
 
   return metrics;
 }
 
-function getSlotRadiusTokenPath(columnCount: GridCardColumnCount) {
-  return columnCount === "5 Column" ? "radius.lg" : "radius.xl";
+function allowsTag(
+  columnCount: StaticSliderCardColumnCount,
+  size: StaticSliderCardSize,
+  type: StaticSliderCardType
+) {
+  if (columnCount === "4+") {
+    return false;
+  }
+
+  if (columnCount === "3+") {
+    return type === "Text Outside" && size !== "Small";
+  }
+
+  return true;
 }
 
-function allowsTag(columnCount: GridCardColumnCount, size: GridCardSize, type: GridCardType) {
-  if (columnCount === "2 Column") {
+function allowsDescription(
+  columnCount: StaticSliderCardColumnCount,
+  size: StaticSliderCardSize,
+  type: StaticSliderCardType
+) {
+  if (type === "Text Outside") {
+    return false;
+  }
+
+  if (columnCount === "1+") {
     return true;
   }
 
-  if (columnCount === "3 Column") {
-    return size !== "Small" || type === "Text Outside";
+  if (columnCount === "2+") {
+    return !(type === "With Icon" && size === "Small");
   }
 
   return false;
 }
 
-function allowsDescription(columnCount: GridCardColumnCount, size: GridCardSize, type: GridCardType) {
-  if (type === "Text Outside") {
-    return false;
-  }
-
-  return columnCount === "2 Column" || (columnCount === "3 Column" && size !== "Small");
-}
-
-function GridCardTextBlock({
+function StaticSliderCardTextBlock({
   align,
   brand,
   description,
@@ -256,11 +260,11 @@ function GridCardTextBlock({
   brand: DisplayBrandId;
   description?: string | undefined;
   descriptionTone: string;
-  scale: GridCardTextScale;
+  scale: StaticSliderCardTextScale;
   title: string;
 }) {
   const titleTypography = TITLE_TYPOGRAPHY[scale];
-  const descriptionTypography = scale === "XS" ? null : DESCRIPTION_TYPOGRAPHY[scale];
+  const descriptionTypography = DESCRIPTION_TYPOGRAPHY[scale];
   const fontFamily = `${String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"))}, sans-serif`;
   const titleWeight = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.semibold"));
   const descriptionWeight = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.regular"));
@@ -271,7 +275,7 @@ function GridCardTextBlock({
     alignItems: align === "center" ? "center" : "flex-start",
     display: "flex",
     flexDirection: "column",
-    gap: scale === "XS" || !description ? 0 : pxToRem(2),
+    gap: description ? pxToRem(2) : 0,
     minWidth: 0,
     textAlign
   };
@@ -289,21 +293,20 @@ function GridCardTextBlock({
     overflowWrap: "anywhere"
   };
 
-  const descriptionStyles: CSSProperties | null =
-    description && descriptionTypography
-      ? {
-          color: descriptionTone,
-          display: "block",
-          fontFamily,
-          fontSize: pxToRem(descriptionTypography.fontSize),
-          fontWeight: descriptionWeight,
-          letterSpacing: `${descriptionTypography.letterSpacing}px`,
-          lineHeight: pxToRem(descriptionTypography.lineHeight),
-          margin: 0,
-          maxWidth: "100%",
-          overflowWrap: "anywhere"
-        }
-      : null;
+  const descriptionStyles: CSSProperties | null = description
+    ? {
+        color: descriptionTone,
+        display: "block",
+        fontFamily,
+        fontSize: pxToRem(descriptionTypography.fontSize),
+        fontWeight: descriptionWeight,
+        letterSpacing: `${descriptionTypography.letterSpacing}px`,
+        lineHeight: pxToRem(descriptionTypography.lineHeight),
+        margin: 0,
+        maxWidth: "100%",
+        overflowWrap: "anywhere"
+      }
+    : null;
 
   return (
     <div style={wrapperStyles}>
@@ -313,7 +316,7 @@ function GridCardTextBlock({
   );
 }
 
-function GridCardIcon({
+function StaticSliderCardIcon({
   brand,
   iconName,
   size
@@ -327,51 +330,55 @@ function GridCardIcon({
       brand={brand}
       decorative
       name={iconName}
-      style={{ fontSize: pxToRem(size), color: String(getRequiredThemeTokenValue(brand, "color.text.primary")) }}
+      style={{ color: String(getRequiredThemeTokenValue(brand, "color.text.primary")), fontSize: pxToRem(size) }}
     />
   );
 }
 
 /**
- * Fixed-dimension content card used inside editorial or discovery grids, with visual density controlled by the intended grid column count.
+ * Slot-based fixed-dimension card used by the static slider widget, adapting density across the approved slider column counts.
  */
-export function GridCard({
+export function StaticSliderCard({
   brand = "Cars24",
   children,
   className,
-  columnCount = "2 Column",
+  columnCount = "1+",
   description = "Description",
   iconName = "placeholder-generate-outline",
-  size = "Large",
+  size = "Medium",
   style,
   tagLabel = "New",
   title = "Title",
   type = "Text Inside",
   ...rest
-}: GridCardProps) {
+}: StaticSliderCardProps) {
   const metrics = resolveMetrics(columnCount, size, type);
   const showTag = Boolean(tagLabel) && allowsTag(columnCount, size, type);
   const showDescription = Boolean(description) && allowsDescription(columnCount, size, type);
   const descriptionTone = String(getRequiredThemeTokenValue(brand, "color.text.secondary"));
   const slotSurface = String(getRequiredThemeTokenValue(brand, "color.brand.primary.50"));
-  const slotRadius = pxToRem(Number(getRequiredThemeTokenValue(brand, getSlotRadiusTokenPath(columnCount))));
+  const insideRadius = pxToRem(Number(getRequiredThemeTokenValue(brand, getInsideRadiusTokenPath(columnCount))));
+  const outsideRadius = pxToRem(Number(getRequiredThemeTokenValue(brand, getOutsideRadiusTokenPath(columnCount))));
   const contentInset = pxToRem(metrics.contentInset);
 
   const rootStyles: CSSProperties = {
     display: "flex",
     flexDirection: "column",
     flexShrink: 0,
-    gap: type === "Text Outside" ? pxToRem(metrics.outsideGap) : undefined,
+    gap: type === "Text Outside" ? pxToRem(Number(getRequiredThemeTokenValue(brand, "spacing.2"))) : undefined,
     position: "relative",
     width: pxToRem(metrics.width),
-    ...(type === "Text Outside" ? null : { height: pxToRem(metrics.slotHeight) }),
+    ...(type === "Text Outside" ? null : { height: pxToRem(metrics.height) }),
     ...style
   };
 
   const slotStyles: CSSProperties = {
     background: slotSurface,
-    borderRadius: slotRadius,
-    height: pxToRem(metrics.slotHeight),
+    borderRadius: type === "Text Outside" ? outsideRadius : insideRadius,
+    height:
+      type === "Text Outside"
+        ? pxToRem(metrics.textOutsideMediaHeight ?? metrics.height)
+        : pxToRem(metrics.height),
     inset: type === "Text Outside" ? undefined : 0,
     overflow: "hidden",
     position: type === "Text Outside" ? "relative" : "absolute",
@@ -379,7 +386,7 @@ export function GridCard({
   };
 
   const slotContentStyles: CSSProperties = {
-    borderRadius: slotRadius,
+    borderRadius: type === "Text Outside" ? outsideRadius : insideRadius,
     inset: 0,
     overflow: "hidden",
     position: "absolute"
@@ -402,7 +409,7 @@ export function GridCard({
               position: "absolute"
             }}
           >
-            <GridCardTextBlock
+            <StaticSliderCardTextBlock
               align="left"
               brand={brand}
               description={showDescription ? description : undefined}
@@ -427,15 +434,15 @@ export function GridCard({
               style={{
                 alignItems: "flex-start",
                 display: "flex",
-                justifyContent: "space-between"
+                justifyContent: showTag ? "space-between" : "flex-start"
               }}
             >
-              <GridCardIcon brand={brand} iconName={iconName} size={metrics.iconSize} />
+              <StaticSliderCardIcon brand={brand} iconName={iconName} size={metrics.iconSize} />
               {tagElement}
             </div>
 
             <div style={{ marginTop: "auto" }}>
-              <GridCardTextBlock
+              <StaticSliderCardTextBlock
                 align="left"
                 brand={brand}
                 description={showDescription ? description : undefined}
@@ -451,8 +458,8 @@ export function GridCard({
           <div
             style={{
               position: "absolute",
-              right: pxToRem(metrics.outsideTagInset),
-              top: pxToRem(metrics.outsideTagInset)
+              right: pxToRem(Number(getRequiredThemeTokenValue(brand, "spacing.2"))),
+              top: pxToRem(Number(getRequiredThemeTokenValue(brand, "spacing.2")))
             }}
           >
             {tagElement}
@@ -461,7 +468,7 @@ export function GridCard({
       </div>
 
       {type === "Text Outside" ? (
-        <GridCardTextBlock
+        <StaticSliderCardTextBlock
           align="center"
           brand={brand}
           description={undefined}

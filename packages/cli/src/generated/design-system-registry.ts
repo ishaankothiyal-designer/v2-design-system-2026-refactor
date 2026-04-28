@@ -4742,6 +4742,120 @@ export const designSystemRegistry: DesignSystemRegistry = {
       ]
     },
     {
+      "canonicalId": "component.chipBar",
+      "canonicalName": "Chip Bar",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": "Chip Bar",
+      "description": "Two-row clipped chip composition with an optional leading filter trigger, built entirely from the approved small horizontal choice-chip instances.",
+      "webExport": "@geist/web/canonical/chip-bar",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "Filter Chip",
+          "values": [
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "Row 2",
+          "values": [
+            "false",
+            "true"
+          ]
+        }
+      ],
+      "states": [
+        "rest"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "container.width",
+          "token": "360px"
+        },
+        {
+          "slot": "container.paddingInline",
+          "token": "var(--cars24-misc-gap-12)"
+        },
+        {
+          "slot": "container.paddingBlock",
+          "token": "var(--cars24-misc-gap-12)"
+        },
+        {
+          "slot": "container.rowGap",
+          "token": "var(--cars24-misc-gap-12)"
+        },
+        {
+          "slot": "row.itemGap",
+          "token": "var(--cars24-misc-gap-12)"
+        },
+        {
+          "slot": "chip.variant",
+          "token": "Horizontal"
+        },
+        {
+          "slot": "chip.size",
+          "token": "Small"
+        },
+        {
+          "slot": "chip.state",
+          "token": "Rest"
+        },
+        {
+          "slot": "chip.type",
+          "token": "Regular"
+        },
+        {
+          "slot": "chip.contentGap",
+          "token": "var(--cars24-misc-gap-6)"
+        },
+        {
+          "slot": "chip.paddingInline",
+          "token": "var(--cars24-misc-gap-8)"
+        },
+        {
+          "slot": "chip.paddingBlock",
+          "token": "var(--cars24-misc-gap-8)"
+        },
+        {
+          "slot": "chip.borderWidth",
+          "token": "var(--cars24-misc-stroke-regular)"
+        },
+        {
+          "slot": "chip.radius",
+          "token": "var(--cars24-theme-radius-alt-sm)"
+        },
+        {
+          "slot": "chip.background",
+          "token": "var(--cars24-semantic-bg-primary)"
+        },
+        {
+          "slot": "chip.border",
+          "token": "var(--cars24-semantic-border-primary)"
+        },
+        {
+          "slot": "chip.label",
+          "token": "label/label-3/medium"
+        },
+        {
+          "slot": "chip.label.foreground",
+          "token": "var(--cars24-semantic-text-primary)"
+        },
+        {
+          "slot": "chip.icon.foreground",
+          "token": "var(--cars24-semantic-icon-primary)"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
       "canonicalId": "component.horizontalTab",
       "canonicalName": "Horizontal Tab",
       "layer": "component",
@@ -6256,6 +6370,744 @@ export const designSystemRegistry: DesignSystemRegistry = {
         {
           "slot": "icon.size.4colPlus",
           "token": "var(--cars24-misc-size-20)"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
+      "canonicalId": "component.staticSliderCard",
+      "canonicalName": "Static Slider Card",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": "_base-Slider-container",
+      "description": "Slot-based fixed-dimension card used in the static slider widget, adapting density to the approved slider column count.",
+      "webExport": "@geist/web/canonical/static-slider-card",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "columnCount",
+          "values": [
+            "1+",
+            "2+",
+            "3+",
+            "4+"
+          ]
+        },
+        {
+          "name": "type",
+          "values": [
+            "Text Inside",
+            "Text Outside",
+            "With Icon"
+          ]
+        },
+        {
+          "name": "size",
+          "values": [
+            "Large",
+            "Medium",
+            "Small"
+          ]
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "container.insideGap",
+          "token": "spacing.2"
+        },
+        {
+          "slot": "container.outsideGap",
+          "token": "spacing.2"
+        },
+        {
+          "slot": "container.padding.regular",
+          "token": "spacing.3"
+        },
+        {
+          "slot": "container.padding.compact",
+          "token": "var(--cars24-misc-gap-10)"
+        },
+        {
+          "slot": "slot.background",
+          "token": "color.brand.primary.50"
+        },
+        {
+          "slot": "slot.radius.regular",
+          "token": "radius.xl"
+        },
+        {
+          "slot": "slot.radius.compact",
+          "token": "radius.lg"
+        },
+        {
+          "slot": "slot.radius.outsideCompact",
+          "token": "radius.md"
+        },
+        {
+          "slot": "content.title.color",
+          "token": "color.text.primary"
+        },
+        {
+          "slot": "content.description.color",
+          "token": "color.text.secondary"
+        },
+        {
+          "slot": "content.title.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "content.title.fontWeight",
+          "token": "typography.fontWeight.semibold"
+        },
+        {
+          "slot": "content.title.lg",
+          "token": "utility/label-1/semibold"
+        },
+        {
+          "slot": "content.title.sm",
+          "token": "utility/label-2/semibold"
+        },
+        {
+          "slot": "content.description.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "content.description.fontWeight",
+          "token": "typography.fontWeight.regular"
+        },
+        {
+          "slot": "content.description.lg",
+          "token": "paragraph/body-2"
+        },
+        {
+          "slot": "content.description.sm",
+          "token": "paragraph/body-3"
+        },
+        {
+          "slot": "tag.background",
+          "token": "var(--cars24-semantic-bg-danger-base)"
+        },
+        {
+          "slot": "tag.foreground",
+          "token": "var(--cars24-semantic-text-primary-inverse)"
+        },
+        {
+          "slot": "tag.typography",
+          "token": "utility/label-4/medium"
+        },
+        {
+          "slot": "tag.radius",
+          "token": "var(--cars24-theme-radius-full)"
+        },
+        {
+          "slot": "icon.color",
+          "token": "color.text.primary"
+        },
+        {
+          "slot": "icon.size.1col",
+          "token": "var(--cars24-misc-size-32)"
+        },
+        {
+          "slot": "icon.size.2col",
+          "token": "var(--cars24-misc-size-24)"
+        },
+        {
+          "slot": "icon.size.3col",
+          "token": "var(--cars24-misc-size-20)"
+        },
+        {
+          "slot": "icon.size.4col",
+          "token": "var(--cars24-misc-size-16)"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
+      "canonicalId": "component.listCard",
+      "canonicalName": "List Card",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": "List_Card",
+      "description": "Fixed-width list card with a persistent media slot, optional badge or price row, and light or inverse surfaces.",
+      "webExport": "@geist/web/canonical/list-card",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "inverse",
+          "values": [
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "type",
+          "values": [
+            "Small: 1T + 1ST",
+            "Med: 1B + 1T + 1ST",
+            "Med: 2T + 1ST",
+            "Med: 1T + 2ST",
+            "Med: 1T + 1ST + 1P",
+            "Large: 1B + 1T + 2ST"
+          ]
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "container.surface.light",
+          "token": "color.surface.canvas"
+        },
+        {
+          "slot": "container.surface.dark",
+          "token": "color.surface.inverse"
+        },
+        {
+          "slot": "container.border.light",
+          "token": "color.border.default"
+        },
+        {
+          "slot": "container.radius",
+          "token": "radius.md"
+        },
+        {
+          "slot": "container.width",
+          "token": "336px"
+        },
+        {
+          "slot": "container.height.small",
+          "token": "67px"
+        },
+        {
+          "slot": "container.height.medium",
+          "token": "84px"
+        },
+        {
+          "slot": "container.height.large",
+          "token": "118px"
+        },
+        {
+          "slot": "media.background",
+          "token": "color.brand.primary.50"
+        },
+        {
+          "slot": "media.width.default",
+          "token": "84px"
+        },
+        {
+          "slot": "media.width.large",
+          "token": "100px"
+        },
+        {
+          "slot": "content.padding.inline",
+          "token": "spacing.3"
+        },
+        {
+          "slot": "content.stackGap.spacious",
+          "token": "spacing.1"
+        },
+        {
+          "slot": "content.title.color.light",
+          "token": "color.text.primary"
+        },
+        {
+          "slot": "content.title.color.dark",
+          "token": "color.text.inverse"
+        },
+        {
+          "slot": "content.subtitle.color.light",
+          "token": "color.text.secondary"
+        },
+        {
+          "slot": "content.subtitle.color.dark",
+          "token": "component.sectionHeader.color.dark.description"
+        },
+        {
+          "slot": "content.price.color.light",
+          "token": "color.text.primary"
+        },
+        {
+          "slot": "content.price.color.dark",
+          "token": "color.text.inverse"
+        },
+        {
+          "slot": "content.strikePrice.color.light",
+          "token": "color.text.secondary"
+        },
+        {
+          "slot": "content.strikePrice.color.dark",
+          "token": "component.sectionHeader.color.dark.description"
+        },
+        {
+          "slot": "action.chevron.color.light",
+          "token": "color.text.primary"
+        },
+        {
+          "slot": "action.chevron.color.dark",
+          "token": "color.text.inverse"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
+      "canonicalId": "component.videoCard",
+      "canonicalName": "Video Card",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": "_Video_Card",
+      "description": "Media-first video preview card with a centered play affordance and inverse metadata overlay.",
+      "webExport": "@geist/web/canonical/video-card",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "size",
+          "values": [
+            "Small",
+            "Medium",
+            "Large"
+          ]
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "container.radius",
+          "token": "radius.xl"
+        },
+        {
+          "slot": "size.small.width",
+          "token": "132px"
+        },
+        {
+          "slot": "size.small.height",
+          "token": "175px"
+        },
+        {
+          "slot": "size.medium.width",
+          "token": "210px"
+        },
+        {
+          "slot": "size.medium.height",
+          "token": "280px"
+        },
+        {
+          "slot": "size.large.width",
+          "token": "280px"
+        },
+        {
+          "slot": "size.large.height",
+          "token": "280px"
+        },
+        {
+          "slot": "surface.background",
+          "token": "color.brand.primary.50"
+        },
+        {
+          "slot": "surface.overlay.start",
+          "token": "rgba(0, 0, 0, 0)"
+        },
+        {
+          "slot": "surface.overlay.mid",
+          "token": "rgba(0, 0, 0, 0.64)"
+        },
+        {
+          "slot": "surface.overlay.end",
+          "token": "rgba(0, 0, 0, 1)"
+        },
+        {
+          "slot": "surface.overlay.midStop",
+          "token": "36%"
+        },
+        {
+          "slot": "content.paddingTop",
+          "token": "20px"
+        },
+        {
+          "slot": "content.paddingInline",
+          "token": "spacing.3"
+        },
+        {
+          "slot": "content.paddingBottom.small",
+          "token": "12px"
+        },
+        {
+          "slot": "content.paddingBottom.medium",
+          "token": "16px"
+        },
+        {
+          "slot": "content.paddingBottom.large",
+          "token": "16px"
+        },
+        {
+          "slot": "content.valueGap",
+          "token": "spacing.2"
+        },
+        {
+          "slot": "content.title.color",
+          "token": "color.text.inverse"
+        },
+        {
+          "slot": "content.description.color",
+          "token": "component.sectionHeader.color.dark.description"
+        },
+        {
+          "slot": "content.value.color",
+          "token": "component.sectionHeader.color.dark.description"
+        },
+        {
+          "slot": "typography.title.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "typography.title.fontWeight",
+          "token": "typography.fontWeight.semibold"
+        },
+        {
+          "slot": "typography.body.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "typography.body.fontWeight",
+          "token": "typography.fontWeight.regular"
+        },
+        {
+          "slot": "typography.title.small.fontSize",
+          "token": "13px"
+        },
+        {
+          "slot": "typography.title.small.lineHeight",
+          "token": "16px"
+        },
+        {
+          "slot": "typography.body.small.fontSize",
+          "token": "11px"
+        },
+        {
+          "slot": "typography.body.small.lineHeight",
+          "token": "17px"
+        },
+        {
+          "slot": "typography.title.medium.fontSize",
+          "token": "15px"
+        },
+        {
+          "slot": "typography.title.medium.lineHeight",
+          "token": "18px"
+        },
+        {
+          "slot": "typography.body.medium.fontSize",
+          "token": "13px"
+        },
+        {
+          "slot": "typography.body.medium.lineHeight",
+          "token": "18px"
+        },
+        {
+          "slot": "typography.title.large.fontSize",
+          "token": "17px"
+        },
+        {
+          "slot": "typography.title.large.lineHeight",
+          "token": "20px"
+        },
+        {
+          "slot": "typography.body.large.fontSize",
+          "token": "15px"
+        },
+        {
+          "slot": "typography.body.large.lineHeight",
+          "token": "20px"
+        },
+        {
+          "slot": "playButton.surface",
+          "token": "component.iconButton.color.dark.solid.primary.rest.background"
+        },
+        {
+          "slot": "playButton.icon.color",
+          "token": "component.iconButton.color.dark.solid.primary.rest.foreground"
+        },
+        {
+          "slot": "playButton.size.box",
+          "token": "component.iconButton.size.lg.boxSize"
+        },
+        {
+          "slot": "playButton.size.icon",
+          "token": "component.iconButton.size.lg.iconSize"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
+      "canonicalId": "component.storyCircle",
+      "canonicalName": "Story Circle",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": "_Story_circle",
+      "description": "Circular story/media wrapper with an accent ring and centered single-line title underneath.",
+      "webExport": "@geist/web/canonical/story-circle",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "size",
+          "values": [
+            "Large",
+            "Small"
+          ]
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "container.gap.large",
+          "token": "spacing.2"
+        },
+        {
+          "slot": "container.gap.small",
+          "token": "spacing.1"
+        },
+        {
+          "slot": "circle.surface",
+          "token": "color.surface.canvas"
+        },
+        {
+          "slot": "circle.border.color",
+          "token": "color.brand.primary.500"
+        },
+        {
+          "slot": "circle.border.width",
+          "token": "2px"
+        },
+        {
+          "slot": "circle.diameter.large",
+          "token": "88px"
+        },
+        {
+          "slot": "circle.diameter.small",
+          "token": "70px"
+        },
+        {
+          "slot": "circle.padding.large",
+          "token": "6px"
+        },
+        {
+          "slot": "circle.padding.small",
+          "token": "5px"
+        },
+        {
+          "slot": "slot.placeholder",
+          "token": "color.brand.primary.50"
+        },
+        {
+          "slot": "slot.diameter.large",
+          "token": "76px"
+        },
+        {
+          "slot": "slot.diameter.small",
+          "token": "60px"
+        },
+        {
+          "slot": "title.width.large",
+          "token": "96px"
+        },
+        {
+          "slot": "title.width.small",
+          "token": "70px"
+        },
+        {
+          "slot": "title.color",
+          "token": "color.text.primary"
+        },
+        {
+          "slot": "title.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "title.fontWeight",
+          "token": "typography.fontWeight.semibold"
+        },
+        {
+          "slot": "title.fontSize",
+          "token": "component.button.typography.sm.fontSize"
+        },
+        {
+          "slot": "title.lineHeight",
+          "token": "component.button.typography.sm.lineHeight"
+        },
+        {
+          "slot": "title.letterSpacing",
+          "token": "component.button.typography.sm.letterSpacing"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
+      "canonicalId": "component.storySlider",
+      "canonicalName": "Story Slider",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": "Story Slider",
+      "description": "Fixed-width horizontal story rail that composes repeated Story Circle items and supports native horizontal scrolling.",
+      "webExport": "@geist/web/canonical/story-slider",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "size",
+          "values": [
+            "Large",
+            "Small"
+          ]
+        }
+      ],
+      "states": [
+        "default",
+        "scroll"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "viewport.width",
+          "token": "336px"
+        },
+        {
+          "slot": "row.gap",
+          "token": "spacing.3"
+        },
+        {
+          "slot": "item.large.width",
+          "token": "96px"
+        },
+        {
+          "slot": "item.small.width",
+          "token": "70px"
+        },
+        {
+          "slot": "row.large.sampleWidth",
+          "token": "528px"
+        },
+        {
+          "slot": "row.small.sampleWidth",
+          "token": "398px"
+        },
+        {
+          "slot": "item.component",
+          "token": "component.storyCircle"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
+      "canonicalId": "component.staticSliderFlexbox",
+      "canonicalName": "Static Slider Flexbox",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": "_base-container-box",
+      "description": "Fixed-width slider row composition built from the approved Static Slider Card and clipped to the Figma viewport.",
+      "webExport": "@geist/web/canonical/static-slider-flexbox",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "columnCount",
+          "values": [
+            "1+",
+            "2+",
+            "3+",
+            "4+"
+          ]
+        },
+        {
+          "name": "type",
+          "values": [
+            "Text Inside",
+            "Text Outside",
+            "With Icon"
+          ]
+        },
+        {
+          "name": "size",
+          "values": [
+            "Large",
+            "Medium",
+            "Small"
+          ]
+        },
+        {
+          "name": "row2",
+          "values": [
+            "true",
+            "false"
+          ]
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "container.viewport.width",
+          "token": "336px"
+        },
+        {
+          "slot": "container.row.gap",
+          "token": "var(--cars24-misc-gap-10)"
+        },
+        {
+          "slot": "container.row.width.1col",
+          "token": "410px"
+        },
+        {
+          "slot": "container.row.width.2col",
+          "token": "440px"
+        },
+        {
+          "slot": "container.row.width.3col",
+          "token": "398px"
+        },
+        {
+          "slot": "container.row.width.4col",
+          "token": "390px"
         }
       ],
       "themeScopes": [
@@ -7849,6 +8701,71 @@ export const designSystemRegistry: DesignSystemRegistry = {
       ],
       "allowedChildren": [
         "component.gridCard"
+      ]
+    },
+    {
+      "canonicalId": "widget.staticSliderWidget",
+      "canonicalName": "Static Slider Widget",
+      "layer": "widget",
+      "status": "approved",
+      "platform": "web",
+      "description": "Discovery widget that packages a section header, optional choice-chip tab slider, a static slider flexbox, and a single primary CTA.",
+      "composition": [
+        "component.sectionHeader",
+        "component.staticSliderFlexbox",
+        "component.button"
+      ],
+      "allowedChildren": [
+        "component.staticSliderFlexbox"
+      ]
+    },
+    {
+      "canonicalId": "widget.faqWidget",
+      "canonicalName": "FAQ Widget",
+      "layer": "widget",
+      "status": "approved",
+      "platform": "web",
+      "description": "FAQ widget that packages an optional section header, optional chip bar, a single-select accordion list, and an optional primary CTA.",
+      "composition": [
+        "component.sectionHeader",
+        "component.chipBar",
+        "component.accordion",
+        "component.buttonGroup"
+      ],
+      "allowedChildren": [
+        "component.accordion"
+      ]
+    },
+    {
+      "canonicalId": "widget.listWidget",
+      "canonicalName": "List Widget",
+      "layer": "widget",
+      "status": "approved",
+      "platform": "web",
+      "description": "Discovery widget that packages a section header, a vertical stack of list cards, and a single full-width primary CTA.",
+      "composition": [
+        "component.sectionHeader",
+        "component.listCard",
+        "component.button"
+      ],
+      "allowedChildren": [
+        "component.listCard"
+      ]
+    },
+    {
+      "canonicalId": "widget.storyWidget",
+      "canonicalName": "Story Widget",
+      "layer": "widget",
+      "status": "approved",
+      "platform": "web",
+      "description": "Story-focused widget that packages a section header, a horizontal story slider rail, and a single primary CTA on light or inverse surfaces.",
+      "composition": [
+        "component.sectionHeader",
+        "component.storySlider",
+        "component.button"
+      ],
+      "allowedChildren": [
+        "component.storySlider"
       ]
     },
     {
