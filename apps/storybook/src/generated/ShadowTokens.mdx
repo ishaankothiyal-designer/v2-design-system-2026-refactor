@@ -1,0 +1,28 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import { DesignTokenDocBlock } from "storybook-design-token";
+import { ShadowPreviewGrid } from "../storybook-layout-tokens";
+import { shadowTokens } from "./shadowTokenData";
+
+<Meta title="Foundations/Shadow Tokens" />
+
+# Shadow Tokens
+
+Shadow documentation generated from the shared drop-shadow scale. This page previews each reusable box-shadow token and lists the raw token values used by the system.
+
+## Shadow Preview
+
+<ShadowPreviewGrid tokens={shadowTokens} />
+
+## Raw Token Catalog
+
+### Shadow
+
+Shared drop-shadow tokens used for elevated surfaces across the system.
+
+<DesignTokenDocBlock
+  categoryName="Shadow"
+  maxHeight={720}
+  pageSize={Number.MAX_VALUE}
+  showSearch={false}
+  viewType="card"
+/>

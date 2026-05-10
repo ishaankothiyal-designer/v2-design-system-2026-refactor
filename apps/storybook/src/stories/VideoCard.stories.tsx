@@ -123,7 +123,7 @@ const defaultSourceCode = `<VideoCard
 />\n`;
 
 const meta = {
-  title: "Components/Video Card",
+  title: "Components/Cards/Video Card",
   component: VideoCard,
   tags: ["autodocs"],
   parameters: {

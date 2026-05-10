@@ -1,0 +1,4 @@
+interface:
+  display_name: "TurboDLS"
+  short_description: "Install DLS repo and build standalone apps"
+  default_prompt: "Use $turbo-dls to install the DLS repo and build a standalone app from my prompt."

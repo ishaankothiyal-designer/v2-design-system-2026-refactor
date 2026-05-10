@@ -428,7 +428,7 @@ const listCardSourceCode = `<ListCard
 />\n`;
 
 const meta: Meta<ListCardProps> = {
-  title: "Components/List Card",
+  title: "Components/Cards/List Card",
   component: ListCard,
   tags: ["autodocs"],
   parameters: {

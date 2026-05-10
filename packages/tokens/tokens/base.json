@@ -45,6 +45,45 @@
       "warning": "#F79009",
       "danger": "#F04438",
       "info": "#2E90FA"
+    },
+    "utility": {
+      "service": {
+        "buy-car": {
+          "base": "#296FE3",
+          "bold": "#103A8C",
+          "subtle": "#8EC2FC"
+        },
+        "car-check": {
+          "base": "#FF7234",
+          "bold": "#6B2100",
+          "subtle": "#FFC8B0"
+        },
+        "challan": {
+          "base": "#159DA3",
+          "bold": "#0A7178",
+          "subtle": "#7CF8FE"
+        },
+        "garage": {
+          "base": "#4736FE",
+          "bold": "#211185",
+          "subtle": "#C8CCFB"
+        },
+        "insurance": {
+          "base": "#296FE3",
+          "bold": "#103A8C",
+          "subtle": "#B9DAFE"
+        },
+        "loan": {
+          "base": "#296FE3",
+          "bold": "#103A8C",
+          "subtle": "#B9DAFE"
+        },
+        "sell-car": {
+          "base": "#44D48D",
+          "bold": "#106F43",
+          "subtle": "#AAF8CE"
+        }
+      }
     }
   },
   "typography": {
