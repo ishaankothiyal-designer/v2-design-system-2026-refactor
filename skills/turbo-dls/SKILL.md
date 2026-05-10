@@ -15,6 +15,74 @@ Use this skill to do two things in order:
 Read [references/repo-facts.md](references/repo-facts.md) before making structural decisions or naming brands.
 Before building any design inside the repo, always inspect the repo-level `reference/` folder and treat its files as required execution context.
 
+## Required Reference Review Flow
+
+Before writing any UI code, the agent must complete the reference review flow below.
+
+1. Read `reference/logicbook.md`.
+2. Read `reference/ai-execution.json`.
+3. Identify the page type from the user prompt:
+   - `L1`
+   - `L2`
+   - `internal`
+4. Inspect the relevant page-level reference folder in `reference/pages/`.
+   - Use `reference/pages/L1/` for landing and homepage work.
+   - Use `reference/pages/L2/` for listing, detail, and comparison work.
+   - Use the most relevant internal-flow references when the task is a flow, form, or step-based screen.
+5. Inspect the relevant widget-level reference folder in `reference/widget/` before composing each section.
+6. Treat page references and widget references as mandatory execution context, not optional inspiration.
+7. Do not start implementation until both page references and widget references have been reviewed.
+8. Write a page recipe before coding.
+9. Write a widget mapping before coding.
+10. Only then begin implementation.
+
+## How To Interpret References
+
+- `reference/pages/*` defines macro composition.
+- `reference/widget/*` defines micro composition.
+
+Use page references to understand:
+
+- section order
+- hero structure
+- CTA placement
+- navigation pattern
+- spacing rhythm
+- density
+- footer behavior
+- overall page pacing
+
+Use widget references to understand:
+
+- padding
+- alignment
+- header treatment
+- content density
+- media ratio
+- CTA position
+- stacking behavior
+- state behavior
+
+## Non-Negotiable Reference Rule
+
+- Do not implement from written rules alone.
+- Do not implement from page references alone.
+- Do not implement from widget references alone.
+- The agent must review both page-level and widget-level references before execution.
+
+## Pre-Build Checklist
+
+The agent must confirm all of the following before implementation:
+
+- `logicbook reviewed`
+- `ai-execution reviewed`
+- `relevant page folder reviewed`
+- `relevant widget folders reviewed`
+- `page recipe written`
+- `widget mapping written`
+
+If any of the above is missing, the design should be treated as incomplete even if the code builds successfully.
+
 ## Install Flow
 
 When the user says `install DLS` or the repo is missing:
@@ -36,20 +104,23 @@ When the user asks for a design:
 1. Work inside the cloned repo.
 2. Read `reference/logicbook.md` first and follow its widget, page-type, brand, and composition rules as the primary design logic source.
 3. Read `reference/ai-execution.json` next and use it to identify page type, brand tone, widget priority, layout order, and validation checks.
-4. Inspect only the relevant examples in `reference/pages/` and `reference/widget/` to learn Cars24 layout patterns, spacing behavior, and widget usage. Extract logic, not full-page copies.
-5. Create a separate app or project.
-6. Never put the deliverable in `apps/storybook`.
-7. Prefer `apps/<kebab-name>` inside the repo unless the user explicitly wants another location.
-8. Set up a small standalone React app, typically with Vite.
-9. Import only from:
+4. Inspect the relevant page-level reference folder in `reference/pages/` based on whether the prompt is `L1`, `L2`, or `internal`.
+5. Inspect the relevant widget-level reference folder in `reference/widget/` before composing each section.
+6. Write a page recipe before coding.
+7. Write a widget mapping before coding.
+8. Create a separate app or project.
+9. Never put the deliverable in `apps/storybook`.
+10. Prefer `apps/<kebab-name>` inside the repo unless the user explicitly wants another location.
+11. Set up a small standalone React app, typically with Vite.
+12. Import only from:
    - `@geist/web`
    - `@geist/tokens`
    - `@geist/icons`
-10. Import `@geist/icons/style.css` in the app entry.
-11. Build the requested UI by composing existing DS components only.
-12. Make the design responsive from the first pass, not as a later polish step.
-13. If the prompt is underspecified, fill in the missing but expected product flow, sections, states, and supporting content instead of leaving the screen feeling empty.
-14. Automatically analyze whether the UI needs generated imagery, and if it does, invoke the `imagegen` skill.
+13. Import `@geist/icons/style.css` in the app entry.
+14. Build the requested UI by composing existing DS components only.
+15. Make the design responsive from the first pass, not as a later polish step.
+16. If the prompt is underspecified, fill in the missing but expected product flow, sections, states, and supporting content instead of leaving the screen feeling empty.
+17. Automatically analyze whether the UI needs generated imagery, and if it does, invoke the `imagegen` skill.
 
 ## Non-Negotiable Rules
 
@@ -58,8 +129,10 @@ When the user asks for a design:
 - Do not invent new visual primitives when existing DS components can be composed.
 - Treat `reference/logicbook.md` as the source of truth for widget usage, brand behavior, page intent, and design decision-making.
 - Use `reference/ai-execution.json` as the execution checklist for page type, widget selection, layout assembly, and validation.
+- Do not start implementation until both the relevant page references and relevant widget references have been reviewed.
 - Review the relevant files in `reference/pages/` and `reference/widget/` before composing the UI so the output reflects Cars24 design patterns.
 - Learn from the reference files without copying entire screens verbatim.
+- Do not implement from written rules alone, page references alone, or widget references alone.
 - Do not hardcode colors, spacing, radii, typography, or brand values when a token exists.
 - Use `getRequiredThemeTokenValue(brand, "...")` for any remaining shell/layout styling.
 - Keep custom code limited to app structure, data mapping, layout composition, and state management.
@@ -117,18 +190,21 @@ Follow this order:
 
 1. Read `reference/logicbook.md`.
 2. Read `reference/ai-execution.json`.
-3. Inspect the most relevant examples in `reference/pages/` and `reference/widget/`.
-4. Turn the prompt into page type, brand, sections, and user goals.
-5. Match each section to `@geist/web` components and repo widget patterns.
-6. Create the app shell first.
-7. Add the floating brand switcher before polishing the content.
-8. Apply the correct L1, L2, or internal-page structure from the reference logic.
-9. Compose the page using DS components.
-10. Analyze whether the design genuinely benefits from custom imagery.
-11. If it does, invoke the `imagegen` skill and place the resulting imagery intentionally in the layout.
-12. Add only token-driven layout wrappers where components alone are not enough.
-13. Check mobile spacing carefully, especially section edges and sticky bottom areas, without re-adding padding the widgets already provide.
-14. Run typecheck, build, and the dev server before finishing.
+3. Identify the page type from the prompt.
+4. Inspect the relevant page folder in `reference/pages/`.
+5. Inspect the relevant widget folders in `reference/widget/`.
+6. Turn the prompt into page type, brand, sections, and user goals.
+7. Write the page recipe.
+8. Write the widget mapping.
+9. Create the app shell first.
+10. Add the floating brand switcher before polishing the content.
+11. Apply the correct L1, L2, or internal-page structure from the reference logic.
+12. Compose the page using DS components.
+13. Analyze whether the design genuinely benefits from custom imagery.
+14. If it does, invoke the `imagegen` skill and place the resulting imagery intentionally in the layout.
+15. Add only token-driven layout wrappers where components alone are not enough.
+16. Check mobile spacing carefully, especially section edges and sticky bottom areas, without re-adding padding the widgets already provide.
+17. Run typecheck, build, and the dev server before finishing.
 
 ## Beginner-Friendly Behavior
 
@@ -144,6 +220,12 @@ After building the design:
 
 1. Run the app's typecheck.
 2. Run the app's build.
-3. Start the app locally and provide the URL.
-4. Verify the layout on both mobile and desktop widths.
-5. Mention any remaining risk, such as a large bundle warning, but only after the app is working.
+3. Validate `logicbook compliance`.
+4. Validate `ai-execution compliance`.
+5. Validate `page-reference alignment`.
+6. Validate `widget-reference alignment`.
+7. Start the app locally and provide the URL.
+8. Verify the layout on both mobile and desktop widths.
+9. Mention any remaining risk, such as a large bundle warning, but only after the app is working.
+
+A working UI is not sufficient if the reference review flow was skipped.
