@@ -5,14 +5,14 @@ import http from "node:http";
 import { getComponentByIdOrName, getRegistry, getRegistrySummary, searchComponents } from "./index.js";
 
 function printHelp(): void {
-  console.log(`Geist Design System CLI
+  console.log(`Turbo Design System CLI
 
 Usage:
-  geist-ds registry [--pretty]
-  geist-ds components [query]
-  geist-ds component <canonical-id-or-name>
-  geist-ds serve [--port 3210]
-  geist-ds help
+  turbo-ds registry [--pretty]
+  turbo-ds components [query]
+  turbo-ds component <canonical-id-or-name>
+  turbo-ds serve [--port 3210]
+  turbo-ds help
 `);
 }
 
@@ -74,7 +74,7 @@ function startServer(args: string[]): void {
 
     if (pathName === "/manifest") {
       sendJson(response, 200, {
-        name: "Geist Design System API",
+        name: "Turbo Design System API",
         version: "0.1.0",
         endpoints: ["/health", "/manifest", "/registry", "/components", "/components/:id"]
       });
@@ -115,7 +115,7 @@ function startServer(args: string[]): void {
   });
 
   server.listen(port, () => {
-    console.log(`Geist Design System API running on http://127.0.0.1:${port}`);
+    console.log(`Turbo Design System API running on http://127.0.0.1:${port}`);
     console.log("Endpoints: /health, /manifest, /registry, /components, /components/:id");
   });
 }
@@ -160,7 +160,7 @@ function main(): void {
       printHelp();
       return;
     default:
-      throw new Error(`Unknown command '${command}'. Run 'geist-ds help' for usage.`);
+      throw new Error(`Unknown command '${command}'. Run 'turbo-ds help' for usage.`);
   }
 }
 

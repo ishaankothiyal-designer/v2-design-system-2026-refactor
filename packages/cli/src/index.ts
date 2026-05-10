@@ -1,4 +1,4 @@
-import type { ComponentContract, DesignSystemRegistry } from "@geist/contracts";
+import type { ComponentContract, DesignSystemRegistry } from "@turbo/contracts";
 
 import { designSystemRegistry } from "./generated/design-system-registry.js";
 

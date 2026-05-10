@@ -6,8 +6,8 @@ import {
   type ReactElement,
   type ReactNode
 } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
-import { designSystemRegistry } from "@geist/contracts";
+import type { DisplayBrandId } from "@turbo/tokens";
+import { designSystemRegistry } from "@turbo/contracts";
 import { getRequiredThemeTokenValue, pxToRem } from "../theme";
 import { Button } from "./button";
 import { ChoiceChip, type ChoiceChipState } from "./choice-chip";

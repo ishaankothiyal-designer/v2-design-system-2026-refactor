@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { coreTokenCatalog, getBrandTokenSet, deepMergeTokenTrees } from "@geist/tokens";
+import { coreTokenCatalog, getBrandTokenSet, deepMergeTokenTrees } from "@turbo/tokens";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 const brands = ["Cars24", "Team BHP", "CarInfo", "VehicleInfo"] as const;

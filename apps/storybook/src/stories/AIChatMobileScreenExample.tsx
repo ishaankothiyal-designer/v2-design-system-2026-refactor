@@ -1,5 +1,5 @@
 import { useState, type CSSProperties, type ReactNode } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
+import type { DisplayBrandId } from "@turbo/tokens";
 import {
   AppHeader,
   BottomNav,
@@ -12,7 +12,7 @@ import {
   getRequiredThemeTokenValue,
   type BottomNavItem,
   type SegmentedControlItem
-} from "@geist/web";
+} from "@turbo/web";
 import { StoryBadge, StoryCard, StoryCopy, StoryHeading, StoryPage } from "../storybook-shell";
 
 export type AIChatMobileScreenProps = {
@@ -1148,7 +1148,7 @@ export const aiChatMobileScreenSourceCode = `import {
   ChatBar,
   SegmentedControl,
   Tag
-} from "@geist/web";
+} from "@turbo/web";
 
 export function AIChatMobileScreen() {
   return (

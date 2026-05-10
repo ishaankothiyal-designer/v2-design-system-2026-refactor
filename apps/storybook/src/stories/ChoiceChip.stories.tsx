@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@turbo/tokens";
 import {
   ChoiceChip,
   type ChoiceChipProps,
@@ -8,7 +8,7 @@ import {
   type ChoiceChipState,
   type ChoiceChipType,
   type ChoiceChipVariant
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryCopy, StoryHeading, StoryPage, StoryPreviewSurface } from "../storybook-shell";
 

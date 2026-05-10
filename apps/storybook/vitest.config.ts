@@ -19,7 +19,7 @@ export default defineConfig({
         plugins: [
           storybookTest({
             configDir: storybookConfigDir,
-            storybookScript: "corepack pnpm --filter @geist/storybook storybook --ci"
+            storybookScript: "corepack pnpm --filter @turbo/storybook storybook --ci"
           })
         ],
         test: {

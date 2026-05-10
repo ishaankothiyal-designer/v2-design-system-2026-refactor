@@ -8,8 +8,8 @@ import {
   type ReactNode,
   useState
 } from "react";
-import { designSystemRegistry } from "@geist/contracts";
-import type { DisplayBrandId } from "@geist/tokens";
+import { designSystemRegistry } from "@turbo/contracts";
+import type { DisplayBrandId } from "@turbo/tokens";
 import { getRequiredThemeTokenValue, getThemeTokenValue } from "../theme";
 import { Icon } from "./icon";
 

@@ -1,4 +1,4 @@
-import type { DesignSystemRegistry } from "@geist/contracts";
+import type { DesignSystemRegistry } from "@turbo/contracts";
 
 export const designSystemRegistry: DesignSystemRegistry = {
   "governance": [
@@ -37,8 +37,8 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "shared",
       "figmaComponentName": "Button",
       "description": "Primary canonical action component.",
-      "webExport": "@geist/web/canonical/button",
-      "nativeExport": "@geist/native/canonical/button",
+      "webExport": "@turbo/web/canonical/button",
+      "nativeExport": "@turbo/native/canonical/button",
       "variants": [
         {
           "name": "shape",
@@ -534,7 +534,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Button group",
       "description": "Grouped button layout that composes primary, secondary, and contextual action patterns.",
-      "webExport": "@geist/web/canonical/button-group",
+      "webExport": "@turbo/web/canonical/button-group",
       "nativeExport": "",
       "variants": [
         {
@@ -654,8 +654,8 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "shared",
       "figmaComponentName": "Link button",
       "description": "Inline text action with optional icons and token-driven underline states.",
-      "webExport": "@geist/web/canonical/link-button",
-      "nativeExport": "@geist/native/canonical/link-button",
+      "webExport": "@turbo/web/canonical/link-button",
+      "nativeExport": "@turbo/native/canonical/link-button",
       "variants": [
         {
           "name": "tone",
@@ -879,7 +879,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Phone Input",
       "description": "Phone number entry field with country selector prefix, optional helper text, and dismiss action.",
-      "webExport": "@geist/web/canonical/phone-input",
+      "webExport": "@turbo/web/canonical/phone-input",
       "nativeExport": "",
       "variants": [
         {
@@ -1259,7 +1259,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Text Input",
       "description": "Single-line text entry field with token-driven affix icons, validation feedback, and size-specific label/helper rhythm.",
-      "webExport": "@geist/web/canonical/text-input",
+      "webExport": "@turbo/web/canonical/text-input",
       "nativeExport": "",
       "variants": [
         {
@@ -1644,7 +1644,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Dropdown field",
       "description": "Canonical dropdown trigger field with token-driven label, affix, helper feedback, and size-specific selected, active, error, and disabled states.",
-      "webExport": "@geist/web/canonical/dropdown",
+      "webExport": "@turbo/web/canonical/dropdown",
       "nativeExport": "",
       "variants": [
         {
@@ -2001,7 +2001,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "OTP",
       "description": "Token-driven one-time-password input with per-box focus states, helper feedback, and resend or countdown support.",
-      "webExport": "@geist/web/canonical/otp-input",
+      "webExport": "@turbo/web/canonical/otp-input",
       "nativeExport": "",
       "variants": [
         {
@@ -2343,7 +2343,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Label",
       "description": "Reusable field label with token-driven size-specific typography, supporting text, required marker, and info affordance.",
-      "webExport": "@geist/web/canonical/label",
+      "webExport": "@turbo/web/canonical/label",
       "nativeExport": "",
       "variants": [
         {
@@ -2493,7 +2493,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Helper Text",
       "description": "Standalone helper copy row with token-driven default, error, and success tones plus optional icon and counter content.",
-      "webExport": "@geist/web/canonical/helper-text",
+      "webExport": "@turbo/web/canonical/helper-text",
       "nativeExport": "",
       "variants": [
         {
@@ -2612,8 +2612,8 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "shared",
       "figmaComponentName": "Caption Button",
       "description": "Action button with a stacked supporting caption placed above or below the primary label.",
-      "webExport": "@geist/web/canonical/caption-button",
-      "nativeExport": "@geist/native/canonical/caption-button",
+      "webExport": "@turbo/web/canonical/caption-button",
+      "nativeExport": "@turbo/native/canonical/caption-button",
       "variants": [
         {
           "name": "styleVariant",
@@ -2820,8 +2820,8 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "shared",
       "figmaComponentName": "SocialButton",
       "description": "Neutral social sign-in button with provider icon, light-surface hover state, and token-driven sizing.",
-      "webExport": "@geist/web/canonical/social-button",
-      "nativeExport": "@geist/native/canonical/social-button",
+      "webExport": "@turbo/web/canonical/social-button",
+      "nativeExport": "@turbo/native/canonical/social-button",
       "variants": [
         {
           "name": "size",
@@ -2998,8 +2998,8 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "shared",
       "figmaComponentName": "Back to top",
       "description": "Compact pill-shaped action used to jump back to the top of a page, with light and inverse surfaces.",
-      "webExport": "@geist/web/canonical/back-to-top-button",
-      "nativeExport": "@geist/native/canonical/back-to-top-button",
+      "webExport": "@turbo/web/canonical/back-to-top-button",
+      "nativeExport": "@turbo/native/canonical/back-to-top-button",
       "variants": [
         {
           "name": "inverse",
@@ -3207,8 +3207,8 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "shared",
       "figmaComponentName": "FAB",
       "description": "Floating upload/share action with collapsed and expanded variants, an anchored status chip, and dark elevated surface styling.",
-      "webExport": "@geist/web/canonical/fab-button",
-      "nativeExport": "@geist/native/canonical/fab-button",
+      "webExport": "@turbo/web/canonical/fab-button",
+      "nativeExport": "@turbo/native/canonical/fab-button",
       "variants": [
         {
           "name": "showTag",
@@ -3413,8 +3413,8 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "shared",
       "figmaComponentName": "Icon Button",
       "description": "Compact icon-only action button with square or circular shape across light and on-dark surfaces.",
-      "webExport": "@geist/web/canonical/icon-button",
-      "nativeExport": "@geist/native/canonical/icon-button",
+      "webExport": "@turbo/web/canonical/icon-button",
+      "nativeExport": "@turbo/native/canonical/icon-button",
       "variants": [
         {
           "name": "shape",
@@ -3923,7 +3923,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Checkbox",
       "description": "Token-driven checkbox input with rest, indeterminate, selected, and disabled states across four visual sizes.",
-      "webExport": "@geist/web/canonical/checkbox",
+      "webExport": "@turbo/web/canonical/checkbox",
       "nativeExport": "",
       "variants": [
         {
@@ -4106,7 +4106,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Radio",
       "description": "Token-driven radio input with small and medium sizes, brand-aware selected fills, and disabled-state support.",
-      "webExport": "@geist/web/canonical/radio",
+      "webExport": "@turbo/web/canonical/radio",
       "nativeExport": "",
       "variants": [
         {
@@ -4249,7 +4249,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Switch",
       "description": "Token-driven switch input with default and small sizes, brand-aware selected states, and disabled-state support.",
-      "webExport": "@geist/web/canonical/switch",
+      "webExport": "@turbo/web/canonical/switch",
       "nativeExport": "",
       "variants": [
         {
@@ -4388,7 +4388,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Segment",
       "description": "Single-selection segmented control for toggling between closely related views or states.",
-      "webExport": "@geist/web/canonical/segmented-control",
+      "webExport": "@turbo/web/canonical/segmented-control",
       "nativeExport": "",
       "variants": [
         {
@@ -4561,7 +4561,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Top Tab",
       "description": "Top-aligned tab navigation with equal-width items, supporting icon and image media in both labeled and media-only configurations across light and inverse surfaces.",
-      "webExport": "@geist/web/canonical/top-tab",
+      "webExport": "@turbo/web/canonical/top-tab",
       "nativeExport": "",
       "variants": [
         {
@@ -4763,7 +4763,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Bottom Nav",
       "description": "Bottom-aligned mobile navigation supporting sticky and floating layouts, equal-width destinations, and icon or icon-plus-label item treatments.",
-      "webExport": "@geist/web/canonical/bottom-nav",
+      "webExport": "@turbo/web/canonical/bottom-nav",
       "nativeExport": "",
       "variants": [
         {
@@ -4955,7 +4955,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Chip Bar",
       "description": "Two-row clipped chip composition with an optional leading filter trigger, built entirely from the approved small horizontal choice-chip instances.",
-      "webExport": "@geist/web/canonical/chip-bar",
+      "webExport": "@turbo/web/canonical/chip-bar",
       "nativeExport": "",
       "variants": [
         {
@@ -5069,7 +5069,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Horizontal Tab",
       "description": "Horizontal tab navigation for switching between peer views, with optional leading and trailing icons plus a tag on each item across light and inverse default and small sizes.",
-      "webExport": "@geist/web/canonical/horizontal-tab",
+      "webExport": "@turbo/web/canonical/horizontal-tab",
       "nativeExport": "",
       "variants": [
         {
@@ -5340,7 +5340,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "_segment-box",
       "description": "Item-level segmented-control button supporting light, inverse, and brand selections plus hover and disabled states.",
-      "webExport": "@geist/web/canonical/segment-button",
+      "webExport": "@turbo/web/canonical/segment-button",
       "nativeExport": "",
       "variants": [
         {
@@ -5515,8 +5515,8 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "shared",
       "figmaComponentName": "Accordion",
       "description": "Expandable content container that reveals or hides related information within the same layout.",
-      "webExport": "@geist/web/canonical/accordion",
-      "nativeExport": "@geist/native/canonical/accordion",
+      "webExport": "@turbo/web/canonical/accordion",
+      "nativeExport": "@turbo/native/canonical/accordion",
       "variants": [
         {
           "name": "size",
@@ -5667,7 +5667,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Checkbox Label",
       "description": "Composed checkbox field with inline label and supporting description sized to match the checkbox control.",
-      "webExport": "@geist/web/canonical/checkbox-label",
+      "webExport": "@turbo/web/canonical/checkbox-label",
       "nativeExport": "",
       "variants": [
         {
@@ -5808,7 +5808,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Radio Label",
       "description": "Composed radio field with inline label and supporting description sized to match the underlying radio control.",
-      "webExport": "@geist/web/canonical/radio-label",
+      "webExport": "@turbo/web/canonical/radio-label",
       "nativeExport": "",
       "variants": [
         {
@@ -5926,7 +5926,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Switch Label",
       "description": "Composed switch field with inline label and supporting description sized to match the underlying switch control.",
-      "webExport": "@geist/web/canonical/switch-label",
+      "webExport": "@turbo/web/canonical/switch-label",
       "nativeExport": "",
       "variants": [
         {
@@ -6044,8 +6044,8 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "shared",
       "figmaComponentName": "Badge",
       "description": "Compact indicator used to show count, status, or a short state attached to another element.",
-      "webExport": "@geist/web/canonical/badge",
-      "nativeExport": "@geist/native/canonical/badge",
+      "webExport": "@turbo/web/canonical/badge",
+      "nativeExport": "@turbo/native/canonical/badge",
       "variants": [
         {
           "name": "size",
@@ -6432,7 +6432,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Grid Cards",
       "description": "Fixed-dimension discovery card that adapts its content density to the intended grid column count.",
-      "webExport": "@geist/web/canonical/grid-card",
+      "webExport": "@turbo/web/canonical/grid-card",
       "nativeExport": "",
       "variants": [
         {
@@ -6593,7 +6593,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "_base-Slider-container",
       "description": "Slot-based fixed-dimension card used in the static slider widget, adapting density to the approved slider column count.",
-      "webExport": "@geist/web/canonical/static-slider-card",
+      "webExport": "@turbo/web/canonical/static-slider-card",
       "nativeExport": "",
       "variants": [
         {
@@ -6750,7 +6750,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "List_Card",
       "description": "Fixed-width list card with a persistent media slot, optional badge or price row, and light or inverse surfaces.",
-      "webExport": "@geist/web/canonical/list-card",
+      "webExport": "@turbo/web/canonical/list-card",
       "nativeExport": "",
       "variants": [
         {
@@ -6884,7 +6884,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Address card",
       "description": "Compact address summary row with a location glyph, optional distance label, and either card or full-bleed surface treatment.",
-      "webExport": "@geist/web/canonical/address-card",
+      "webExport": "@turbo/web/canonical/address-card",
       "nativeExport": "",
       "variants": [
         {
@@ -7050,7 +7050,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "_Video_Card",
       "description": "Media-first video preview card with a centered play affordance and inverse metadata overlay.",
-      "webExport": "@geist/web/canonical/video-card",
+      "webExport": "@turbo/web/canonical/video-card",
       "nativeExport": "",
       "variants": [
         {
@@ -7246,7 +7246,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": ".Blog card",
       "description": "Media-first editorial card with optional badge and play affordance, plus author metadata on light or inverse surfaces.",
-      "webExport": "@geist/web/canonical/blog-card",
+      "webExport": "@turbo/web/canonical/blog-card",
       "nativeExport": "",
       "variants": [
         {
@@ -7448,7 +7448,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": ".Video top bar",
       "description": "Overlay top-bar component for fullscreen story and video media with header controls plus progress or playback affordances.",
-      "webExport": "@geist/web/canonical/video-top-bar",
+      "webExport": "@turbo/web/canonical/video-top-bar",
       "nativeExport": "",
       "variants": [
         {
@@ -7543,7 +7543,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": ".atom SEO Card",
       "description": "Media-first SEO content card with a fixed showcase slot, a two-line headline, and a four-line body block.",
-      "webExport": "@geist/web/canonical/seo-content-card",
+      "webExport": "@turbo/web/canonical/seo-content-card",
       "nativeExport": "",
       "variants": [
         {
@@ -7639,7 +7639,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Showroom card",
       "description": "Showroom discovery card with a fixed media slot, store metadata, directions CTA, opening-hours row, and paired button actions.",
-      "webExport": "@geist/web/canonical/showroom-card",
+      "webExport": "@turbo/web/canonical/showroom-card",
       "nativeExport": "",
       "variants": [
         {
@@ -7899,7 +7899,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "_Story_circle",
       "description": "Circular story/media wrapper with an accent ring and centered single-line title underneath.",
-      "webExport": "@geist/web/canonical/story-circle",
+      "webExport": "@turbo/web/canonical/story-circle",
       "nativeExport": "",
       "variants": [
         {
@@ -8010,7 +8010,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "FullBleedBanner",
       "description": "Full-bleed banner media slot with six fixed heights and an optional centered play affordance for video use cases.",
-      "webExport": "@geist/web/canonical/full-bleed-banner-card",
+      "webExport": "@turbo/web/canonical/full-bleed-banner-card",
       "nativeExport": "",
       "variants": [
         {
@@ -8108,7 +8108,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "_Single_Card_Banner",
       "description": "Fixed-width banner card with a single media slot and an optional centered play affordance for video use cases.",
-      "webExport": "@geist/web/canonical/single-banner-card",
+      "webExport": "@turbo/web/canonical/single-banner-card",
       "nativeExport": "",
       "variants": [
         {
@@ -8155,7 +8155,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "_Rotating_Banner_Card",
       "description": "Animated banner carousel that keeps the active banner centered while adjacent banners scale down into the clipped side peeks.",
-      "webExport": "@geist/web/canonical/rotating-banner-card",
+      "webExport": "@turbo/web/canonical/rotating-banner-card",
       "nativeExport": "",
       "variants": [
         {
@@ -8321,7 +8321,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Story Slider",
       "description": "Fixed-width horizontal story rail that composes repeated Story Circle items and supports native horizontal scrolling.",
-      "webExport": "@geist/web/canonical/story-slider",
+      "webExport": "@turbo/web/canonical/story-slider",
       "nativeExport": "",
       "variants": [
         {
@@ -8381,7 +8381,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "_base-container-box",
       "description": "Fixed-width slider row composition built from the approved Static Slider Card and clipped to the Figma viewport.",
-      "webExport": "@geist/web/canonical/static-slider-flexbox",
+      "webExport": "@turbo/web/canonical/static-slider-flexbox",
       "nativeExport": "",
       "variants": [
         {
@@ -8461,7 +8461,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Notification Badge",
       "description": "Compact indicator dot used to show short notification or status presence attached to another element.",
-      "webExport": "@geist/web/canonical/notification-badge",
+      "webExport": "@turbo/web/canonical/notification-badge",
       "nativeExport": "",
       "variants": [
         {
@@ -8536,8 +8536,8 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "shared",
       "figmaComponentName": "Tooltip",
       "description": "Compact inverse helper surface that exposes contextual guidance with directional stem variants.",
-      "webExport": "@geist/web/canonical/tooltip",
-      "nativeExport": "@geist/native/canonical/tooltip",
+      "webExport": "@turbo/web/canonical/tooltip",
+      "nativeExport": "@turbo/native/canonical/tooltip",
       "variants": [
         {
           "name": "tip",
@@ -8629,8 +8629,8 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "shared",
       "figmaComponentName": "Banner",
       "description": "Inline notification surface for status messaging with optional icon and action.",
-      "webExport": "@geist/web/canonical/banner",
-      "nativeExport": "@geist/native/canonical/banner",
+      "webExport": "@turbo/web/canonical/banner",
+      "nativeExport": "@turbo/native/canonical/banner",
       "variants": [
         {
           "name": "theme",
@@ -9126,8 +9126,8 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "shared",
       "figmaComponentName": "Section Text Header",
       "description": "Section heading block with optional second title line, supporting description, tag, and trailing action.",
-      "webExport": "@geist/web/canonical/section-header",
-      "nativeExport": "@geist/native/canonical/section-header",
+      "webExport": "@turbo/web/canonical/section-header",
+      "nativeExport": "@turbo/native/canonical/section-header",
       "variants": [
         {
           "name": "inverse",
@@ -9399,8 +9399,8 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "shared",
       "figmaComponentName": "divider",
       "description": "Visual separator with optional token-driven label content and left, center, or right alignment.",
-      "webExport": "@geist/web/canonical/divider",
-      "nativeExport": "@geist/native/canonical/divider",
+      "webExport": "@turbo/web/canonical/divider",
+      "nativeExport": "@turbo/native/canonical/divider",
       "variants": [
         {
           "name": "labelPosition",
@@ -9521,7 +9521,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Lazy Loader",
       "description": "Loading placeholder component used while content is still being prepared.",
-      "webExport": "@geist/web/canonical/lazy-loader",
+      "webExport": "@turbo/web/canonical/lazy-loader",
       "nativeExport": "",
       "variants": [],
       "states": [
@@ -9584,7 +9584,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Progress bar",
       "description": "Compact linear progress indicator with the documented 10%, 40%, and 100% canonical variants.",
-      "webExport": "@geist/web/canonical/progress-bar",
+      "webExport": "@turbo/web/canonical/progress-bar",
       "nativeExport": "",
       "variants": [
         {
@@ -9675,7 +9675,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Progress stepper",
       "description": "Linear step indicator component for multi-step flows with canonical rest, active, loading, success, error, and disabled states.",
-      "webExport": "@geist/web/canonical/progress-stepper",
+      "webExport": "@turbo/web/canonical/progress-stepper",
       "nativeExport": "",
       "variants": [
         {
@@ -9861,7 +9861,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Ratings",
       "description": "Canonical ratings lockup with Small and Medium sizes, plus the underlying star-state glyph system for default, half, and full stars.",
-      "webExport": "@geist/web/canonical/ratings",
+      "webExport": "@turbo/web/canonical/ratings",
       "nativeExport": "",
       "variants": [
         {

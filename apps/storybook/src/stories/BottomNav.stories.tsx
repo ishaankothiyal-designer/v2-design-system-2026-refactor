@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "storybook/preview-api";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
 import {
   BottomNav,
   Text,
@@ -8,7 +8,7 @@ import {
   type BottomNavItem,
   type BottomNavProps,
   type BottomNavType
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import {
   StoryMatrix,
@@ -222,7 +222,7 @@ function StatesStory({ brand }: { brand: DisplayBrandId }) {
   );
 }
 
-const bottomNavSourceCode = `import { BottomNav } from "@geist/web";
+const bottomNavSourceCode = `import { BottomNav } from "@turbo/web";
 
 const items = [
   { value: "home", label: "Home", ariaLabel: "Home", iconName: "sparkle-filled" },

@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@turbo/tokens";
 import {
   Button,
   Icon,
@@ -11,7 +11,7 @@ import {
   type SocialButtonPreviewState,
   type SocialButtonProps,
   type SocialButtonSize
-} from "@geist/web";
+} from "@turbo/web";
 import {
   StoryMatrix,
   StoryMatrixCornerCell,

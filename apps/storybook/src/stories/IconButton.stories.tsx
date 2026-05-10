@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@turbo/tokens";
 import {
   Icon,
   IconButton,
@@ -9,7 +9,7 @@ import {
   type IconButtonShape,
   type IconButtonSize,
   type IconButtonStyleVariant
-} from "@geist/web";
+} from "@turbo/web";
 import {
   StoryMatrix,
   StoryMatrixCornerCell,
@@ -277,7 +277,7 @@ export default meta;
 type Story = StoryObj<IconButtonStoryArgs>;
 
 function buildIconButtonVariantSourceCode(styleVariant: IconButtonStyleVariant) {
-  return `import { Icon, IconButton } from "@geist/web";
+  return `import { Icon, IconButton } from "@turbo/web";
 
 <IconButton
   aria-label="Add item"

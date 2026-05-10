@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
-import { ChipBar, type ChipBarProps } from "@geist/web";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
+import { ChipBar, type ChipBarProps } from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryCopy, StoryHeading, StoryPage, StoryPreviewSurface } from "../storybook-shell";
 

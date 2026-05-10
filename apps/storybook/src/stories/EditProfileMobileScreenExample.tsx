@@ -1,5 +1,5 @@
 import { useState, type ChangeEvent, type ReactNode } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
+import type { DisplayBrandId } from "@turbo/tokens";
 import {
   Avatar,
   Button,
@@ -8,7 +8,7 @@ import {
   PageHeaderL2,
   TextInput,
   getRequiredThemeTokenValue
-} from "@geist/web";
+} from "@turbo/web";
 import { StoryPage } from "../storybook-shell";
 
 export type EditProfileMobileScreenProps = {
@@ -344,7 +344,7 @@ export const editProfileScreenSourceCode = `import {
   LinkButton,
   PageHeaderL2,
   TextInput
-} from "@geist/web";
+} from "@turbo/web";
 
 export function EditProfileMobileScreen() {
   return (

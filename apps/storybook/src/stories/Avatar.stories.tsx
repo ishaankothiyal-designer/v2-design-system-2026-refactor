@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { coreTokenCatalog } from "@geist/tokens";
+import { coreTokenCatalog } from "@turbo/tokens";
 import {
   getAvatarResolvedMetrics,
   Avatar,
@@ -11,7 +11,7 @@ import {
   type AvatarSize,
   type AvatarStatusBadgeType,
   type AvatarStatusDotColor
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryCopy, StoryHeading, StoryPage } from "../storybook-shell";
 

@@ -1,8 +1,8 @@
 import type { ChangeEvent } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "storybook/preview-api";
-import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
-import { ChatBar, type ChatBarProps, type ChatBarState } from "@geist/web";
+import { STORYBOOK_BRAND_OPTIONS } from "@turbo/tokens";
+import { ChatBar, type ChatBarProps, type ChatBarState } from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import {
   StoryMatrix,
@@ -112,7 +112,7 @@ function buildChatBarStateSourceCode({
   label: string;
   state: ChatBarState;
 }) {
-  return `import { ChatBar } from "@geist/web";
+  return `import { ChatBar } from "@turbo/web";
 
 export function ChatBar${label.replace(/[^a-zA-Z0-9]/g, "")}() {
   return (

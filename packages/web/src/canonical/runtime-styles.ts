@@ -9,7 +9,7 @@ import {
   type BrandId,
   type RepoBrandId,
   type TokenTree
-} from "@geist/tokens";
+} from "@turbo/tokens";
 import { pxToRem } from "../theme";
 
 const mergedBrandTokenTrees = Object.fromEntries(

@@ -9,9 +9,9 @@ import {
   type ReactNode,
   useState
 } from "react";
-import type { IconName } from "@geist/icons";
-import { designSystemRegistry } from "@geist/contracts";
-import type { DisplayBrandId } from "@geist/tokens";
+import type { IconName } from "@turbo/icons";
+import { designSystemRegistry } from "@turbo/contracts";
+import type { DisplayBrandId } from "@turbo/tokens";
 import { getRequiredThemeTokenValue, tokenValueToRem } from "../theme";
 import { getTapFeedbackStyles } from "./press-feedback";
 import { Icon } from "./icon";

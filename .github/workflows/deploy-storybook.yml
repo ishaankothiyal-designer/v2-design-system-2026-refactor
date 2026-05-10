@@ -50,7 +50,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build Storybook
-        run: pnpm --filter @geist/storybook build
+        run: pnpm --filter @turbo/storybook build
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5

@@ -1,4 +1,4 @@
-import { iconCount, iconDefinitions, iconNames, type IconName } from "@geist/icons";
+import { iconCount, iconDefinitions, iconNames, type IconName } from "@turbo/icons";
 
 export type IconVariantLabel = "Default" | "Line" | "Outline" | "Outlined" | "Fill" | "Filled";
 

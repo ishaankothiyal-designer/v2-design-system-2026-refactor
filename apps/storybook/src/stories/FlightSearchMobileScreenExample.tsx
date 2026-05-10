@@ -1,5 +1,5 @@
 import { useMemo, useState, type CSSProperties, type ReactNode } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
+import type { DisplayBrandId } from "@turbo/tokens";
 import {
   AppHeader,
   Button,
@@ -8,7 +8,7 @@ import {
   Icon,
   Text,
   getRequiredThemeTokenValue
-} from "@geist/web";
+} from "@turbo/web";
 import { StoryPage } from "../storybook-shell";
 
 export type FlightSearchMobileScreenProps = {
@@ -1030,7 +1030,7 @@ export const flightSearchMobileScreenSourceCode = `import {
   Divider,
   Icon,
   Text
-} from "@geist/web";
+} from "@turbo/web";
 
 export function FlightSearchMobileScreen() {
   return (

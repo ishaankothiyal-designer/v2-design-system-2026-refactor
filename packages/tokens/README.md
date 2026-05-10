@@ -1,4 +1,4 @@
-# Token Documentation - Geist Design System
+# Token Documentation - Turbo Design System
 
 > **Source of truth:** `packages/tokens/tokens/base.json`
 > **Brand overrides:** `packages/tokens/tokens/brands/core.json`, `packages/tokens/tokens/brands/acme.json`
@@ -139,7 +139,7 @@ The legacy `token/token.json` file is retained as a reference export from the ea
 - Use semantic tokens in components instead of hardcoded values.
 - Add a base token first, then override it in a brand file only when necessary.
 - Keep the token tree stable so web, native, Storybook, and Figma stay aligned.
-- Validate changes with `pnpm --filter @geist/tokens validate:registry` and `pnpm --filter @geist/tokens typecheck` when token shapes change.
+- Validate changes with `pnpm --filter @turbo/tokens validate:registry` and `pnpm --filter @turbo/tokens typecheck` when token shapes change.
 
 ## Related files
 

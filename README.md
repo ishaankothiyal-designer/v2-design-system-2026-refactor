@@ -66,7 +66,7 @@ Common commands:
 
 1. Install dependencies with `corepack pnpm install`
 2. Start Storybook with `corepack pnpm storybook`
-3. Build Storybook with `corepack pnpm --filter @geist/storybook build`
+3. Build Storybook with `corepack pnpm --filter @turbo/storybook build`
 
 The Storybook app also emits a machine-readable registry at `apps/storybook/public/design-system-registry.json`.
 
@@ -84,10 +84,10 @@ The CLI in `packages/cli` provides a machine-friendly way to inspect the approve
 
 Examples:
 
-- `geist-ds registry`
-- `geist-ds components button`
-- `geist-ds component component.button`
-- `geist-ds serve --port 3210`
+- `turbo-ds registry`
+- `turbo-ds components button`
+- `turbo-ds component component.button`
+- `turbo-ds serve --port 3210`
 
 Local API endpoints include:
 

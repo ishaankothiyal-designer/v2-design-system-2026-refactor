@@ -1,12 +1,12 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS } from "@turbo/tokens";
 import {
   getTopTabHeaderWidgetDefaultItems,
   TopTabHeaderWidget,
   TopTabHeaderWidgetTabStatusAtom,
   type TopTabHeaderWidgetProps
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryCopy, StoryHeading, StoryPage } from "../storybook-shell";
 

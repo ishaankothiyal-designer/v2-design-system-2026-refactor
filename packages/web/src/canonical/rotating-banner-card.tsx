@@ -1,7 +1,7 @@
 import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
-import { designSystemRegistry } from "@geist/contracts";
-import type { DisplayBrandId } from "@geist/tokens";
+import { designSystemRegistry } from "@turbo/contracts";
+import type { DisplayBrandId } from "@turbo/tokens";
 import { getRequiredThemeTokenValue, pxToRem, tokenValueToRem } from "../theme";
 
 export const canonicalRotatingBannerCardWebContract = designSystemRegistry.components.find(

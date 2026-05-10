@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@geist/tokens";
-import { ProgressStepper, type ProgressStepperProps, type ProgressStepperStepState } from "@geist/web";
+import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@turbo/tokens";
+import { ProgressStepper, type ProgressStepperProps, type ProgressStepperStepState } from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryCopy, StoryHeading, StoryPage } from "../storybook-shell";
 
@@ -117,7 +117,7 @@ const surfaceCardStyles: CSSProperties = {
   padding: 20
 };
 
-const progressStepperUiExampleSourceCode = `import { ProgressStepper } from "@geist/web";
+const progressStepperUiExampleSourceCode = `import { ProgressStepper } from "@turbo/web";
 
 export function Example() {
   return (

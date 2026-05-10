@@ -1,7 +1,7 @@
 import type { ChangeEvent } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "storybook/preview-api";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
 import {
   ButtonGroup,
   Icon,
@@ -14,7 +14,7 @@ import {
   type RegInputPreviewState,
   type RegInputProps,
   type RegInputSize
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import {
   StoryMatrix,
@@ -132,7 +132,7 @@ function buildRegInputStateSourceCode({
   trailingAction: RegInputTrailingAction;
   value?: string;
 }) {
-  return `import { RegInput } from "@geist/web";
+  return `import { RegInput } from "@turbo/web";
 
 export function RegInput${label.replace(/[^a-zA-Z0-9]/g, "")}() {
   return (
@@ -447,7 +447,7 @@ const regInputUiExampleSourceCode = `import {
   PageHeaderL2,
   RegInput,
   Text
-} from "@geist/web";
+} from "@turbo/web";
 
 const burstImageSrc = "${regInputHeroBurstImageSrc}";
 const personImageSrc = "${regInputHeroPersonImageSrc}";

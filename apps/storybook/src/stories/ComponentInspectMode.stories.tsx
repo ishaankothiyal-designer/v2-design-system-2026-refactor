@@ -7,7 +7,7 @@ import {
   useState
 } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { designSystemRegistry } from "@geist/contracts";
+import { designSystemRegistry } from "@turbo/contracts";
 import {
   Accordion,
   BackToTopButton,
@@ -19,7 +19,7 @@ import {
   LinkButton,
   SectionHeader,
   Text
-} from "@geist/web";
+} from "@turbo/web";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 type Measurement = {

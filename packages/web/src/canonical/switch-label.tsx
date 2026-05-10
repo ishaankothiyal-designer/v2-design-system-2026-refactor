@@ -1,6 +1,6 @@
 import { type CSSProperties, type ReactNode, useId, useInsertionEffect } from "react";
-import { designSystemRegistry } from "@geist/contracts";
-import { type DisplayBrandId, normalizeBrandId } from "@geist/tokens";
+import { designSystemRegistry } from "@turbo/contracts";
+import { type DisplayBrandId, normalizeBrandId } from "@turbo/tokens";
 import { Switch, type SwitchProps, type SwitchSize } from "./switch";
 import { ensureStyleSheet, joinClassNames, runtimeTokenVar, runtimeTokenVarPx, toCssRule } from "./runtime-styles";
 

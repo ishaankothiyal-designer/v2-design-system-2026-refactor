@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@turbo/tokens";
 import {
   Button,
   Icon,
@@ -14,7 +14,7 @@ import {
   type ButtonShape,
   type ButtonSize,
   type ButtonStyleVariant
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import {
   StoryMatrix,
@@ -245,7 +245,7 @@ function BrandStateDocument({
 }
 
 function buildButtonStyleSourceCode(styleVariant: ButtonStyleVariant) {
-  return `import { Button, Icon } from "@geist/web";
+  return `import { Button, Icon } from "@turbo/web";
 
 <Button
   brand="Cars24"

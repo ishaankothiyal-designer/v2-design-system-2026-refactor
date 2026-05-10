@@ -1,5 +1,5 @@
 import type { CSSProperties, HTMLAttributes, ReactNode, SVGProps } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
+import type { DisplayBrandId } from "@turbo/tokens";
 import { getRequiredThemeTokenValue } from "../theme";
 
 export type OwnershipBadgeSeller =

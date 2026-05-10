@@ -1,8 +1,8 @@
 import type { ChangeEvent } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "storybook/preview-api";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
-import { SwitchLabel, Text, type SwitchLabelProps, type SwitchLabelSize } from "@geist/web";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
+import { SwitchLabel, Text, type SwitchLabelProps, type SwitchLabelSize } from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import {
   StoryMatrix,
@@ -95,7 +95,7 @@ function StateMatrixStory({
 }
 
 function buildSwitchLabelStateSourceCode(state: (typeof documentedStates)[number]) {
-  return `import { SwitchLabel } from "@geist/web";
+  return `import { SwitchLabel } from "@turbo/web";
 
 const sizes = ["Default", "Small"] as const;
 

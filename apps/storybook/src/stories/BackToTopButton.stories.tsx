@@ -1,12 +1,12 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog } from "@turbo/tokens";
 import {
   BackToTopButton,
   Text,
   type BackToTopButtonPreviewState,
   type BackToTopButtonProps
-} from "@geist/web";
+} from "@turbo/web";
 import {
   StoryMatrix,
   StoryMatrixCornerCell,

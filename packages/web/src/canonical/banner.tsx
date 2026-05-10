@@ -1,6 +1,6 @@
 import { type CSSProperties, useState } from "react";
-import type { BrandId, DisplayBrandId } from "@geist/tokens";
-import { designSystemRegistry } from "@geist/contracts";
+import type { BrandId, DisplayBrandId } from "@turbo/tokens";
+import { designSystemRegistry } from "@turbo/contracts";
 import { Icon } from "./icon";
 import { getRequiredThemeTokenValue, pxToRem, tokenValueToRem } from "../theme";
 

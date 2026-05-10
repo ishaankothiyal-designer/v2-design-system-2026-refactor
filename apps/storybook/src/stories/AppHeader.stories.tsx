@@ -9,7 +9,7 @@ import {
   type AppHeaderLevel,
   type AppHeaderProps,
   type AppHeaderVariant
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import {
   StoryMatrix,

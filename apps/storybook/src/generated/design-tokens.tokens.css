@@ -33,6 +33,27 @@
   --color-status-warning: #F79009; /* color.status.warning | @presenter Color */
   --color-status-danger: #F04438; /* color.status.danger | @presenter Color */
   --color-status-info: #2E90FA; /* color.status.info | @presenter Color */
+  --color-utility-service-buy-car-base: #296FE3; /* color.utility.service.buy-car.base | @presenter Color */
+  --color-utility-service-buy-car-bold: #103A8C; /* color.utility.service.buy-car.bold | @presenter Color */
+  --color-utility-service-buy-car-subtle: #8EC2FC; /* color.utility.service.buy-car.subtle | @presenter Color */
+  --color-utility-service-car-check-base: #FF7234; /* color.utility.service.car-check.base | @presenter Color */
+  --color-utility-service-car-check-bold: #6B2100; /* color.utility.service.car-check.bold | @presenter Color */
+  --color-utility-service-car-check-subtle: #FFC8B0; /* color.utility.service.car-check.subtle | @presenter Color */
+  --color-utility-service-challan-base: #159DA3; /* color.utility.service.challan.base | @presenter Color */
+  --color-utility-service-challan-bold: #0A7178; /* color.utility.service.challan.bold | @presenter Color */
+  --color-utility-service-challan-subtle: #7CF8FE; /* color.utility.service.challan.subtle | @presenter Color */
+  --color-utility-service-garage-base: #4736FE; /* color.utility.service.garage.base | @presenter Color */
+  --color-utility-service-garage-bold: #211185; /* color.utility.service.garage.bold | @presenter Color */
+  --color-utility-service-garage-subtle: #C8CCFB; /* color.utility.service.garage.subtle | @presenter Color */
+  --color-utility-service-insurance-base: #296FE3; /* color.utility.service.insurance.base | @presenter Color */
+  --color-utility-service-insurance-bold: #103A8C; /* color.utility.service.insurance.bold | @presenter Color */
+  --color-utility-service-insurance-subtle: #B9DAFE; /* color.utility.service.insurance.subtle | @presenter Color */
+  --color-utility-service-loan-base: #296FE3; /* color.utility.service.loan.base | @presenter Color */
+  --color-utility-service-loan-bold: #103A8C; /* color.utility.service.loan.bold | @presenter Color */
+  --color-utility-service-loan-subtle: #B9DAFE; /* color.utility.service.loan.subtle | @presenter Color */
+  --color-utility-service-sell-car-base: #44D48D; /* color.utility.service.sell-car.base | @presenter Color */
+  --color-utility-service-sell-car-bold: #106F43; /* color.utility.service.sell-car.bold | @presenter Color */
+  --color-utility-service-sell-car-subtle: #AAF8CE; /* color.utility.service.sell-car.subtle | @presenter Color */
 
   /**
    * @tokens Typography

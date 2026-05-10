@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
-import { Label, Text, type LabelProps, type LabelSize } from "@geist/web";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
+import { Label, Text, type LabelProps, type LabelSize } from "@turbo/web";
 import {
   StoryMatrix,
   StoryMatrixCornerCell,

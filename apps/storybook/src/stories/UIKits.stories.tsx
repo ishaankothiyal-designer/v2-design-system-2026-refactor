@@ -1,5 +1,5 @@
 import type { Meta } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS } from "@turbo/tokens";
 import { UIExample as AccordionUIExample } from "./Accordion.stories";
 import { UIExample as AIChatUIExample } from "./AIChatMobileScreenExample";
 import { UIExample as BannerUIExample } from "./Banner.stories";

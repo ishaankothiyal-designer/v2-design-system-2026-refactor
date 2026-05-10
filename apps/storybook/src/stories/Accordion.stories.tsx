@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog } from "@geist/tokens";
-import { Badge, Icon, Accordion, SectionHeader, Text, type AccordionProps } from "@geist/web";
+import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog } from "@turbo/tokens";
+import { Badge, Icon, Accordion, SectionHeader, Text, type AccordionProps } from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import {
   StoryMatrix,

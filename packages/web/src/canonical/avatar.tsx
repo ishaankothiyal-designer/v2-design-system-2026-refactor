@@ -1,6 +1,6 @@
 import { type CSSProperties, type HTMLAttributes, type ReactNode, useInsertionEffect } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
-import type { IconName } from "@geist/icons";
+import type { DisplayBrandId } from "@turbo/tokens";
+import type { IconName } from "@turbo/icons";
 import { ensureStyleSheet, joinClassNames, toCssRule } from "./runtime-styles";
 import { getRequiredThemeTokenValue, tokenValueToRem } from "../theme";
 import { BrandLogo } from "./brand-logo";

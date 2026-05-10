@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog } from "@geist/tokens";
-import { ProgressBar, type ProgressBarProps } from "@geist/web";
+import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog } from "@turbo/tokens";
+import { ProgressBar, type ProgressBarProps } from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
@@ -93,7 +93,7 @@ const variantHeadingStyles: CSSProperties = {
   lineHeight: "18px"
 };
 
-const progressBarUiExampleSourceCode = `import { ProgressBar } from "@geist/web";
+const progressBarUiExampleSourceCode = `import { ProgressBar } from "@turbo/web";
 
 export function Example() {
   return <ProgressBar percentage={40} />;

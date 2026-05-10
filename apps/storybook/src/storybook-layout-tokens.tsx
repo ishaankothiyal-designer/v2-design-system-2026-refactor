@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { coreTokenCatalog } from "@geist/tokens";
+import { coreTokenCatalog } from "@turbo/tokens";
 
 type GapToken = {
   name: string;

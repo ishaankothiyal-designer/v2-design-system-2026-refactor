@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "type": "module",
   "bin": {
-    "geist-ds": "./dist/cli.js"
+    "turbo-ds": "./dist/cli.js"
   },
   "files": [
     "dist"
@@ -17,6 +17,6 @@
     "typecheck": "tsx ../../scripts/sync-design-system-registry.ts && tsc -p tsconfig.json --noEmit"
   },
   "devDependencies": {
-    "@geist/contracts": "workspace:*"
+    "@turbo/contracts": "workspace:*"
   }
 }

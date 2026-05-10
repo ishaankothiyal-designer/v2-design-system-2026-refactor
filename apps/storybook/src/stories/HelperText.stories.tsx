@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
-import { HelperText, Text, type HelperTextProps, type HelperTextSize, type HelperTextTone } from "@geist/web";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
+import { HelperText, Text, type HelperTextProps, type HelperTextSize, type HelperTextTone } from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import {
   StoryMatrix,
@@ -148,7 +148,7 @@ const counterMatrixStyles = {
 } as const;
 
 function buildHelperTextToneSourceCode(tone: HelperTextTone) {
-  return `import { HelperText } from "@geist/web";
+  return `import { HelperText } from "@turbo/web";
 
 export function HelperText${tone}() {
   return (

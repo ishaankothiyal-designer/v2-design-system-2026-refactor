@@ -1,5 +1,5 @@
 import type { CSSProperties, HTMLAttributes } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
+import type { DisplayBrandId } from "@turbo/tokens";
 
 export type BrandLogoBrand = DisplayBrandId;
 export type BrandLogoType = "Logo" | "Symbol";

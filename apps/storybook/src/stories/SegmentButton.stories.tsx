@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@turbo/tokens";
 import {
   SegmentButton,
   type SegmentButtonPreviewState,
@@ -8,7 +8,7 @@ import {
   type SegmentButtonSelectionColor,
   type SegmentButtonSize,
   type SegmentButtonType
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 

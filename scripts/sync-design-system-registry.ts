@@ -13,7 +13,7 @@ const cliGeneratedDir = path.join(repoRoot, "packages/cli/src/generated");
 const cliGeneratedModulePath = path.join(cliGeneratedDir, "design-system-registry.ts");
 
 const registryJson = `${JSON.stringify(designSystemRegistry, null, 2)}\n`;
-const registryModule = `import type { DesignSystemRegistry } from "@geist/contracts";
+const registryModule = `import type { DesignSystemRegistry } from "@turbo/contracts";
 
 export const designSystemRegistry: DesignSystemRegistry = ${registryJson.trim()} as const;
 `;

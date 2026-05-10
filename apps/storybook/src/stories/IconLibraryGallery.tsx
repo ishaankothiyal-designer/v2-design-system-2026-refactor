@@ -1,7 +1,7 @@
 import { useMemo, useState, type CSSProperties } from "react";
 import { IconGallery, IconItem } from "@storybook/addon-docs/blocks";
-import { coreTokenCatalog } from "@geist/tokens";
-import { Icon } from "@geist/web";
+import { coreTokenCatalog } from "@turbo/tokens";
+import { Icon } from "@turbo/web";
 import { iconFamilies, type IconFamily, type IconVariantLabel } from "./iconLibraryData";
 
 type IconFilter = "all" | "outline" | "filled";

@@ -1,13 +1,13 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog } from "@turbo/tokens";
 import {
   StepperBar,
   Text,
   type StepperBarProps,
   type StepperBarSegmentState,
   type StepperBarVariant
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
@@ -176,7 +176,7 @@ const matrixValueCellStyles: CSSProperties = {
   padding: "16px 20px"
 };
 
-const stepperBarUiExampleSourceCode = `import { StepperBar } from "@geist/web";
+const stepperBarUiExampleSourceCode = `import { StepperBar } from "@turbo/web";
 
 export function Example() {
   return <StepperBar stepCount={4} variant="Continuous" />;

@@ -1,5 +1,5 @@
-import { coreTokenCatalog, deepMergeTokenTrees, getBrandTokenSet, getTokenValue } from "@geist/tokens";
-import type { BrandId } from "@geist/tokens";
+import { coreTokenCatalog, deepMergeTokenTrees, getBrandTokenSet, getTokenValue } from "@turbo/tokens";
+import type { BrandId } from "@turbo/tokens";
 
 export function getNativeThemeTokens(brandId: BrandId) {
   const brandSet = getBrandTokenSet(brandId);

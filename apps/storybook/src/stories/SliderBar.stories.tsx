@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "storybook/preview-api";
-import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS } from "@turbo/tokens";
 import {
   SliderBar,
   Text,
@@ -9,7 +9,7 @@ import {
   type SliderBarProps,
   type SliderBarState,
   type SliderBarTooltipDirection
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import {
   StoryMatrix,
@@ -268,7 +268,7 @@ function OrientationStory({ brand }: { brand?: NonNullable<SliderBarProps["brand
   );
 }
 
-const sliderBarExampleSourceCode = `import { SliderBar } from "@geist/web";
+const sliderBarExampleSourceCode = `import { SliderBar } from "@turbo/web";
 
 export function Example() {
   return (

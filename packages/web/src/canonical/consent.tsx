@@ -1,7 +1,7 @@
 import { type CSSProperties, type ReactNode, useId, useInsertionEffect } from "react";
-import { designSystemRegistry } from "@geist/contracts";
-import type { DisplayBrandId } from "@geist/tokens";
-import { normalizeBrandId } from "@geist/tokens";
+import { designSystemRegistry } from "@turbo/contracts";
+import type { DisplayBrandId } from "@turbo/tokens";
+import { normalizeBrandId } from "@turbo/tokens";
 import { Checkbox, type CheckboxProps, type CheckboxSize } from "./checkbox";
 import { Text } from "./text";
 import { ensureStyleSheet, joinClassNames, runtimeTokenVar, runtimeTokenVarPx, toCssRule } from "./runtime-styles";

@@ -1,9 +1,9 @@
 import { type CSSProperties, useEffect, useMemo, useRef } from "react";
 import type { Decorator } from "@storybook/react";
-import { designSystemRegistry, type ComponentContract } from "@geist/contracts";
+import { designSystemRegistry, type ComponentContract } from "@turbo/contracts";
 import { Canvas, Controls, Description, DocsPage, Stories, Subtitle, Title, useOf } from "@storybook/addon-docs/blocks";
-import { coreTokenCatalog } from "@geist/tokens";
-import { Text } from "@geist/web";
+import { coreTokenCatalog } from "@turbo/tokens";
+import { Text } from "@turbo/web";
 
 const sectionHeadingStyles: CSSProperties = {
   margin: "32px 0 16px"

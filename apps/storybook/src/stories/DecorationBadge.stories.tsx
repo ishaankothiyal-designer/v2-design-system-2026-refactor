@@ -1,13 +1,13 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
 import {
   DecorationBadge,
   type DecorationBadgeColor,
   type DecorationBadgeProps,
   type DecorationBadgeStyle,
   type DecorationBadgeType
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
@@ -104,7 +104,7 @@ function Style2Gallery({
 }
 
 function buildVariantsSourceCode(brand: DisplayBrandId) {
-  return `import { DecorationBadge } from "@geist/web";
+  return `import { DecorationBadge } from "@turbo/web";
 
 const style1Colors = ["Purple", "Yellow", "Red", "Gray", "Black", "Green"] as const;
 const style2Types = [

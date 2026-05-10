@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { EliteBadge, type EliteBadgeBrand, type EliteBadgeName, Text } from "@geist/web";
-import { coreTokenCatalog } from "@geist/tokens";
+import { EliteBadge, type EliteBadgeBrand, type EliteBadgeName, Text } from "@turbo/web";
+import { coreTokenCatalog } from "@turbo/tokens";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 

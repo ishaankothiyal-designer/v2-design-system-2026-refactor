@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
 import {
   CaptionButton,
   Text,
@@ -8,7 +8,7 @@ import {
   type CaptionButtonProps,
   type CaptionButtonSize,
   type CaptionButtonStyleVariant
-} from "@geist/web";
+} from "@turbo/web";
 import {
   StoryMatrix,
   StoryMatrixCornerCell,
@@ -244,7 +244,7 @@ export default meta;
 type Story = StoryObj<CaptionButtonStoryArgs>;
 
 function buildCaptionButtonStyleSourceCode(styleVariant: CaptionButtonStyleVariant) {
-  return `import { CaptionButton } from "@geist/web";
+  return `import { CaptionButton } from "@turbo/web";
 
 <CaptionButton brand="Cars24" caption="Caption" captionPosition="Up" size="Medium" styleVariant="${styleVariant}">
   Primary Button

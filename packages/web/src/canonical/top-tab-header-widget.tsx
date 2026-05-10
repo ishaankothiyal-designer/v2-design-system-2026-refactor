@@ -10,7 +10,7 @@ import {
   useRef,
   useState
 } from "react";
-import { designSystemRegistry } from "@geist/contracts";
+import { designSystemRegistry } from "@turbo/contracts";
 import { getRequiredThemeTokenValue, pxToRem } from "../theme";
 import { AppHeader, type AppHeaderBrand, type AppHeaderIconAction, type AppHeaderProps } from "./app-header";
 import { Icon } from "./icon";

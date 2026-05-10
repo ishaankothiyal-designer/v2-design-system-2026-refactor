@@ -13,8 +13,8 @@ import {
 import {
   normalizeBrandId,
   type DisplayBrandId
-} from "@geist/tokens";
-import { designSystemRegistry } from "@geist/contracts";
+} from "@turbo/tokens";
+import { designSystemRegistry } from "@turbo/contracts";
 import { ensureStyleSheet, runtimeTokenVar, runtimeTokenVarPx, toCssRule } from "./runtime-styles";
 
 export const canonicalButtonWebContract = designSystemRegistry.components.find(

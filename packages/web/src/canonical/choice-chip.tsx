@@ -7,8 +7,8 @@ import {
   type ReactNode,
   useState
 } from "react";
-import type { IconName } from "@geist/icons";
-import type { DisplayBrandId } from "@geist/tokens";
+import type { IconName } from "@turbo/icons";
+import type { DisplayBrandId } from "@turbo/tokens";
 import { getRequiredThemeTokenValue } from "../theme";
 import { Icon } from "./icon";
 import { getTapFeedbackStyles } from "./press-feedback";

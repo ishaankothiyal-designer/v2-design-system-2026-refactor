@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { ChangeEvent } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
 import {
   AppHeader,
   Button,
@@ -18,7 +18,7 @@ import {
   type PhoneInputPreviewState,
   type PhoneInputProps,
   type PhoneInputSize
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import {
   StoryMatrix,
@@ -304,7 +304,7 @@ function buildPhoneInputStateSourceCode({
   label: string;
   value?: string;
 }) {
-  return `import { PhoneInput } from "@geist/web";
+  return `import { PhoneInput } from "@turbo/web";
 
 export function PhoneInput${label.replace(/[^a-zA-Z0-9]/g, "")}() {
   return (

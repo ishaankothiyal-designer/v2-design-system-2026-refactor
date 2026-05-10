@@ -1,8 +1,8 @@
 import type { ChangeEvent } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "storybook/preview-api";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
-import { RadioLabel, Text, type RadioLabelProps, type RadioLabelSize } from "@geist/web";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
+import { RadioLabel, Text, type RadioLabelProps, type RadioLabelSize } from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import {
   StoryMatrix,
@@ -95,7 +95,7 @@ function StateMatrixStory({
 }
 
 function buildRadioLabelStateSourceCode(state: (typeof documentedStates)[number]) {
-  return `import { RadioLabel } from "@geist/web";
+  return `import { RadioLabel } from "@turbo/web";
 
 const sizes = ["Small", "Medium"] as const;
 

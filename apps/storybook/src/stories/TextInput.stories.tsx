@@ -1,7 +1,7 @@
 import type { ChangeEvent } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "storybook/preview-api";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
 import {
   TextInput,
   type TextInputHelperTone,
@@ -9,7 +9,7 @@ import {
   type TextInputProps,
   type TextInputSize,
   type TextInputValidationState
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import {
   EditProfileMobileScreen,
@@ -125,7 +125,7 @@ function buildTextInputStateSourceCode({
   label: string;
   value?: string;
 }) {
-  return `import { TextInput } from "@geist/web";
+  return `import { TextInput } from "@turbo/web";
 
 export function TextInput${label.replace(/[^a-zA-Z0-9]/g, "")}() {
   return (

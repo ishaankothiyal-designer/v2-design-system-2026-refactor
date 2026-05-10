@@ -1,6 +1,6 @@
 import type { CSSProperties, HTMLAttributes, MouseEventHandler, ReactNode } from "react";
-import { designSystemRegistry } from "@geist/contracts";
-import type { DisplayBrandId } from "@geist/tokens";
+import { designSystemRegistry } from "@turbo/contracts";
+import type { DisplayBrandId } from "@turbo/tokens";
 import { getRequiredThemeTokenValue, tokenValueToRem } from "../theme";
 import { Button } from "./button";
 import { Icon } from "./icon";

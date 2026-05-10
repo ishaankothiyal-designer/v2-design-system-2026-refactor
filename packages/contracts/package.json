@@ -1,5 +1,5 @@
 {
-  "name": "@geist/contracts",
+  "name": "@turbo/contracts",
   "version": "0.1.0",
   "private": true,
   "type": "module",

@@ -1,5 +1,5 @@
 import type { HTMLAttributes, ReactNode } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
+import type { DisplayBrandId } from "@turbo/tokens";
 import { getRequiredThemeTokenValue, pxToRem } from "../theme";
 
 export interface TextProps extends HTMLAttributes<HTMLSpanElement> {

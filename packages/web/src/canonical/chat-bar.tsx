@@ -5,9 +5,9 @@ import {
   useInsertionEffect,
   useState
 } from "react";
-import type { IconName } from "@geist/icons";
-import { designSystemRegistry } from "@geist/contracts";
-import { type DisplayBrandId, normalizeBrandId } from "@geist/tokens";
+import type { IconName } from "@turbo/icons";
+import { designSystemRegistry } from "@turbo/contracts";
+import { type DisplayBrandId, normalizeBrandId } from "@turbo/tokens";
 import { Icon } from "./icon";
 import { ensureStyleSheet, joinClassNames, runtimeTokenVar, runtimeTokenVarPx, toCssRule } from "./runtime-styles";
 

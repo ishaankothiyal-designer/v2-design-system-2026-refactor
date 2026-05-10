@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
 import {
   FabButton,
   Icon,
   Text,
   type FabButtonPreviewState,
   type FabButtonProps
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import {
   StoryMatrix,
@@ -155,7 +155,7 @@ function PlaygroundStory(args: FabButtonStoryArgs) {
 }
 
 function buildPlaygroundSourceCode() {
-  return `import { FabButton, Icon } from "@geist/web";
+  return `import { FabButton, Icon } from "@turbo/web";
 
 <FabButton
   aria-label="Upload pending for RC image"
@@ -169,7 +169,7 @@ function buildPlaygroundSourceCode() {
 }
 
 function buildStatesSourceCode() {
-  return `import { FabButton, Icon } from "@geist/web";
+  return `import { FabButton, Icon } from "@turbo/web";
 
 <FabButton
   aria-label="Upload pending for RC image"

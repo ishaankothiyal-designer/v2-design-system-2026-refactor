@@ -1,6 +1,6 @@
 import type { CSSProperties, HTMLAttributes, MouseEventHandler, ReactNode } from "react";
-import { designSystemRegistry } from "@geist/contracts";
-import type { DisplayBrandId } from "@geist/tokens";
+import { designSystemRegistry } from "@turbo/contracts";
+import type { DisplayBrandId } from "@turbo/tokens";
 import { getRequiredThemeTokenValue, pxToRem, tokenValueToRem } from "../theme";
 import { Avatar, type AvatarProps } from "./avatar";
 import { Badge } from "./badge";
