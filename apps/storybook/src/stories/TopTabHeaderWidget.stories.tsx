@@ -88,6 +88,35 @@ function CountryShowcase({
             </PreviewFrame>
           </div>
         </StoryCard>
+
+        <StoryCard style={{ width: "fit-content" }}>
+          <div style={{ display: "grid", gap: 12 }}>
+            <div style={{ display: "grid", gap: 6 }}>
+              <StoryHeading brand={brand} size="lg">
+                India Collapsed
+              </StoryHeading>
+              <StoryCopy brand={brand} size="sm">
+                Scroll-collapsed state with the app header hidden, the search field pinned, and the India tab rail reduced to the compact label-only mode.
+              </StoryCopy>
+            </div>
+            <PreviewFrame>
+              <TopTabHeaderWidget
+                brand={brand}
+                collapsed
+                country="India"
+                headerProps={{
+                  avatarAppearance: "Image",
+                  avatarImageSrc,
+                  locationLabel: "New Delhi"
+                }}
+                searchBarProps={{
+                  placeholder: "Search Maruti cars"
+                }}
+                showBanner={false}
+              />
+            </PreviewFrame>
+          </div>
+        </StoryCard>
       </div>
     </StoryPage>
   );
@@ -271,6 +300,7 @@ const meta: Meta<TopTabHeaderWidgetProps> = {
   args: {
     banner: <DefaultStoryBanner />,
     brand: "Cars24",
+    collapsed: false,
     country: "India",
     headerProps: {
       avatarAppearance: "Image",
@@ -292,6 +322,9 @@ const meta: Meta<TopTabHeaderWidgetProps> = {
     country: {
       control: "inline-radio",
       options: ["India", "Country2"]
+    },
+    collapsed: {
+      control: "boolean"
     },
     defaultValue: {
       control: false

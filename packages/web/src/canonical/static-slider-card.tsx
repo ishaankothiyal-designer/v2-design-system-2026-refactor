@@ -1,8 +1,14 @@
-import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type HTMLAttributes, type ReactNode } from "react";
 import type { IconName } from "@turbo/icons";
 import type { DisplayBrandId } from "@turbo/tokens";
 import { designSystemRegistry } from "@turbo/contracts";
-import { getRequiredThemeTokenValue, pxToRem } from "../theme";
+import {
+  getReadableTextColor,
+  getRequiredThemeTokenValue,
+  pxToRem,
+  sampleBackgroundImageIsDark,
+  sampleImageElementIsDark
+} from "../theme";
 import { Icon } from "./icon";
 import { Tag } from "./tag";
 
@@ -251,6 +257,7 @@ function allowsDescription(
 function StaticSliderCardTextBlock({
   align,
   brand,
+  titleTone,
   description,
   descriptionTone,
   scale,
@@ -258,6 +265,7 @@ function StaticSliderCardTextBlock({
 }: {
   align: "left" | "center";
   brand: DisplayBrandId;
+  titleTone: string;
   description?: string | undefined;
   descriptionTone: string;
   scale: StaticSliderCardTextScale;
@@ -268,7 +276,6 @@ function StaticSliderCardTextBlock({
   const fontFamily = `${String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"))}, sans-serif`;
   const titleWeight = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.semibold"));
   const descriptionWeight = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.regular"));
-  const titleColor = String(getRequiredThemeTokenValue(brand, "color.text.primary"));
   const textAlign = align === "center" ? "center" : "left";
 
   const wrapperStyles: CSSProperties = {
@@ -281,7 +288,7 @@ function StaticSliderCardTextBlock({
   };
 
   const titleStyles: CSSProperties = {
-    color: titleColor,
+    color: titleTone,
     display: "block",
     fontFamily,
     fontSize: pxToRem(titleTypography.fontSize),
@@ -319,10 +326,12 @@ function StaticSliderCardTextBlock({
 function StaticSliderCardIcon({
   brand,
   iconName,
+  tone,
   size
 }: {
   brand: DisplayBrandId;
   iconName: IconName;
+  tone: string;
   size: number;
 }) {
   return (
@@ -330,7 +339,7 @@ function StaticSliderCardIcon({
       brand={brand}
       decorative
       name={iconName}
-      style={{ color: String(getRequiredThemeTokenValue(brand, "color.text.primary")), fontSize: pxToRem(size) }}
+      style={{ color: tone, fontSize: pxToRem(size) }}
     />
   );
 }
@@ -355,11 +364,26 @@ export function StaticSliderCard({
   const metrics = resolveMetrics(columnCount, size, type);
   const showTag = Boolean(tagLabel) && allowsTag(columnCount, size, type);
   const showDescription = Boolean(description) && allowsDescription(columnCount, size, type);
-  const descriptionTone = String(getRequiredThemeTokenValue(brand, "color.text.secondary"));
   const slotSurface = String(getRequiredThemeTokenValue(brand, "color.brand.primary.50"));
   const insideRadius = pxToRem(Number(getRequiredThemeTokenValue(brand, getInsideRadiusTokenPath(columnCount))));
   const outsideRadius = pxToRem(Number(getRequiredThemeTokenValue(brand, getOutsideRadiusTokenPath(columnCount))));
   const contentInset = pxToRem(metrics.contentInset);
+  const slotRef = useRef<HTMLDivElement | null>(null);
+  const resolvedBackground =
+    typeof style?.background === "string"
+      ? style.background
+      : typeof style?.backgroundColor === "string"
+        ? style.backgroundColor
+        : slotSurface;
+  const backgroundImage = typeof style?.backgroundImage === "string" ? style.backgroundImage : undefined;
+  const defaultOnSurfaceTextTone = getReadableTextColor(resolvedBackground);
+  const [onSurfaceTextTone, setOnSurfaceTextTone] = useState(defaultOnSurfaceTextTone);
+  const titleTone = type === "Text Outside"
+    ? String(getRequiredThemeTokenValue(brand, "color.text.primary"))
+    : onSurfaceTextTone;
+  const descriptionTone = type === "Text Outside"
+    ? String(getRequiredThemeTokenValue(brand, "color.text.secondary"))
+    : onSurfaceTextTone;
 
   const rootStyles: CSSProperties = {
     display: "flex",
@@ -385,6 +409,34 @@ export function StaticSliderCard({
     width: "100%"
   };
 
+  useEffect(() => {
+    let cancelled = false;
+
+    async function resolveTone() {
+      const imageElement = slotRef.current?.querySelector("img");
+      const imageDarkness = imageElement ? await sampleImageElementIsDark(imageElement) : null;
+      const backgroundImageDarkness =
+        imageDarkness === null && backgroundImage ? await sampleBackgroundImageIsDark(backgroundImage) : null;
+      const nextTone =
+        imageDarkness === null && backgroundImageDarkness === null
+          ? defaultOnSurfaceTextTone
+          : imageDarkness === true || backgroundImageDarkness === true
+            ? "#FFFFFF"
+            : "#000000";
+
+      if (!cancelled) {
+        setOnSurfaceTextTone(nextTone);
+      }
+    }
+
+    setOnSurfaceTextTone(defaultOnSurfaceTextTone);
+    void resolveTone();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [backgroundImage, children, defaultOnSurfaceTextTone]);
+
   const slotContentStyles: CSSProperties = {
     borderRadius: type === "Text Outside" ? outsideRadius : insideRadius,
     inset: 0,
@@ -396,7 +448,7 @@ export function StaticSliderCard({
 
   return (
     <div {...rest} className={className} style={rootStyles}>
-      <div style={slotStyles}>
+      <div ref={slotRef} style={slotStyles}>
         <div style={slotContentStyles}>{children}</div>
 
         {type === "Text Inside" ? (
@@ -412,6 +464,7 @@ export function StaticSliderCard({
             <StaticSliderCardTextBlock
               align="left"
               brand={brand}
+              titleTone={titleTone}
               description={showDescription ? description : undefined}
               descriptionTone={descriptionTone}
               scale={metrics.textScale}
@@ -437,7 +490,7 @@ export function StaticSliderCard({
                 justifyContent: showTag ? "space-between" : "flex-start"
               }}
             >
-              <StaticSliderCardIcon brand={brand} iconName={iconName} size={metrics.iconSize} />
+              <StaticSliderCardIcon brand={brand} iconName={iconName} size={metrics.iconSize} tone={onSurfaceTextTone} />
               {tagElement}
             </div>
 
@@ -445,6 +498,7 @@ export function StaticSliderCard({
               <StaticSliderCardTextBlock
                 align="left"
                 brand={brand}
+                titleTone={titleTone}
                 description={showDescription ? description : undefined}
                 descriptionTone={descriptionTone}
                 scale={metrics.textScale}
@@ -471,6 +525,7 @@ export function StaticSliderCard({
         <StaticSliderCardTextBlock
           align="center"
           brand={brand}
+          titleTone={titleTone}
           description={undefined}
           descriptionTone={descriptionTone}
           scale={metrics.textScale}

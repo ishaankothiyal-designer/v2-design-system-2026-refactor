@@ -1,8 +1,14 @@
-import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type HTMLAttributes, type ReactNode } from "react";
 import type { IconName } from "@turbo/icons";
 import type { DisplayBrandId } from "@turbo/tokens";
 import { designSystemRegistry } from "@turbo/contracts";
-import { getRequiredThemeTokenValue, pxToRem } from "../theme";
+import {
+  getReadableTextColor,
+  getRequiredThemeTokenValue,
+  pxToRem,
+  sampleBackgroundImageIsDark,
+  sampleImageElementIsDark
+} from "../theme";
 import { Icon } from "./icon";
 import { Tag } from "./tag";
 
@@ -247,6 +253,7 @@ function allowsDescription(columnCount: GridCardColumnCount, size: GridCardSize,
 function GridCardTextBlock({
   align,
   brand,
+  titleTone,
   description,
   descriptionTone,
   scale,
@@ -254,6 +261,7 @@ function GridCardTextBlock({
 }: {
   align: "left" | "center";
   brand: DisplayBrandId;
+  titleTone: string;
   description?: string | undefined;
   descriptionTone: string;
   scale: GridCardTextScale;
@@ -264,7 +272,6 @@ function GridCardTextBlock({
   const fontFamily = `${String(getRequiredThemeTokenValue(brand, "typography.fontFamily.sans"))}, sans-serif`;
   const titleWeight = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.semibold"));
   const descriptionWeight = Number(getRequiredThemeTokenValue(brand, "typography.fontWeight.regular"));
-  const titleColor = String(getRequiredThemeTokenValue(brand, "color.text.primary"));
   const textAlign = align === "center" ? "center" : "left";
 
   const wrapperStyles: CSSProperties = {
@@ -277,7 +284,7 @@ function GridCardTextBlock({
   };
 
   const titleStyles: CSSProperties = {
-    color: titleColor,
+    color: titleTone,
     display: "block",
     fontFamily,
     fontSize: pxToRem(titleTypography.fontSize),
@@ -316,10 +323,12 @@ function GridCardTextBlock({
 function GridCardIcon({
   brand,
   iconName,
+  tone,
   size
 }: {
   brand: DisplayBrandId;
   iconName: IconName;
+  tone: string;
   size: number;
 }) {
   return (
@@ -327,7 +336,7 @@ function GridCardIcon({
       brand={brand}
       decorative
       name={iconName}
-      style={{ fontSize: pxToRem(size), color: String(getRequiredThemeTokenValue(brand, "color.text.primary")) }}
+      style={{ fontSize: pxToRem(size), color: tone }}
     />
   );
 }
@@ -352,10 +361,25 @@ export function GridCard({
   const metrics = resolveMetrics(columnCount, size, type);
   const showTag = Boolean(tagLabel) && allowsTag(columnCount, size, type);
   const showDescription = Boolean(description) && allowsDescription(columnCount, size, type);
-  const descriptionTone = String(getRequiredThemeTokenValue(brand, "color.text.secondary"));
   const slotSurface = String(getRequiredThemeTokenValue(brand, "color.brand.primary.50"));
   const slotRadius = pxToRem(Number(getRequiredThemeTokenValue(brand, getSlotRadiusTokenPath(columnCount))));
   const contentInset = pxToRem(metrics.contentInset);
+  const slotRef = useRef<HTMLDivElement | null>(null);
+  const resolvedBackground =
+    typeof style?.background === "string"
+      ? style.background
+      : typeof style?.backgroundColor === "string"
+        ? style.backgroundColor
+        : slotSurface;
+  const backgroundImage = typeof style?.backgroundImage === "string" ? style.backgroundImage : undefined;
+  const defaultOnSurfaceTextTone = getReadableTextColor(resolvedBackground);
+  const [onSurfaceTextTone, setOnSurfaceTextTone] = useState(defaultOnSurfaceTextTone);
+  const titleTone = type === "Text Outside"
+    ? String(getRequiredThemeTokenValue(brand, "color.text.primary"))
+    : onSurfaceTextTone;
+  const descriptionTone = type === "Text Outside"
+    ? String(getRequiredThemeTokenValue(brand, "color.text.secondary"))
+    : onSurfaceTextTone;
 
   const rootStyles: CSSProperties = {
     display: "flex",
@@ -378,6 +402,34 @@ export function GridCard({
     width: "100%"
   };
 
+  useEffect(() => {
+    let cancelled = false;
+
+    async function resolveTone() {
+      const imageElement = slotRef.current?.querySelector("img");
+      const imageDarkness = imageElement ? await sampleImageElementIsDark(imageElement) : null;
+      const backgroundImageDarkness =
+        imageDarkness === null && backgroundImage ? await sampleBackgroundImageIsDark(backgroundImage) : null;
+      const nextTone =
+        imageDarkness === null && backgroundImageDarkness === null
+          ? defaultOnSurfaceTextTone
+          : imageDarkness === true || backgroundImageDarkness === true
+            ? "#FFFFFF"
+            : "#000000";
+
+      if (!cancelled) {
+        setOnSurfaceTextTone(nextTone);
+      }
+    }
+
+    setOnSurfaceTextTone(defaultOnSurfaceTextTone);
+    void resolveTone();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [backgroundImage, children, defaultOnSurfaceTextTone]);
+
   const slotContentStyles: CSSProperties = {
     borderRadius: slotRadius,
     inset: 0,
@@ -389,7 +441,7 @@ export function GridCard({
 
   return (
     <div {...rest} className={className} style={rootStyles}>
-      <div style={slotStyles}>
+      <div ref={slotRef} style={slotStyles}>
         <div style={slotContentStyles}>{children}</div>
 
         {type === "Text Inside" ? (
@@ -405,6 +457,7 @@ export function GridCard({
             <GridCardTextBlock
               align="left"
               brand={brand}
+              titleTone={titleTone}
               description={showDescription ? description : undefined}
               descriptionTone={descriptionTone}
               scale={metrics.textScale}
@@ -430,7 +483,7 @@ export function GridCard({
                 justifyContent: "space-between"
               }}
             >
-              <GridCardIcon brand={brand} iconName={iconName} size={metrics.iconSize} />
+              <GridCardIcon brand={brand} iconName={iconName} size={metrics.iconSize} tone={onSurfaceTextTone} />
               {tagElement}
             </div>
 
@@ -438,6 +491,7 @@ export function GridCard({
               <GridCardTextBlock
                 align="left"
                 brand={brand}
+                titleTone={titleTone}
                 description={showDescription ? description : undefined}
                 descriptionTone={descriptionTone}
                 scale={metrics.textScale}
@@ -464,6 +518,7 @@ export function GridCard({
         <GridCardTextBlock
           align="center"
           brand={brand}
+          titleTone={titleTone}
           description={undefined}
           descriptionTone={descriptionTone}
           scale={metrics.textScale}

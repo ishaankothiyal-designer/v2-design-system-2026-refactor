@@ -2,7 +2,14 @@ import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import { designSystemRegistry } from "@turbo/contracts";
 import type { DisplayBrandId } from "@turbo/tokens";
-import { getRequiredThemeTokenValue, pxToRem, tokenValueToRem } from "../theme";
+import {
+  getReadableTextColor,
+  getRequiredThemeTokenValue,
+  pxToRem,
+  sampleBackgroundImageIsDark,
+  sampleImageElementIsDark,
+  tokenValueToRem
+} from "../theme";
 
 export const canonicalRotatingBannerCardWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.rotatingBannerCard"
@@ -190,6 +197,140 @@ function clampNumber(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 }
 
+async function resolveSlideCopyTone(slideNode: HTMLDivElement | null, fallbackBackground: string) {
+  if (!slideNode || typeof window === "undefined") {
+    return getReadableTextColor(fallbackBackground);
+  }
+
+  const imageElement = slideNode.querySelector("img");
+  const imageDarkness = imageElement ? await sampleImageElementIsDark(imageElement) : null;
+
+  if (imageDarkness !== null) {
+    return imageDarkness ? "#FFFFFF" : "#000000";
+  }
+
+  const mediaElement = slideNode.firstElementChild instanceof HTMLElement ? slideNode.firstElementChild : null;
+  const computedStyles = mediaElement ? window.getComputedStyle(mediaElement) : null;
+  const mediaBackgroundImage = computedStyles?.backgroundImage;
+  const mediaBackgroundColor = computedStyles?.backgroundColor;
+  const backgroundImageDarkness =
+    mediaBackgroundImage && mediaBackgroundImage !== "none"
+      ? await sampleBackgroundImageIsDark(mediaBackgroundImage)
+      : null;
+
+  if (backgroundImageDarkness !== null) {
+    return backgroundImageDarkness ? "#FFFFFF" : "#000000";
+  }
+
+  const effectiveBackground =
+    mediaBackgroundColor && mediaBackgroundColor !== "rgba(0, 0, 0, 0)" ? mediaBackgroundColor : fallbackBackground;
+
+  return getReadableTextColor(effectiveBackground);
+}
+
+function RotatingBannerCardCopy({
+  description,
+  descriptionFontFamily,
+  descriptionFontSize,
+  descriptionFontWeight,
+  descriptionLetterSpacing,
+  descriptionLineHeight,
+  fallbackBackground,
+  slideNode,
+  contentGap,
+  contentInsetInline,
+  contentInsetTop,
+  title,
+  titleFontFamily,
+  titleFontSize,
+  titleFontWeight,
+  titleLetterSpacing,
+  titleLineHeight
+}: {
+  contentGap: string;
+  contentInsetInline: string;
+  contentInsetTop: string;
+  description: string;
+  descriptionFontFamily: string;
+  descriptionFontSize: string;
+  descriptionFontWeight: number;
+  descriptionLetterSpacing: string;
+  descriptionLineHeight: string;
+  fallbackBackground: string;
+  slideNode: HTMLDivElement | null;
+  title: string;
+  titleFontFamily: string;
+  titleFontSize: string;
+  titleFontWeight: number;
+  titleLetterSpacing: string;
+  titleLineHeight: string;
+}) {
+  const defaultTone = getReadableTextColor(fallbackBackground);
+  const [copyTone, setCopyTone] = useState(defaultTone);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function updateTone() {
+      const nextTone = await resolveSlideCopyTone(slideNode, fallbackBackground);
+
+      if (!cancelled) {
+        setCopyTone(nextTone);
+      }
+    }
+
+    setCopyTone(defaultTone);
+    void updateTone();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [defaultTone, description, fallbackBackground, slideNode, title]);
+
+  return (
+    <div
+      style={{
+        display: "grid",
+        gap: contentGap,
+        left: contentInsetInline,
+        minWidth: 0,
+        position: "absolute",
+        right: contentInsetInline,
+        top: contentInsetTop
+      }}
+    >
+      <p
+        style={{
+          ...singleLineTextStyles,
+          color: copyTone,
+          fontFamily: titleFontFamily,
+          fontSize: titleFontSize,
+          fontWeight: titleFontWeight,
+          letterSpacing: titleLetterSpacing,
+          lineHeight: titleLineHeight,
+          margin: 0
+        }}
+      >
+        {title}
+      </p>
+      <p
+        style={{
+          ...singleLineTextStyles,
+          color: copyTone,
+          fontFamily: descriptionFontFamily,
+          fontSize: descriptionFontSize,
+          fontWeight: descriptionFontWeight,
+          letterSpacing: descriptionLetterSpacing,
+          lineHeight: descriptionLineHeight,
+          margin: 0
+        }}
+      >
+        {description}
+      </p>
+    </div>
+  );
+}
+
 /**
  * Banner carousel that mirrors the linked Figma geometry with a clipped 336px viewport, center-focused scale transitions, and endless forward rotation.
  */
@@ -212,6 +353,7 @@ export function RotatingBannerCard({
   const [isHovered, setIsHovered] = useState(false);
   const [isManualDragging, setIsManualDragging] = useState(false);
   const manualViewportRef = useRef<HTMLDivElement | null>(null);
+  const singleSlideRef = useRef<HTMLDivElement | null>(null);
   const manualPointerStateRef = useRef<{
     pointerId: number | null;
     startScrollLeft: number;
@@ -222,6 +364,7 @@ export function RotatingBannerCard({
     startX: 0
   });
   const manualSlideRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const autoSlideRefs = useRef<Record<number, HTMLDivElement | null>>({});
   const metrics = SIZE_METRICS[size];
   const containerWidthPx = resolveRotatingBannerCardBindingNumber(brand, "container.width", 336);
   const containerRadius = resolveRotatingBannerCardBindingRem(brand, "container.radius", "16px");
@@ -243,7 +386,6 @@ export function RotatingBannerCard({
   const contentInsetInline = resolveRotatingBannerCardBindingRem(brand, "content.inset.inline", "16px");
   const contentInsetTop = resolveRotatingBannerCardBindingRem(brand, "content.inset.top", "16px");
   const contentGap = resolveRotatingBannerCardBindingRem(brand, "content.stackGap", "2px");
-  const titleColor = resolveRotatingBannerCardBindingValue(brand, "content.title.color", "#020617");
   const titleFontFamily = `${resolveRotatingBannerCardBindingValue(
     brand,
     "content.title.fontFamily",
@@ -260,11 +402,6 @@ export function RotatingBannerCard({
     brand,
     "content.title.letterSpacing",
     "0px"
-  );
-  const descriptionColor = resolveRotatingBannerCardBindingValue(
-    brand,
-    "content.description.color",
-    "#64748B"
   );
   const descriptionFontFamily = `${resolveRotatingBannerCardBindingValue(
     brand,
@@ -478,6 +615,7 @@ export function RotatingBannerCard({
           }}
         >
           <div
+            ref={singleSlideRef}
             style={{
               borderRadius: slideRadius,
               height: "100%",
@@ -491,46 +629,25 @@ export function RotatingBannerCard({
             <div style={{ background: slideSurface, height: "100%", position: "relative", width: "100%" }}>
               {onlyItem.media ?? renderDefaultSlide(slideSurface)}
               {showCopy ? (
-                <div
-                  style={{
-                    display: "grid",
-                    gap: contentGap,
-                    left: contentInsetInline,
-                    minWidth: 0,
-                    position: "absolute",
-                    right: contentInsetInline,
-                    top: contentInsetTop
-                  }}
-                >
-                  <p
-                    style={{
-                      ...singleLineTextStyles,
-                      color: titleColor,
-                      fontFamily: titleFontFamily,
-                      fontSize: titleFontSize,
-                      fontWeight: titleFontWeight,
-                      letterSpacing: titleLetterSpacing,
-                      lineHeight: titleLineHeight,
-                      margin: 0
-                    }}
-                  >
-                    {onlyItem.title ?? "Title"}
-                  </p>
-                  <p
-                    style={{
-                      ...singleLineTextStyles,
-                      color: descriptionColor,
-                      fontFamily: descriptionFontFamily,
-                      fontSize: descriptionFontSize,
-                      fontWeight: descriptionFontWeight,
-                      letterSpacing: descriptionLetterSpacing,
-                      lineHeight: descriptionLineHeight,
-                      margin: 0
-                    }}
-                  >
-                    {onlyItem.description ?? "Description"}
-                  </p>
-                </div>
+                <RotatingBannerCardCopy
+                  contentGap={contentGap}
+                  contentInsetInline={contentInsetInline}
+                  contentInsetTop={contentInsetTop}
+                  description={onlyItem.description ?? "Description"}
+                  descriptionFontFamily={descriptionFontFamily}
+                  descriptionFontSize={descriptionFontSize}
+                  descriptionFontWeight={descriptionFontWeight}
+                  descriptionLetterSpacing={descriptionLetterSpacing}
+                  descriptionLineHeight={descriptionLineHeight}
+                  fallbackBackground={slideSurface}
+                  slideNode={singleSlideRef.current}
+                  title={onlyItem.title ?? "Title"}
+                  titleFontFamily={titleFontFamily}
+                  titleFontSize={titleFontSize}
+                  titleFontWeight={titleFontWeight}
+                  titleLetterSpacing={titleLetterSpacing}
+                  titleLineHeight={titleLineHeight}
+                />
               ) : null}
             </div>
           </div>
@@ -620,46 +737,25 @@ export function RotatingBannerCard({
                     {resolvedItem.media ?? renderDefaultSlide(slideSurface)}
 
                     {showCopy ? (
-                      <div
-                        style={{
-                          display: "grid",
-                          gap: contentGap,
-                          left: contentInsetInline,
-                          minWidth: 0,
-                          position: "absolute",
-                          right: contentInsetInline,
-                          top: contentInsetTop
-                        }}
-                      >
-                        <p
-                          style={{
-                            ...singleLineTextStyles,
-                            color: titleColor,
-                            fontFamily: titleFontFamily,
-                            fontSize: titleFontSize,
-                            fontWeight: titleFontWeight,
-                            letterSpacing: titleLetterSpacing,
-                            lineHeight: titleLineHeight,
-                            margin: 0
-                          }}
-                        >
-                          {resolvedItem.title ?? "Title"}
-                        </p>
-                        <p
-                          style={{
-                            ...singleLineTextStyles,
-                            color: descriptionColor,
-                            fontFamily: descriptionFontFamily,
-                            fontSize: descriptionFontSize,
-                            fontWeight: descriptionFontWeight,
-                            letterSpacing: descriptionLetterSpacing,
-                            lineHeight: descriptionLineHeight,
-                            margin: 0
-                          }}
-                        >
-                          {resolvedItem.description ?? "Description"}
-                        </p>
-                      </div>
+                      <RotatingBannerCardCopy
+                        contentGap={contentGap}
+                        contentInsetInline={contentInsetInline}
+                        contentInsetTop={contentInsetTop}
+                        description={resolvedItem.description ?? "Description"}
+                        descriptionFontFamily={descriptionFontFamily}
+                        descriptionFontSize={descriptionFontSize}
+                        descriptionFontWeight={descriptionFontWeight}
+                        descriptionLetterSpacing={descriptionLetterSpacing}
+                        descriptionLineHeight={descriptionLineHeight}
+                        fallbackBackground={slideSurface}
+                        slideNode={manualSlideRefs.current[index]}
+                        title={resolvedItem.title ?? "Title"}
+                        titleFontFamily={titleFontFamily}
+                        titleFontSize={titleFontSize}
+                        titleFontWeight={titleFontWeight}
+                        titleLetterSpacing={titleLetterSpacing}
+                        titleLineHeight={titleLineHeight}
+                      />
                     ) : null}
                   </div>
                 </div>
@@ -719,59 +815,41 @@ export function RotatingBannerCard({
               zIndex: SLOT_Z_INDEX[slot]
             }}
           >
-            <div
-              style={{
-                background: slideSurface,
-                borderRadius: slideRadius,
-                height: "100%",
-                overflow: "hidden",
-                position: "relative",
-                width: "100%"
-              }}
-            >
+          <div
+            ref={(node) => {
+              autoSlideRefs.current[sequence] = node;
+            }}
+            style={{
+              background: slideSurface,
+              borderRadius: slideRadius,
+              height: "100%",
+              overflow: "hidden",
+              position: "relative",
+              width: "100%"
+            }}
+          >
               {item.media ?? renderDefaultSlide(slideSurface)}
 
               {showCopy && slot === "center" ? (
-                <div
-                  style={{
-                    display: "grid",
-                    gap: contentGap,
-                    left: contentInsetInline,
-                    minWidth: 0,
-                    position: "absolute",
-                    right: contentInsetInline,
-                    top: contentInsetTop
-                  }}
-                >
-                  <p
-                    style={{
-                      ...singleLineTextStyles,
-                      color: titleColor,
-                      fontFamily: titleFontFamily,
-                      fontSize: titleFontSize,
-                      fontWeight: titleFontWeight,
-                      letterSpacing: titleLetterSpacing,
-                      lineHeight: titleLineHeight,
-                      margin: 0
-                    }}
-                  >
-                    {item.title ?? "Title"}
-                  </p>
-                  <p
-                    style={{
-                      ...singleLineTextStyles,
-                      color: descriptionColor,
-                      fontFamily: descriptionFontFamily,
-                      fontSize: descriptionFontSize,
-                      fontWeight: descriptionFontWeight,
-                      letterSpacing: descriptionLetterSpacing,
-                      lineHeight: descriptionLineHeight,
-                      margin: 0
-                    }}
-                  >
-                    {item.description ?? "Description"}
-                  </p>
-                </div>
+                <RotatingBannerCardCopy
+                  contentGap={contentGap}
+                  contentInsetInline={contentInsetInline}
+                  contentInsetTop={contentInsetTop}
+                  description={item.description ?? "Description"}
+                  descriptionFontFamily={descriptionFontFamily}
+                  descriptionFontSize={descriptionFontSize}
+                  descriptionFontWeight={descriptionFontWeight}
+                  descriptionLetterSpacing={descriptionLetterSpacing}
+                  descriptionLineHeight={descriptionLineHeight}
+                  fallbackBackground={slideSurface}
+                  slideNode={autoSlideRefs.current[sequence] ?? null}
+                  title={item.title ?? "Title"}
+                  titleFontFamily={titleFontFamily}
+                  titleFontSize={titleFontSize}
+                  titleFontWeight={titleFontWeight}
+                  titleLetterSpacing={titleLetterSpacing}
+                  titleLineHeight={titleLineHeight}
+                />
               ) : null}
             </div>
           </div>

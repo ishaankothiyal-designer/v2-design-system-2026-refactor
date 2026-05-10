@@ -31,6 +31,8 @@ The AI must use the Reference folder to understand how widgets visually look, be
 
 The Reference folder is meant for ideation and understanding, not direct copying.
 
+For CARS24 specifically, the reference pages should also be used to understand why many L1 pages are more visual-heavy than text-heavy. This is intentional behavior design, not decorative styling.
+
 ### How AI Should Use the Reference Folder
 
 Do:
@@ -136,6 +138,36 @@ If the correct widget folder was not reviewed, widget usage is unvalidated.
 
 If both were not reviewed, the output should be treated as process-invalid even if visually acceptable or technically working.
 
+## External Reference Fallback Rule
+
+If the AI is out of context, needs additional UI reference support, or cannot understand the design behavior clearly enough from the repository references alone, it may use Mobbin as a secondary visual reference source.
+
+Mobbin should be used to study:
+
+- layout patterns
+- spacing rhythm
+- hierarchy
+- visual pacing
+- interaction ideas
+- section composition
+
+Mobbin must not replace the repository reference system.
+
+The priority order is:
+
+1. `reference/logicbook.md`
+2. `reference/ai-execution.json`
+3. `reference/pages/*`
+4. `reference/widget/*`
+5. Mobbin as additional support when needed
+
+When using Mobbin:
+
+- use it to recover context or strengthen design judgment
+- do not copy screens directly
+- do not override repository-specific widget rules with Mobbin patterns
+- always adapt Mobbin inspiration back into the Cars24 widget system and reference logic
+
 ## Page-Type Evaluation Rule
 
 L1, L2, and internal pages must be judged against:
@@ -195,6 +227,10 @@ L1 pages define the first impression of the brand or product experience.
 
 Each L1 page must have a strong visual identity. The AI must not use a generic layout for all brands. Every L1 page should feel distinct based on brand, audience, and objective.
 
+For CARS24 specifically, L1 pages are entry-point pages. Their job is to help users quickly understand the major journeys, bucket services and information clearly, and move into the right next step without friction.
+
+L1 pages for CARS24 are not just marketing surfaces. They are structured entry points into the ecosystem.
+
 #### L1 Design Rules
 
 - Start with a strong hero section.
@@ -205,6 +241,116 @@ Each L1 page must have a strong visual identity. The AI must not use a generic l
 - Use trust-building widgets where relevant.
 - Avoid overly dense layouts in the first screen.
 - Do not start with low-priority widgets such as FAQs, testimonials, or footers.
+- Use container-style grouping to bucket services and information into clear entry points.
+- Learn the layout language from the provided reference pages before composing the screen.
+- Keep the design clean and simple. Do not add unnecessary boxed treatments or rounded card shells inside widgets unless the widget itself explicitly requires it.
+- Prefer visual recognition over text explanation in the early parts of the page.
+- Keep text context minimal when the visual and service bucket already communicate the intent.
+- Use widgets as service containers that help users recognize the right journey quickly.
+- Treat the first scroll as an entry surface, not a reading surface.
+- Let the first content blocks move users into journeys such as buy, sell, loans, checks, and vehicle management quickly.
+- Prefer direct service labels over abstract category copy.
+- Choose Grid Widget or Static Slider based on how much content sits inside a given service bucket.
+- Do not add blanket overall page padding to push the entire layout inward on mobile pages.
+- Let widgets define most of the page-edge spacing unless a specific structure clearly requires something else.
+
+#### L1 Purpose For CARS24
+
+An L1 page for CARS24 should solve these needs:
+
+- establish the main entry points into the platform
+- group services into understandable buckets
+- help users discover the right journey quickly
+- reduce confusion in the first screen
+- create confidence and clarity before deeper exploration
+- help users recognize services visually, not only by reading
+- support fast consumption behavior by making service groups easy to scan
+
+#### Visual Consumption Rule For CARS24
+
+CARS24 L1 pages are often visually heavy on purpose.
+
+This is not because more decoration is better. It is because users recognize visual service cues faster than they read long text blocks.
+
+Both text and visuals have different purposes:
+
+- visuals help fast recognition
+- text helps confirmation and clarity
+
+The system should therefore prioritize visual recognition first, with text used only where it adds necessary support.
+
+#### Service Bucketing Rule
+
+L1 pages for CARS24 should use container-style grouping to bucket services and information.
+
+Examples:
+
+- buy can contain multiple buying services
+- sell can contain multiple selling services
+- loans can contain multiple finance services
+- trust or pre-buying can contain checks, inspection, or history services
+
+The goal is not to describe every service in detail. The goal is to help the user recognize the right bucket quickly and enter the right flow.
+
+Buckets should be concrete and product-real.
+
+Good bucket content examples:
+
+- Buy used car
+- Buy new car
+- Sell your car
+- Check car price
+- Used car loan
+- Credit score
+- Car service history
+- Pay challan
+
+Avoid abstract bucket content such as:
+
+- mobility options
+- automotive solutions
+- explore more
+- everything cars
+
+If the reference page shows concrete service actions, the AI should stay concrete in both section composition and card labels.
+
+#### Single Bucket Composition Rule
+
+Each service bucket should be resolved as one composition system.
+
+This means:
+
+- do not create a Module Widget first and then place another widget under it for the same bucket
+- do not wrap a bucket in one abstract container and then start the real bucket again below it
+- if Grid is the right bucket solution, let Grid be the bucket
+- if Static Slider is the right bucket solution, let Static Slider be the bucket
+- if no exact bucket pattern exists, use Module Widget itself to build that bucket directly
+
+The AI must not stack "wrapper bucket" and "real bucket" patterns for the same section. That creates unnecessary layers and breaks the visual rhythm.
+
+#### Grid vs Static Slider Rule
+
+When building a service bucket:
+
+- use Grid when the content count is small and should be seen together at once
+- use Static Slider when the bucket contains more items, or when horizontal browsing improves scan behavior
+- choose the widget based on content amount and recognition behavior, not personal preference
+- do not add a separate heading block above a widget if the widget header itself already resolves the section cleanly
+- prefer one resolved bucket widget over a heading plus another loose widget under it
+
+#### L1 Mandatory Widget Combination For CARS24
+
+For a complete CARS24 L1 page, the AI should strongly consider this widget combination as the default page-building system:
+
+- Top Tab Header Widget
+- Grid Widget
+- Static Slider
+- Module Widget
+- List Widget
+- FAQ Widget
+- Banner Widget
+
+This does not mean every widget must be repeated multiple times. It means the L1 page should usually be assembled from these building blocks unless the prompt clearly requires a different structure.
 
 #### Common L1 Widget Types
 
@@ -308,6 +454,153 @@ For every widget, the AI must check:
 
 If a widget does not satisfy at least one clear purpose, do not use it.
 
+### Widget Contract Compliance Rule
+
+The AI must also respect the actual structural contract of each widget, not just its visual intent.
+
+This means:
+
+- do not assume a widget can support more items than its approved layout allows
+- do not force extra cards, rows, or content into a widget if the widget is designed for a smaller fixed composition
+- do not treat Storybook widgets like generic containers
+- confirm whether a widget is single-row, multi-item, scrollable, fixed-count, or CTA-bound before using it in a real page
+
+If a bucket needs more items than a widget supports:
+
+- switch to a widget that structurally supports that content count
+- or use Module Widget only if no existing widget fits
+
+Breaking widget structure in a way that causes layout failure, overflow, clipped content, or unstable composition should be treated as a critical implementation mistake.
+
+### Widget Filtering Rule
+
+Before creating any custom section, the AI must filter through the existing widget system first.
+
+The decision order should be:
+
+1. Check whether an existing widget already fulfills the requirement.
+2. If yes, use the existing widget.
+3. If not, check whether the requirement can be solved by `Grid Widget`, `Static Slider`, or `Module Widget`.
+4. Only if the requirement still cannot be satisfied cleanly should the AI create a custom composition.
+
+In practice:
+
+- do not create custom sections just because they feel easier to design manually
+- do not bypass existing widgets when they already solve the requirement
+- always evaluate `Grid` and `Static Slider` before inventing a custom layout
+- use custom composition only when the widget library genuinely does not fulfill the requirement
+
+If an existing widget fulfills the requirement, using a custom-built section instead should be treated as a design-system compliance mistake.
+
+### Variant Filtering Rule
+
+Checking a widget is not enough. The AI must also check whether the widget already has a supported variant that fulfills the requirement.
+
+This means:
+
+- do not stop at the widget name level
+- inspect supported variants such as `Text Inside`, `Text Outside`, `With Icon`, size options, and column-count options
+- if a required pattern already exists as a widget variant, use that variant instead of custom-building the pattern
+
+Example:
+
+- if `GridCard` already supports a `With Icon` variant for utility cards, do not draw fake icon blocks manually inside a custom card
+
+If the right variant exists and the AI still creates a manual replacement, that should be treated as a design-system compliance mistake.
+
+### Screenshot To Widget Mapping Rule
+
+If the user shares a screenshot, mock, visual reference, or existing design sample, the AI must evaluate the visual against the repository widget system before starting implementation.
+
+The AI must ask:
+
+1. Which existing widget does this section most closely match?
+2. Which existing component or variant does this card or block most closely match?
+3. Which parts are already solved by the design system?
+4. Which parts genuinely require custom composition only after widget filtering is complete?
+
+Required execution order:
+
+1. analyze the screenshot section by section
+2. map each section to the closest widget
+3. map each card or block to the closest component or variant
+4. use the approved widget/component first
+5. only then add custom composition where the system truly cannot satisfy the reference
+
+Do:
+
+- use screenshots to reverse-map design patterns into widgets and components
+- identify the closest approved widget before writing UI code
+- identify the closest approved component variant before drawing a custom block
+- treat visual references as component-selection input, not just visual inspiration
+
+Don't:
+
+- do not start building blindly from the screenshot
+- do not jump directly into hardcoded layouts
+- do not recreate cards or sections manually if the repo already provides a close widget or component
+- do not use custom wrappers as the first move before checking widget compatibility
+- do not hardcode a section just because it looks simple
+
+If screenshot-to-widget evaluation was skipped, the implementation should be treated as incomplete even if the page looks visually acceptable.
+
+### Grid And Block Card Rule
+
+If a section is being built as a grid layout, block layout, or grouped card layout, the AI should not define a new manual card first.
+
+The AI must check:
+
+1. can this be solved by `GridWidget`?
+2. can this be solved by `GridCard`?
+3. can this be solved by `StaticSliderWidget` with approved slider cards?
+4. can this be solved by an existing card variant already available in the system?
+
+Do:
+
+- use `GridCard` when building card-based grid or block layouts
+- use the widget shell first, then approved cards inside it
+- use card variants instead of drawing a new custom card shell
+
+Don't:
+
+- do not define a new custom card inside a grid or block section if `GridCard` already fits
+- do not manually recreate card borders, radius, spacing, and text structure when the system already provides the card
+- do not mix widget-level section structure with handmade cards unless the system truly has no matching card pattern
+
+If the layout is grid-led or block-led and the AI still builds manual cards where `GridCard` or an approved card variant would work, that should be treated as a design-system compliance mistake.
+
+### Filled Image Rule
+
+If the AI is placing images inside:
+
+- `GridCard`
+- `GridWidget`
+- `StaticSliderCard`
+- `StaticSliderWidget`
+- rotating banner cards
+- banner media slots
+
+the image treatment should be `Filled`.
+
+This means:
+
+- the media should fill the available image slot
+- the image should not sit like a small contained sticker unless the component pattern explicitly requires that behavior
+- the visual should feel integrated with the card, not floating inside unused empty space
+
+Do:
+
+- use filled image treatment for grid, slider, and rotating-banner card media
+- let the image occupy the full visual slot of the card
+- keep card imagery immersive and edge-aware
+
+Don't:
+
+- do not use contained image treatment for card media by default
+- do not leave large empty areas around card imagery when the slot is meant to be image-led
+
+If grid, slider, or rotating-banner media is not using filled image treatment where the pattern is image-led, the implementation should be treated as incomplete.
+
 ---
 
 ## 6. Widget Priority Levels
@@ -380,15 +673,20 @@ A page should follow a logical story arc.
 
 ### Recommended L1 Flow
 
-1. Hero / value proposition
-2. Primary action or search/input
-3. Key benefits or feature highlights
-4. Product/service journey
-5. Popular categories or recommended options
-6. Trust markers
-7. Social proof or testimonials
-8. FAQ
-9. Footer
+1. Top entry layer with context, search, and top-tab navigation
+2. Optional banner or rotating hero if it strengthens entry behavior
+3. Direct service buckets for major journeys such as buy, sell, loans, checks, and vehicle management
+4. Discovery or commerce buckets such as trending cars, deals, or showrooms
+5. Trust or proof sections at natural points in the scroll
+6. FAQ
+7. Footer
+
+For CARS24 specifically, the L1 page should usually behave like:
+
+- users land
+- users recognize their journey quickly
+- users tap into a bucket
+- trust and depth appear after entry, not before
 
 ### Recommended L2 Flow
 
@@ -425,6 +723,8 @@ The AI must generate content that is clear, realistic, and product-appropriate.
 - Specific to the prompt
 - Useful for the user journey
 - Free of placeholder text unless explicitly requested
+- Minimal when visuals already communicate the meaning clearly
+- Supportive rather than dominant in visual-first entry-point sections
 
 ### Avoid
 
@@ -434,6 +734,8 @@ The AI must generate content that is clear, realistic, and product-appropriate.
 - Repeating the same message in multiple sections
 - Over-promising or unrealistic claims
 - Using unrelated widgets only to fill space
+- Explaining every service with too much copy when visual buckets already do the job
+- Turning the homepage into a reading-heavy experience
 
 ---
 
@@ -447,6 +749,30 @@ Every primary page must have a clear main action.
 - Secondary CTAs are allowed only when they support exploration.
 - CTA labels must be specific.
 - Avoid vague labels like "Click Here" or "Submit" unless the context is obvious.
+
+### Button Group Usage Rule
+
+Button Group inside widgets is not mandatory by default.
+
+Use Button Group only when:
+
+- the section needs a clear next step
+- the user must move forward through a distinct action
+- the content alone is not enough to complete the section's purpose
+- the bucket needs a strong conversion push rather than simple exploration
+
+Do not use Button Group when:
+
+- cards or service items already act as the main entry actions
+- a header action such as "View all" is enough
+- the section is primarily for browsing, recognition, or discovery
+- adding a button would duplicate the obvious next step
+
+For CARS24 L1 pages specifically:
+
+- do not force Button Group into every widget
+- use one strong primary action where the page genuinely needs it
+- prefer visual bucket entry and section-level navigation before adding extra button groups
 
 ### Good CTA Examples
 
@@ -527,6 +853,38 @@ Don't:
 - Do not use in L2 or internal pages unless explicitly required.
 - Do not redesign its structure arbitrarily.
 - Do not overload with too many tabs.
+
+### Top Tab Header Widget
+
+Description:
+Top Tab Header Widget is the preferred L1 entry widget for CARS24 homepage and landing experiences. It combines the branded entry layer, navigation, and top-of-page interaction pattern into one system.
+
+Do:
+
+- Use it as a primary entry-point system on CARS24 L1 pages.
+- Keep it sticky at the top of the screen on CARS24 L1 pages.
+- Make it collapse smoothly on scroll when the page moves into content.
+- Use it to bucket major services and journeys clearly.
+- Learn its structure from the reference pages before composing surrounding sections.
+- Keep the layout clean and light in the opening screen.
+
+Don't:
+
+- Do not assume the banner inside Top Tab Header Widget is mandatory.
+- Do not treat it like a normal scroll-away section on CARS24 L1 pages.
+- Do not place other content above it.
+- Do not let the collapse state snap abruptly if the widget supports a collapsed mode.
+
+Compliance rule:
+
+- If Top Tab Header Widget is sticky but does not collapse correctly on scroll where the reference behavior expects collapse, the implementation should be treated as incomplete.
+- If collapse is supported, the transition should feel smooth and intentional rather than sudden or broken.
+- Do not force a banner if the page works better without it.
+- Do not overload the first screen with extra content around it.
+- Do not add unnecessary boxed summary cards inside or immediately after it unless the prompt clearly needs them.
+
+Banner rule:
+The banner inside Top Tab Header Widget is optional, not mandatory.
 
 ### Footer (Mobile Web)
 
@@ -622,14 +980,22 @@ Module Widget is a flexible, custom-defined container used when no existing widg
 Do:
 
 - Use when no existing widget fits the requirement.
+- Use it first when the AI gets stuck because the exact required composition does not exist.
 - Ensure consistency with overall design system.
 - Define clear structure and purpose.
+- Use it to design within system boundaries instead of inventing completely new primitives.
+- Use it to create service buckets when the exact bucket pattern does not exist as a ready-made widget.
+- Keep it focused on grouping and recognition, not explanation-heavy content.
+- If Module Widget is used for a bucket, the bucket should be completed inside Module Widget itself.
 
 Don't:
 
 - Do not overuse for simple cases.
 - Do not break design consistency.
 - Do not create overly complex or unclear layouts.
+- Do not turn Module Widget into a heavy boxed card system by default.
+- Do not add unnecessary corner radius or framed container treatment inside the widget just to create visual weight.
+- Do not use Module Widget as a wrapper and then place another widget underneath it for the same bucket.
 
 ### FAB (Floating Action Button)
 
@@ -698,6 +1064,70 @@ Don't:
 - Do not delay primary content or CTA.
 - Do not use autoplay with sound.
 - Do not use when static content is sufficient.
+
+### Section Header Usage Rules
+
+Description:
+Section Header is a content-organization system used inside many widgets. It contains Title 1, Title 2, tag/badge, link button, and description. Each part is optional except where noted below.
+
+#### Section Header Element Rules
+
+Title 1:
+
+- Title 1 is mandatory in most widget usage.
+- It is the main section-heading line and should always carry the primary meaning.
+- Exception: do not force Title 1 usage in Banner Widget or Rotating Carousel when the composition already communicates the message correctly without it.
+
+Title 2:
+
+- Title 2 is optional.
+- Use it only when the context becomes too long for Title 1.
+- Use it to naturally extend or complete the thought started in Title 1.
+- Do not use Title 2 as a separate unrelated label.
+- If Title 2 is not needed, hide it using the widget's boolean or visibility control instead of leaving fallback text visible.
+
+Tag / Badge:
+
+- Tag or badge is optional.
+- Do not use it in every widget by default.
+- Use it when the design needs to draw attention to an offer, priority label, or important status.
+- If there is no special attention-worthy message, skip it.
+
+Link Button:
+
+- Link button is optional.
+- Use it only when the section benefits from a clear secondary navigation or "view all" action.
+- Do not add it automatically to every section.
+
+Description:
+
+- Description is optional.
+- Do not use description in every widget by default.
+- Use it only when extra context is genuinely needed.
+- If the heading and widget content already communicate clearly, skip the description.
+- If description is not needed, hide it using the widget's boolean or visibility control instead of leaving fallback copy visible.
+
+#### Section Header Compliance Rule
+
+When using Section Header inside widgets:
+
+- keep Title 1 as the primary content anchor
+- use Title 2 only for overflow or expansion of Title 1
+- use tag only when emphasis is needed
+- use description only when context is needed
+- avoid filling every available header slot just because the API allows it
+- if Title 2 or description do not have real context, explicitly hide them
+
+#### Clean Composition Rule
+
+Within widgets or Module Widget compositions:
+
+- do not make the design look boxed by default
+- do not add unnecessary card shells
+- do not add rounded-corner framing unless the widget pattern specifically requires it
+- prefer clean, simple, open composition aligned with the reference designs
+- do not rely on global shell padding as a substitute for proper widget spacing
+- do not wrap the full page in generic left-right-top padding when the widget system already handles that spacing
 
 ---
 

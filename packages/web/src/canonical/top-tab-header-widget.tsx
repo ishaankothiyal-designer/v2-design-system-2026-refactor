@@ -47,6 +47,7 @@ export interface TopTabHeaderWidgetSearchAction
 
 export interface TopTabHeaderWidgetProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
   brand?: AppHeaderBrand;
+  collapsed?: boolean;
   country?: TopTabHeaderWidgetCountry;
   defaultValue?: string;
   value?: string;
@@ -465,6 +466,8 @@ export function TopTabHeaderWidgetTabStatusAtom({
     country === "Country2" && selected ? selectedForeground : selected ? inverseText : "rgba(255, 255, 255, 0.82)";
   const eyebrow = item.eyebrow ?? label;
   const mediaSize = country === "India" ? pxToRem(56) : selected ? pxToRem(42) : pxToRem(38);
+  const expandedPadding =
+    country === "India" ? `${pxToRem(8)} 0 ${pxToRem(8)}` : `${pxToRem(6)} ${pxToRem(6)} ${pxToRem(8)}`;
 
   return (
     <button
@@ -497,47 +500,51 @@ export function TopTabHeaderWidgetTabStatusAtom({
         height: expanded ? (country === "India" ? "auto" : pxToRem(navItemHeight)) : pxToRem(country === "India" ? 36 : 40),
         justifyContent: "flex-start",
         minHeight: expanded && country === "India" ? pxToRem(navItemHeight) : undefined,
-        padding: expanded
-          ? country === "India"
-            ? `${pxToRem(8)} 0 ${pxToRem(8)}`
-            : `${pxToRem(6)} ${pxToRem(6)} ${pxToRem(8)}`
-          : 0,
+        padding: expanded ? expandedPadding : 0,
+        transition:
+          "background 220ms ease, border-radius 220ms ease, gap 220ms ease, height 220ms ease, min-height 220ms ease, padding 220ms ease",
         width: pxToRem(DEFAULT_NAV_ITEM_WIDTH),
         ...style
       }}
       tabIndex={selected ? 0 : -1}
       type="button"
     >
-      {expanded && country === "Country2" && selected ? (
-        <span
-          style={{
-            color: selectedForeground,
-            fontFamily: `${fontFamily}, sans-serif`,
-            fontSize: eyebrowFontSize,
-            fontWeight: 600,
-            lineHeight: pxToRem(16),
-            whiteSpace: "nowrap"
-          }}
-        >
-          {eyebrow}
-        </span>
-      ) : null}
+      <span
+        aria-hidden={!(expanded && country === "Country2" && selected)}
+        style={{
+          color: selectedForeground,
+          fontFamily: `${fontFamily}, sans-serif`,
+          fontSize: eyebrowFontSize,
+          fontWeight: 600,
+          lineHeight: pxToRem(16),
+          maxHeight: expanded && country === "Country2" && selected ? pxToRem(16) : 0,
+          opacity: expanded && country === "Country2" && selected ? 1 : 0,
+          overflow: "hidden",
+          transform: expanded && country === "Country2" && selected ? "translateY(0)" : "translateY(-4px)",
+          transition: "max-height 220ms ease, opacity 180ms ease, transform 220ms ease",
+          whiteSpace: "nowrap"
+        }}
+      >
+        {eyebrow}
+      </span>
 
-      {expanded ? (
-        <span
-          aria-hidden="true"
-          style={{
-            alignItems: "center",
-            display: "inline-flex",
-            height: mediaSize,
-            justifyContent: "center",
-            overflow: country === "India" ? "visible" : "hidden",
-            width: country === "India" ? mediaSize : "100%"
-          }}
-        >
-          {renderMedia(item, label, mediaSize, selected)}
-        </span>
-      ) : null}
+      <span
+        aria-hidden={!expanded}
+        style={{
+          alignItems: "center",
+          display: "inline-flex",
+          height: mediaSize,
+          justifyContent: "center",
+          maxHeight: expanded ? mediaSize : 0,
+          opacity: expanded ? 1 : 0,
+          overflow: "hidden",
+          transform: expanded ? "scale(1) translateY(0)" : "scale(0.86) translateY(-6px)",
+          transition: "max-height 220ms ease, opacity 180ms ease, transform 220ms ease",
+          width: country === "India" ? mediaSize : "100%"
+        }}
+      >
+        {renderMedia(item, label, mediaSize, selected)}
+      </span>
 
       <span
         style={{
@@ -551,6 +558,7 @@ export function TopTabHeaderWidgetTabStatusAtom({
           maxWidth: "100%",
           overflow: "hidden",
           textAlign: "center",
+          transition: "color 180ms ease",
           WebkitBoxOrient: expanded && country === "Country2" ? "vertical" : undefined,
           WebkitLineClamp: expanded && country === "Country2" ? 2 : undefined,
           whiteSpace: expanded && country === "Country2" ? "normal" : "nowrap"
@@ -569,6 +577,7 @@ export function TopTabHeaderWidget({
   banner,
   brand = "Cars24",
   className,
+  collapsed = false,
   country = "India",
   defaultValue,
   headerProps,
@@ -632,7 +641,10 @@ export function TopTabHeaderWidget({
         boxSizing: "border-box",
         display: "flex",
         gap: pxToRem(spacing2),
-        padding: `0 ${pxToRem(spacing3)} ${pxToRem(spacing3)}`,
+        padding: collapsed
+          ? `${pxToRem(spacing3)} ${pxToRem(spacing3)} ${pxToRem(spacing3)}`
+          : `0 ${pxToRem(spacing3)} ${pxToRem(spacing3)}`,
+        transition: "padding 220ms ease",
         width: "100%"
       }}
     >
@@ -690,7 +702,7 @@ export function TopTabHeaderWidget({
               buttonRefs.current[index] = element;
             }}
             country={country}
-            expanded
+            expanded={!collapsed}
             item={item}
             onClick={() => {
               if (!isControlled) {
@@ -747,14 +759,31 @@ export function TopTabHeaderWidget({
         ...style
       }}
     >
-      <div style={{ display: "grid", gap: pxToRem(spacing1), width: "100%" }}>
-        <AppHeader
-          brand={brand}
-          level="Page - L1"
-          variant="Brand"
-          {...appHeaderProps}
-          style={resolvedHeaderStyle}
-        />
+      <div
+        style={{
+          display: "grid",
+          gap: searchFirst ? "0" : pxToRem(spacing1),
+          width: "100%"
+        }}
+      >
+        <div
+          aria-hidden={collapsed}
+          style={{
+            maxHeight: collapsed ? 0 : pxToRem(88),
+            opacity: collapsed ? 0 : 1,
+            overflow: "hidden",
+            transform: collapsed ? "translateY(-10px)" : "translateY(0)",
+            transition: "max-height 240ms ease, opacity 180ms ease, transform 240ms ease"
+          }}
+        >
+          <AppHeader
+            brand={brand}
+            level="Page - L1"
+            variant="Brand"
+            {...appHeaderProps}
+            style={resolvedHeaderStyle}
+          />
+        </div>
         {searchFirst ? searchBarNode : null}
         {navigationNode}
         {searchFirst ? null : searchBarNode}
