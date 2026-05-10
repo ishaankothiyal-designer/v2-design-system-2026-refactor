@@ -52,6 +52,102 @@ The AI must extract the design logic from references, then create a suitable des
 
 ---
 
+## Reference Usage Rules
+
+The `reference` folder is a required design decision system, not just a visual library.
+
+### Page References
+
+Use `reference/pages/*` as the source of truth for macro composition.
+
+Page references must be used to evaluate:
+
+- hero structure
+- section sequence
+- CTA behavior
+- navigation pattern
+- trust module placement
+- spacing rhythm
+- card density
+- footer behavior
+- overall page pacing
+
+These references define how a page should feel and flow at the full-screen level.
+
+### Widget References
+
+Use `reference/widget/*` as the source of truth for micro composition.
+
+Widget references must be used to evaluate:
+
+- internal padding
+- alignment
+- header structure
+- content stacking
+- media usage
+- CTA placement
+- density
+- state behavior
+- section-level spacing
+
+These references define how each widget should behave inside the page.
+
+## Macro vs Micro Rule
+
+- `reference/pages/*` defines macro layout behavior.
+- `reference/widget/*` defines micro layout behavior.
+
+A correct design must satisfy both.
+
+## Design Decision Rule
+
+Written rules alone are not enough to justify implementation.
+
+A valid design decision must be supported by:
+
+1. page-type logic
+2. brand logic
+3. page reference review
+4. widget reference review
+
+## Extraction Rule
+
+AI must extract logic from references, not copy screens verbatim.
+
+Allowed:
+
+- learning layout patterns
+- learning spacing rhythm
+- learning hierarchy
+- learning CTA placement
+- learning widget behavior
+
+Not allowed:
+
+- copying full screens
+- copying full widget layouts without adaptation
+- ignoring prompt context in favor of reference duplication
+
+## Validation Rule
+
+If the correct page folder was not reviewed, page composition is unvalidated.
+
+If the correct widget folder was not reviewed, widget usage is unvalidated.
+
+If both were not reviewed, the output should be treated as process-invalid even if visually acceptable or technically working.
+
+## Page-Type Evaluation Rule
+
+L1, L2, and internal pages must be judged against:
+
+- textual rules
+- visual page references
+- widget-specific references
+
+Text-only compliance is not sufficient.
+
+---
+
 ## 3. Core Design Principle
 
 The AI must design with intent.
