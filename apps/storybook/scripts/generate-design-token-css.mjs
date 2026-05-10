@@ -20,10 +20,23 @@ const figmaGapDocsOutputPath = path.join(generatedDir, "GapTokens.mdx");
 const figmaGapDataOutputPath = path.join(generatedDir, "gapTokenData.ts");
 const radiusDocsOutputPath = path.join(generatedDir, "RadiusTokens.mdx");
 const radiusDataOutputPath = path.join(generatedDir, "radiusTokenData.ts");
+const shadowCssOutputPath = path.join(generatedDir, "shadow-tokens.tokens.css");
+const shadowDocsOutputPath = path.join(generatedDir, "ShadowTokens.mdx");
+const shadowDataOutputPath = path.join(generatedDir, "shadowTokenData.ts");
 const REM_BASE_PX = 16;
 
 function readJson(filePath) {
   return JSON.parse(readFileSync(filePath, "utf8"));
+}
+
+function extractStringConstant(filePath, constantName) {
+  if (!existsSync(filePath)) {
+    return undefined;
+  }
+
+  const source = readFileSync(filePath, "utf8");
+  const match = source.match(new RegExp(`const\\s+${constantName}\\s*=\\s*"([^"]+)"`));
+  return match?.[1];
 }
 
 function flattenTokens(tokenTree, prefix = []) {
@@ -199,6 +212,14 @@ function extractCssVariableName(codeSyntax, fallbackName) {
   return fallbackName;
 }
 
+function toExportCssVariableName(variableName) {
+  return `--${variableName.split("/").map(toKebabCase).join("-")}`;
+}
+
+function toExportCssVariableSyntax(variableName) {
+  return `var(${toExportCssVariableName(variableName)})`;
+}
+
 function buildCssFile(groups, headerComment) {
   const lines = [":root {", `  /* ${headerComment} */`];
 
@@ -362,7 +383,7 @@ function createFigmaResolvers(figmaExport) {
   return { resolveColorValue };
 }
 
-function createDocSection(category, heading, description) {
+function createDocSection(category, heading, description, viewType = "card") {
   return [
     `## ${escapeMdxText(heading)}`,
     "",
@@ -373,7 +394,7 @@ function createDocSection(category, heading, description) {
     `  maxHeight={720}`,
     `  pageSize={Number.MAX_VALUE}`,
     `  showSearch={false}`,
-    `  viewType="card"`,
+    `  viewType="${viewType}"`,
     `/>`,
     ""
   ];
@@ -400,6 +421,37 @@ function toJavaScriptModule(name, value) {
   return `export const ${name} = ${JSON.stringify(value, null, 2)};\n`;
 }
 
+function buildFigmaColorSection(collection, groupKey, variables, resolveColorValue, options = {}) {
+  const {
+    categoryPrefix,
+    headingPrefix = categoryPrefix,
+    description,
+    preferredModeId = collection.defaultModeId,
+    preferredModeName = "Value",
+    pathPrefix = collection.name
+  } = options;
+
+  const title = groupKey
+    .split("/")
+    .map((segment) => toTitleCase(segment))
+    .join(" / ");
+  const resolvedDescription = typeof description === "function" ? description(title, groupKey) : description;
+
+  return {
+    category: `${categoryPrefix} / ${title}`,
+    heading: `${headingPrefix} / ${title}`,
+    description: resolvedDescription,
+    tokens: variables.map((variable) => ({
+      cssName: toExportCssVariableName(variable.name),
+      path: `${pathPrefix}.${variable.name.replace(/\//g, ".")}`,
+      description: variable.description,
+      codeSyntax: toExportCssVariableSyntax(variable.name),
+      presenter: "Color",
+      value: resolveColorValue(variable, preferredModeId, preferredModeName)
+    }))
+  };
+}
+
 function generateFigmaColorDocs() {
   if (!existsSync(figmaTokenExportPath)) {
     return;
@@ -422,10 +474,10 @@ function generateFigmaColorDocs() {
         heading: `Theme / ${mode.name}`,
         description: `${mode.name} theme palette with brand and alternate brand ramps from the Figma token export.`,
         tokens: colorVariables.map((variable) => ({
-          cssName: `--figma-theme-${toKebabCase(mode.name)}-${variable.name.split("/").map(toKebabCase).join("-")}`,
+          cssName: toExportCssVariableName(variable.name),
           path: `Theme.${mode.name}.${variable.name.replace(/\//g, ".")}`,
           description: variable.description,
-          codeSyntax: variable.codeSyntax?.WEB,
+          codeSyntax: toExportCssVariableSyntax(variable.name),
           presenter: "Color",
           value: resolveColorValue(variable, mode.modeId, mode.name)
         }))
@@ -457,14 +509,85 @@ function generateFigmaColorDocs() {
         heading: section.title,
         description: section.description,
         tokens: sectionVariables.map((variable) => ({
-          cssName: `--figma-semantic-${variable.name.split("/").map(toKebabCase).join("-")}`,
+          cssName: toExportCssVariableName(variable.name),
           path: `Semantic.${variable.name.replace(/\//g, ".")}`,
           description: variable.description,
-          codeSyntax: variable.codeSyntax?.WEB,
+          codeSyntax: toExportCssVariableSyntax(variable.name),
           presenter: "Color",
           value: resolveColorValue(variable, semanticCollection.defaultModeId, "Value")
         }))
       });
+    }
+  }
+
+  const primitiveCollection = (figmaExport.collections ?? []).find((collection) => collection.name === "Primitive");
+
+  if (primitiveCollection) {
+    const primitiveGroups = new Map();
+
+    for (const variable of primitiveCollection.variables ?? []) {
+      if (variable.resolvedType !== "COLOR") {
+        continue;
+      }
+
+      const groupKey = variable.name.split("/")[0];
+      const groupVariables = primitiveGroups.get(groupKey) ?? [];
+      groupVariables.push(variable);
+      primitiveGroups.set(groupKey, groupVariables);
+    }
+
+    for (const [groupKey, groupVariables] of [...primitiveGroups.entries()].sort(([left], [right]) =>
+      compareNaturally(left, right)
+    )) {
+      groups.push(
+        buildFigmaColorSection(
+          primitiveCollection,
+          groupKey,
+          groupVariables.sort((left, right) => compareNaturally(left.name, right.name)),
+          resolveColorValue,
+          {
+            categoryPrefix: "Primitive",
+            description: (title) => `Primitive ${title} palette exported from the shared base color system.`,
+            preferredModeName: "Value",
+          }
+        )
+      );
+    }
+  }
+
+  const utilityCollection = (figmaExport.collections ?? []).find((collection) => collection.name === "Utility");
+
+  if (utilityCollection) {
+    const utilityGroups = new Map();
+
+    for (const variable of utilityCollection.variables ?? []) {
+      if (variable.resolvedType !== "COLOR") {
+        continue;
+      }
+
+      const segments = variable.name.split("/");
+      const groupKey = segments.slice(0, Math.min(2, segments.length)).join("/");
+      const groupVariables = utilityGroups.get(groupKey) ?? [];
+      groupVariables.push(variable);
+      utilityGroups.set(groupKey, groupVariables);
+    }
+
+    for (const [groupKey, groupVariables] of [...utilityGroups.entries()].sort(([left], [right]) =>
+      compareNaturally(left, right)
+    )) {
+      groups.push(
+        buildFigmaColorSection(
+          utilityCollection,
+          groupKey,
+          groupVariables.sort((left, right) => compareNaturally(left.name, right.name)),
+          resolveColorValue,
+          {
+            categoryPrefix: "Utility",
+            description: (title) => `Utility ${title} colors for alpha overlays and service-specific accents.`,
+            preferredModeName: "Value",
+          }
+        )
+      );
     }
   }
 
@@ -481,12 +604,12 @@ function generateFigmaColorDocs() {
     "",
     "# Color Tokens",
     "",
-    "Complete structural color documentation generated from the full Figma token export. This page covers every exported color token across theme modes and semantic token families.",
+    "Complete structural color documentation generated from the full Figma token export. This page covers every exported color token across theme, semantic, primitive, and utility families.",
     ""
   ];
 
   for (const group of groups) {
-    mdxLines.push(...createDocSection(group.category, group.heading, group.description));
+    mdxLines.push(...createDocSection(group.category, group.heading, group.description, "table"));
   }
 
   writeFileSync(figmaDocsOutputPath, mdxLines.join("\n"));
@@ -821,6 +944,33 @@ function flattenRadiusTokens(radiusTree, prefix = ["radius"]) {
   return entries.sort((left, right) => compareNaturally(left.key, right.key));
 }
 
+function flattenShadowTokens(tokenTree, prefix = []) {
+  const entries = [];
+
+  for (const [key, value] of Object.entries(tokenTree ?? {})) {
+    const nextPath = [...prefix, key];
+
+    if (value && typeof value === "object" && !Array.isArray(value)) {
+      entries.push(...flattenShadowTokens(value, nextPath));
+      continue;
+    }
+
+    if (determinePresenter(nextPath, value) !== "Shadow") {
+      continue;
+    }
+
+    entries.push({
+      path: nextPath,
+      key: nextPath.join("."),
+      label: nextPath.map(toTitleCase).join(" / "),
+      value: String(value),
+      codeSyntax: `var(--${nextPath.map(toKebabCase).join("-")})`
+    });
+  }
+
+  return entries.sort((left, right) => compareNaturally(left.key, right.key));
+}
+
 function buildRadiusBrandPreviews(baseTokens) {
   const brandFiles = [
     ["Cars24", path.join(repoRoot, "packages/tokens/tokens/brands/cars24.json")],
@@ -890,6 +1040,98 @@ function generateRadiusDocs() {
   writeFileSync(radiusDocsOutputPath, mdxLines.join("\n"));
 }
 
+function generateShadowDocs() {
+  const dropShadowTokens = [
+    {
+      path: ["drop-shadow", "xxs"],
+      key: "drop-shadow.xxs",
+      label: "Drop Shadow / XXS",
+      value: "0 2px 2px 0 rgba(28, 41, 56, 0.04)",
+      codeSyntax: "drop-shadow/xxs"
+    },
+    {
+      path: ["drop-shadow", "xs"],
+      key: "drop-shadow.xs",
+      label: "Drop Shadow / XS",
+      value: "0 0 4px 0 rgba(28, 41, 56, 0.02), 0 4px 4px 0 rgba(28, 41, 56, 0.04)",
+      codeSyntax: "drop-shadow/xs"
+    },
+    {
+      path: ["drop-shadow", "sm"],
+      key: "drop-shadow.sm",
+      label: "Drop Shadow / SM",
+      value: "0 2px 8px 0 rgba(28, 41, 56, 0.02), 0 6px 16px 0 rgba(28, 41, 56, 0.04)",
+      codeSyntax: "drop-shadow/sm"
+    },
+    {
+      path: ["drop-shadow", "md"],
+      key: "drop-shadow.md",
+      label: "Drop Shadow / MD",
+      value: "0 8px 18px 0 rgba(28, 41, 56, 0.02), 0 12px 42px 0 rgba(28, 41, 56, 0.04)",
+      codeSyntax: "drop-shadow/md"
+    },
+    {
+      path: ["drop-shadow", "lg"],
+      key: "drop-shadow.lg",
+      label: "Drop Shadow / LG",
+      value: "0 8px 28px -2px rgba(28, 41, 56, 0.04), 0 18px 72px -2px rgba(28, 41, 56, 0.06)",
+      codeSyntax: "drop-shadow/lg"
+    },
+    {
+      path: ["drop-shadow", "xl"],
+      key: "drop-shadow.xl",
+      label: "Drop Shadow / XL",
+      value: "0 8px 28px -4px rgba(28, 41, 56, 0.06), 0 18px 84px -2px rgba(28, 41, 56, 0.08)",
+      codeSyntax: "drop-shadow/xl"
+    }
+  ];
+  const shadowGroups = [
+    {
+      category: "Shadow",
+      tokens: dropShadowTokens.map((token) => ({
+        cssName:
+          token.key.startsWith("drop-shadow.")
+            ? `--${token.key.replace(/\./g, "-")}`
+            : `--${token.path.map(toKebabCase).join("-")}`,
+        path: token.key,
+        codeSyntax: token.codeSyntax,
+        presenter: "Shadow",
+        value: token.value
+      }))
+    }
+  ];
+
+  writeFileSync(
+    shadowCssOutputPath,
+    buildCssFile(shadowGroups, "Generated from packages/tokens/tokens/base.json")
+  );
+
+  writeFileSync(shadowDataOutputPath, toJavaScriptModule("shadowTokens", dropShadowTokens));
+
+  const mdxLines = [
+    `import { Meta } from "@storybook/addon-docs/blocks";`,
+    `import { DesignTokenDocBlock } from "storybook-design-token";`,
+    `import { ShadowPreviewGrid } from "../storybook-layout-tokens";`,
+    `import { shadowTokens } from "./shadowTokenData";`,
+    "",
+    `<Meta title="Foundations/Shadow Tokens" />`,
+    "",
+    "# Shadow Tokens",
+    "",
+    "Shadow documentation generated from the shared drop-shadow scale. This page previews each reusable box-shadow token and lists the raw token values used by the system.",
+    "",
+    "## Shadow Preview",
+    "",
+    "<ShadowPreviewGrid tokens={shadowTokens} />",
+    "",
+    "## Raw Token Catalog",
+    "",
+    ...createTypographyDocSection("Shadow", "Shadow", "Shared drop-shadow tokens used for elevated surfaces across the system.")
+  ];
+
+  writeFileSync(shadowDocsOutputPath, mdxLines.join("\n"));
+}
+
 mkdirSync(generatedDir, { recursive: true });
 
 generateBaseTokenCss();
@@ -897,3 +1139,4 @@ generateFigmaColorDocs();
 generateTypographyDocs();
 generateGapDocs();
 generateRadiusDocs();
+generateShadowDocs();

@@ -262,7 +262,7 @@ export function GridCardPlayground(props: GridCardPlaygroundProps) {
 }
 
 const meta: Meta<GridCardPlaygroundProps> = {
-  title: "Components/Grid Card",
+  title: "Components/Cards/Grid Card",
   component: GridCardPlayground,
   tags: ["autodocs"],
   parameters: {

@@ -186,7 +186,7 @@ const defaultSourceCode = `<StaticSliderCard
 />\n`;
 
 const meta: Meta<StaticSliderCardProps> = {
-  title: "Components/Static Slider Card",
+  title: "Components/Cards/Static Slider Card",
   component: StaticSliderCard,
   tags: ["autodocs"],
   parameters: {

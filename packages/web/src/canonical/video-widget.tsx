@@ -12,6 +12,7 @@ export const canonicalVideoWidgetWebContract = designSystemRegistry.widgets.find
 );
 
 const VIDEO_WIDGET_WIDTH = 360;
+const DEFAULT_DARK_WIDGET_SURFACE = "var(--cars24-semantic-bg-primary-inverse, #0A0A0A)";
 
 export interface VideoWidgetProps extends Omit<HTMLAttributes<HTMLDivElement>, "children" | "title"> {
   brand?: DisplayBrandId;
@@ -78,11 +79,10 @@ export function VideoWidget({
 }: VideoWidgetProps) {
   const spacing3 = Number(getRequiredThemeTokenValue(brand, "spacing.3"));
   const canvasSurface = String(getRequiredThemeTokenValue(brand, "color.surface.canvas"));
-  const inverseSurface = String(getRequiredThemeTokenValue(brand, "color.surface.inverse"));
   const resolvedPrimaryAction = primaryAction === undefined ? buildDefaultPrimaryAction() : primaryAction;
 
   const rootStyles: CSSProperties = {
-    background: inverse ? inverseSurface : canvasSurface,
+    background: inverse ? DEFAULT_DARK_WIDGET_SURFACE : canvasSurface,
     boxSizing: "border-box",
     maxWidth: pxToRem(VIDEO_WIDGET_WIDTH),
     paddingBlock: inverse ? pxToRem(spacing3) : undefined,

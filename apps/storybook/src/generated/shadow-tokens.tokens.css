@@ -1,0 +1,13 @@
+:root {
+  /* Generated from packages/tokens/tokens/base.json */
+  /**
+   * @tokens Shadow
+   */
+  --drop-shadow-xxs: 0 2px 2px 0 rgba(28, 41, 56, 0.04); /* drop-shadow.xxs | WEB: drop-shadow/xxs | @presenter Shadow */
+  --drop-shadow-xs: 0 0 4px 0 rgba(28, 41, 56, 0.02), 0 4px 4px 0 rgba(28, 41, 56, 0.04); /* drop-shadow.xs | WEB: drop-shadow/xs | @presenter Shadow */
+  --drop-shadow-sm: 0 2px 8px 0 rgba(28, 41, 56, 0.02), 0 6px 16px 0 rgba(28, 41, 56, 0.04); /* drop-shadow.sm | WEB: drop-shadow/sm | @presenter Shadow */
+  --drop-shadow-md: 0 8px 18px 0 rgba(28, 41, 56, 0.02), 0 12px 42px 0 rgba(28, 41, 56, 0.04); /* drop-shadow.md | WEB: drop-shadow/md | @presenter Shadow */
+  --drop-shadow-lg: 0 8px 28px -2px rgba(28, 41, 56, 0.04), 0 18px 72px -2px rgba(28, 41, 56, 0.06); /* drop-shadow.lg | WEB: drop-shadow/lg | @presenter Shadow */
+  --drop-shadow-xl: 0 8px 28px -4px rgba(28, 41, 56, 0.06), 0 18px 84px -2px rgba(28, 41, 56, 0.08); /* drop-shadow.xl | WEB: drop-shadow/xl | @presenter Shadow */
+
+}
