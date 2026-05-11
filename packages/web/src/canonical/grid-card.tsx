@@ -359,6 +359,7 @@ export function GridCard({
   ...rest
 }: GridCardProps) {
   const metrics = resolveMetrics(columnCount, size, type);
+  const slotAspectRatio = `${metrics.width} / ${metrics.slotHeight}`;
   const showTag = Boolean(tagLabel) && allowsTag(columnCount, size, type);
   const showDescription = Boolean(description) && allowsDescription(columnCount, size, type);
   const slotSurface = String(getRequiredThemeTokenValue(brand, "color.brand.primary.50"));
@@ -384,18 +385,25 @@ export function GridCard({
   const rootStyles: CSSProperties = {
     display: "flex",
     flexDirection: "column",
-    flexShrink: 0,
+    flexShrink: 1,
     gap: type === "Text Outside" ? pxToRem(metrics.outsideGap) : undefined,
+    maxWidth: pxToRem(metrics.width),
+    minWidth: 0,
     position: "relative",
-    width: pxToRem(metrics.width),
-    ...(type === "Text Outside" ? null : { height: pxToRem(metrics.slotHeight) }),
+    width: "100%",
+    ...(type === "Text Outside"
+      ? null
+      : {
+          aspectRatio: slotAspectRatio
+        }),
     ...style
   };
 
   const slotStyles: CSSProperties = {
     background: slotSurface,
+    aspectRatio: slotAspectRatio,
     borderRadius: slotRadius,
-    height: pxToRem(metrics.slotHeight),
+    height: type === "Text Outside" ? "auto" : "100%",
     inset: type === "Text Outside" ? undefined : 0,
     overflow: "hidden",
     position: type === "Text Outside" ? "relative" : "absolute",

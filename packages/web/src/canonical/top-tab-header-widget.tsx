@@ -643,7 +643,7 @@ export function TopTabHeaderWidget({
         gap: pxToRem(spacing2),
         padding: collapsed
           ? `${pxToRem(spacing3)} ${pxToRem(spacing3)} ${pxToRem(spacing3)}`
-          : `0 ${pxToRem(spacing3)} ${pxToRem(spacing3)}`,
+          : `0 ${pxToRem(spacing3)} ${pxToRem(spacing1)}`,
         transition: "padding 220ms ease",
         width: "100%"
       }}

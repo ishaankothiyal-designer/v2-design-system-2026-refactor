@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from
 import type { DisplayBrandId } from "@turbo/tokens";
 import {
   BannerWidget,
+  BottomNav,
   FabButton,
   FaqWidget,
   GridCard,
@@ -19,11 +20,11 @@ import {
   TopTabHeaderWidget,
   getRequiredThemeTokenValue
 } from "@turbo/web";
-import buyUsedCarImage from "./assets/buy-used-car-v1.png";
-import inspectionVisualImage from "./assets/inspection-visual-v1.png";
-import loanVisualImage from "./assets/loan-visual-v1.png";
-import orbitBannerImage from "./assets/orbit-banner-v1.png";
-import sellCarImage from "./assets/sell-car-v1.png";
+import buyUsedCarImage from "./assets/buy-used-car-v2.png";
+import inspectionVisualImage from "./assets/inspection-visual-v2.png";
+import loanVisualImage from "./assets/loan-visual-v2.png";
+import orbitBannerImage from "./assets/orbit-banner-v2.png";
+import sellCarImage from "./assets/sell-car-v2.png";
 import hondaLogoImage from "../../storybook/src/stories/assets/car-brand-logos/image/honda.png";
 import hyundaiLogoImage from "../../storybook/src/stories/assets/car-brand-logos/image/hyundai.png";
 import mahindraLogoImage from "../../storybook/src/stories/assets/car-brand-logos/image/mahindra.png";
@@ -82,6 +83,7 @@ export function App() {
   const [topTabCollapsed, setTopTabCollapsed] = useState(false);
   const [activeTopTab, setActiveTopTab] = useState("all");
   const [activePage, setActivePage] = useState<"home" | "challan">("home");
+  const [activeBottomNav, setActiveBottomNav] = useState("home");
 
   const shellStyles = useMemo(() => createShellStyles(brand), [brand]);
 
@@ -129,8 +131,7 @@ export function App() {
                   brand={brand}
                   playLabel="Open offer"
                   primaryAction={{
-                    label: "Explore now",
-                    trailingIcon: <Icon decorative name="arrow-right-outline" />
+                    label: "Explore now"
                   }}
                   rotatingItems={buildEntrySlides(brand)}
                   rotatingShowCopy
@@ -246,8 +247,7 @@ export function App() {
                   brand={brand}
                   items={faqItems}
                   primaryAction={{
-                    label: "Talk to an expert",
-                    trailingIcon: <Icon decorative name="arrow-right-outline" />
+                    label: "Talk to an expert"
                   }}
                   showBottomButton={false}
                   showHeaderAction={false}
@@ -266,6 +266,26 @@ export function App() {
       </main>
 
       <Footer brand={brand} shellStyles={shellStyles} />
+
+      <div style={shellStyles.bottomNavWrap}>
+        <div style={shellStyles.bottomNavInner}>
+          <BottomNav
+            brand={brand}
+            configuration="Label + icon"
+            items={[
+              { value: "home", label: "Home", ariaLabel: "Home", iconName: "sparkle-filled" },
+              { value: "explore", label: "Explore", ariaLabel: "Explore", iconName: "sparkle-filled" },
+              { value: "my-cars", label: "My Cars", ariaLabel: "My Cars", iconName: "sparkle-filled" },
+              { value: "showrooms", label: "Showrooms", ariaLabel: "Showrooms", iconName: "sparkle-filled" },
+              { value: "activity", label: "Activity", ariaLabel: "Activity", iconName: "sparkle-filled" }
+            ]}
+            showHomeIndicator
+            type="Sticky"
+            value={activeBottomNav}
+            onValueChange={setActiveBottomNav}
+          />
+        </div>
+      </div>
 
       <BrandSwitcher
         brand={brand}
@@ -320,7 +340,7 @@ function createShellStyles(brand: DisplayBrandId) {
       justifyItems: "stretch",
       margin: "0 auto",
       maxWidth: 392,
-      padding: `0 0 ${spacing8}`,
+      padding: `0 0 calc(${spacing8} + 104px)`,
       position: "relative",
       width: "100%",
       zIndex: 1
@@ -367,9 +387,23 @@ function createShellStyles(brand: DisplayBrandId) {
       display: "grid",
       gap: spacing4,
       marginTop: spacing6,
-      padding: `${spacing5} ${spacing3} calc(${spacing8} + 72px)`,
+      padding: `${spacing5} ${spacing3} calc(${spacing8} + 120px)`,
       position: "relative",
       zIndex: 1
+    } satisfies CSSProperties,
+    bottomNavWrap: {
+      bottom: 0,
+      left: 0,
+      pointerEvents: "none",
+      position: "fixed",
+      right: 0,
+      zIndex: 15
+    } satisfies CSSProperties,
+    bottomNavInner: {
+      margin: "0 auto",
+      maxWidth: 392,
+      pointerEvents: "auto",
+      width: "100%"
     } satisfies CSSProperties,
     footerInner: {
       display: "grid",
@@ -385,7 +419,7 @@ function createShellStyles(brand: DisplayBrandId) {
       gap: "12px"
     } satisfies CSSProperties,
     switcherWrap: {
-      bottom: 20,
+      bottom: 104,
       position: "fixed",
       right: 20,
       zIndex: 20
@@ -666,26 +700,20 @@ function HorizontalBadgeRail({
       subtitle=""
       title={title}
     >
-      <div style={{ display: "flex", gap: 12, overflowX: "auto", paddingBottom: 2 }}>
+      <div style={{ display: "flex", gap: 12, overflowX: "auto", padding: "0 12px 2px" }}>
         {items.map((item) => (
-          <div key={item.label} style={{ alignItems: "center", display: "grid", gap: 8, justifyItems: "center", minWidth: 58 }}>
-            <div style={{ alignItems: "center", background: "#fff", border: "1px solid rgba(15,23,42,0.08)", borderRadius: 999, display: "flex", height: 46, justifyContent: "center", overflow: "hidden", width: 46 }}>
-              <img
-                alt=""
-                aria-hidden="true"
-                src={item.logo}
-                style={{
-                  display: "block",
-                  height: "68%",
-                  objectFit: "contain",
-                  width: "68%"
-                }}
-              />
-            </div>
-            <Text brand={brand} size="xs" tone="secondary">
-              {item.label}
-            </Text>
-          </div>
+          <StaticSliderCard
+            key={item.label}
+            brand={brand}
+            columnCount="4+"
+            description=""
+            size="Large"
+            tagLabel=""
+            title={item.label}
+            type="Text Outside"
+          >
+            <BrandBadgeTile logo={item.logo} />
+          </StaticSliderCard>
         ))}
       </div>
     </StaticSliderWidget>
@@ -704,19 +732,54 @@ function BodyTypeRail({ brand }: { brand: DisplayBrandId }) {
       subtitle=""
       title="Buy used cars by body type"
     >
-      <div style={{ display: "flex", gap: 12, overflowX: "auto", paddingBottom: 2 }}>
+      <div style={{ display: "flex", gap: 12, overflowX: "auto", padding: "0 12px 2px" }}>
         {bodyTypeOptions.map((item, index) => (
-          <div key={item} style={{ display: "grid", gap: 8, minWidth: 92 }}>
-            <div style={{ minHeight: 54 }}>
+          <StaticSliderCard
+            key={item}
+            brand={brand}
+            columnCount="2+"
+            description=""
+            size="Medium"
+            tagLabel=""
+            title={item}
+            type="Text Outside"
+          >
+            <div style={{ minHeight: 96 }}>
               <ImageTile objectPosition={index % 2 === 0 ? "center" : "70% center"} src={buyUsedCarImage} />
             </div>
-            <Text as="strong" brand={brand} size="xs" tone="primary" style={{ textAlign: "center" }}>
-              {item}
-            </Text>
-          </div>
+          </StaticSliderCard>
         ))}
       </div>
     </StaticSliderWidget>
+  );
+}
+
+function BrandBadgeTile({ logo }: { logo: string }) {
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        alignItems: "center",
+        background: "#fff",
+        border: "1px solid rgba(15,23,42,0.08)",
+        borderRadius: 999,
+        display: "flex",
+        height: "100%",
+        justifyContent: "center",
+        width: "100%"
+      }}
+    >
+      <img
+        alt=""
+        src={logo}
+        style={{
+          display: "block",
+          height: "52%",
+          objectFit: "contain",
+          width: "52%"
+        }}
+      />
+    </div>
   );
 }
 
@@ -1124,39 +1187,44 @@ function ScrappageBanner({ brand }: { brand: DisplayBrandId }) {
 
 function NearbyShowroomsSection({ brand }: { brand: DisplayBrandId }) {
   return (
-    <Module
+    <StaticSliderWidget
       brand={brand}
-      bodyMinHeight={0}
       description=""
-      primaryAction={null}
-      showButtonGroup={false}
+      showCta={false}
       showHeaderAction
       showTag={false}
+      showTabSlider={false}
       subtitle=""
       title="Nearby showrooms"
       headerActionLabel="View all"
     >
-      <div style={{ display: "flex", gap: 12, overflowX: "auto" }}>
-        <ShowroomCard
-          brand={brand}
-          directionsLabel="4.5 km away"
-          inventoryLabel="135+ Cars"
-          primaryActionLabel="View showroom"
-          secondaryActionLabel="Call now"
-          title="Piyush Mahendra Mall"
-        />
-        <ShowroomCard
-          brand={brand}
-          directionsLabel="6.1 km away"
-          inventoryLabel="94+ Cars"
-          primaryActionLabel="View showroom"
-          rating={4.6}
-          reviewCount="(148)"
-          secondaryActionLabel="Call now"
-          title="Gurgaon Auto Hub"
-        />
+      <div style={{ display: "flex", gap: 12, overflowX: "auto", padding: "0 12px 2px" }}>
+        <div style={{ flex: "0 0 auto" }}>
+          <ShowroomCard
+            brand={brand}
+            directionsLabel="4.5 km away"
+            inventoryLabel="135+ Cars"
+            primaryActionLabel="View showroom"
+            size="Large"
+            secondaryActionLabel="Call now"
+            title="Piyush Mahendra Mall"
+          />
+        </div>
+        <div style={{ flex: "0 0 auto" }}>
+          <ShowroomCard
+            brand={brand}
+            directionsLabel="6.1 km away"
+            inventoryLabel="94+ Cars"
+            primaryActionLabel="View showroom"
+            rating={4.6}
+            reviewCount="(148)"
+            size="Large"
+            secondaryActionLabel="Call now"
+            title="Gurgaon Auto Hub"
+          />
+        </div>
       </div>
-    </Module>
+    </StaticSliderWidget>
   );
 }
 
@@ -1284,8 +1352,7 @@ function ChallanPage({
         bodyMinHeight={0}
         description=""
         primaryAction={{
-          label: "Check challan",
-          trailingIcon: <Icon decorative name="arrow-right-outline" />
+          label: "Check challan"
         }}
         showButtonGroup
         showHeaderAction={false}
