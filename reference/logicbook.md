@@ -1007,12 +1007,15 @@ Do:
 - Use as a secondary or quick action trigger.
 - Keep it visible but non-intrusive.
 - Use clear iconography or short labels.
+- Keep floating actions above sticky Bottom Navigation when both exist on the same screen.
+- Preserve enough vertical separation so the FAB and bottom nav do not visually collide or overlap.
 
 Don't:
 
 - Do not block important UI elements.
 - Do not use for primary actions that require full attention.
 - Do not use multiple FABs on one screen.
+- Do not place floating actions behind, inside, or touching the sticky bottom nav area.
 
 ### FAQ Widget
 
@@ -1064,6 +1067,59 @@ Don't:
 - Do not delay primary content or CTA.
 - Do not use autoplay with sound.
 - Do not use when static content is sufficient.
+
+### Component Guidelines
+
+#### Button
+
+Description:
+Buttons are action components. Leading icons, trailing icons, and internal spacing should only be used when they improve the meaning or scanning of the action.
+
+Do:
+
+- use button icons only when they have a clear functional or directional purpose
+- keep the button content clean when the label already explains the action
+- let icon usage depend on action meaning, navigation need, or state communication
+- use content spacing only when the icon and label combination genuinely needs it
+
+Don't:
+
+- do not enable leading icons by default
+- do not enable trailing icons by default
+- do not assume every button needs icon-plus-label treatment
+- do not add icon spacing when no meaningful icon is being used
+- do not use icons only to make the button look more decorative
+
+Valid button icon purpose examples:
+
+- forward navigation
+- back navigation
+- external direction cue
+- download or share meaning
+- state or utility cue that the label alone does not communicate clearly
+
+If a button label is already clear and self-sufficient, icons should remain optional and usually hidden.
+
+#### Bottom Navigation
+
+Description:
+Bottom Navigation is the persistent mobile navigation layer used for primary app destinations such as Home, Explore, My Cars, Showrooms, and Activity.
+
+Do:
+
+- keep Bottom Navigation sticky at the viewport bottom
+- use the approved bottom navigation component instead of recreating a custom footer nav
+- preserve enough page-bottom spacing so content does not get hidden behind the sticky nav
+- use it as the persistent destination switcher for app-style Cars24 pages where bottom nav is part of the pattern
+
+Don't:
+
+- do not let Bottom Navigation scroll away like normal page content
+- do not place it inside the content stack as a regular section
+- do not let footer or CTA content collide with the sticky nav area
+- do not replace the component with hardcoded text links when the canonical bottom nav exists
+
+If Bottom Navigation is expected for the page pattern and it is not sticky to the viewport bottom, the implementation should be treated as incomplete.
 
 ### Section Header Usage Rules
 
