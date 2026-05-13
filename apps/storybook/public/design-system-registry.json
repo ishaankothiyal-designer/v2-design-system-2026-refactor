@@ -6976,6 +6976,233 @@
           "values": [
             "2",
             "3"
+          ]
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "row.width",
+          "token": "336px"
+        },
+        {
+          "slot": "row.gap",
+          "token": "spacing.3"
+        },
+        {
+          "slot": "card.composition",
+          "token": "component.gridCard"
+        },
+        {
+          "slot": "card.slot.background",
+          "token": "var(--cars24-primitive-drive-pink-50)"
+        },
+        {
+          "slot": "card.slot.radius",
+          "token": "radius.xl"
+        },
+        {
+          "slot": "card.tag.background",
+          "token": "var(--cars24-semantic-bg-danger-base)"
+        },
+        {
+          "slot": "card.tag.foreground",
+          "token": "var(--cars24-semantic-text-primary-inverse)"
+        },
+        {
+          "slot": "card.tag.typography",
+          "token": "utility/label-4/medium"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
+      "canonicalId": "component.soldCarCard",
+      "canonicalName": "Sold Car Card",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": ".sold car card",
+      "description": "Sold-car summary card with sale price, model details, sold media stamp, buyer metadata, and avatar.",
+      "webExport": "@geist/web/canonical/sold-car-card",
+      "nativeExport": "",
+      "variants": [],
+      "states": [
+        "default"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "container.width",
+          "token": "264px"
+        },
+        {
+          "slot": "container.background",
+          "token": "color.surface.canvas"
+        },
+        {
+          "slot": "container.border",
+          "token": "color.border.default"
+        },
+        {
+          "slot": "container.borderWidth",
+          "token": "1px"
+        },
+        {
+          "slot": "container.radius",
+          "token": "radius.md"
+        },
+        {
+          "slot": "container.shadow",
+          "token": "component.switch.thumb.shadow"
+        },
+        {
+          "slot": "details.gap",
+          "token": "spacing.2"
+        },
+        {
+          "slot": "details.paddingInline",
+          "token": "spacing.3"
+        },
+        {
+          "slot": "details.paddingBlock",
+          "token": "spacing.4"
+        },
+        {
+          "slot": "price.color",
+          "token": "color.status.success"
+        },
+        {
+          "slot": "price.typography",
+          "token": "heading/h2/semibold"
+        },
+        {
+          "slot": "model.color",
+          "token": "color.text.primary"
+        },
+        {
+          "slot": "model.typography",
+          "token": "heading/h5/semibold"
+        },
+        {
+          "slot": "media.width",
+          "token": "77px"
+        },
+        {
+          "slot": "media.height",
+          "token": "52px"
+        },
+        {
+          "slot": "media.background",
+          "token": "color.brand.primary.50"
+        },
+        {
+          "slot": "media.radius",
+          "token": "radius.sm"
+        },
+        {
+          "slot": "media.icon",
+          "token": "square-plus-add-outline"
+        },
+        {
+          "slot": "media.iconColor",
+          "token": "color.brand.primary.500"
+        },
+        {
+          "slot": "media.iconSize",
+          "token": "32px"
+        },
+        {
+          "slot": "soldStamp.width",
+          "token": "42px"
+        },
+        {
+          "slot": "soldStamp.height",
+          "token": "15px"
+        },
+        {
+          "slot": "soldStamp.bottomOffset",
+          "token": "-5px"
+        },
+        {
+          "slot": "soldStamp.centerOffset",
+          "token": "-0.5px"
+        },
+        {
+          "slot": "soldStamp.asset",
+          "token": "packages/web/src/canonical/assets/sold-car-card/sold-stamp.png"
+        },
+        {
+          "slot": "soldStamp.objectFit",
+          "token": "cover"
+        },
+        {
+          "slot": "footer.border",
+          "token": "color.border.default"
+        },
+        {
+          "slot": "footer.borderWidth",
+          "token": "0.5px"
+        },
+        {
+          "slot": "footer.gap",
+          "token": "spacing.2"
+        },
+        {
+          "slot": "footer.paddingInline",
+          "token": "spacing.3"
+        },
+        {
+          "slot": "footer.paddingBlock",
+          "token": "spacing.2"
+        },
+        {
+          "slot": "buyer.color",
+          "token": "color.text.primary"
+        },
+        {
+          "slot": "buyer.typography",
+          "token": "label/label-3/regular"
+        },
+        {
+          "slot": "metadata.color",
+          "token": "color.text.secondary"
+        },
+        {
+          "slot": "metadata.typography",
+          "token": "label/label-4/regular"
+        },
+        {
+          "slot": "metadata.gap",
+          "token": "spacing.1"
+        },
+        {
+          "slot": "avatar.size",
+          "token": "Extra small"
+        },
+        {
+          "slot": "avatar.style",
+          "token": "Initials"
+        },
+        {
+          "slot": "avatar.type",
+          "token": "Status dot"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
       "canonicalId": "component.staticSliderCard",
       "canonicalName": "Static Slider Card",
       "layer": "component",
@@ -7017,7 +7244,6 @@
       ],
       "tokenBindings": [
         {
-          "slot": "row.width",
           "slot": "container.insideGap",
           "token": "spacing.2"
         },
@@ -8737,28 +8963,6 @@
           "token": "spacing.3"
         },
         {
-          "slot": "card.composition",
-          "token": "component.gridCard"
-        },
-        {
-          "slot": "card.slot.background",
-          "token": "var(--cars24-primitive-drive-pink-50)"
-        },
-        {
-          "slot": "card.slot.radius",
-          "token": "radius.xl"
-        },
-        {
-          "slot": "card.tag.background",
-          "token": "var(--cars24-semantic-bg-danger-base)"
-        },
-        {
-          "slot": "card.tag.foreground",
-          "token": "var(--cars24-semantic-text-primary-inverse)"
-        },
-        {
-          "slot": "card.tag.typography",
-          "token": "utility/label-4/medium"
           "slot": "item.large.width",
           "token": "96px"
         },
@@ -8787,16 +8991,6 @@
       ]
     },
     {
-      "canonicalId": "component.soldCarCard",
-      "canonicalName": "Sold Car Card",
-      "layer": "component",
-      "status": "approved",
-      "platform": "web",
-      "figmaComponentName": ".sold car card",
-      "description": "Sold-car summary card with sale price, model details, sold media stamp, buyer metadata, and avatar.",
-      "webExport": "@geist/web/canonical/sold-car-card",
-      "nativeExport": "",
-      "variants": [],
       "canonicalId": "component.staticSliderFlexbox",
       "canonicalName": "Static Slider Flexbox",
       "layer": "component",
@@ -8845,160 +9039,6 @@
       ],
       "tokenBindings": [
         {
-          "slot": "container.width",
-          "token": "264px"
-        },
-        {
-          "slot": "container.background",
-          "token": "color.surface.canvas"
-        },
-        {
-          "slot": "container.border",
-          "token": "color.border.default"
-        },
-        {
-          "slot": "container.borderWidth",
-          "token": "1px"
-        },
-        {
-          "slot": "container.radius",
-          "token": "radius.md"
-        },
-        {
-          "slot": "container.shadow",
-          "token": "component.switch.thumb.shadow"
-        },
-        {
-          "slot": "details.gap",
-          "token": "spacing.2"
-        },
-        {
-          "slot": "details.paddingInline",
-          "token": "spacing.3"
-        },
-        {
-          "slot": "details.paddingBlock",
-          "token": "spacing.4"
-        },
-        {
-          "slot": "price.color",
-          "token": "color.status.success"
-        },
-        {
-          "slot": "price.typography",
-          "token": "heading/h2/semibold"
-        },
-        {
-          "slot": "model.color",
-          "token": "color.text.primary"
-        },
-        {
-          "slot": "model.typography",
-          "token": "heading/h5/semibold"
-        },
-        {
-          "slot": "media.width",
-          "token": "77px"
-        },
-        {
-          "slot": "media.height",
-          "token": "52px"
-        },
-        {
-          "slot": "media.background",
-          "token": "color.brand.primary.50"
-        },
-        {
-          "slot": "media.radius",
-          "token": "radius.sm"
-        },
-        {
-          "slot": "media.icon",
-          "token": "square-plus-add-outline"
-        },
-        {
-          "slot": "media.iconColor",
-          "token": "color.brand.primary.500"
-        },
-        {
-          "slot": "media.iconSize",
-          "token": "32px"
-        },
-        {
-          "slot": "soldStamp.width",
-          "token": "42px"
-        },
-        {
-          "slot": "soldStamp.height",
-          "token": "15px"
-        },
-        {
-          "slot": "soldStamp.bottomOffset",
-          "token": "-5px"
-        },
-        {
-          "slot": "soldStamp.centerOffset",
-          "token": "-0.5px"
-        },
-        {
-          "slot": "soldStamp.asset",
-          "token": "packages/web/src/canonical/assets/sold-car-card/sold-stamp.png"
-        },
-        {
-          "slot": "soldStamp.objectFit",
-          "token": "cover"
-        },
-        {
-          "slot": "footer.border",
-          "token": "color.border.default"
-        },
-        {
-          "slot": "footer.borderWidth",
-          "token": "0.5px"
-        },
-        {
-          "slot": "footer.gap",
-          "token": "spacing.2"
-        },
-        {
-          "slot": "footer.paddingInline",
-          "token": "spacing.3"
-        },
-        {
-          "slot": "footer.paddingBlock",
-          "token": "spacing.2"
-        },
-        {
-          "slot": "buyer.color",
-          "token": "color.text.primary"
-        },
-        {
-          "slot": "buyer.typography",
-          "token": "label/label-3/regular"
-        },
-        {
-          "slot": "metadata.color",
-          "token": "color.text.secondary"
-        },
-        {
-          "slot": "metadata.typography",
-          "token": "label/label-4/regular"
-        },
-        {
-          "slot": "metadata.gap",
-          "token": "spacing.1"
-        },
-        {
-          "slot": "avatar.size",
-          "token": "Extra small"
-        },
-        {
-          "slot": "avatar.style",
-          "token": "Initials"
-        },
-        {
-          "slot": "avatar.type",
-          "token": "Status dot"
           "slot": "container.viewport.width",
           "token": "336px"
         },
@@ -11973,6 +12013,15 @@
       "allowedChildren": [
         "component.buttonGroup",
         "component.button"
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
       "canonicalId": "widget.staticSliderWidget",
       "canonicalName": "Static Slider Widget",
       "layer": "widget",

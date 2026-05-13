@@ -1,12 +1,12 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
 import {
   InlineButtonGroup,
   type InlineButtonGroupCount,
   type InlineButtonGroupItemAction,
   type InlineButtonGroupProps
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryCopy, StoryHeading, StoryPage } from "../storybook-shell";
 
@@ -111,7 +111,7 @@ function CountMatrixStory({ brand = "Cars24", label = "Label" }: Pick<InlineButt
   );
 }
 
-const inlineButtonGroupSourceCode = `import { InlineButtonGroup } from "@geist/web";
+const inlineButtonGroupSourceCode = `import { InlineButtonGroup } from "@turbo/web";
 
 <InlineButtonGroup numberOfButtons={3} />`;
 

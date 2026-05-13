@@ -1,13 +1,13 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
 import {
   Icon,
   Locator,
   Text,
   type LocatorProps,
   type AddressStatusType
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
@@ -114,7 +114,7 @@ function WidgetOptionsStory({ brand = "Cars24" }: Pick<LocatorProps, "brand">) {
   );
 }
 
-const locatorSourceCode = `import { Icon, Locator } from "@geist/web";
+const locatorSourceCode = `import { Icon, Locator } from "@turbo/web";
 
 <Locator
   brand="Cars24"

@@ -1,12 +1,12 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
 import {
   AppRatingBanner,
   AppRatingBannerPlaceholder,
   Text,
   type AppRatingBannerProps
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
@@ -115,7 +115,7 @@ function WidgetOptionsStory({ brand = "Cars24" }: Pick<AppRatingBannerProps, "br
   );
 }
 
-const appRatingBannerSourceCode = `import { AppRatingBanner } from "@geist/web";
+const appRatingBannerSourceCode = `import { AppRatingBanner } from "@turbo/web";
 
 export function Example() {
   return (

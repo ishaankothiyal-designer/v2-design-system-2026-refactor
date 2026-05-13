@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
-import { InvoiceItem, Text, type InvoiceItemProps, type InvoiceItemType } from "@geist/web";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
+import { InvoiceItem, Text, type InvoiceItemProps, type InvoiceItemType } from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
@@ -97,7 +97,7 @@ function VariantsStory({ brand = "Cars24" }: Pick<InvoiceItemStoryArgs, "brand">
   );
 }
 
-const invoiceItemSourceCode = `import { InvoiceItem } from "@geist/web";
+const invoiceItemSourceCode = `import { InvoiceItem } from "@turbo/web";
 
 <InvoiceItem
   brand="Cars24"

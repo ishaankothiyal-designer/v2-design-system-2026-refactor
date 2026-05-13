@@ -1,5 +1,5 @@
 import type { CSSProperties, HTMLAttributes } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
+import type { DisplayBrandId } from "@turbo/tokens";
 import { pxToRem } from "../theme";
 
 export interface HomeIndicatorProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {

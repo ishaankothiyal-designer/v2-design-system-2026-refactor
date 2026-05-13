@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
 import {
   Icon,
   Text,
@@ -8,7 +8,7 @@ import {
   WidgetEmptyStateImageSlot,
   type ButtonGroupButtonAction,
   type WidgetEmptyStateProps
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
@@ -142,7 +142,7 @@ function OptionsStory({ brand = "Cars24" }: Pick<WidgetEmptyStateProps, "brand">
   );
 }
 
-const widgetEmptyStateSourceCode = `import { Icon, WidgetEmptyState } from "@geist/web";
+const widgetEmptyStateSourceCode = `import { Icon, WidgetEmptyState } from "@turbo/web";
 
 <WidgetEmptyState
   brand="Cars24"

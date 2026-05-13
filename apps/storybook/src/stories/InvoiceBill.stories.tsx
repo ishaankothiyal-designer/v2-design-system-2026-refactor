@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
-import { Icon, InvoiceBill, InvoiceItem, Text, type InvoiceBillProps } from "@geist/web";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
+import { Icon, InvoiceBill, InvoiceItem, Text, type InvoiceBillProps } from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
@@ -151,7 +151,7 @@ function CompositionStory({ brand = "Cars24" }: Pick<InvoiceBillStoryArgs, "bran
   );
 }
 
-const invoiceBillSourceCode = `import { Icon, InvoiceBill } from "@geist/web";
+const invoiceBillSourceCode = `import { Icon, InvoiceBill } from "@turbo/web";
 
 <InvoiceBill
   brand="Cars24"

@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
-import { BrandCard, type BrandCardProps, type BrandCardState } from "@geist/web";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
+import { BrandCard, type BrandCardProps, type BrandCardState } from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryHeading, StoryPage } from "../storybook-shell";
 

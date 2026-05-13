@@ -7,8 +7,8 @@ import {
   type ReactNode,
   useInsertionEffect
 } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
-import { designSystemRegistry } from "@geist/contracts";
+import type { DisplayBrandId } from "@turbo/tokens";
+import { designSystemRegistry } from "@turbo/contracts";
 import { getRequiredThemeTokenValue, pxToRem } from "../theme";
 import { Icon } from "./icon";
 import { ensureStyleSheet, joinClassNames, toCssRule } from "./runtime-styles";

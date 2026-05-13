@@ -3979,8 +3979,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       description:
         "Fixed mobile bottom action surface with a vertical large button group and optional iOS home indicator.",
       composition: ["component.buttonGroup"],
-      allowedChildren: ["component.buttonGroup", "component.button"]
-      ],
+      allowedChildren: ["component.buttonGroup", "component.button"],
       themeScopes: ["cars24", "teambhp", "carinfo", "vehicleinfo"]
     },
     {

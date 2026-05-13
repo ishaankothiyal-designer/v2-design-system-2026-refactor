@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
 import {
   PaymentCardType,
   PaymentPricingFlow,
@@ -10,7 +10,7 @@ import {
   type PaymentCardTypeVariant,
   type PaymentPricingState,
   type PaymentStatus
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
@@ -138,7 +138,7 @@ function ReusableSubcomponentsStory({ brand = "Cars24" }: Pick<PaymentCardTypePr
   );
 }
 
-const paymentCardTypeSourceCode = `import { PaymentCardType } from "@geist/web";
+const paymentCardTypeSourceCode = `import { PaymentCardType } from "@turbo/web";
 
 <PaymentCardType
   brand="Cars24"

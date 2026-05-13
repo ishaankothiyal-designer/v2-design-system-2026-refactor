@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@geist/tokens";
-import { FixedActionBar, Icon, Text, type FixedActionBarProps } from "@geist/web";
+import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@turbo/tokens";
+import { FixedActionBar, Icon, Text, type FixedActionBarProps } from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
@@ -141,7 +141,7 @@ function WidgetOptionsStory({ brand = "Cars24" }: Pick<FixedActionBarProps, "bra
   );
 }
 
-const fixedActionBarSourceCode = `import { FixedActionBar, Icon } from "@geist/web";
+const fixedActionBarSourceCode = `import { FixedActionBar, Icon } from "@turbo/web";
 
 export function Example() {
   return (

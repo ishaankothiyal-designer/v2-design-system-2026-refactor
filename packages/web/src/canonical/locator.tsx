@@ -1,7 +1,7 @@
 import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
-import type { IconName } from "@geist/icons";
-import type { DisplayBrandId } from "@geist/tokens";
-import { designSystemRegistry } from "@geist/contracts";
+import type { IconName } from "@turbo/icons";
+import type { DisplayBrandId } from "@turbo/tokens";
+import { designSystemRegistry } from "@turbo/contracts";
 import { getRequiredThemeTokenValue, pxToRem } from "../theme";
 import { AddressStatus, type AddressStatusType } from "./address-status";
 import { Button, type ButtonProps } from "./button";

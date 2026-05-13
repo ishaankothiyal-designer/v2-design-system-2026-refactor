@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
 import {
   Icon,
   InternalPageHeader,
@@ -8,7 +8,7 @@ import {
   Text,
   type InternalPageHeaderProps,
   type InternalPageHeaderType
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
@@ -126,7 +126,7 @@ function OptionsStory({ brand = "Cars24" }: Pick<InternalPageHeaderProps, "brand
   );
 }
 
-const internalPageHeaderSourceCode = `import { InternalPageHeader } from "@geist/web";
+const internalPageHeaderSourceCode = `import { InternalPageHeader } from "@turbo/web";
 
 <InternalPageHeader
   brand="Cars24"

@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
 import {
   Icon,
   InvoiceItem,
@@ -13,7 +13,7 @@ import {
   getRequiredThemeTokenValue,
   type LoanCardNbfcProps,
   type LoanCardSupportingContentType
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
@@ -188,7 +188,7 @@ function CompositionStory({ brand = "Cars24" }: Pick<LoanCardNbfcStoryArgs, "bra
   );
 }
 
-const loanCardNbfcSourceCode = `import { LoanCardNbfc } from "@geist/web";
+const loanCardNbfcSourceCode = `import { LoanCardNbfc } from "@turbo/web";
 
 <LoanCardNbfc
   brand="Cars24"

@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
-import { DialogPopup, Icon, Text, type DialogPopupProps } from "@geist/web";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
+import { DialogPopup, Icon, Text, type DialogPopupProps } from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
@@ -136,7 +136,7 @@ function CtaVisibilityStory({ brand = "Cars24" }: Pick<DialogPopupStoryArgs, "br
   );
 }
 
-const dialogPopupSourceCode = `import { DialogPopup, Icon } from "@geist/web";
+const dialogPopupSourceCode = `import { DialogPopup, Icon } from "@turbo/web";
 
 export function Example() {
   return (
