@@ -113,6 +113,16 @@ export const radiusTokens = [
     "label": "Xl",
     "value": 16,
     "codeSyntax": "var(--radius-xl)"
+  },
+  {
+    "path": [
+      "radius",
+      "xxs"
+    ],
+    "key": "xxs",
+    "label": "Xxs",
+    "value": 4,
+    "codeSyntax": "var(--radius-xxs)"
   }
 ];
 
@@ -175,6 +185,11 @@ export const radiusBrandPreviews = [
         "key": "xl",
         "label": "Xl",
         "value": 16
+      },
+      {
+        "key": "xxs",
+        "label": "Xxs",
+        "value": 4
       }
     ]
   },
@@ -235,6 +250,11 @@ export const radiusBrandPreviews = [
         "key": "xl",
         "label": "Xl",
         "value": 16
+      },
+      {
+        "key": "xxs",
+        "label": "Xxs",
+        "value": 4
       }
     ]
   },
@@ -295,6 +315,11 @@ export const radiusBrandPreviews = [
         "key": "xl",
         "label": "Xl",
         "value": 8
+      },
+      {
+        "key": "xxs",
+        "label": "Xxs",
+        "value": 2
       }
     ]
   },
@@ -334,7 +359,7 @@ export const radiusBrandPreviews = [
       {
         "key": "md",
         "label": "Md",
-        "value": 12
+        "value": 16
       },
       {
         "key": "none",
@@ -355,6 +380,11 @@ export const radiusBrandPreviews = [
         "key": "xl",
         "label": "Xl",
         "value": 16
+      },
+      {
+        "key": "xxs",
+        "label": "Xxs",
+        "value": 4
       }
     ]
   }

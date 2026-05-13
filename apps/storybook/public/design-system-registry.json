@@ -645,6 +645,92 @@
       ]
     },
     {
+      "canonicalId": "component.actionBar",
+      "canonicalName": "Action Bar",
+      "layer": "component",
+      "status": "draft",
+      "platform": "web",
+      "figmaComponentName": "Action bar",
+      "description": "Mobile action container that composes immediate actions, progress, chat, payment, address, and assurance rows.",
+      "webExport": "@geist/web/canonical/action-bar",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "actionVariant",
+          "values": [
+            "Button Group",
+            "Loader",
+            "Chat Bar",
+            "Payment Strip",
+            "Payment Option",
+            "Payment Breakdown",
+            "Strike Amount",
+            "Progressive"
+          ]
+        },
+        {
+          "name": "buttonGroupType",
+          "values": [
+            "Vertical",
+            "Horizontal"
+          ]
+        },
+        {
+          "name": "divider",
+          "values": [
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "showHomeIndicator",
+          "values": [
+            "false",
+            "true"
+          ]
+        }
+      ],
+      "states": [
+        "rest"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "surface.background",
+          "token": "color.surface.canvas"
+        },
+        {
+          "slot": "divider.color",
+          "token": "component.divider.color.line"
+        },
+        {
+          "slot": "action.paddingBlock",
+          "token": "spacing.3"
+        },
+        {
+          "slot": "action.paddingInline",
+          "token": "spacing.4"
+        },
+        {
+          "slot": "buttonGroup.gap",
+          "token": "spacing.2"
+        },
+        {
+          "slot": "button.size.lg.height",
+          "token": "component.button.size.lg.height"
+        },
+        {
+          "slot": "button.typography.lg.fontSize",
+          "token": "component.button.typography.lg.fontSize"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
       "canonicalId": "component.linkButton",
       "canonicalName": "Link Button",
       "layer": "component",
@@ -1625,6 +1711,185 @@
         {
           "slot": "color.field.disabled.affix",
           "token": "component.textInput.color.field.disabled.affix"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
+      "canonicalId": "component.searchBar",
+      "canonicalName": "Search Bar",
+      "layer": "component",
+      "status": "draft",
+      "platform": "web",
+      "figmaComponentName": "Search bar",
+      "description": "Search input field that reuses the text-input token family with leading search or back affordances and preview states.",
+      "webExport": "@geist/web/canonical/search-bar",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "size",
+          "values": [
+            "Small",
+            "Large"
+          ]
+        },
+        {
+          "name": "color",
+          "values": [
+            "Solid White",
+            "Blue",
+            "Inverse"
+          ]
+        },
+        {
+          "name": "forceState",
+          "values": [
+            "Rest",
+            "Hover",
+            "Active",
+            "Error",
+            "Completed"
+          ]
+        },
+        {
+          "name": "showBackButton",
+          "values": [
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "showClearButton",
+          "values": [
+            "false",
+            "true"
+          ]
+        }
+      ],
+      "states": [
+        "rest",
+        "hover",
+        "active",
+        "error",
+        "completed"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "size.sm.height",
+          "token": "component.textInput.size.sm.height"
+        },
+        {
+          "slot": "size.lg.height",
+          "token": "component.phoneInput.size.lg.height"
+        },
+        {
+          "slot": "size.sm.fieldGap",
+          "token": "component.textInput.size.sm.fieldGap"
+        },
+        {
+          "slot": "size.lg.fieldGap",
+          "token": "component.textInput.size.lg.fieldGap"
+        },
+        {
+          "slot": "size.sm.paddingInline",
+          "token": "component.textInput.size.sm.fieldPaddingInline"
+        },
+        {
+          "slot": "size.lg.paddingInline",
+          "token": "component.phoneInput.size.lg.fieldPaddingInline"
+        },
+        {
+          "slot": "size.sm.paddingBlock",
+          "token": "component.textInput.size.sm.fieldPaddingBlock"
+        },
+        {
+          "slot": "size.lg.paddingBlock",
+          "token": "component.phoneInput.size.lg.fieldPaddingBlock"
+        },
+        {
+          "slot": "size.sm.radius",
+          "token": "radius.alt.md"
+        },
+        {
+          "slot": "size.lg.radius",
+          "token": "radius.alt.lg"
+        },
+        {
+          "slot": "icon.sm.size",
+          "token": "icon.size.md"
+        },
+        {
+          "slot": "icon.lg.size",
+          "token": "icon.size.lg"
+        },
+        {
+          "slot": "border.width",
+          "token": "component.textInput.border.width"
+        },
+        {
+          "slot": "typography.sm.fontSize",
+          "token": "component.textInput.typography.input.sm.fontSize"
+        },
+        {
+          "slot": "typography.sm.lineHeight",
+          "token": "component.textInput.typography.input.sm.lineHeight"
+        },
+        {
+          "slot": "typography.sm.letterSpacing",
+          "token": "component.textInput.typography.input.sm.letterSpacing"
+        },
+        {
+          "slot": "typography.lg.fontSize",
+          "token": "component.textInput.typography.input.lg.fontSize"
+        },
+        {
+          "slot": "typography.lg.lineHeight",
+          "token": "component.textInput.typography.input.lg.lineHeight"
+        },
+        {
+          "slot": "typography.lg.letterSpacing",
+          "token": "component.textInput.typography.input.lg.letterSpacing"
+        },
+        {
+          "slot": "color.rest.background",
+          "token": "component.textInput.color.field.rest.background"
+        },
+        {
+          "slot": "color.rest.border",
+          "token": "component.divider.color.line"
+        },
+        {
+          "slot": "color.rest.foreground",
+          "token": "component.textInput.color.helper.default.text"
+        },
+        {
+          "slot": "color.rest.icon",
+          "token": "component.textInput.color.field.rest.value"
+        },
+        {
+          "slot": "color.hover.background",
+          "token": "component.textInput.color.field.hover.background"
+        },
+        {
+          "slot": "color.hover.border",
+          "token": "component.textInput.color.field.hover.border"
+        },
+        {
+          "slot": "color.active.border",
+          "token": "component.textInput.color.field.active.border"
+        },
+        {
+          "slot": "color.error.border",
+          "token": "component.textInput.color.field.error.border"
+        },
+        {
+          "slot": "color.completed.foreground",
+          "token": "component.textInput.color.field.rest.value"
         }
       ],
       "themeScopes": [
@@ -6103,6 +6368,110 @@
       ]
     },
     {
+      "canonicalId": "component.brandCard",
+      "canonicalName": "Brand Card",
+      "layer": "component",
+      "status": "draft",
+      "platform": "web",
+      "figmaComponentName": "Brand card",
+      "description": "Compact selectable brand pill with a fixed 24px media slot and rest or pressed visual states.",
+      "webExport": "@geist/web/canonical/brand-card",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "state",
+          "values": [
+            "Rest",
+            "Pressed"
+          ]
+        }
+      ],
+      "states": [
+        "rest",
+        "pressed"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "container.height",
+          "token": "var(--cars24-misc-size-40)"
+        },
+        {
+          "slot": "container.gap",
+          "token": "var(--cars24-misc-gap-4)"
+        },
+        {
+          "slot": "container.paddingTop",
+          "token": "var(--cars24-misc-gap-4)"
+        },
+        {
+          "slot": "container.paddingRight",
+          "token": "var(--cars24-misc-gap-12)"
+        },
+        {
+          "slot": "container.paddingBottom",
+          "token": "var(--cars24-misc-gap-4)"
+        },
+        {
+          "slot": "container.paddingLeft",
+          "token": "var(--cars24-misc-gap-6)"
+        },
+        {
+          "slot": "container.radius",
+          "token": "var(--cars24-theme-radius-md)"
+        },
+        {
+          "slot": "container.borderWidth",
+          "token": "component.button.border.width"
+        },
+        {
+          "slot": "surface.rest.background",
+          "token": "color.surface.canvas"
+        },
+        {
+          "slot": "surface.rest.border",
+          "token": "component.phoneInput.color.field.rest.border"
+        },
+        {
+          "slot": "surface.pressed.background",
+          "token": "color.brand.primary.50"
+        },
+        {
+          "slot": "surface.pressed.border",
+          "token": "color.brand.primary.500"
+        },
+        {
+          "slot": "slot.size",
+          "token": "var(--cars24-misc-size-24)"
+        },
+        {
+          "slot": "slot.background",
+          "token": "var(--cars24-primitive-drive-pink-50)"
+        },
+        {
+          "slot": "slot.icon",
+          "token": "var(--cars24-primitive-drive-pink-400)"
+        },
+        {
+          "slot": "slot.radius",
+          "token": "var(--cars24-theme-radius-xxs)"
+        },
+        {
+          "slot": "label.color",
+          "token": "component.sectionHeader.color.light.title"
+        },
+        {
+          "slot": "label.typography",
+          "token": "heading/h5/semibold"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
       "canonicalId": "component.gridCard",
       "canonicalName": "Grid Card",
       "layer": "component",
@@ -6254,6 +6623,256 @@
         {
           "slot": "icon.size.4colPlus",
           "token": "var(--cars24-misc-size-20)"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
+      "canonicalId": "component.bentoRow",
+      "canonicalName": "Bento Row",
+      "layer": "component",
+      "status": "draft",
+      "platform": "web",
+      "figmaComponentName": ".Bento Row",
+      "description": "Fixed-width row composition that arranges two or three bento grid cards across portrait, square, and landscape sizes.",
+      "webExport": "@geist/web/canonical/bento-row",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "size",
+          "values": [
+            "Portrait",
+            "Square",
+            "Landscape"
+          ]
+        },
+        {
+          "name": "columns",
+          "values": [
+            "2",
+            "3"
+          ]
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "row.width",
+          "token": "336px"
+        },
+        {
+          "slot": "row.gap",
+          "token": "spacing.3"
+        },
+        {
+          "slot": "card.composition",
+          "token": "component.gridCard"
+        },
+        {
+          "slot": "card.slot.background",
+          "token": "var(--cars24-primitive-drive-pink-50)"
+        },
+        {
+          "slot": "card.slot.radius",
+          "token": "radius.xl"
+        },
+        {
+          "slot": "card.tag.background",
+          "token": "var(--cars24-semantic-bg-danger-base)"
+        },
+        {
+          "slot": "card.tag.foreground",
+          "token": "var(--cars24-semantic-text-primary-inverse)"
+        },
+        {
+          "slot": "card.tag.typography",
+          "token": "utility/label-4/medium"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
+      "canonicalId": "component.soldCarCard",
+      "canonicalName": "Sold Car Card",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": ".sold car card",
+      "description": "Sold-car summary card with sale price, model details, sold media stamp, buyer metadata, and avatar.",
+      "webExport": "@geist/web/canonical/sold-car-card",
+      "nativeExport": "",
+      "variants": [],
+      "states": [
+        "default"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "container.width",
+          "token": "264px"
+        },
+        {
+          "slot": "container.background",
+          "token": "color.surface.canvas"
+        },
+        {
+          "slot": "container.border",
+          "token": "color.border.default"
+        },
+        {
+          "slot": "container.borderWidth",
+          "token": "1px"
+        },
+        {
+          "slot": "container.radius",
+          "token": "radius.md"
+        },
+        {
+          "slot": "container.shadow",
+          "token": "component.switch.thumb.shadow"
+        },
+        {
+          "slot": "details.gap",
+          "token": "spacing.2"
+        },
+        {
+          "slot": "details.paddingInline",
+          "token": "spacing.3"
+        },
+        {
+          "slot": "details.paddingBlock",
+          "token": "spacing.4"
+        },
+        {
+          "slot": "price.color",
+          "token": "color.status.success"
+        },
+        {
+          "slot": "price.typography",
+          "token": "heading/h2/semibold"
+        },
+        {
+          "slot": "model.color",
+          "token": "color.text.primary"
+        },
+        {
+          "slot": "model.typography",
+          "token": "heading/h5/semibold"
+        },
+        {
+          "slot": "media.width",
+          "token": "77px"
+        },
+        {
+          "slot": "media.height",
+          "token": "52px"
+        },
+        {
+          "slot": "media.background",
+          "token": "color.brand.primary.50"
+        },
+        {
+          "slot": "media.radius",
+          "token": "radius.sm"
+        },
+        {
+          "slot": "media.icon",
+          "token": "square-plus-add-outline"
+        },
+        {
+          "slot": "media.iconColor",
+          "token": "color.brand.primary.500"
+        },
+        {
+          "slot": "media.iconSize",
+          "token": "32px"
+        },
+        {
+          "slot": "soldStamp.width",
+          "token": "42px"
+        },
+        {
+          "slot": "soldStamp.height",
+          "token": "15px"
+        },
+        {
+          "slot": "soldStamp.bottomOffset",
+          "token": "-5px"
+        },
+        {
+          "slot": "soldStamp.centerOffset",
+          "token": "-0.5px"
+        },
+        {
+          "slot": "soldStamp.asset",
+          "token": "packages/web/src/canonical/assets/sold-car-card/sold-stamp.png"
+        },
+        {
+          "slot": "soldStamp.objectFit",
+          "token": "cover"
+        },
+        {
+          "slot": "footer.border",
+          "token": "color.border.default"
+        },
+        {
+          "slot": "footer.borderWidth",
+          "token": "0.5px"
+        },
+        {
+          "slot": "footer.gap",
+          "token": "spacing.2"
+        },
+        {
+          "slot": "footer.paddingInline",
+          "token": "spacing.3"
+        },
+        {
+          "slot": "footer.paddingBlock",
+          "token": "spacing.2"
+        },
+        {
+          "slot": "buyer.color",
+          "token": "color.text.primary"
+        },
+        {
+          "slot": "buyer.typography",
+          "token": "label/label-3/regular"
+        },
+        {
+          "slot": "metadata.color",
+          "token": "color.text.secondary"
+        },
+        {
+          "slot": "metadata.typography",
+          "token": "label/label-4/regular"
+        },
+        {
+          "slot": "metadata.gap",
+          "token": "spacing.1"
+        },
+        {
+          "slot": "avatar.size",
+          "token": "Extra small"
+        },
+        {
+          "slot": "avatar.style",
+          "token": "Initials"
+        },
+        {
+          "slot": "avatar.type",
+          "token": "Status dot"
         }
       ],
       "themeScopes": [
@@ -6929,6 +7548,97 @@
       ]
     },
     {
+      "canonicalId": "component.addressStatus",
+      "canonicalName": "Address Status",
+      "layer": "component",
+      "status": "draft",
+      "platform": "web",
+      "figmaComponentName": ".address status",
+      "description": "Compact Locator status strip that communicates default inspection messaging or ANS location unavailability.",
+      "webExport": "@geist/web/canonical/address-status",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "type",
+          "values": [
+            "ANS",
+            "Default"
+          ]
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "container.width",
+          "token": "360px"
+        },
+        {
+          "slot": "container.paddingInline",
+          "token": "var(--cars24-misc-size-12)"
+        },
+        {
+          "slot": "container.paddingBlock",
+          "token": "var(--cars24-misc-size-8)"
+        },
+        {
+          "slot": "container.gap",
+          "token": "var(--cars24-misc-gap-4)"
+        },
+        {
+          "slot": "type.default.background",
+          "token": "var(--cars24-semantic-bg-brand-subtler)"
+        },
+        {
+          "slot": "type.default.text",
+          "token": "var(--cars24-semantic-text-primary)"
+        },
+        {
+          "slot": "type.ans.background",
+          "token": "var(--cars24-semantic-bg-danger-subtler)"
+        },
+        {
+          "slot": "type.ans.text",
+          "token": "var(--cars24-semantic-text-danger-base)"
+        },
+        {
+          "slot": "type.ans.icon",
+          "token": "var(--cars24-semantic-icon-danger-base)"
+        },
+        {
+          "slot": "icon.ans.size",
+          "token": "12px"
+        },
+        {
+          "slot": "typography.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "typography.fontWeight",
+          "token": "typography.fontWeight.medium"
+        },
+        {
+          "slot": "typography.fontSize",
+          "token": "var(--cars24-typography-size-utility-label-3)"
+        },
+        {
+          "slot": "typography.lineHeight",
+          "token": "var(--cars24-typography-line-height-utility-label-3)"
+        },
+        {
+          "slot": "typography.letterSpacing",
+          "token": "var(--cars24-typography-letter-spacing-utility-label-3)"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
       "canonicalId": "component.sectionHeader",
       "canonicalName": "Section Header",
       "layer": "component",
@@ -7192,6 +7902,448 @@
         {
           "slot": "color.tag.foreground",
           "token": "component.sectionHeader.color.tag.foreground"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
+      "canonicalId": "component.paymentCardType",
+      "canonicalName": "Payment Card Type",
+      "layer": "component",
+      "status": "draft",
+      "platform": "web",
+      "figmaComponentName": ".Payment card type",
+      "description": "Reusable NBFC payment row with leading icon, title, optional badge and description, amount, status badge, and List box/List card presentations.",
+      "webExport": "@geist/web/canonical/payment-card",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "variant",
+          "values": [
+            "List box",
+            "List card"
+          ]
+        },
+        {
+          "name": "pricingState",
+          "values": [
+            "Default",
+            "Positive",
+            "Negative"
+          ]
+        },
+        {
+          "name": "status",
+          "values": [
+            "Paid",
+            "Pending",
+            "Failed"
+          ]
+        },
+        {
+          "name": "showBadge",
+          "values": [
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "showDescription",
+          "values": [
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "showDivider",
+          "values": [
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "showLeadingIcon",
+          "values": [
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "showStatus",
+          "values": [
+            "false",
+            "true"
+          ]
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "container.width",
+          "token": "336px"
+        },
+        {
+          "slot": "container.background",
+          "token": "var(--cars24-semantic-bg-primary)"
+        },
+        {
+          "slot": "container.border",
+          "token": "var(--cars24-semantic-border-primary)"
+        },
+        {
+          "slot": "container.borderWidth",
+          "token": "var(--cars24-misc-stroke-regular)"
+        },
+        {
+          "slot": "container.radius",
+          "token": "var(--cars24-theme-radius-md)"
+        },
+        {
+          "slot": "layout.row.gap",
+          "token": "var(--cars24-misc-gap-8)"
+        },
+        {
+          "slot": "layout.row.paddingBlock",
+          "token": "var(--cars24-misc-gap-12)"
+        },
+        {
+          "slot": "layout.card.padding",
+          "token": "var(--cars24-misc-gap-12)"
+        },
+        {
+          "slot": "layout.text.gap",
+          "token": "var(--cars24-misc-gap-4)"
+        },
+        {
+          "slot": "layout.amount.gap",
+          "token": "var(--cars24-misc-gap-2)"
+        },
+        {
+          "slot": "icon.tile.background",
+          "token": "var(--cars24-semantic-bg-brand-subtler)"
+        },
+        {
+          "slot": "icon.tile.radius",
+          "token": "9px"
+        },
+        {
+          "slot": "icon.tile.size",
+          "token": "40px"
+        },
+        {
+          "slot": "icon.glyph",
+          "token": "full-screen-focus-outline"
+        },
+        {
+          "slot": "icon.glyph.size",
+          "token": "var(--cars24-misc-size-20)"
+        },
+        {
+          "slot": "icon.glyph.color",
+          "token": "var(--cars24-semantic-icon-brand-base)"
+        },
+        {
+          "slot": "typography.title.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "typography.title.fontWeight",
+          "token": "typography.fontWeight.semibold"
+        },
+        {
+          "slot": "typography.title.fontSize",
+          "token": "var(--cars24-typography-size-headline-h4)"
+        },
+        {
+          "slot": "typography.title.lineHeight",
+          "token": "var(--cars24-typography-line-height-headline-h4)"
+        },
+        {
+          "slot": "typography.title.letterSpacing",
+          "token": "var(--cars24-typography-letter-spacing-headline-h4)"
+        },
+        {
+          "slot": "typography.description.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "typography.description.fontWeight",
+          "token": "typography.fontWeight.regular"
+        },
+        {
+          "slot": "typography.description.fontSize",
+          "token": "var(--cars24-typography-size-utility-label-3)"
+        },
+        {
+          "slot": "typography.description.lineHeight",
+          "token": "var(--cars24-typography-line-height-utility-label-3)"
+        },
+        {
+          "slot": "typography.description.letterSpacing",
+          "token": "var(--cars24-typography-letter-spacing-utility-label-3)"
+        },
+        {
+          "slot": "typography.amount.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "typography.amount.fontWeight",
+          "token": "typography.fontWeight.semibold"
+        },
+        {
+          "slot": "typography.amount.fontSize",
+          "token": "var(--cars24-typography-size-headline-h4)"
+        },
+        {
+          "slot": "typography.amount.lineHeight",
+          "token": "var(--cars24-typography-line-height-headline-h4)"
+        },
+        {
+          "slot": "typography.amount.letterSpacing",
+          "token": "var(--cars24-typography-letter-spacing-headline-h4)"
+        },
+        {
+          "slot": "color.title",
+          "token": "var(--cars24-semantic-text-primary)"
+        },
+        {
+          "slot": "color.description",
+          "token": "var(--cars24-semantic-text-secondary)"
+        },
+        {
+          "slot": "color.amount.default",
+          "token": "var(--cars24-semantic-text-primary)"
+        },
+        {
+          "slot": "color.amount.positive",
+          "token": "var(--cars24-semantic-text-success-base)"
+        },
+        {
+          "slot": "color.amount.negative",
+          "token": "var(--cars24-semantic-text-danger-base)"
+        },
+        {
+          "slot": "badge.inline",
+          "token": "component.badge"
+        },
+        {
+          "slot": "badge.status",
+          "token": "component.badge"
+        },
+        {
+          "slot": "divider",
+          "token": "component.divider"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
+      "canonicalId": "component.invoiceItem",
+      "canonicalName": "Invoice Item",
+      "layer": "component",
+      "status": "draft",
+      "platform": "web",
+      "figmaComponentName": ".invoice item",
+      "description": "Invoice row component for bill items, section headers, and total footer rows with optional badges and pricing affordances.",
+      "webExport": "@geist/web/canonical/invoice-item",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "type",
+          "values": [
+            "Bill item",
+            "Header",
+            "Footer text"
+          ]
+        },
+        {
+          "name": "clickableItem",
+          "values": [
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "showDescription",
+          "values": [
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "showInfoIcon",
+          "values": [
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "showPricing",
+          "values": [
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "showStrikeOutPrice",
+          "values": [
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "showBadge",
+          "values": [
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "showRefundableBadge",
+          "values": [
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "showFreeBadge",
+          "values": [
+            "false",
+            "true"
+          ]
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "layout.item.gap",
+          "token": "var(--cars24-misc-gap-24)"
+        },
+        {
+          "slot": "layout.content.gap",
+          "token": "var(--cars24-misc-gap-2)"
+        },
+        {
+          "slot": "layout.inline.gap",
+          "token": "var(--cars24-misc-gap-4)"
+        },
+        {
+          "slot": "layout.header.gap",
+          "token": "var(--cars24-misc-gap-8)"
+        },
+        {
+          "slot": "layout.header.paddingBottom",
+          "token": "var(--lego-spacing-4)"
+        },
+        {
+          "slot": "typography.item.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "typography.item.fontWeight",
+          "token": "typography.fontWeight.medium"
+        },
+        {
+          "slot": "typography.item.fontSize",
+          "token": "var(--cars24-typography-size-utility-label-2)"
+        },
+        {
+          "slot": "typography.item.lineHeight",
+          "token": "var(--cars24-typography-line-height-utility-label-2)"
+        },
+        {
+          "slot": "typography.item.letterSpacing",
+          "token": "var(--cars24-typography-letter-spacing-utility-label-2)"
+        },
+        {
+          "slot": "typography.description.fontWeight",
+          "token": "typography.fontWeight.regular"
+        },
+        {
+          "slot": "typography.description.fontSize",
+          "token": "var(--cars24-typography-size-utility-label-4)"
+        },
+        {
+          "slot": "typography.description.lineHeight",
+          "token": "var(--cars24-typography-line-height-utility-label-4)"
+        },
+        {
+          "slot": "typography.description.letterSpacing",
+          "token": "var(--cars24-typography-letter-spacing-utility-label-4)"
+        },
+        {
+          "slot": "typography.total.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "typography.total.fontWeight",
+          "token": "typography.fontWeight.semibold"
+        },
+        {
+          "slot": "typography.total.fontSize",
+          "token": "var(--cars24-typography-size-headline-h4)"
+        },
+        {
+          "slot": "typography.total.lineHeight",
+          "token": "var(--cars24-typography-line-height-headline-h4)"
+        },
+        {
+          "slot": "typography.total.letterSpacing",
+          "token": "var(--cars24-typography-letter-spacing-headline-h4)"
+        },
+        {
+          "slot": "color.item.text",
+          "token": "var(--cars24-semantic-text-secondary)"
+        },
+        {
+          "slot": "color.item.description",
+          "token": "var(--cars24-semantic-text-secondary)"
+        },
+        {
+          "slot": "color.item.strike",
+          "token": "var(--cars24-semantic-text-tertiary)"
+        },
+        {
+          "slot": "color.total.text",
+          "token": "var(--cars24-semantic-text-primary)"
+        },
+        {
+          "slot": "icon.info",
+          "token": "info-outline"
+        },
+        {
+          "slot": "badge.success.low",
+          "token": "component.badge"
+        },
+        {
+          "slot": "divider.header",
+          "token": "component.divider"
+        },
+        {
+          "slot": "divider.header.thickness",
+          "token": "Regular"
+        },
+        {
+          "slot": "divider.footer",
+          "token": "component.divider"
+        },
+        {
+          "slot": "divider.footer.thickness",
+          "token": "Regular"
         }
       ],
       "themeScopes": [
@@ -7801,6 +8953,555 @@
         "carinfo",
         "vehicleinfo"
       ]
+    },
+    {
+      "canonicalId": "component.webQuoteBottomInfo",
+      "canonicalName": "Web Quote Bottom Info",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": ".bottom-info",
+      "description": "Bottom info sub-component for Web Quote Card with link-button and description variants.",
+      "webExport": "@geist/web/canonical/web-quote-card",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "type",
+          "values": [
+            "Link Button",
+            "Description"
+          ]
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "container.width",
+          "token": "component.webQuoteCard.layout.width"
+        },
+        {
+          "slot": "container.divider",
+          "token": "component.webQuoteCard.color.divider"
+        },
+        {
+          "slot": "container.dividerWidth",
+          "token": "component.webQuoteCard.border.dividerWidth"
+        },
+        {
+          "slot": "link.background",
+          "token": "component.webQuoteCard.color.background"
+        },
+        {
+          "slot": "link.height",
+          "token": "component.webQuoteCard.layout.bottomLinkHeight"
+        },
+        {
+          "slot": "link.paddingInline",
+          "token": "component.webQuoteCard.layout.bottomPaddingInline"
+        },
+        {
+          "slot": "link.paddingBlock",
+          "token": "component.webQuoteCard.layout.bottomLinkPaddingBlock"
+        },
+        {
+          "slot": "link.action",
+          "token": "component.linkButton.color.light.brand.rest"
+        },
+        {
+          "slot": "description.background",
+          "token": "component.webQuoteCard.color.descriptionBackground"
+        },
+        {
+          "slot": "description.foreground",
+          "token": "component.webQuoteCard.color.highlight"
+        },
+        {
+          "slot": "description.height",
+          "token": "component.webQuoteCard.layout.bottomDescriptionHeight"
+        },
+        {
+          "slot": "description.paddingInline",
+          "token": "component.webQuoteCard.layout.bottomPaddingInline"
+        },
+        {
+          "slot": "description.paddingBlock",
+          "token": "component.webQuoteCard.layout.bottomDescriptionPaddingBlock"
+        },
+        {
+          "slot": "description.typography.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "description.typography.fontWeight",
+          "token": "typography.fontWeight.regular"
+        },
+        {
+          "slot": "description.typography.fontSize",
+          "token": "component.webQuoteCard.typography.description.fontSize"
+        },
+        {
+          "slot": "description.typography.lineHeight",
+          "token": "component.webQuoteCard.typography.description.lineHeight"
+        },
+        {
+          "slot": "description.typography.letterSpacing",
+          "token": "component.webQuoteCard.typography.description.letterSpacing"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
+      "canonicalId": "component.webQuoteCard",
+      "canonicalName": "Web Quote Card",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": ".Web quote component",
+      "description": "Quote card surface with price visible and hidden variants plus Web Quote Bottom Info.",
+      "webExport": "@geist/web/canonical/web-quote-card",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "priceVisible",
+          "values": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "bottomInfoType",
+          "values": [
+            "Link Button",
+            "Description"
+          ]
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "container.width",
+          "token": "component.webQuoteCard.layout.width"
+        },
+        {
+          "slot": "container.background",
+          "token": "component.webQuoteCard.color.background"
+        },
+        {
+          "slot": "container.border",
+          "token": "component.webQuoteCard.color.border"
+        },
+        {
+          "slot": "container.borderWidth",
+          "token": "component.webQuoteCard.border.width"
+        },
+        {
+          "slot": "container.radius",
+          "token": "radius.xl"
+        },
+        {
+          "slot": "container.shadow",
+          "token": "component.webQuoteCard.shadow.container"
+        },
+        {
+          "slot": "top.height",
+          "token": "component.webQuoteCard.layout.topHeight"
+        },
+        {
+          "slot": "top.padding",
+          "token": "component.webQuoteCard.layout.topPadding"
+        },
+        {
+          "slot": "top.gap",
+          "token": "component.webQuoteCard.layout.contentGap"
+        },
+        {
+          "slot": "highlight.gap",
+          "token": "component.webQuoteCard.layout.highlightGap"
+        },
+        {
+          "slot": "highlight.iconSize",
+          "token": "component.webQuoteCard.size.highlightIcon"
+        },
+        {
+          "slot": "highlight.labelMaxWidth",
+          "token": "component.webQuoteCard.layout.highlightLabelMaxWidth"
+        },
+        {
+          "slot": "highlight.color",
+          "token": "component.webQuoteCard.color.highlight"
+        },
+        {
+          "slot": "highlight.typography.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "highlight.typography.fontWeight",
+          "token": "typography.fontWeight.regular"
+        },
+        {
+          "slot": "highlight.typography.fontSize",
+          "token": "component.webQuoteCard.typography.highlight.fontSize"
+        },
+        {
+          "slot": "highlight.typography.lineHeight",
+          "token": "component.webQuoteCard.typography.highlight.lineHeight"
+        },
+        {
+          "slot": "highlight.typography.letterSpacing",
+          "token": "component.webQuoteCard.typography.highlight.letterSpacing"
+        },
+        {
+          "slot": "subject.gap",
+          "token": "component.webQuoteCard.layout.subjectGap"
+        },
+        {
+          "slot": "amount.color",
+          "token": "component.webQuoteCard.color.title"
+        },
+        {
+          "slot": "amount.typography.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "amount.typography.fontWeight",
+          "token": "typography.fontWeight.bold"
+        },
+        {
+          "slot": "amount.typography.fontSize",
+          "token": "component.webQuoteCard.typography.amount.fontSize"
+        },
+        {
+          "slot": "amount.typography.lineHeight",
+          "token": "component.webQuoteCard.typography.amount.lineHeight"
+        },
+        {
+          "slot": "amount.typography.letterSpacing",
+          "token": "component.webQuoteCard.typography.amount.letterSpacing"
+        },
+        {
+          "slot": "hiddenAmount.digitSize",
+          "token": "component.webQuoteCard.size.hiddenDigit"
+        },
+        {
+          "slot": "hiddenAmount.gap",
+          "token": "component.webQuoteCard.layout.hiddenDigitGap"
+        },
+        {
+          "slot": "badge.background",
+          "token": "component.webQuoteCard.color.badgeBackground"
+        },
+        {
+          "slot": "badge.foreground",
+          "token": "component.webQuoteCard.color.badgeText"
+        },
+        {
+          "slot": "badge.radius",
+          "token": "radius.alt.xs"
+        },
+        {
+          "slot": "badge.typography",
+          "token": "component.badge.typography.xs"
+        },
+        {
+          "slot": "bottom.divider",
+          "token": "component.webQuoteCard.color.divider"
+        },
+        {
+          "slot": "bottom.dividerWidth",
+          "token": "component.webQuoteCard.border.dividerWidth"
+        },
+        {
+          "slot": "bottom.link.height",
+          "token": "component.webQuoteCard.layout.bottomLinkHeight"
+        },
+        {
+          "slot": "bottom.link.paddingInline",
+          "token": "component.webQuoteCard.layout.bottomPaddingInline"
+        },
+        {
+          "slot": "bottom.link.paddingBlock",
+          "token": "component.webQuoteCard.layout.bottomLinkPaddingBlock"
+        },
+        {
+          "slot": "bottom.link.action",
+          "token": "component.linkButton.color.light.brand.rest"
+        },
+        {
+          "slot": "bottom.description.background",
+          "token": "component.webQuoteCard.color.descriptionBackground"
+        },
+        {
+          "slot": "bottom.description.height",
+          "token": "component.webQuoteCard.layout.bottomDescriptionHeight"
+        },
+        {
+          "slot": "bottom.description.paddingInline",
+          "token": "component.webQuoteCard.layout.bottomPaddingInline"
+        },
+        {
+          "slot": "bottom.description.paddingBlock",
+          "token": "component.webQuoteCard.layout.bottomDescriptionPaddingBlock"
+        },
+        {
+          "slot": "bottom.description.typography.fontSize",
+          "token": "component.webQuoteCard.typography.description.fontSize"
+        },
+        {
+          "slot": "bottom.description.typography.lineHeight",
+          "token": "component.webQuoteCard.typography.description.lineHeight"
+        },
+        {
+          "slot": "bottom.description.typography.letterSpacing",
+          "token": "component.webQuoteCard.typography.description.letterSpacing"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
+      "canonicalId": "component.testimonialCard",
+      "canonicalName": "Testimonial Card",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": "Testimonial card",
+      "description": "Review card with customer bottom bar, optional title, review text, rating lockup, and review source metadata.",
+      "webExport": "@geist/web/canonical/testimonial-card",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "size",
+          "values": [
+            "Large",
+            "Small"
+          ]
+        },
+        {
+          "name": "showTitle",
+          "values": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "showRating",
+          "values": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "showSource",
+          "values": [
+            "true",
+            "false"
+          ]
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "container.width.large",
+          "token": "component.testimonialCard.layout.card.width.large"
+        },
+        {
+          "slot": "container.width.small",
+          "token": "component.testimonialCard.layout.card.width.small"
+        },
+        {
+          "slot": "container.height.large",
+          "token": "component.testimonialCard.layout.card.height.large"
+        },
+        {
+          "slot": "container.height.titleLarge",
+          "token": "component.testimonialCard.layout.card.height.titleLarge"
+        },
+        {
+          "slot": "container.height.small",
+          "token": "component.testimonialCard.layout.card.height.small"
+        },
+        {
+          "slot": "container.height.titleSmall",
+          "token": "component.testimonialCard.layout.card.height.titleSmall"
+        },
+        {
+          "slot": "container.background",
+          "token": "component.testimonialCard.color.background"
+        },
+        {
+          "slot": "container.border",
+          "token": "component.testimonialCard.color.border"
+        },
+        {
+          "slot": "container.borderWidth",
+          "token": "component.testimonialCard.border.width"
+        },
+        {
+          "slot": "container.radius.large",
+          "token": "radius.xl"
+        },
+        {
+          "slot": "container.radius.small",
+          "token": "radius.md"
+        },
+        {
+          "slot": "container.padding.large",
+          "token": "component.testimonialCard.layout.card.padding.large"
+        },
+        {
+          "slot": "container.padding.small",
+          "token": "component.testimonialCard.layout.card.padding.small"
+        },
+        {
+          "slot": "container.gap.large",
+          "token": "component.testimonialCard.layout.card.gap.large"
+        },
+        {
+          "slot": "container.gap.small",
+          "token": "component.testimonialCard.layout.card.gap.small"
+        },
+        {
+          "slot": "container.gap.titleSmall",
+          "token": "component.testimonialCard.layout.card.gap.titleSmall"
+        },
+        {
+          "slot": "bottomBar.width.center",
+          "token": "component.testimonialCard.layout.bottomBar.width.center"
+        },
+        {
+          "slot": "bottomBar.width.sideways",
+          "token": "component.testimonialCard.layout.bottomBar.width.sideways"
+        },
+        {
+          "slot": "bottomBar.gap.center",
+          "token": "component.testimonialCard.layout.bottomBar.gap.center"
+        },
+        {
+          "slot": "bottomBar.gap.sideways",
+          "token": "component.testimonialCard.layout.bottomBar.gap.sideways"
+        },
+        {
+          "slot": "bottomBar.userInfo.gap",
+          "token": "component.testimonialCard.layout.bottomBar.gap.userInfo"
+        },
+        {
+          "slot": "bottomBar.details.gap",
+          "token": "component.testimonialCard.layout.bottomBar.gap.details"
+        },
+        {
+          "slot": "bottomBar.name.color",
+          "token": "component.testimonialCard.color.title"
+        },
+        {
+          "slot": "bottomBar.name.large.typography",
+          "token": "component.testimonialCard.typography.name.large"
+        },
+        {
+          "slot": "bottomBar.name.small.typography",
+          "token": "component.testimonialCard.typography.name.small"
+        },
+        {
+          "slot": "bottomBar.details.color",
+          "token": "component.testimonialCard.color.metadata"
+        },
+        {
+          "slot": "bottomBar.details.large.typography",
+          "token": "component.testimonialCard.typography.details.large"
+        },
+        {
+          "slot": "bottomBar.details.small.typography",
+          "token": "component.testimonialCard.typography.details.small"
+        },
+        {
+          "slot": "bottomBar.avatar.large.size",
+          "token": "Small"
+        },
+        {
+          "slot": "bottomBar.avatar.small.size",
+          "token": "Extra small"
+        },
+        {
+          "slot": "bottomBar.avatar.style",
+          "token": "Image"
+        },
+        {
+          "slot": "bottomBar.avatar.type",
+          "token": "Status dot"
+        },
+        {
+          "slot": "title.color",
+          "token": "component.testimonialCard.color.title"
+        },
+        {
+          "slot": "title.typography",
+          "token": "component.testimonialCard.typography.title"
+        },
+        {
+          "slot": "description.color.default",
+          "token": "component.testimonialCard.color.body"
+        },
+        {
+          "slot": "description.color.withTitle",
+          "token": "component.testimonialCard.color.metadata"
+        },
+        {
+          "slot": "description.large.typography",
+          "token": "component.testimonialCard.typography.description.large"
+        },
+        {
+          "slot": "description.titleLarge.typography",
+          "token": "component.testimonialCard.typography.description.titleLarge"
+        },
+        {
+          "slot": "description.small.typography",
+          "token": "component.testimonialCard.typography.description.small"
+        },
+        {
+          "slot": "description.titleSmall.typography",
+          "token": "component.testimonialCard.typography.description.titleSmall"
+        },
+        {
+          "slot": "rating.lockup",
+          "token": "component.ratings"
+        },
+        {
+          "slot": "rating.gap",
+          "token": "component.testimonialCard.layout.rating.gap"
+        },
+        {
+          "slot": "source.color",
+          "token": "component.testimonialCard.color.source"
+        },
+        {
+          "slot": "source.large.typography",
+          "token": "component.testimonialCard.typography.source.large"
+        },
+        {
+          "slot": "source.small.typography",
+          "token": "component.testimonialCard.typography.source.small"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
     }
   ],
   "widgets": [
@@ -7847,6 +9548,283 @@
       ],
       "allowedChildren": [
         "component.gridCard"
+      ]
+    },
+    {
+      "canonicalId": "widget.gridBento",
+      "canonicalName": "Grid Bento",
+      "layer": "widget",
+      "status": "draft",
+      "platform": "web",
+      "figmaComponentName": "Bento Grid",
+      "description": "Bento discovery widget that packages a section header, stacked bento rows, and one primary CTA in light and inverse presentations.",
+      "composition": [
+        "component.sectionHeader",
+        "component.bentoRow",
+        "component.gridCard",
+        "component.buttonGroup"
+      ],
+      "allowedChildren": [
+        "component.bentoRow",
+        "component.gridCard"
+      ]
+    },
+    {
+      "canonicalId": "widget.brandCardGroup",
+      "canonicalName": "Brand Card Group",
+      "layer": "widget",
+      "status": "draft",
+      "platform": "web",
+      "figmaComponentName": "Brand card group",
+      "description": "Brand discovery widget with optional section header, search field, horizontally scrollable brand-card rows, and bottom CTA.",
+      "composition": [
+        "component.sectionHeader",
+        "component.searchBar",
+        "component.brandCard",
+        "component.buttonGroup"
+      ],
+      "allowedChildren": [
+        "component.brandCard"
+      ]
+    },
+    {
+      "canonicalId": "widget.soldCarCarousel",
+      "canonicalName": "Sold Car Carousel",
+      "layer": "widget",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": "Sold car carousel",
+      "description": "Sold-car carousel widget with background, Header, and Bottom CTA properties, packaging a section header, horizontally scrollable sold-car cards, and an optional primary CTA.",
+      "composition": [
+        "component.sectionHeader",
+        "component.soldCarCard",
+        "component.buttonGroup"
+      ],
+      "allowedChildren": [
+        "component.soldCarCard"
+      ]
+    },
+    {
+      "canonicalId": "widget.webQuoteWidget",
+      "canonicalName": "Web Quote Widget",
+      "layer": "widget",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": "Web quote widget",
+      "description": "Web quote widget that composes a section header, web quote card, and optional primary CTA.",
+      "composition": [
+        "component.sectionHeader",
+        "component.webQuoteCard",
+        "component.buttonGroup"
+      ],
+      "allowedChildren": [
+        "component.webQuoteCard"
+      ]
+    },
+    {
+      "canonicalId": "widget.appRatingBanner",
+      "canonicalName": "App Rating Banner",
+      "layer": "widget",
+      "status": "draft",
+      "platform": "web",
+      "figmaComponentName": "App rating banner",
+      "description": "Compact app-download rating banner with a media slot, optional overlay widget slot, title/description copy, and store-logo CTA row.",
+      "composition": [],
+      "allowedChildren": []
+    },
+    {
+      "canonicalId": "widget.emptyState",
+      "canonicalName": "Empty State Widget",
+      "layer": "widget",
+      "status": "draft",
+      "platform": "web",
+      "figmaComponentName": "Widget / Empty State",
+      "description": "Compact empty-state widget with a placeholder image slot, title/description copy, dynamic label, and vertical large CTA group.",
+      "composition": [
+        "component.buttonGroup"
+      ],
+      "allowedChildren": [
+        "component.buttonGroup",
+        "component.button"
+      ]
+    },
+    {
+      "canonicalId": "widget.internalPageHeader",
+      "canonicalName": "Internal Page Header",
+      "layer": "widget",
+      "status": "draft",
+      "platform": "web",
+      "figmaComponentName": "Internal Page Header",
+      "description": "Compact internal page header with heading copy, optional location-style description, and either a reusable image slot or extra-small primary action.",
+      "composition": [
+        "component.button"
+      ],
+      "allowedChildren": [
+        "component.button"
+      ]
+    },
+    {
+      "canonicalId": "widget.paymentCard",
+      "canonicalName": "Payment Card",
+      "layer": "widget",
+      "status": "draft",
+      "platform": "web",
+      "figmaComponentName": "Payment card",
+      "description": "Payment summary widget with optional section header and CTA, composing repeated payment rows with amount and paid status.",
+      "composition": [
+        "component.sectionHeader",
+        "component.paymentCardType",
+        "component.badge",
+        "component.divider",
+        "component.buttonGroup"
+      ],
+      "allowedChildren": [
+        "component.paymentCardType",
+        "component.badge",
+        "component.divider",
+        "component.button"
+      ]
+    },
+    {
+      "canonicalId": "widget.invoiceBill",
+      "canonicalName": "Invoice / Bill",
+      "layer": "widget",
+      "status": "draft",
+      "platform": "web",
+      "figmaComponentName": "Invoice",
+      "description": "Invoice and bill summary widget with section heading, grouped invoice items, divider treatments, total footer, offer strip, and primary CTA.",
+      "composition": [
+        "component.invoiceItem",
+        "component.divider",
+        "component.badge",
+        "component.buttonGroup"
+      ],
+      "allowedChildren": [
+        "component.invoiceItem",
+        "component.divider",
+        "component.badge",
+        "component.button"
+      ]
+    },
+    {
+      "canonicalId": "widget.loanCardNbfc",
+      "canonicalName": "Loan Card (NBFC)",
+      "layer": "widget",
+      "status": "draft",
+      "platform": "web",
+      "figmaComponentName": "Loan card (NBFC)",
+      "description": "Compact NBFC loan summary card with media slot, vehicle registration supporting content, trailing icon action, dashed divider, and invoice-style amount rows.",
+      "composition": [
+        "component.iconButton",
+        "component.divider",
+        "component.invoiceItem"
+      ],
+      "allowedChildren": [
+        "component.iconButton",
+        "component.divider",
+        "component.invoiceItem"
+      ]
+    },
+    {
+      "canonicalId": "widget.dialogPopup",
+      "canonicalName": "Dialog Popup",
+      "layer": "widget",
+      "status": "draft",
+      "platform": "web",
+      "figmaComponentName": "Dialog",
+      "description": "Mobile dialog popup overlay with optional header, content slot, close affordance, and horizontal bottom CTA tray.",
+      "composition": [
+        "component.iconButton",
+        "component.actionBar"
+      ],
+      "allowedChildren": [
+        "component.iconButton",
+        "component.actionBar",
+        "component.button"
+      ]
+    },
+    {
+      "canonicalId": "widget.inlineButtonGroup",
+      "canonicalName": "Inline Button Group",
+      "layer": "widget",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": "Inline buttons",
+      "description": "Compact inline shortcut widget with three, four, or five equal-width icon button actions and label captions.",
+      "composition": [
+        "component.iconButton",
+        "component.label"
+      ],
+      "allowedChildren": [
+        "component.iconButton",
+        "component.label"
+      ]
+    },
+    {
+      "canonicalId": "widget.showroomAddress",
+      "canonicalName": "Showroom Address",
+      "layer": "widget",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": "Showroom address",
+      "description": "Showroom contact widget that presents address copy, distance, open status, Google rating, and call or directions actions.",
+      "composition": [
+        "component.button"
+      ],
+      "allowedChildren": [
+        "component.button"
+      ]
+    },
+    {
+      "canonicalId": "widget.testimonial",
+      "canonicalName": "Testimonial",
+      "layer": "widget",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": "Testimonial",
+      "description": "Interactive testimonial carousel widget with Inverse, Header, and Bottom CTA properties, composing a section header, centered testimonial card carousel, and optional bottom CTA.",
+      "composition": [
+        "component.sectionHeader",
+        "component.testimonialCard",
+        "component.buttonGroup"
+      ],
+      "allowedChildren": [
+        "component.testimonialCard"
+      ]
+    },
+    {
+      "canonicalId": "widget.locator",
+      "canonicalName": "Locator",
+      "layer": "widget",
+      "status": "draft",
+      "platform": "web",
+      "figmaComponentName": "Locator",
+      "description": "Mobile locator widget for inspection address status, selected address content, change action, and primary CTA.",
+      "composition": [
+        "component.addressStatus",
+        "component.button",
+        "component.buttonGroup"
+      ],
+      "allowedChildren": [
+        "component.addressStatus",
+        "component.button",
+        "component.buttonGroup"
+      ]
+    },
+    {
+      "canonicalId": "widget.fixedActionBar",
+      "canonicalName": "Fixed Action Bar",
+      "layer": "widget",
+      "status": "draft",
+      "platform": "web",
+      "figmaComponentName": "Fixed action bar",
+      "description": "Fixed mobile bottom action surface with a vertical large button group and optional iOS home indicator.",
+      "composition": [
+        "component.buttonGroup"
+      ],
+      "allowedChildren": [
+        "component.buttonGroup",
+        "component.button"
       ]
     },
     {

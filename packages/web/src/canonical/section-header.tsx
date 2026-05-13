@@ -365,6 +365,7 @@ const SECTION_HEADER_STYLESHEET = [
     "align-items": "center",
     background: "var(--section-header-tag-background)",
     "border-radius": "var(--section-header-tag-radius)",
+    "box-sizing": "border-box",
     color: "var(--section-header-tag-color)",
     display: "inline-flex",
     "flex-shrink": "0",

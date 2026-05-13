@@ -1033,6 +1033,158 @@
   --component-icon-button-focus-outline-offset: 0.125rem; /* component.iconButton.focus.outlineOffset | @presenter Spacing */
 
   /**
+   * @tokens Web Quote Card Tokens
+   */
+  --component-web-quote-card-color-background: #FFFFFF; /* component.webQuoteCard.color.background | @presenter Color */
+  --component-web-quote-card-color-border: #E2E8F0; /* component.webQuoteCard.color.border | @presenter Color */
+  --component-web-quote-card-color-divider: #E2E8F0; /* component.webQuoteCard.color.divider | @presenter Color */
+  --component-web-quote-card-color-description-background: #F1F5F9; /* component.webQuoteCard.color.descriptionBackground | @presenter Color */
+  --component-web-quote-card-color-highlight: #020617; /* component.webQuoteCard.color.highlight | @presenter Color */
+  --component-web-quote-card-color-title: #020617; /* component.webQuoteCard.color.title | @presenter Color */
+  --component-web-quote-card-color-badge-background: #F1F5F9; /* component.webQuoteCard.color.badgeBackground | @presenter Color */
+  --component-web-quote-card-color-badge-text: #64748B; /* component.webQuoteCard.color.badgeText | @presenter Color */
+  --component-web-quote-card-layout-width: 21rem; /* component.webQuoteCard.layout.width | @presenter Spacing */
+  --component-web-quote-card-layout-top-height: 6.75rem; /* component.webQuoteCard.layout.topHeight | @presenter Spacing */
+  --component-web-quote-card-layout-top-padding: 0.75rem; /* component.webQuoteCard.layout.topPadding | @presenter Spacing */
+  --component-web-quote-card-layout-content-gap: 0.75rem; /* component.webQuoteCard.layout.contentGap | @presenter Spacing */
+  --component-web-quote-card-layout-highlight-gap: 0.3125rem; /* component.webQuoteCard.layout.highlightGap | @presenter Spacing */
+  --component-web-quote-card-layout-highlight-label-max-width: 11.25rem; /* component.webQuoteCard.layout.highlightLabelMaxWidth | @presenter Spacing */
+  --component-web-quote-card-layout-subject-gap: 0.5rem; /* component.webQuoteCard.layout.subjectGap | @presenter Spacing */
+  --component-web-quote-card-layout-hidden-digit-gap: 0.5rem; /* component.webQuoteCard.layout.hiddenDigitGap | @presenter Spacing */
+  --component-web-quote-card-layout-bottom-link-height: 2.5rem; /* component.webQuoteCard.layout.bottomLinkHeight | @presenter Spacing */
+  --component-web-quote-card-layout-bottom-description-height: 2rem; /* component.webQuoteCard.layout.bottomDescriptionHeight | @presenter Spacing */
+  --component-web-quote-card-layout-bottom-padding-inline: 0.75rem; /* component.webQuoteCard.layout.bottomPaddingInline | @presenter Spacing */
+  --component-web-quote-card-layout-bottom-link-padding-block: 0.75rem; /* component.webQuoteCard.layout.bottomLinkPaddingBlock | @presenter Spacing */
+  --component-web-quote-card-layout-bottom-description-padding-block: 0.5rem; /* component.webQuoteCard.layout.bottomDescriptionPaddingBlock | @presenter Spacing */
+  --component-web-quote-card-size-highlight-icon: 0.375rem; /* component.webQuoteCard.size.highlightIcon | @presenter Spacing */
+  --component-web-quote-card-size-hidden-digit: 0.54rem; /* component.webQuoteCard.size.hiddenDigit | @presenter Spacing */
+  --component-web-quote-card-border-width: 0.0625rem; /* component.webQuoteCard.border.width | @presenter Spacing */
+  --component-web-quote-card-border-divider-width: 0.0625rem; /* component.webQuoteCard.border.dividerWidth | @presenter Spacing */
+  --component-web-quote-card-shadow-container: 0px 2px 2px rgba(31, 41, 55, 0.04); /* component.webQuoteCard.shadow.container | @presenter Shadow */
+  --component-web-quote-card-typography-highlight-font-size: 0.75rem; /* component.webQuoteCard.typography.highlight.fontSize | @presenter FontSize */
+  --component-web-quote-card-typography-highlight-line-height: 1rem; /* component.webQuoteCard.typography.highlight.lineHeight | @presenter LineHeight */
+  --component-web-quote-card-typography-highlight-letter-spacing: 0px; /* component.webQuoteCard.typography.highlight.letterSpacing | @presenter LetterSpacing */
+  --component-web-quote-card-typography-amount-font-size: 1.5rem; /* component.webQuoteCard.typography.amount.fontSize | @presenter FontSize */
+  --component-web-quote-card-typography-amount-line-height: 1.75rem; /* component.webQuoteCard.typography.amount.lineHeight | @presenter LineHeight */
+  --component-web-quote-card-typography-amount-letter-spacing: 0px; /* component.webQuoteCard.typography.amount.letterSpacing | @presenter LetterSpacing */
+  --component-web-quote-card-typography-badge-font-size: 0.6875rem; /* component.webQuoteCard.typography.badge.fontSize | @presenter FontSize */
+  --component-web-quote-card-typography-badge-line-height: 0.875rem; /* component.webQuoteCard.typography.badge.lineHeight | @presenter LineHeight */
+  --component-web-quote-card-typography-badge-letter-spacing: 0px; /* component.webQuoteCard.typography.badge.letterSpacing | @presenter LetterSpacing */
+  --component-web-quote-card-typography-description-font-size: 0.75rem; /* component.webQuoteCard.typography.description.fontSize | @presenter FontSize */
+  --component-web-quote-card-typography-description-line-height: 1rem; /* component.webQuoteCard.typography.description.lineHeight | @presenter LineHeight */
+  --component-web-quote-card-typography-description-letter-spacing: 0px; /* component.webQuoteCard.typography.description.letterSpacing | @presenter LetterSpacing */
+
+  /**
+   * @tokens Testimonial Card Tokens
+   */
+  --component-testimonial-card-color-background: #FFFFFF; /* component.testimonialCard.color.background | @presenter Color */
+  --component-testimonial-card-color-border: #E2E8F0; /* component.testimonialCard.color.border | @presenter Color */
+  --component-testimonial-card-color-title: #020617; /* component.testimonialCard.color.title | @presenter Color */
+  --component-testimonial-card-color-body: #020617; /* component.testimonialCard.color.body | @presenter Color */
+  --component-testimonial-card-color-metadata: #64748B; /* component.testimonialCard.color.metadata | @presenter Color */
+  --component-testimonial-card-color-source: #64748B; /* component.testimonialCard.color.source | @presenter Color */
+  --component-testimonial-card-layout-card-width-large: 18rem; /* component.testimonialCard.layout.card.width.large | @presenter Spacing */
+  --component-testimonial-card-layout-card-width-small: 14.625rem; /* component.testimonialCard.layout.card.width.small | @presenter Spacing */
+  --component-testimonial-card-layout-card-height-large: 9.375rem; /* component.testimonialCard.layout.card.height.large | @presenter Spacing */
+  --component-testimonial-card-layout-card-height-title-large: 10.625rem; /* component.testimonialCard.layout.card.height.titleLarge | @presenter Spacing */
+  --component-testimonial-card-layout-card-height-small: 8.5rem; /* component.testimonialCard.layout.card.height.small | @presenter Spacing */
+  --component-testimonial-card-layout-card-height-title-small: 8.875rem; /* component.testimonialCard.layout.card.height.titleSmall | @presenter Spacing */
+  --component-testimonial-card-layout-card-padding-large: 0.75rem; /* component.testimonialCard.layout.card.padding.large | @presenter Spacing */
+  --component-testimonial-card-layout-card-padding-small: 0.5rem; /* component.testimonialCard.layout.card.padding.small | @presenter Spacing */
+  --component-testimonial-card-layout-card-gap-large: 0.5rem; /* component.testimonialCard.layout.card.gap.large | @presenter Spacing */
+  --component-testimonial-card-layout-card-gap-small: 0.5rem; /* component.testimonialCard.layout.card.gap.small | @presenter Spacing */
+  --component-testimonial-card-layout-card-gap-title-small: 0.375rem; /* component.testimonialCard.layout.card.gap.titleSmall | @presenter Spacing */
+  --component-testimonial-card-layout-bottom-bar-width-center: 16.5rem; /* component.testimonialCard.layout.bottomBar.width.center | @presenter Spacing */
+  --component-testimonial-card-layout-bottom-bar-width-sideways: 13.625rem; /* component.testimonialCard.layout.bottomBar.width.sideways | @presenter Spacing */
+  --component-testimonial-card-layout-bottom-bar-gap-center: 0.75rem; /* component.testimonialCard.layout.bottomBar.gap.center | @presenter Spacing */
+  --component-testimonial-card-layout-bottom-bar-gap-sideways: 0.5rem; /* component.testimonialCard.layout.bottomBar.gap.sideways | @presenter Spacing */
+  --component-testimonial-card-layout-bottom-bar-gap-user-info: 0.125rem; /* component.testimonialCard.layout.bottomBar.gap.userInfo | @presenter Spacing */
+  --component-testimonial-card-layout-bottom-bar-gap-details: 0.25rem; /* component.testimonialCard.layout.bottomBar.gap.details | @presenter Spacing */
+  --component-testimonial-card-layout-rating-gap: 0.75rem; /* component.testimonialCard.layout.rating.gap | @presenter Spacing */
+  --component-testimonial-card-layout-widget-width: 22.5rem; /* component.testimonialCard.layout.widget.width | @presenter Spacing */
+  --component-testimonial-card-layout-widget-padding: 0.75rem; /* component.testimonialCard.layout.widget.padding | @presenter Spacing */
+  --component-testimonial-card-layout-widget-gap: 0.75rem; /* component.testimonialCard.layout.widget.gap | @presenter Spacing */
+  --component-testimonial-card-border-width: 0.0625rem; /* component.testimonialCard.border.width | @presenter Spacing */
+  --component-testimonial-card-radius-large: 1rem; /* component.testimonialCard.radius.large | @presenter BorderRadius */
+  --component-testimonial-card-radius-small: 0.75rem; /* component.testimonialCard.radius.small | @presenter BorderRadius */
+  --component-testimonial-card-typography-name-large-font-size: 1rem; /* component.testimonialCard.typography.name.large.fontSize | @presenter FontSize */
+  --component-testimonial-card-typography-name-large-line-height: 1.25rem; /* component.testimonialCard.typography.name.large.lineHeight | @presenter LineHeight */
+  --component-testimonial-card-typography-name-large-letter-spacing: 0px; /* component.testimonialCard.typography.name.large.letterSpacing | @presenter LetterSpacing */
+  --component-testimonial-card-typography-name-small-font-size: 0.6875rem; /* component.testimonialCard.typography.name.small.fontSize | @presenter FontSize */
+  --component-testimonial-card-typography-name-small-line-height: 0.875rem; /* component.testimonialCard.typography.name.small.lineHeight | @presenter LineHeight */
+  --component-testimonial-card-typography-name-small-letter-spacing: 0px; /* component.testimonialCard.typography.name.small.letterSpacing | @presenter LetterSpacing */
+  --component-testimonial-card-typography-details-large-font-size: 0.625rem; /* component.testimonialCard.typography.details.large.fontSize | @presenter FontSize */
+  --component-testimonial-card-typography-details-large-line-height: 0.875rem; /* component.testimonialCard.typography.details.large.lineHeight | @presenter LineHeight */
+  --component-testimonial-card-typography-details-large-letter-spacing: 0px; /* component.testimonialCard.typography.details.large.letterSpacing | @presenter LetterSpacing */
+  --component-testimonial-card-typography-details-small-font-size: 0.5625rem; /* component.testimonialCard.typography.details.small.fontSize | @presenter FontSize */
+  --component-testimonial-card-typography-details-small-line-height: 0.75rem; /* component.testimonialCard.typography.details.small.lineHeight | @presenter LineHeight */
+  --component-testimonial-card-typography-details-small-letter-spacing: 0px; /* component.testimonialCard.typography.details.small.letterSpacing | @presenter LetterSpacing */
+  --component-testimonial-card-typography-title-font-size: 0.8125rem; /* component.testimonialCard.typography.title.fontSize | @presenter FontSize */
+  --component-testimonial-card-typography-title-line-height: 1rem; /* component.testimonialCard.typography.title.lineHeight | @presenter LineHeight */
+  --component-testimonial-card-typography-title-letter-spacing: 0px; /* component.testimonialCard.typography.title.letterSpacing | @presenter LetterSpacing */
+  --component-testimonial-card-typography-description-large-font-size: 0.75rem; /* component.testimonialCard.typography.description.large.fontSize | @presenter FontSize */
+  --component-testimonial-card-typography-description-large-line-height: 1.125rem; /* component.testimonialCard.typography.description.large.lineHeight | @presenter LineHeight */
+  --component-testimonial-card-typography-description-large-letter-spacing: 0px; /* component.testimonialCard.typography.description.large.letterSpacing | @presenter LetterSpacing */
+  --component-testimonial-card-typography-description-title-large-font-size: 0.8125rem; /* component.testimonialCard.typography.description.titleLarge.fontSize | @presenter FontSize */
+  --component-testimonial-card-typography-description-title-large-line-height: 1.125rem; /* component.testimonialCard.typography.description.titleLarge.lineHeight | @presenter LineHeight */
+  --component-testimonial-card-typography-description-title-large-letter-spacing: 0px; /* component.testimonialCard.typography.description.titleLarge.letterSpacing | @presenter LetterSpacing */
+  --component-testimonial-card-typography-description-small-font-size: 0.5625rem; /* component.testimonialCard.typography.description.small.fontSize | @presenter FontSize */
+  --component-testimonial-card-typography-description-small-line-height: 0.75rem; /* component.testimonialCard.typography.description.small.lineHeight | @presenter LineHeight */
+  --component-testimonial-card-typography-description-small-letter-spacing: 0px; /* component.testimonialCard.typography.description.small.letterSpacing | @presenter LetterSpacing */
+  --component-testimonial-card-typography-description-title-small-font-size: 0.5625rem; /* component.testimonialCard.typography.description.titleSmall.fontSize | @presenter FontSize */
+  --component-testimonial-card-typography-description-title-small-line-height: 0.875rem; /* component.testimonialCard.typography.description.titleSmall.lineHeight | @presenter LineHeight */
+  --component-testimonial-card-typography-description-title-small-letter-spacing: 0px; /* component.testimonialCard.typography.description.titleSmall.letterSpacing | @presenter LetterSpacing */
+  --component-testimonial-card-typography-source-large-font-size: 0.75rem; /* component.testimonialCard.typography.source.large.fontSize | @presenter FontSize */
+  --component-testimonial-card-typography-source-large-line-height: 1rem; /* component.testimonialCard.typography.source.large.lineHeight | @presenter LineHeight */
+  --component-testimonial-card-typography-source-large-letter-spacing: 0px; /* component.testimonialCard.typography.source.large.letterSpacing | @presenter LetterSpacing */
+  --component-testimonial-card-typography-source-small-font-size: 0.5625rem; /* component.testimonialCard.typography.source.small.fontSize | @presenter FontSize */
+  --component-testimonial-card-typography-source-small-line-height: 0.75rem; /* component.testimonialCard.typography.source.small.lineHeight | @presenter LineHeight */
+  --component-testimonial-card-typography-source-small-letter-spacing: 0px; /* component.testimonialCard.typography.source.small.letterSpacing | @presenter LetterSpacing */
+
+  /**
+   * @tokens Showroom Address Tokens
+   */
+  --component-showroom-address-color-background: #FFFFFF; /* component.showroomAddress.color.background | @presenter Color */
+  --component-showroom-address-color-title: #020617; /* component.showroomAddress.color.title | @presenter Color */
+  --component-showroom-address-color-body: #64748B; /* component.showroomAddress.color.body | @presenter Color */
+  --component-showroom-address-color-distance: #020617; /* component.showroomAddress.color.distance | @presenter Color */
+  --component-showroom-address-color-rating: #020617; /* component.showroomAddress.color.rating | @presenter Color */
+  --component-showroom-address-color-status-open: #1C9C1C; /* component.showroomAddress.color.status.open | @presenter Color */
+  --component-showroom-address-color-status-closed: #DC2626; /* component.showroomAddress.color.status.closed | @presenter Color */
+  --component-showroom-address-color-status-closing-soon: #E17100; /* component.showroomAddress.color.status.closingSoon | @presenter Color */
+  --component-showroom-address-layout-width: 22.5rem; /* component.showroomAddress.layout.width | @presenter Spacing */
+  --component-showroom-address-layout-padding: 0.75rem; /* component.showroomAddress.layout.padding | @presenter Spacing */
+  --component-showroom-address-layout-gap: 0.75rem; /* component.showroomAddress.layout.gap | @presenter Spacing */
+  --component-showroom-address-layout-details-gap: 0.75rem; /* component.showroomAddress.layout.detailsGap | @presenter Spacing */
+  --component-showroom-address-layout-text-gap: 0.5rem; /* component.showroomAddress.layout.textGap | @presenter Spacing */
+  --component-showroom-address-layout-address-gap: 0.25rem; /* component.showroomAddress.layout.addressGap | @presenter Spacing */
+  --component-showroom-address-layout-status-gap: 0.25rem; /* component.showroomAddress.layout.statusGap | @presenter Spacing */
+  --component-showroom-address-layout-action-gap: 0.5rem; /* component.showroomAddress.layout.actionGap | @presenter Spacing */
+  --component-showroom-address-layout-rating-gap: 0.25rem; /* component.showroomAddress.layout.ratingGap | @presenter Spacing */
+  --component-showroom-address-layout-rating-icon-size: 1rem; /* component.showroomAddress.layout.ratingIconSize | @presenter Spacing */
+  --component-showroom-address-typography-address-line1-font-size: 1.1875rem; /* component.showroomAddress.typography.addressLine1.fontSize | @presenter FontSize */
+  --component-showroom-address-typography-address-line1-line-height: 1.5rem; /* component.showroomAddress.typography.addressLine1.lineHeight | @presenter LineHeight */
+  --component-showroom-address-typography-address-line1-letter-spacing: -0.03px; /* component.showroomAddress.typography.addressLine1.letterSpacing | @presenter LetterSpacing */
+  --component-showroom-address-typography-address-line2-font-size: 0.875rem; /* component.showroomAddress.typography.addressLine2.fontSize | @presenter FontSize */
+  --component-showroom-address-typography-address-line2-line-height: 1.25rem; /* component.showroomAddress.typography.addressLine2.lineHeight | @presenter LineHeight */
+  --component-showroom-address-typography-address-line2-letter-spacing: 0px; /* component.showroomAddress.typography.addressLine2.letterSpacing | @presenter LetterSpacing */
+  --component-showroom-address-typography-distance-font-size: 0.75rem; /* component.showroomAddress.typography.distance.fontSize | @presenter FontSize */
+  --component-showroom-address-typography-distance-line-height: 1rem; /* component.showroomAddress.typography.distance.lineHeight | @presenter LineHeight */
+  --component-showroom-address-typography-distance-letter-spacing: 0px; /* component.showroomAddress.typography.distance.letterSpacing | @presenter LetterSpacing */
+  --component-showroom-address-typography-status-font-size: 0.8125rem; /* component.showroomAddress.typography.status.fontSize | @presenter FontSize */
+  --component-showroom-address-typography-status-line-height: 1.125rem; /* component.showroomAddress.typography.status.lineHeight | @presenter LineHeight */
+  --component-showroom-address-typography-status-letter-spacing: 0px; /* component.showroomAddress.typography.status.letterSpacing | @presenter LetterSpacing */
+  --component-showroom-address-typography-separator-font-size: 0.8125rem; /* component.showroomAddress.typography.separator.fontSize | @presenter FontSize */
+  --component-showroom-address-typography-separator-line-height: 1rem; /* component.showroomAddress.typography.separator.lineHeight | @presenter LineHeight */
+  --component-showroom-address-typography-separator-letter-spacing: 0px; /* component.showroomAddress.typography.separator.letterSpacing | @presenter LetterSpacing */
+  --component-showroom-address-typography-timing-font-size: 0.875rem; /* component.showroomAddress.typography.timing.fontSize | @presenter FontSize */
+  --component-showroom-address-typography-timing-line-height: 1.125rem; /* component.showroomAddress.typography.timing.lineHeight | @presenter LineHeight */
+  --component-showroom-address-typography-timing-letter-spacing: 0px; /* component.showroomAddress.typography.timing.letterSpacing | @presenter LetterSpacing */
+  --component-showroom-address-typography-rating-font-size: 0.9375rem; /* component.showroomAddress.typography.rating.fontSize | @presenter FontSize */
+  --component-showroom-address-typography-rating-line-height: 1.25rem; /* component.showroomAddress.typography.rating.lineHeight | @presenter LineHeight */
+  --component-showroom-address-typography-rating-letter-spacing: -0.02px; /* component.showroomAddress.typography.rating.letterSpacing | @presenter LetterSpacing */
+
+  /**
    * @tokens Spacing
    */
   --spacing-0: 0; /* spacing.0 | @presenter Spacing */
@@ -1051,6 +1203,7 @@
    * @tokens Radius
    */
   --radius-none: 0; /* radius.none | @presenter BorderRadius */
+  --radius-xxs: 0.25rem; /* radius.xxs | @presenter BorderRadius */
   --radius-sm: 0.25rem; /* radius.sm | @presenter BorderRadius */
   --radius-md: 0.5rem; /* radius.md | @presenter BorderRadius */
   --radius-lg: 0.75rem; /* radius.lg | @presenter BorderRadius */

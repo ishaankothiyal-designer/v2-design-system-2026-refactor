@@ -338,6 +338,12 @@ function GridCardIcon({
   );
 }
 
+function resolveSlotRadius(brand: DisplayBrandId, radius: number) {
+  const tokenPath = radius <= 12 ? "radius.lg" : "radius.xl";
+
+  return pxToRem(Number(getRequiredThemeTokenValue(brand, tokenPath)));
+}
+
 /**
  * Fixed-dimension content card used inside editorial or discovery grids, with visual density controlled by the intended grid column count.
  */
@@ -359,8 +365,8 @@ export function GridCard({
   const showTag = Boolean(tagLabel) && allowsTag(columnCount, size, type);
   const showDescription = Boolean(description) && allowsDescription(columnCount, size, type);
   const descriptionTone = String(getRequiredThemeTokenValue(brand, "color.text.secondary"));
-  const slotSurface = String(getRequiredThemeTokenValue(brand, "color.brand.primary.50"));
-  const slotRadius = pxToRem(metrics.slotRadius);
+  const slotSurface = "var(--cars24-primitive-drive-pink-50, #FFE8F6)";
+  const slotRadius = resolveSlotRadius(brand, metrics.slotRadius);
   const contentInset = pxToRem(metrics.contentInset);
 
   const rootStyles: CSSProperties = {

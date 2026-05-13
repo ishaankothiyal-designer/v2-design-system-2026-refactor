@@ -4,7 +4,7 @@ import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
 import { getRequiredThemeTokenValue, getThemeTokenValue } from "../theme";
 import { Button, type ButtonProps } from "./button";
-import { ButtonGroup } from "./button-group";
+import { ButtonGroup, type ButtonGroupType } from "./button-group";
 import { ChatBar, type ChatBarProps } from "./chat-bar";
 import { Checkbox } from "./checkbox";
 import { Icon } from "./icon";
@@ -29,6 +29,8 @@ export type ActionBarActionVariant =
   | "Strike Amount"
   | "Progressive";
 
+type ActionBarButtonGroupType = Extract<ButtonGroupType, "Vertical" | "Horizontal">;
+
 type ActionBarTypographyKey =
   | "body1Semibold"
   | "body2Regular"
@@ -50,6 +52,7 @@ type ActionBarButtonEventProps = Pick<ButtonHTMLAttributes<HTMLButtonElement>, "
 export interface ActionBarButtonAction extends ActionBarButtonEventProps {
   label: ReactNode;
   leadingIcon?: ReactNode;
+  styleVariant?: ButtonProps["styleVariant"];
   trailingIcon?: ReactNode;
 }
 
@@ -118,6 +121,7 @@ type ActionBarChatBarActionProps = Pick<
 export type ActionBarAction =
   | {
       variant?: "Button Group";
+      buttonGroupType?: ActionBarButtonGroupType;
       primaryAction?: ActionBarButtonAction;
       secondaryAction?: ActionBarButtonAction;
     }
@@ -1215,6 +1219,8 @@ function ActionBarActionRow({
   }
 
   if (resolvedAction.variant === "Button Group") {
+    const buttonGroupType = resolvedAction.buttonGroupType ?? "Vertical";
+
     return (
       <div
         style={{
@@ -1230,20 +1236,34 @@ function ActionBarActionRow({
             leadingIcon:
               resolvedAction.primaryAction?.leadingIcon ??
               <Icon name="sparkle-filled" decorative />,
-            onClick: resolvedAction.primaryAction?.onClick,
             trailingIcon:
               resolvedAction.primaryAction?.trailingIcon ??
               <Icon name="arrow-right-outline" decorative />,
-            type: resolvedAction.primaryAction?.type
+            ...(resolvedAction.primaryAction?.disabled !== undefined
+              ? { disabled: resolvedAction.primaryAction.disabled }
+              : {}),
+            ...(resolvedAction.primaryAction?.onClick !== undefined ? { onClick: resolvedAction.primaryAction.onClick } : {}),
+            ...(resolvedAction.primaryAction?.styleVariant !== undefined
+              ? { styleVariant: resolvedAction.primaryAction.styleVariant }
+              : {}),
+            ...(resolvedAction.primaryAction?.type !== undefined ? { type: resolvedAction.primaryAction.type } : {})
           }}
           secondaryAction={
             resolvedAction.secondaryAction
               ? {
                   label: wrapButtonLabel(brand, resolvedAction.secondaryAction.label),
                   leadingIcon: resolvedAction.secondaryAction.leadingIcon,
-                  onClick: resolvedAction.secondaryAction.onClick,
                   trailingIcon: resolvedAction.secondaryAction.trailingIcon,
-                  type: resolvedAction.secondaryAction.type
+                  ...(resolvedAction.secondaryAction.disabled !== undefined
+                    ? { disabled: resolvedAction.secondaryAction.disabled }
+                    : {}),
+                  ...(resolvedAction.secondaryAction.onClick !== undefined
+                    ? { onClick: resolvedAction.secondaryAction.onClick }
+                    : {}),
+                  ...(resolvedAction.secondaryAction.styleVariant !== undefined
+                    ? { styleVariant: resolvedAction.secondaryAction.styleVariant }
+                    : {}),
+                  ...(resolvedAction.secondaryAction.type !== undefined ? { type: resolvedAction.secondaryAction.type } : {})
                 }
               : {
                   label: wrapButtonLabel(brand, "Label"),
@@ -1253,7 +1273,7 @@ function ActionBarActionRow({
           }
           shape="Regular"
           size="Large"
-          type="Vertical"
+          type={buttonGroupType}
         />
       </div>
     );

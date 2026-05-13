@@ -1795,6 +1795,254 @@
         "outlineWidth": 2,
         "outlineOffset": 2
       }
+    },
+    "webQuoteCard": {
+      "color": {
+        "background": "#FFFFFF",
+        "border": "#E2E8F0",
+        "divider": "#E2E8F0",
+        "descriptionBackground": "#F1F5F9",
+        "highlight": "#020617",
+        "title": "#020617",
+        "badgeBackground": "#F1F5F9",
+        "badgeText": "#64748B"
+      },
+      "layout": {
+        "width": 336,
+        "topHeight": 108,
+        "topPadding": 12,
+        "contentGap": 12,
+        "highlightGap": 5,
+        "highlightLabelMaxWidth": 180,
+        "subjectGap": 8,
+        "hiddenDigitGap": 8,
+        "bottomLinkHeight": 40,
+        "bottomDescriptionHeight": 32,
+        "bottomPaddingInline": 12,
+        "bottomLinkPaddingBlock": 12,
+        "bottomDescriptionPaddingBlock": 8
+      },
+      "size": {
+        "highlightIcon": 6,
+        "hiddenDigit": 8.64
+      },
+      "border": {
+        "width": 1,
+        "dividerWidth": 1
+      },
+      "shadow": {
+        "container": "0px 2px 2px rgba(31, 41, 55, 0.04)"
+      },
+      "typography": {
+        "highlight": {
+          "fontSize": 12,
+          "lineHeight": 16,
+          "letterSpacing": 0
+        },
+        "amount": {
+          "fontSize": 24,
+          "lineHeight": 28,
+          "letterSpacing": 0
+        },
+        "badge": {
+          "fontSize": 11,
+          "lineHeight": 14,
+          "letterSpacing": 0
+        },
+        "description": {
+          "fontSize": 12,
+          "lineHeight": 16,
+          "letterSpacing": 0
+        }
+      }
+    },
+    "testimonialCard": {
+      "color": {
+        "background": "#FFFFFF",
+        "border": "#E2E8F0",
+        "title": "#020617",
+        "body": "#020617",
+        "metadata": "#64748B",
+        "source": "#64748B"
+      },
+      "layout": {
+        "card": {
+          "width": {
+            "large": 288,
+            "small": 234
+          },
+          "height": {
+            "large": 150,
+            "titleLarge": 170,
+            "small": 136,
+            "titleSmall": 142
+          },
+          "padding": {
+            "large": 12,
+            "small": 8
+          },
+          "gap": {
+            "large": 8,
+            "small": 8,
+            "titleSmall": 6
+          }
+        },
+        "bottomBar": {
+          "width": {
+            "center": 264,
+            "sideways": 218
+          },
+          "gap": {
+            "center": 12,
+            "sideways": 8,
+            "userInfo": 2,
+            "details": 4
+          }
+        },
+        "rating": {
+          "gap": 12
+        },
+        "widget": {
+          "width": 360,
+          "padding": 12,
+          "gap": 12
+        }
+      },
+      "border": {
+        "width": 1
+      },
+      "radius": {
+        "large": 16,
+        "small": 12
+      },
+      "typography": {
+        "name": {
+          "large": {
+            "fontSize": 16,
+            "lineHeight": 20,
+            "letterSpacing": 0
+          },
+          "small": {
+            "fontSize": 11,
+            "lineHeight": 14,
+            "letterSpacing": 0
+          }
+        },
+        "details": {
+          "large": {
+            "fontSize": 10,
+            "lineHeight": 14,
+            "letterSpacing": 0
+          },
+          "small": {
+            "fontSize": 9,
+            "lineHeight": 12,
+            "letterSpacing": 0
+          }
+        },
+        "title": {
+          "fontSize": 13,
+          "lineHeight": 16,
+          "letterSpacing": 0
+        },
+        "description": {
+          "large": {
+            "fontSize": 12,
+            "lineHeight": 18,
+            "letterSpacing": 0
+          },
+          "titleLarge": {
+            "fontSize": 13,
+            "lineHeight": 18,
+            "letterSpacing": 0
+          },
+          "small": {
+            "fontSize": 9,
+            "lineHeight": 12,
+            "letterSpacing": 0
+          },
+          "titleSmall": {
+            "fontSize": 9,
+            "lineHeight": 14,
+            "letterSpacing": 0
+          }
+        },
+        "source": {
+          "large": {
+            "fontSize": 12,
+            "lineHeight": 16,
+            "letterSpacing": 0
+          },
+          "small": {
+            "fontSize": 9,
+            "lineHeight": 12,
+            "letterSpacing": 0
+          }
+        }
+      }
+    },
+    "showroomAddress": {
+      "color": {
+        "background": "#FFFFFF",
+        "title": "#020617",
+        "body": "#64748B",
+        "distance": "#020617",
+        "rating": "#020617",
+        "status": {
+          "open": "#1C9C1C",
+          "closed": "#DC2626",
+          "closingSoon": "#E17100"
+        }
+      },
+      "layout": {
+        "width": 360,
+        "padding": 12,
+        "gap": 12,
+        "detailsGap": 12,
+        "textGap": 8,
+        "addressGap": 4,
+        "statusGap": 4,
+        "actionGap": 8,
+        "ratingGap": 4,
+        "ratingIconSize": 16
+      },
+      "typography": {
+        "addressLine1": {
+          "fontSize": 19,
+          "lineHeight": 24,
+          "letterSpacing": -0.03
+        },
+        "addressLine2": {
+          "fontSize": 14,
+          "lineHeight": 20,
+          "letterSpacing": 0
+        },
+        "distance": {
+          "fontSize": 12,
+          "lineHeight": 16,
+          "letterSpacing": 0
+        },
+        "status": {
+          "fontSize": 13,
+          "lineHeight": 18,
+          "letterSpacing": 0
+        },
+        "separator": {
+          "fontSize": 13,
+          "lineHeight": 16,
+          "letterSpacing": 0
+        },
+        "timing": {
+          "fontSize": 14,
+          "lineHeight": 18,
+          "letterSpacing": 0
+        },
+        "rating": {
+          "fontSize": 15,
+          "lineHeight": 20,
+          "letterSpacing": -0.02
+        }
+      }
     }
   },
   "spacing": {
@@ -1812,6 +2060,7 @@
   },
   "radius": {
     "none": 0,
+    "xxs": 4,
     "sm": 4,
     "md": 8,
     "lg": 12,

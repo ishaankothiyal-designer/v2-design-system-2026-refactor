@@ -2,7 +2,7 @@ import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
 import type { DisplayBrandId } from "@geist/tokens";
 import { designSystemRegistry } from "@geist/contracts";
 import { getRequiredThemeTokenValue, pxToRem } from "../theme";
-import { Button, type ButtonProps, type ButtonShape } from "./button";
+import { Button, type ButtonProps, type ButtonShape, type ButtonStyleVariant } from "./button";
 import { LinkButton, type LinkButtonProps } from "./link-button";
 
 export const canonicalButtonGroupWebContract = designSystemRegistry.components.find(
@@ -15,6 +15,7 @@ export type ButtonGroupSize = "Small" | "Medium" | "Large";
 export interface ButtonGroupButtonAction
   extends Omit<ButtonProps, "brand" | "children" | "onDark" | "shape" | "size" | "styleVariant"> {
   label: ReactNode;
+  styleVariant?: ButtonStyleVariant;
 }
 
 export interface ButtonGroupContextualAction
@@ -61,7 +62,7 @@ function getLayoutMetrics(brand: DisplayBrandId, size: ButtonGroupSize) {
 function getButtonLayoutStyle(type: ButtonGroupType): CSSProperties {
   if (type === "Horizontal") {
     return {
-      flex: "1 1 180px",
+      flex: "1 1 0",
       minWidth: 0,
       width: "auto"
     };
@@ -134,6 +135,7 @@ export function ButtonGroup({
   const {
     label: primaryLabel,
     style: primaryStyle,
+    styleVariant: primaryStyleVariant,
     type: primaryButtonType,
     ...primaryButtonProps
   } = primaryAction;
@@ -153,7 +155,7 @@ export function ButtonGroup({
           shape={shape}
           size={buttonSize}
           style={resolvedPrimaryStyle}
-          styleVariant="Solid"
+          styleVariant={primaryStyleVariant ?? "Solid"}
           type={primaryButtonType ?? "button"}
         >
           {primaryLabel}
@@ -165,6 +167,7 @@ export function ButtonGroup({
           const {
             label: secondaryLabel,
             style: secondaryStyle,
+            styleVariant: secondaryStyleVariant,
             type: secondaryButtonType,
             ...secondaryButtonProps
           } = secondaryAction;
@@ -180,7 +183,7 @@ export function ButtonGroup({
                 ...secondaryStyle,
                 ...buttonLayoutStyle
               }}
-              styleVariant="Outline"
+              styleVariant={secondaryStyleVariant ?? "Outline"}
               type={secondaryButtonType ?? "button"}
             >
               {secondaryLabel}
@@ -197,7 +200,7 @@ export function ButtonGroup({
           shape={shape}
           size={buttonSize}
           style={resolvedPrimaryStyle}
-          styleVariant="Solid"
+          styleVariant={primaryStyleVariant ?? "Solid"}
           type={primaryButtonType ?? "button"}
         >
           {primaryLabel}

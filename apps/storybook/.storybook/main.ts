@@ -7,7 +7,10 @@ const config: StorybookConfig = {
   },
   // Ignore Finder-style duplicate copies like "IconLibrary 2.mdx" so Storybook
   // doesn't index the same docs page twice.
-  stories: ["../src/**/!(* [0-9]*).mdx", "../src/**/*.stories.@(ts|tsx)"],
+  stories: [
+    "../src/**/!(* [0-9]*).mdx",
+    "../src/stories/!(* [0-9]*).stories.@(ts|tsx)"
+  ],
   addons: [
     "@storybook/addon-docs",
     "@storybook/addon-designs",
