@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "storybook/preview-api";
-import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@turbo/tokens";
 import {
   HorizontalTab,
   Text,
@@ -9,7 +9,7 @@ import {
   type HorizontalTabItemState,
   type HorizontalTabProps,
   type HorizontalTabSize
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
@@ -375,7 +375,7 @@ const matrixValueCellStyles: CSSProperties = {
   padding: "16px 20px"
 };
 
-const horizontalTabUiExampleSourceCode = `import { HorizontalTab } from "@geist/web";
+const horizontalTabUiExampleSourceCode = `import { HorizontalTab } from "@turbo/web";
 
 const items = [
   { value: "overview", label: "Overview", iconLeading: true, tag: true },

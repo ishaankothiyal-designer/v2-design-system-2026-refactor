@@ -1,0 +1,181 @@
+{
+  "version": "1.0",
+  "system": "cars24_design_ai",
+  "rules": {
+    "page_types": {
+      "L1": {
+        "description": "Landing / homepage / entry page",
+        "required_sections": ["hero", "primary_cta"],
+        "allowed_widgets_priority": ["discovery", "trust", "navigation"],
+        "avoid": ["heavy_forms", "deep_internal_components"]
+      },
+      "L2": {
+        "description": "Listing / detail / comparison pages",
+        "required_sections": ["content", "decision_support"],
+        "allowed_widgets_priority": ["listing", "filter", "comparison", "detail"],
+        "avoid": ["over_marketing"]
+      },
+      "internal": {
+        "description": "Flows, forms, step-based pages",
+        "required_sections": ["task", "cta"],
+        "allowed_widgets_priority": ["form", "progress", "action"],
+        "avoid": ["distractions"]
+      }
+    },
+
+    "brands": {
+      "cars24": {
+        "tone": ["simple", "trustworthy", "conversion-focused"],
+        "preferred_widgets": ["hero banner - mobile", "car card", "cta", "trust"]
+      },
+      "team_bhp": {
+        "tone": ["structured", "data-heavy", "community"],
+        "preferred_widgets": ["list", "comparison table", "info card"]
+      },
+      "carinfo": {
+        "tone": ["informational", "utility"],
+        "preferred_widgets": ["info card", "seo section", "data cards"]
+      },
+      "vehicleinfo": {
+        "tone": ["detailed", "structured"],
+        "preferred_widgets": ["comparison", "specs", "detail cards"]
+      }
+    },
+
+    "widget_rules": {
+      "top tab": {
+        "type": "navigation",
+        "allowed_on": ["L1"],
+        "priority": "high",
+        "position": "top",
+        "conditions": ["multi-section navigation required"],
+        "avoid": ["L2", "internal"]
+      },
+
+      "action bar": {
+        "type": "cta",
+        "allowed_on": ["internal"],
+        "priority": "high",
+        "position": "sticky_bottom",
+        "conditions": ["user needs to take action"],
+        "avoid": ["multiple_ctas", "L1"]
+      },
+
+      "floating action button": {
+        "type": "secondary_action",
+        "allowed_on": ["L1", "L2"],
+        "priority": "medium",
+        "position": "floating_bottom",
+        "conditions": ["quick action needed"],
+        "avoid": ["primary_action_replacement"]
+      },
+
+      "brand card group": {
+        "type": "discovery",
+        "allowed_on": ["L1", "L2"],
+        "priority": "medium",
+        "conditions": ["brand_selection_needed"]
+      },
+
+      "car card": {
+        "type": "listing",
+        "allowed_on": ["L2"],
+        "priority": "high",
+        "conditions": ["multiple_car_display"]
+      },
+
+      "comparison table": {
+        "type": "comparison",
+        "allowed_on": ["L2"],
+        "priority": "high",
+        "conditions": ["user_needs_comparison"]
+      },
+
+      "faq": {
+        "type": "trust",
+        "allowed_on": ["L1", "L2"],
+        "priority": "low",
+        "conditions": ["user_doubt_expected"]
+      },
+
+      "guide preview": {
+        "type": "onboarding",
+        "allowed_on": ["internal"],
+        "priority": "high",
+        "conditions": ["complex_flow"]
+      },
+
+      "header video": {
+        "type": "media",
+        "allowed_on": ["L2"],
+        "priority": "low",
+        "conditions": ["video_adds_value"]
+      },
+
+      "module widget": {
+        "type": "custom",
+        "allowed_on": ["L1", "L2", "internal"],
+        "priority": "fallback",
+        "conditions": ["no_existing_widget"],
+        "warning": "use_only_if_necessary"
+      }
+    },
+
+    "selection_engine": {
+      "steps": [
+        "identify_page_type",
+        "identify_brand",
+        "extract_user_goal",
+        "map_goal_to_widget_types",
+        "filter_widgets_by_page_rules",
+        "prioritize_widgets",
+        "assemble_layout"
+      ]
+    },
+
+    "goal_to_widget_mapping": {
+      "buy_car": ["hero banner - mobile", "search", "car card", "filter"],
+      "compare_cars": ["comparison table", "comparison menu", "car card"],
+      "sell_car": ["form widget", "guide preview", "cta"],
+      "check_price": ["info card", "cta", "calculator"],
+      "explore_brands": ["brand card group", "tile list"],
+      "loan": ["loan calculator", "emi tracker", "payment card"]
+    },
+
+    "layout_rules": {
+      "L1": [
+        "hero",
+        "primary_cta",
+        "benefits",
+        "discovery",
+        "trust",
+        "faq",
+        "footer"
+      ],
+      "L2": [
+        "header",
+        "filters",
+        "content",
+        "details",
+        "comparison",
+        "cta"
+      ],
+      "internal": [
+        "header",
+        "progress",
+        "task",
+        "cta",
+        "confirmation"
+      ]
+    },
+
+    "validation_rules": [
+      "no_unknown_widgets",
+      "cta_present",
+      "no_duplicate_sections",
+      "page_type_valid",
+      "brand_respected",
+      "no_random_widgets"
+    ]
+  }
+}

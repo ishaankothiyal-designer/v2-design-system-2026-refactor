@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
-import { Divider, Icon, Text, type DividerLabelPosition, type DividerLineStyle, type DividerProps, type DividerThickness } from "@geist/web";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
+import { Divider, Icon, Text, type DividerLabelPosition, type DividerLineStyle, type DividerProps, type DividerThickness } from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import {
   StoryMatrix,

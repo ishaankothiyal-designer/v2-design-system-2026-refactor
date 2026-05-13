@@ -1,5 +1,5 @@
 import { useState, type CSSProperties, type ReactNode } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
+import type { DisplayBrandId } from "@turbo/tokens";
 import {
   Badge,
   Button,
@@ -10,7 +10,7 @@ import {
   TextInput,
   getRequiredThemeTokenValue,
   type SegmentedControlItem
-} from "@geist/web";
+} from "@turbo/web";
 import { StoryBadge, StoryCard, StoryCopy, StoryHeading, StoryPage } from "../storybook-shell";
 
 export type ServiceBookingMobileScreenProps = {
@@ -1039,7 +1039,7 @@ export const serviceBookingMobileScreenSourceCode = `import {
   SegmentedControl,
   Text,
   TextInput
-} from "@geist/web";
+} from "@turbo/web";
 
 export function ServiceBookingMobileScreen() {
   return (

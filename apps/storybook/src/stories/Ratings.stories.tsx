@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog } from "@turbo/tokens";
 import {
   RatingState,
   Ratings,
@@ -9,7 +9,7 @@ import {
   type RatingStateValue,
   type RatingsProps,
   type RatingsSize
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
@@ -189,7 +189,7 @@ const stateValueCellStyles: CSSProperties = {
   minHeight: 96
 };
 
-const ratingsSourceCode = `import { Ratings } from "@geist/web";
+const ratingsSourceCode = `import { Ratings } from "@turbo/web";
 
 export function Example() {
   return <Ratings rating={4.5} size="Medium" />;

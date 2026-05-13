@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from "react";
 import { Text as RNText } from "react-native";
-import type { DisplayBrandId } from "@geist/tokens";
+import type { DisplayBrandId } from "@turbo/tokens";
 import { getRequiredNativeThemeTokenValue } from "../theme";
 
 export interface TextProps {

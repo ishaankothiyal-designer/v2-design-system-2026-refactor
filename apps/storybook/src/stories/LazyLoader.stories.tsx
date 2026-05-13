@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@geist/tokens";
-import { LazyLoader, type LazyLoaderProps } from "@geist/web";
+import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@turbo/tokens";
+import { LazyLoader, type LazyLoaderProps } from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryCopy, StoryHeading, StoryPage, StoryPreviewSurface } from "../storybook-shell";
 
@@ -90,7 +90,7 @@ const specLabelStyles: CSSProperties = {
   lineHeight: "18px"
 };
 
-const lazyLoaderUiExampleSourceCode = `import { LazyLoader } from "@geist/web";
+const lazyLoaderUiExampleSourceCode = `import { LazyLoader } from "@turbo/web";
 
 export function Example() {
   return <LazyLoader width={320} height={40} />;

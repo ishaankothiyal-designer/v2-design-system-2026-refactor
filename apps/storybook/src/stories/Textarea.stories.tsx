@@ -1,8 +1,8 @@
 import type { ChangeEvent } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "storybook/preview-api";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
-import { Text, Textarea, type TextareaPreviewState, type TextareaProps, type TextareaSize } from "@geist/web";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
+import { Text, Textarea, type TextareaPreviewState, type TextareaProps, type TextareaSize } from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import {
   StoryMatrix,
@@ -100,7 +100,7 @@ function buildTextareaStateSourceCode({
   label: string;
   value?: string;
 }) {
-  return `import { Textarea } from "@geist/web";
+  return `import { Textarea } from "@turbo/web";
 
 export function Textarea${label.replace(/[^a-zA-Z0-9]/g, "")}() {
   return (

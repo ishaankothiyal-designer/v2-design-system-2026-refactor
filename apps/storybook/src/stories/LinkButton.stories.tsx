@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@turbo/tokens";
 import {
   Icon,
   LinkButton,
@@ -9,7 +9,7 @@ import {
   type LinkButtonProps,
   type LinkButtonSize,
   type LinkButtonTone
-} from "@geist/web";
+} from "@turbo/web";
 import {
   StoryMatrix,
   StoryMatrixCornerCell,

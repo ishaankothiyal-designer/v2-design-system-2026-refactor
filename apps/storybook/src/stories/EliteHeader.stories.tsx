@@ -16,7 +16,7 @@ import {
   type EliteHeaderType,
   type EliteHeaderVariant,
   type AvatarAppearance
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import {
   StoryMatrix,

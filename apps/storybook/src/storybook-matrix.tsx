@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import { coreTokenCatalog } from "@geist/tokens";
+import { coreTokenCatalog } from "@turbo/tokens";
 
 type StoryMatrixTone = "canvas" | "inverse";
 

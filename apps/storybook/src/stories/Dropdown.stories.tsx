@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "storybook/preview-api";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
 import {
   Dropdown,
   Text,
@@ -9,7 +9,7 @@ import {
   type DropdownProps,
   type DropdownSize,
   type DropdownValidationState
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import {
   StoryMatrix,
@@ -119,7 +119,7 @@ function buildDropdownStateSourceCode({
   label: string;
   value?: string;
 }) {
-  return `import { Dropdown } from "@geist/web";
+  return `import { Dropdown } from "@turbo/web";
 
 export function Dropdown${label.replace(/[^a-zA-Z0-9]/g, "")}() {
   return (

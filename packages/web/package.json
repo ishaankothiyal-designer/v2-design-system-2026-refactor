@@ -1,5 +1,5 @@
 {
-  "name": "@geist/web",
+  "name": "@turbo/web",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -10,9 +10,9 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@geist/contracts": "workspace:*",
-    "@geist/icons": "workspace:*",
-    "@geist/tokens": "workspace:*",
+    "@turbo/contracts": "workspace:*",
+    "@turbo/icons": "workspace:*",
+    "@turbo/tokens": "workspace:*",
     "react": "*"
   },
   "peerDependencies": {

@@ -1,11 +1,11 @@
 import type { CSSProperties, ReactNode } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
+import type { DisplayBrandId } from "@turbo/tokens";
 import {
   ChoiceChip,
   Icon,
   PageHeaderL2,
   getRequiredThemeTokenValue
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryPage } from "../storybook-shell";
 
@@ -931,7 +931,7 @@ export const myOrdersMobileScreenSourceCode = `import {
   ChoiceChip,
   Icon,
   PageHeaderL2
-} from "@geist/web";
+} from "@turbo/web";
 
 export function MyOrdersMobileScreen() {
   return (

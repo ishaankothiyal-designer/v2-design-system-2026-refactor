@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { BrandLogo, Text, type BrandLogoProps, type BrandLogoType } from "@geist/web";
-import { coreTokenCatalog } from "@geist/tokens";
+import { BrandLogo, Text, type BrandLogoProps, type BrandLogoType } from "@turbo/web";
+import { coreTokenCatalog } from "@turbo/tokens";
 import { createFigspecDesign } from "../storybookFigma";
 import {
   StoryMatrix,

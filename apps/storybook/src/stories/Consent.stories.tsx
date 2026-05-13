@@ -1,8 +1,8 @@
 import type { ChangeEvent } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "storybook/preview-api";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
-import { Consent, Text, type ConsentProps, type ConsentSize } from "@geist/web";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
+import { Consent, Text, type ConsentProps, type ConsentSize } from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import {
   StoryMatrix,
@@ -117,7 +117,7 @@ function StateMatrixStory({
 }
 
 function buildConsentStateSourceCode(state: (typeof consentStates)[number]) {
-  return `import { Consent } from "@geist/web";
+  return `import { Consent } from "@turbo/web";
 
 const sizes = ["Small", "Medium", "Large"] as const;
 

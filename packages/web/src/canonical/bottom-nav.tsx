@@ -12,9 +12,9 @@ import {
   useRef,
   useState
 } from "react";
-import type { IconName } from "@geist/icons";
-import { designSystemRegistry } from "@geist/contracts";
-import { type DisplayBrandId, normalizeBrandId, REPO_BRAND_IDS, type RepoBrandId } from "@geist/tokens";
+import type { IconName } from "@turbo/icons";
+import { designSystemRegistry } from "@turbo/contracts";
+import { type DisplayBrandId, normalizeBrandId, REPO_BRAND_IDS, type RepoBrandId } from "@turbo/tokens";
 import { getRequiredThemeTokenValue, tokenValueToRem } from "../theme";
 import { Icon } from "./icon";
 import { ensureStyleSheet, joinClassNames, toCssRule } from "./runtime-styles";

@@ -1,7 +1,7 @@
 import type { ChangeEvent } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "storybook/preview-api";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
 import {
   SearchBar,
   Text,
@@ -9,7 +9,7 @@ import {
   type SearchBarPreviewState,
   type SearchBarProps,
   type SearchBarSize
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import {
   StoryMatrix,
@@ -125,7 +125,7 @@ function buildSearchBarStateSourceCode({
   forceState: SearchBarPreviewState;
   label: string;
 }) {
-  return `import { SearchBar } from "@geist/web";
+  return `import { SearchBar } from "@turbo/web";
 
 const colors = ["Solid White", "Blue", "Inverse"] as const;
 const sizes = ["Small", "Large"] as const;

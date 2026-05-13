@@ -8,10 +8,10 @@ import {
   useRef,
   useState
 } from "react";
-import { normalizeBrandId, type DisplayBrandId } from "@geist/tokens";
-import { designSystemRegistry } from "@geist/contracts";
+import { normalizeBrandId, type DisplayBrandId } from "@turbo/tokens";
+import { designSystemRegistry } from "@turbo/contracts";
 import { Icon } from "./icon";
-import type { IconName } from "@geist/icons";
+import type { IconName } from "@turbo/icons";
 import { ensureStyleSheet, joinClassNames, runtimeTokenVar, runtimeTokenVarPx, toCssRule } from "./runtime-styles";
 import { tokenValueToRem } from "../theme";
 

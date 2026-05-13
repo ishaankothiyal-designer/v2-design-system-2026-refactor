@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
+import type { DisplayBrandId } from "@turbo/tokens";
 import {
   Button,
   Icon,
@@ -8,7 +8,7 @@ import {
   SectionHeader,
   Switch,
   getRequiredThemeTokenValue
-} from "@geist/web";
+} from "@turbo/web";
 import { StoryPage } from "../storybook-shell";
 
 export type NotificationSettingsMobileScreenProps = {

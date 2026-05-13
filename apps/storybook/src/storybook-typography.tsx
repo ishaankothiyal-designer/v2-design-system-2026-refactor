@@ -1,5 +1,5 @@
 import { useMemo, useState, type CSSProperties } from "react";
-import { coreTokenCatalog } from "@geist/tokens";
+import { coreTokenCatalog } from "@turbo/tokens";
 
 type BrandPreview = {
   name: string;

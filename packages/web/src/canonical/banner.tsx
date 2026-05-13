@@ -1,8 +1,14 @@
-import { type CSSProperties, useState } from "react";
-import type { BrandId, DisplayBrandId } from "@geist/tokens";
-import { designSystemRegistry } from "@geist/contracts";
+import { type CSSProperties, useEffect, useState } from "react";
+import type { BrandId, DisplayBrandId } from "@turbo/tokens";
+import { designSystemRegistry } from "@turbo/contracts";
 import { Icon } from "./icon";
-import { getRequiredThemeTokenValue, pxToRem, tokenValueToRem } from "../theme";
+import {
+  getReadableTextColor,
+  getRequiredThemeTokenValue,
+  pxToRem,
+  sampleBackgroundImageIsDark,
+  tokenValueToRem
+} from "../theme";
 
 export const canonicalBannerWebContract = designSystemRegistry.components.find(
   (component) => component.canonicalId === "component.banner"
@@ -218,6 +224,44 @@ export function Banner({
   const actionTextRadius = pxToRem(Number(getRequiredThemeTokenValue(brand, "radius.pill")));
   const actionTextPaddingInline = resolveBannerBindingValue(brand, "action.text.paddingInline", "12px");
   const actionTextPaddingBlock = resolveBannerBindingValue(brand, "action.text.paddingBlock", "6px");
+  const resolvedBackground =
+    typeof style?.background === "string"
+      ? style.background
+      : typeof style?.backgroundColor === "string"
+        ? style.backgroundColor
+        : tone.background;
+  const backgroundImage = typeof style?.backgroundImage === "string" ? style.backgroundImage : undefined;
+  const defaultReadableTone = getReadableTextColor(resolvedBackground);
+  const [readableTone, setReadableTone] = useState(defaultReadableTone);
+  const titleTone = readableTone;
+  const descriptionTone = readableTone;
+  const leadingIconTone = readableTone;
+  const actionIconTone = actionType === "Icon button" ? readableTone : tone.actionIcon;
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function resolveTone() {
+      const backgroundImageDarkness = backgroundImage ? await sampleBackgroundImageIsDark(backgroundImage) : null;
+      const nextTone =
+        backgroundImageDarkness === null
+          ? defaultReadableTone
+          : backgroundImageDarkness
+            ? "#FFFFFF"
+            : "#000000";
+
+      if (!cancelled) {
+        setReadableTone(nextTone);
+      }
+    }
+
+    setReadableTone(defaultReadableTone);
+    void resolveTone();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [backgroundImage, defaultReadableTone]);
 
   const rootStyles: CSSProperties = {
     display: "flex",
@@ -323,7 +367,7 @@ export function Banner({
               width: leadingIconSize,
               height: leadingIconSize,
               fontSize: leadingIconSize,
-              color: tone.iconColor
+              color: leadingIconTone
             }}
           />
         ) : null}
@@ -333,7 +377,7 @@ export function Banner({
               <div
                 style={{
                   margin: 0,
-                  color: tone.titleColor,
+                  color: titleTone,
                   fontFamily: `${fontFamily}, sans-serif`,
                   fontSize: pxToRem(16),
                   lineHeight: pxToRem(20),
@@ -345,7 +389,7 @@ export function Banner({
               <div
                 style={{
                   margin: 0,
-                  color: tone.descriptionColor,
+                  color: descriptionTone,
                   fontFamily: `${fontFamily}, sans-serif`,
                   fontSize: pxToRem(12),
                   lineHeight: pxToRem(18),
@@ -359,7 +403,7 @@ export function Banner({
             <div
               style={{
                 margin: 0,
-                color: tone.titleColor,
+                color: titleTone,
                 fontFamily: `${fontFamily}, sans-serif`,
                 fontSize: pxToRem(14),
                 lineHeight: pxToRem(20),
@@ -397,7 +441,7 @@ export function Banner({
                   width: actionIconSize,
                   height: actionIconSize,
                   fontSize: actionIconSize,
-                  color: tone.actionIcon
+                  color: actionIconTone
                 }}
               />
             </button>

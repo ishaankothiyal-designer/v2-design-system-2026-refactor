@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
+import type { DisplayBrandId } from "@turbo/tokens";
 import {
   Badge,
   BottomNav,
@@ -16,7 +16,7 @@ import {
   getRequiredThemeTokenValue,
   type BottomNavItem,
   type HorizontalTabItem
-} from "@geist/web";
+} from "@turbo/web";
 import { StoryBadge, StoryCard, StoryCopy, StoryHeading, StoryPage } from "../storybook-shell";
 
 const mercedesCClassImageSrc = new URL("./assets/car-marketplace/mercedes-c-class.png", import.meta.url).href;
@@ -1611,7 +1611,7 @@ export const carMarketplaceDashboardDesktopSourceCode = `import {
   SearchBar,
   SectionHeader,
   TextInput
-} from "@geist/web";
+} from "@turbo/web";
 
 export function CarMarketplaceDashboard() {
   return (

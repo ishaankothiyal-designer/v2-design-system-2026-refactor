@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog } from "@turbo/tokens";
 import {
   Pagination,
   Text,
@@ -8,7 +8,7 @@ import {
   type PaginationPlatform,
   type PaginationProps,
   type PaginationType
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
@@ -180,7 +180,7 @@ const matrixValueCellStyles: CSSProperties = {
 };
 
 function buildPaginationPlatformSourceCode(platform: PaginationPlatform) {
-  return `import { Pagination } from "@geist/web";
+  return `import { Pagination } from "@turbo/web";
 
 export function Example() {
   return (

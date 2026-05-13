@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
+import type { DisplayBrandId } from "@turbo/tokens";
 import {
   ActionBar,
   AppHeader,
@@ -15,7 +15,7 @@ import {
   Tag,
   Text,
   getRequiredThemeTokenValue
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryPage } from "../storybook-shell";
 
@@ -715,7 +715,7 @@ export const dogInventoryShopLandingMobileScreenSourceCode = `import {
   SearchBar,
   SectionHeader,
   Tag
-} from "@geist/web";
+} from "@turbo/web";
 
 export function DogInventoryShopLandingMobileScreen() {
   return (

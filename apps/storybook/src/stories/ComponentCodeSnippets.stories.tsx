@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { designSystemRegistry } from "@geist/contracts";
-import { Accordion, BackToTopButton, Badge, Banner, Button, Divider, Icon, LinkButton, SectionHeader } from "@geist/web";
+import { designSystemRegistry } from "@turbo/contracts";
+import { Accordion, BackToTopButton, Badge, Banner, Button, Divider, Icon, LinkButton, SectionHeader } from "@turbo/web";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
 const componentCards = [
@@ -19,7 +19,7 @@ const componentCards = [
         Label
       </Button>
     ),
-    snippet: `import { Button } from "@geist/web";
+    snippet: `import { Button } from "@turbo/web";
 
 export function Example() {
   return (
@@ -35,13 +35,13 @@ export function Example() {
     </Button>
   );
 }`,
-    file: "@geist/web/canonical/button"
+    file: "@turbo/web/canonical/button"
   },
   {
     canonicalId: "component.backToTopButton",
     title: "Back To Top Button",
     preview: <BackToTopButton>Go to top</BackToTopButton>,
-    snippet: `import { BackToTopButton } from "@geist/web";
+    snippet: `import { BackToTopButton } from "@turbo/web";
 
 export function Example() {
   return (
@@ -53,7 +53,7 @@ export function Example() {
     </BackToTopButton>
   );
 }`,
-    file: "@geist/web/canonical/back-to-top-button"
+    file: "@turbo/web/canonical/back-to-top-button"
   },
   {
     canonicalId: "component.linkButton",
@@ -68,7 +68,7 @@ export function Example() {
         Label
       </LinkButton>
     ),
-    snippet: `import { LinkButton } from "@geist/web";
+    snippet: `import { LinkButton } from "@turbo/web";
 
 export function Example() {
   return (
@@ -84,7 +84,7 @@ export function Example() {
     </LinkButton>
   );
 }`,
-    file: "@geist/web/canonical/link-button"
+    file: "@turbo/web/canonical/link-button"
   },
   {
     canonicalId: "component.accordion",
@@ -108,7 +108,7 @@ export function Example() {
         />
       </div>
     ),
-    snippet: `import { Accordion, Badge } from "@geist/web";
+    snippet: `import { Accordion, Badge } from "@turbo/web";
 
 export function Example() {
   return (
@@ -129,7 +129,7 @@ export function Example() {
     />
   );
 }`,
-    file: "@geist/web/canonical/accordion"
+    file: "@turbo/web/canonical/accordion"
   },
   {
     canonicalId: "component.badge",
@@ -152,7 +152,7 @@ export function Example() {
         />
       </div>
     ),
-    snippet: `import { Badge } from "@geist/web";
+    snippet: `import { Badge } from "@turbo/web";
 
 export function Example() {
   return (
@@ -167,7 +167,7 @@ export function Example() {
     />
   );
 }`,
-    file: "@geist/web/canonical/badge"
+    file: "@turbo/web/canonical/badge"
   },
   {
     canonicalId: "component.banner",
@@ -185,7 +185,7 @@ export function Example() {
         actionLabel="Label"
       />
     ),
-    snippet: `import { Banner } from "@geist/web";
+    snippet: `import { Banner } from "@turbo/web";
 
 export function Example() {
   return (
@@ -202,7 +202,7 @@ export function Example() {
     />
   );
 }`,
-    file: "@geist/web/canonical/banner"
+    file: "@turbo/web/canonical/banner"
   },
   {
     canonicalId: "component.sectionHeader",
@@ -216,7 +216,7 @@ export function Example() {
         actionLabel="View all"
       />
     ),
-    snippet: `import { SectionHeader } from "@geist/web";
+    snippet: `import { SectionHeader } from "@turbo/web";
 
 export function Example() {
   return (
@@ -233,7 +233,7 @@ export function Example() {
     />
   );
 }`,
-    file: "@geist/web/canonical/section-header"
+    file: "@turbo/web/canonical/section-header"
   },
   {
     canonicalId: "component.divider",
@@ -248,7 +248,7 @@ export function Example() {
         trailingIcon={<Icon name="sparkle-filled" decorative />}
       />
     ),
-    snippet: `import { Divider } from "@geist/web";
+    snippet: `import { Divider } from "@turbo/web";
 
 export function Example() {
   return (
@@ -262,7 +262,7 @@ export function Example() {
     />
   );
 }`,
-    file: "@geist/web/canonical/divider"
+    file: "@turbo/web/canonical/divider"
   }
 ] as const;
 

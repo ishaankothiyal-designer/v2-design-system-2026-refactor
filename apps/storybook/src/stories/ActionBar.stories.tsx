@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
 import {
   ActionBar,
   Icon,
@@ -10,7 +10,7 @@ import {
   type ActionBarInfoTone,
   type ActionBarOfferTone,
   type ActionBarProps
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import {
   StoryMatrix,

@@ -5,7 +5,7 @@ import {
   deepMergeTokenTrees,
   getBrandTokenSet,
   STORYBOOK_BRAND_OPTIONS
-} from "@geist/tokens";
+} from "@turbo/tokens";
 import { StoryBadge, StoryCard, StoryPage } from "../storybook-shell";
 
 const brands = STORYBOOK_BRAND_OPTIONS;
@@ -180,7 +180,7 @@ function Tokens() {
             <ul style={{ margin: 0, paddingLeft: 20, display: "grid", gap: 8, color: cars24.color.text.primary }}>
               <li>Use semantic tokens in components instead of hardcoded values.</li>
               <li>Merge brand overrides onto the base catalog rather than replacing it.</li>
-              <li>Use the helper functions in `@geist/tokens` for lookups and platform exports.</li>
+              <li>Use the helper functions in `/tokens` for lookups and platform exports.</li>
             </ul>
           </div>
         </StoryCard>

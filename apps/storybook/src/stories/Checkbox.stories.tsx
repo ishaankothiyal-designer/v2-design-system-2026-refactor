@@ -1,8 +1,8 @@
 import type { ChangeEvent } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "storybook/preview-api";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
-import { Checkbox, Text, type CheckboxProps, type CheckboxSize } from "@geist/web";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
+import { Checkbox, Text, type CheckboxProps, type CheckboxSize } from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import {
   StoryMatrix,
@@ -111,7 +111,7 @@ function StateMatrixStory({
 }
 
 function buildCheckboxStateSourceCode(state: (typeof documentedStates)[number]) {
-  return `import { Checkbox } from "@geist/web";
+  return `import { Checkbox } from "@turbo/web";
 
 const sizes = ["Small", "Medium", "Large", "Extra Large"] as const;
 

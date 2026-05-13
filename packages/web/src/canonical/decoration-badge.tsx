@@ -1,6 +1,6 @@
 import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
-import type { IconName } from "@geist/icons";
-import type { DisplayBrandId } from "@geist/tokens";
+import type { IconName } from "@turbo/icons";
+import type { DisplayBrandId } from "@turbo/tokens";
 import { Icon } from "./icon";
 import { getRequiredThemeTokenValue } from "../theme";
 

@@ -1,11 +1,11 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog } from "@turbo/tokens";
 import {
   NotificationBadge,
   type NotificationBadgeProps,
   type NotificationBadgeSize
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
@@ -70,7 +70,7 @@ function VariantsStory({ brand }: { brand?: NotificationBadgeProps["brand"] }) {
 }
 
 function buildVariantsSourceCode(brand: NonNullable<NotificationBadgeProps["brand"]>) {
-  return `import { NotificationBadge } from "@geist/web";
+  return `import { NotificationBadge } from "@turbo/web";
 
 const sizes = ["Small", "Medium", "Large"] as const;
 

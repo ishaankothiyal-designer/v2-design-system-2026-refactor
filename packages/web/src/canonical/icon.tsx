@@ -1,6 +1,6 @@
 import type { HTMLAttributes } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
-import { getIconClassName, getIconPathCount, type IconName } from "@geist/icons";
+import type { DisplayBrandId } from "@turbo/tokens";
+import { getIconClassName, getIconPathCount, type IconName } from "@turbo/icons";
 import { getRequiredThemeTokenValue } from "../theme";
 
 export interface IconProps extends HTMLAttributes<HTMLSpanElement> {

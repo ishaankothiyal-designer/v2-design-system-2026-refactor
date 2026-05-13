@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "storybook/preview-api";
-import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@turbo/tokens";
 import {
   Icon,
   Text,
@@ -10,7 +10,7 @@ import {
   type TopTabItem,
   type TopTabItemState,
   type TopTabProps
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
@@ -402,7 +402,7 @@ const matrixValueCellStyles: CSSProperties = {
   padding: "16px 20px"
 };
 
-const topTabUiExampleSourceCode = `import { TopTab } from "@geist/web";
+const topTabUiExampleSourceCode = `import { TopTab } from "@turbo/web";
 
 const items = [
   {
@@ -432,7 +432,7 @@ function buildTopTabConfigurationSourceCode(configuration: TopTabConfiguration) 
   const usesImage = configuration === "Label + image" || configuration === "Image only";
   const includesLabel = configuration === "Label + icon" || configuration === "Label + image";
 
-  return `import { TopTab } from "@geist/web";
+  return `import { TopTab } from "@turbo/web";
 
 const items = [
   {

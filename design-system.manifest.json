@@ -1,5 +1,5 @@
 {
-  "name": "Geist Design System",
+  "name": "Turbo Design System",
   "scope": "sandbox",
   "layers": ["tokens", "components", "widgets", "pages", "flows"],
   "ownership": {

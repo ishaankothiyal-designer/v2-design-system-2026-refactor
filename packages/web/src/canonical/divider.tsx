@@ -6,8 +6,8 @@ import {
   type ReactNode,
   isValidElement
 } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
-import { designSystemRegistry } from "@geist/contracts";
+import type { DisplayBrandId } from "@turbo/tokens";
+import { designSystemRegistry } from "@turbo/contracts";
 import { getRequiredThemeTokenValue, tokenValueToRem } from "../theme";
 
 export const canonicalDividerWebContract = designSystemRegistry.components.find(

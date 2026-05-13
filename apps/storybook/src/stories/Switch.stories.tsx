@@ -1,8 +1,8 @@
 import type { ChangeEvent } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "storybook/preview-api";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
-import { Switch, Text, type SwitchProps, type SwitchSize } from "@geist/web";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
+import { Switch, Text, type SwitchProps, type SwitchSize } from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import {
   NotificationSettingsMobileScreen,
@@ -83,7 +83,7 @@ function StateMatrixStory({
 }
 
 function buildSwitchStateSourceCode(state: (typeof documentedStates)[number]) {
-  return `import { Switch } from "@geist/web";
+  return `import { Switch } from "@turbo/web";
 
 const sizes = ["Default", "Small"] as const;
 

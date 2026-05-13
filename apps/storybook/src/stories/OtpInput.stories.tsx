@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "storybook/preview-api";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
 import {
   OtpInput,
   Text,
@@ -9,7 +9,7 @@ import {
   type OtpInputProps,
   type OtpInputSize,
   type OtpInputValidationState
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import {
   StoryMatrix,
@@ -126,7 +126,7 @@ function buildOtpInputStateSourceCode({
   validationState?: OtpInputValidationState;
   value?: string;
 }) {
-  return `import { OtpInput } from "@geist/web";
+  return `import { OtpInput } from "@turbo/web";
 
 export function OtpInput${label.replace(/[^a-zA-Z0-9]/g, "")}() {
   return (

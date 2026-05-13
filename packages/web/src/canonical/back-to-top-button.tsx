@@ -9,8 +9,8 @@ import {
   useInsertionEffect,
   useState
 } from "react";
-import { designSystemRegistry } from "@geist/contracts";
-import { normalizeBrandId, type DisplayBrandId } from "@geist/tokens";
+import { designSystemRegistry } from "@turbo/contracts";
+import { normalizeBrandId, type DisplayBrandId } from "@turbo/tokens";
 import { Icon } from "./icon";
 import { ensureStyleSheet, runtimeTokenVar, runtimeTokenVarPx, toCssRule } from "./runtime-styles";
 

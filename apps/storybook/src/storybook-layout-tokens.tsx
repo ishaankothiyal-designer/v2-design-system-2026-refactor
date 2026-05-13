@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { coreTokenCatalog } from "@geist/tokens";
+import { coreTokenCatalog } from "@turbo/tokens";
 
 type GapToken = {
   name: string;
@@ -23,6 +23,13 @@ type RadiusBrandPreview = {
     label: string;
     value: number;
   }>;
+};
+
+type ShadowToken = {
+  key: string;
+  label: string;
+  value: string;
+  codeSyntax: string;
 };
 
 const gridStyles: CSSProperties = {
@@ -176,6 +183,46 @@ export function RadiusBrandPreviewGrid({ brands }: { brands: RadiusBrandPreview[
             ))}
           </div>
         </section>
+      ))}
+    </div>
+  );
+}
+
+export function ShadowPreviewGrid({ tokens }: { tokens: ShadowToken[] }) {
+  return (
+    <div style={gridStyles}>
+      {tokens.map((token) => (
+        <article key={token.key} style={cardStyles}>
+          <div style={{ display: "grid", gap: 4 }}>
+            <strong>{token.label}</strong>
+            <span style={chipStyles}>{token.key}</span>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              minHeight: 120,
+              padding: 16,
+              borderRadius: 16,
+              background: String(coreTokenCatalog.color.surface.subtle)
+            }}
+          >
+            <div
+              style={{
+                width: 104,
+                height: 104,
+                borderRadius: 20,
+                background: String(coreTokenCatalog.color.surface.canvas),
+                border: `1px solid ${String(coreTokenCatalog.color.border.default)}`,
+                boxShadow: token.value
+              }}
+            />
+          </div>
+
+          <code style={codeStyles}>{token.codeSyntax}</code>
+        </article>
       ))}
     </div>
   );

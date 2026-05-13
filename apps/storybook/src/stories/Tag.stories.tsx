@@ -1,13 +1,13 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
 import {
   Tag,
   type TagColor,
   type TagPriority,
   type TagProps,
   type TagSize
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
@@ -85,7 +85,7 @@ function PreviewCell({ children }: { children: ReactNode }) {
 }
 
 function buildVariantsSourceCode(brand: DisplayBrandId) {
-  return `import { Tag } from "@geist/web";
+  return `import { Tag } from "@turbo/web";
 
 const colors = ["Red", "Green", "Neutral", "Brand blue", "Blue", "Orange"] as const;
 

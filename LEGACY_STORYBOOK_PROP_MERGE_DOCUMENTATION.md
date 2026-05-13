@@ -437,7 +437,7 @@ These show structural differences between the legacy widget model and the curren
 
 ## Final Recommendation
 
-Do not merge the legacy JSON contract directly into the canonical `@geist/web` component APIs.
+Do not merge the legacy JSON contract directly into the canonical `/web` component APIs.
 
 Use this split instead:
 

@@ -1,5 +1,5 @@
 {
-  "name": "@geist/native",
+  "name": "@turbo/native",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -10,8 +10,8 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@geist/contracts": "workspace:*",
-    "@geist/tokens": "workspace:*",
+    "@turbo/contracts": "workspace:*",
+    "@turbo/tokens": "workspace:*",
     "react": "*",
     "react-native": "*"
   }

@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "storybook/preview-api";
-import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, coreTokenCatalog, type DisplayBrandId } from "@turbo/tokens";
 import {
   SegmentedControl,
   Text,
@@ -9,7 +9,7 @@ import {
   type SegmentedControlProps,
   type SegmentedControlSize,
   type SegmentedControlType
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
@@ -217,7 +217,7 @@ const matrixValueCellStyles: CSSProperties = {
 };
 
 function buildSegmentedControlVariantsSourceCode(type: SegmentedControlType) {
-  return `import { SegmentedControl } from "@geist/web";
+  return `import { SegmentedControl } from "@turbo/web";
 
 const sizes = ["Default", "Large"] as const;
 const counts = [2, 3, 4, 5] as const;

@@ -1,4 +1,4 @@
-import { type DisplayBrandId } from "@geist/tokens";
+import { type DisplayBrandId } from "@turbo/tokens";
 
 export type StorybookBrandGlobal = "auto" | DisplayBrandId;
 

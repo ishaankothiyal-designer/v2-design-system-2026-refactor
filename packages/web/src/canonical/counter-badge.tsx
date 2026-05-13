@@ -1,5 +1,5 @@
 import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
+import type { DisplayBrandId } from "@turbo/tokens";
 import { getRequiredThemeTokenValue } from "../theme";
 
 export type CounterBadgeColor = "Brand" | "Green" | "Red" | "White";

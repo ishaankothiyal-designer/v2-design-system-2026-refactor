@@ -1,13 +1,13 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS } from "@turbo/tokens";
 import {
   Accordion,
   Module,
   Text,
   TextInput,
   type ModuleProps
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
@@ -146,7 +146,7 @@ const slotGridStyles: CSSProperties = {
   justifyContent: "center"
 };
 
-const moduleSourceCode = `import { Module, TextInput } from "@geist/web";
+const moduleSourceCode = `import { Module, TextInput } from "@turbo/web";
 
 export function Example() {
   return (

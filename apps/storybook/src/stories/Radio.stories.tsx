@@ -1,8 +1,8 @@
 import type { ChangeEvent } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "storybook/preview-api";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
-import { Radio, Text, type RadioProps, type RadioSize } from "@geist/web";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
+import { Radio, Text, type RadioProps, type RadioSize } from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import {
   StoryMatrix,
@@ -79,7 +79,7 @@ function StateMatrixStory({
 }
 
 function buildRadioStateSourceCode(state: (typeof documentedStates)[number]) {
-  return `import { Radio } from "@geist/web";
+  return `import { Radio } from "@turbo/web";
 
 const sizes = ["Small", "Medium"] as const;
 

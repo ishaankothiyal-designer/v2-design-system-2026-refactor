@@ -7,8 +7,8 @@ import {
   isValidElement,
   useInsertionEffect
 } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
-import { designSystemRegistry } from "@geist/contracts";
+import type { DisplayBrandId } from "@turbo/tokens";
+import { designSystemRegistry } from "@turbo/contracts";
 import { LinkButton } from "./link-button";
 import { ensureStyleSheet, joinClassNames, toCssRule } from "./runtime-styles";
 import { getRequiredThemeTokenValue, tokenValueToRem } from "../theme";

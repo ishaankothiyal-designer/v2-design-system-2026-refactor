@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
-import { Text, Tooltip, type TooltipProps, type TooltipTip } from "@geist/web";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
+import { Text, Tooltip, type TooltipProps, type TooltipTip } from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import {
   StoryMatrix,
@@ -104,7 +104,7 @@ function TipMatrixStory({
 }
 
 function buildTipsSourceCode(brand: DisplayBrandId) {
-  return `import { Tooltip } from "@geist/web";
+  return `import { Tooltip } from "@turbo/web";
 
 const tips = [
   "Top",

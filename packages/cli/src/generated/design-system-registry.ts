@@ -1,4 +1,4 @@
-import type { DesignSystemRegistry } from "@geist/contracts";
+import type { DesignSystemRegistry } from "@turbo/contracts";
 
 export const designSystemRegistry: DesignSystemRegistry = {
   "governance": [
@@ -37,8 +37,8 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "shared",
       "figmaComponentName": "Button",
       "description": "Primary canonical action component.",
-      "webExport": "@geist/web/canonical/button",
-      "nativeExport": "@geist/native/canonical/button",
+      "webExport": "@turbo/web/canonical/button",
+      "nativeExport": "@turbo/native/canonical/button",
       "variants": [
         {
           "name": "shape",
@@ -534,7 +534,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Button group",
       "description": "Grouped button layout that composes primary, secondary, and contextual action patterns.",
-      "webExport": "@geist/web/canonical/button-group",
+      "webExport": "@turbo/web/canonical/button-group",
       "nativeExport": "",
       "variants": [
         {
@@ -740,8 +740,8 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "shared",
       "figmaComponentName": "Link button",
       "description": "Inline text action with optional icons and token-driven underline states.",
-      "webExport": "@geist/web/canonical/link-button",
-      "nativeExport": "@geist/native/canonical/link-button",
+      "webExport": "@turbo/web/canonical/link-button",
+      "nativeExport": "@turbo/native/canonical/link-button",
       "variants": [
         {
           "name": "tone",
@@ -965,7 +965,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Phone Input",
       "description": "Phone number entry field with country selector prefix, optional helper text, and dismiss action.",
-      "webExport": "@geist/web/canonical/phone-input",
+      "webExport": "@turbo/web/canonical/phone-input",
       "nativeExport": "",
       "variants": [
         {
@@ -1345,7 +1345,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Text Input",
       "description": "Single-line text entry field with token-driven affix icons, validation feedback, and size-specific label/helper rhythm.",
-      "webExport": "@geist/web/canonical/text-input",
+      "webExport": "@turbo/web/canonical/text-input",
       "nativeExport": "",
       "variants": [
         {
@@ -1909,7 +1909,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Dropdown field",
       "description": "Canonical dropdown trigger field with token-driven label, affix, helper feedback, and size-specific selected, active, error, and disabled states.",
-      "webExport": "@geist/web/canonical/dropdown",
+      "webExport": "@turbo/web/canonical/dropdown",
       "nativeExport": "",
       "variants": [
         {
@@ -2266,7 +2266,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "OTP",
       "description": "Token-driven one-time-password input with per-box focus states, helper feedback, and resend or countdown support.",
-      "webExport": "@geist/web/canonical/otp-input",
+      "webExport": "@turbo/web/canonical/otp-input",
       "nativeExport": "",
       "variants": [
         {
@@ -2608,7 +2608,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Label",
       "description": "Reusable field label with token-driven size-specific typography, supporting text, required marker, and info affordance.",
-      "webExport": "@geist/web/canonical/label",
+      "webExport": "@turbo/web/canonical/label",
       "nativeExport": "",
       "variants": [
         {
@@ -2758,7 +2758,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Helper Text",
       "description": "Standalone helper copy row with token-driven default, error, and success tones plus optional icon and counter content.",
-      "webExport": "@geist/web/canonical/helper-text",
+      "webExport": "@turbo/web/canonical/helper-text",
       "nativeExport": "",
       "variants": [
         {
@@ -2877,8 +2877,8 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "shared",
       "figmaComponentName": "Caption Button",
       "description": "Action button with a stacked supporting caption placed above or below the primary label.",
-      "webExport": "@geist/web/canonical/caption-button",
-      "nativeExport": "@geist/native/canonical/caption-button",
+      "webExport": "@turbo/web/canonical/caption-button",
+      "nativeExport": "@turbo/native/canonical/caption-button",
       "variants": [
         {
           "name": "styleVariant",
@@ -3085,8 +3085,8 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "shared",
       "figmaComponentName": "SocialButton",
       "description": "Neutral social sign-in button with provider icon, light-surface hover state, and token-driven sizing.",
-      "webExport": "@geist/web/canonical/social-button",
-      "nativeExport": "@geist/native/canonical/social-button",
+      "webExport": "@turbo/web/canonical/social-button",
+      "nativeExport": "@turbo/native/canonical/social-button",
       "variants": [
         {
           "name": "size",
@@ -3263,8 +3263,8 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "shared",
       "figmaComponentName": "Back to top",
       "description": "Compact pill-shaped action used to jump back to the top of a page, with light and inverse surfaces.",
-      "webExport": "@geist/web/canonical/back-to-top-button",
-      "nativeExport": "@geist/native/canonical/back-to-top-button",
+      "webExport": "@turbo/web/canonical/back-to-top-button",
+      "nativeExport": "@turbo/native/canonical/back-to-top-button",
       "variants": [
         {
           "name": "inverse",
@@ -3465,6 +3465,212 @@ export const designSystemRegistry: DesignSystemRegistry = {
       ]
     },
     {
+      "canonicalId": "component.fabButton",
+      "canonicalName": "FAB Button",
+      "layer": "component",
+      "status": "approved",
+      "platform": "shared",
+      "figmaComponentName": "FAB",
+      "description": "Floating upload/share action with collapsed and expanded variants, an anchored status chip, and dark elevated surface styling.",
+      "webExport": "@turbo/web/canonical/fab-button",
+      "nativeExport": "@turbo/native/canonical/fab-button",
+      "variants": [
+        {
+          "name": "showTag",
+          "values": [
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "disabled",
+          "values": [
+            "false",
+            "true"
+          ]
+        }
+      ],
+      "states": [
+        "rest",
+        "hover",
+        "pressed",
+        "focus",
+        "disabled"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "size.default.width",
+          "token": "48px"
+        },
+        {
+          "slot": "size.default.height",
+          "token": "48px"
+        },
+        {
+          "slot": "size.expanded.width",
+          "token": "324px"
+        },
+        {
+          "slot": "size.expanded.height",
+          "token": "48px"
+        },
+        {
+          "slot": "content.width",
+          "token": "224px"
+        },
+        {
+          "slot": "content.gap",
+          "token": "spacing.2"
+        },
+        {
+          "slot": "content.paddingInline",
+          "token": "spacing.3"
+        },
+        {
+          "slot": "content.paddingBlock",
+          "token": "spacing.3"
+        },
+        {
+          "slot": "label.width",
+          "token": "192px"
+        },
+        {
+          "slot": "icon.size",
+          "token": "component.iconButton.size.lg.iconSize"
+        },
+        {
+          "slot": "radius.pill",
+          "token": "radius.pill"
+        },
+        {
+          "slot": "surface.shadow",
+          "token": "component.backToTopButton.shadow.lg"
+        },
+        {
+          "slot": "border.width",
+          "token": "component.backToTopButton.border.width"
+        },
+        {
+          "slot": "focusRing.color",
+          "token": "color.border.focus"
+        },
+        {
+          "slot": "focusRing.width",
+          "token": "component.backToTopButton.focus.outlineWidth"
+        },
+        {
+          "slot": "focusRing.offset",
+          "token": "component.backToTopButton.focus.outlineOffset"
+        },
+        {
+          "slot": "surface.dark.rest.background",
+          "token": "component.backToTopButton.color.dark.rest.background"
+        },
+        {
+          "slot": "surface.dark.rest.foreground",
+          "token": "component.backToTopButton.color.dark.rest.foreground"
+        },
+        {
+          "slot": "surface.dark.rest.icon",
+          "token": "component.backToTopButton.color.dark.rest.icon"
+        },
+        {
+          "slot": "surface.dark.hover.background",
+          "token": "component.backToTopButton.color.dark.hover.background"
+        },
+        {
+          "slot": "surface.dark.hover.foreground",
+          "token": "component.backToTopButton.color.dark.hover.foreground"
+        },
+        {
+          "slot": "surface.dark.hover.icon",
+          "token": "component.backToTopButton.color.dark.hover.icon"
+        },
+        {
+          "slot": "surface.dark.disabled.background",
+          "token": "component.backToTopButton.color.dark.disabled.background"
+        },
+        {
+          "slot": "surface.dark.disabled.foreground",
+          "token": "component.backToTopButton.color.dark.disabled.foreground"
+        },
+        {
+          "slot": "surface.dark.disabled.icon",
+          "token": "component.backToTopButton.color.dark.disabled.icon"
+        },
+        {
+          "slot": "label.typography.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "label.typography.fontWeight",
+          "token": "typography.fontWeight.medium"
+        },
+        {
+          "slot": "label.typography.fontSize",
+          "token": "component.button.typography.sm.fontSize"
+        },
+        {
+          "slot": "label.typography.lineHeight",
+          "token": "component.button.typography.sm.lineHeight"
+        },
+        {
+          "slot": "label.typography.letterSpacing",
+          "token": "component.button.typography.sm.letterSpacing"
+        },
+        {
+          "slot": "tag.offset.left",
+          "token": "26px"
+        },
+        {
+          "slot": "tag.offset.top",
+          "token": "-3px"
+        },
+        {
+          "slot": "tag.minWidth",
+          "token": "26px"
+        },
+        {
+          "slot": "tag.height",
+          "token": "16px"
+        },
+        {
+          "slot": "tag.paddingInline",
+          "token": "6px"
+        },
+        {
+          "slot": "tag.background",
+          "token": "component.sectionHeader.color.tag.background"
+        },
+        {
+          "slot": "tag.foreground",
+          "token": "component.sectionHeader.color.tag.foreground"
+        },
+        {
+          "slot": "tag.typography.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "tag.typography.fontWeight",
+          "token": "typography.fontWeight.semibold"
+        },
+        {
+          "slot": "tag.typography.fontSize",
+          "token": "typography.fontSize.xs"
+        },
+        {
+          "slot": "tag.typography.lineHeight",
+          "token": "typography.lineHeight.xs"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
       "canonicalId": "component.iconButton",
       "canonicalName": "Icon Button",
       "layer": "component",
@@ -3472,8 +3678,8 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "shared",
       "figmaComponentName": "Icon Button",
       "description": "Compact icon-only action button with square or circular shape across light and on-dark surfaces.",
-      "webExport": "@geist/web/canonical/icon-button",
-      "nativeExport": "@geist/native/canonical/icon-button",
+      "webExport": "@turbo/web/canonical/icon-button",
+      "nativeExport": "@turbo/native/canonical/icon-button",
       "variants": [
         {
           "name": "shape",
@@ -3982,7 +4188,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Checkbox",
       "description": "Token-driven checkbox input with rest, indeterminate, selected, and disabled states across four visual sizes.",
-      "webExport": "@geist/web/canonical/checkbox",
+      "webExport": "@turbo/web/canonical/checkbox",
       "nativeExport": "",
       "variants": [
         {
@@ -4165,7 +4371,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Radio",
       "description": "Token-driven radio input with small and medium sizes, brand-aware selected fills, and disabled-state support.",
-      "webExport": "@geist/web/canonical/radio",
+      "webExport": "@turbo/web/canonical/radio",
       "nativeExport": "",
       "variants": [
         {
@@ -4308,7 +4514,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Switch",
       "description": "Token-driven switch input with default and small sizes, brand-aware selected states, and disabled-state support.",
-      "webExport": "@geist/web/canonical/switch",
+      "webExport": "@turbo/web/canonical/switch",
       "nativeExport": "",
       "variants": [
         {
@@ -4447,7 +4653,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Segment",
       "description": "Single-selection segmented control for toggling between closely related views or states.",
-      "webExport": "@geist/web/canonical/segmented-control",
+      "webExport": "@turbo/web/canonical/segmented-control",
       "nativeExport": "",
       "variants": [
         {
@@ -4620,7 +4826,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Top Tab",
       "description": "Top-aligned tab navigation with equal-width items, supporting icon and image media in both labeled and media-only configurations across light and inverse surfaces.",
-      "webExport": "@geist/web/canonical/top-tab",
+      "webExport": "@turbo/web/canonical/top-tab",
       "nativeExport": "",
       "variants": [
         {
@@ -4822,7 +5028,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Bottom Nav",
       "description": "Bottom-aligned mobile navigation supporting sticky and floating layouts, equal-width destinations, and icon or icon-plus-label item treatments.",
-      "webExport": "@geist/web/canonical/bottom-nav",
+      "webExport": "@turbo/web/canonical/bottom-nav",
       "nativeExport": "",
       "variants": [
         {
@@ -5007,6 +5213,120 @@ export const designSystemRegistry: DesignSystemRegistry = {
       ]
     },
     {
+      "canonicalId": "component.chipBar",
+      "canonicalName": "Chip Bar",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": "Chip Bar",
+      "description": "Two-row clipped chip composition with an optional leading filter trigger, built entirely from the approved small horizontal choice-chip instances.",
+      "webExport": "@turbo/web/canonical/chip-bar",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "Filter Chip",
+          "values": [
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "Row 2",
+          "values": [
+            "false",
+            "true"
+          ]
+        }
+      ],
+      "states": [
+        "rest"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "container.width",
+          "token": "360px"
+        },
+        {
+          "slot": "container.paddingInline",
+          "token": "var(--cars24-misc-gap-12)"
+        },
+        {
+          "slot": "container.paddingBlock",
+          "token": "var(--cars24-misc-gap-12)"
+        },
+        {
+          "slot": "container.rowGap",
+          "token": "var(--cars24-misc-gap-12)"
+        },
+        {
+          "slot": "row.itemGap",
+          "token": "var(--cars24-misc-gap-12)"
+        },
+        {
+          "slot": "chip.variant",
+          "token": "Horizontal"
+        },
+        {
+          "slot": "chip.size",
+          "token": "Small"
+        },
+        {
+          "slot": "chip.state",
+          "token": "Rest"
+        },
+        {
+          "slot": "chip.type",
+          "token": "Regular"
+        },
+        {
+          "slot": "chip.contentGap",
+          "token": "var(--cars24-misc-gap-6)"
+        },
+        {
+          "slot": "chip.paddingInline",
+          "token": "var(--cars24-misc-gap-8)"
+        },
+        {
+          "slot": "chip.paddingBlock",
+          "token": "var(--cars24-misc-gap-8)"
+        },
+        {
+          "slot": "chip.borderWidth",
+          "token": "var(--cars24-misc-stroke-regular)"
+        },
+        {
+          "slot": "chip.radius",
+          "token": "var(--cars24-theme-radius-alt-sm)"
+        },
+        {
+          "slot": "chip.background",
+          "token": "var(--cars24-semantic-bg-primary)"
+        },
+        {
+          "slot": "chip.border",
+          "token": "var(--cars24-semantic-border-primary)"
+        },
+        {
+          "slot": "chip.label",
+          "token": "label/label-3/medium"
+        },
+        {
+          "slot": "chip.label.foreground",
+          "token": "var(--cars24-semantic-text-primary)"
+        },
+        {
+          "slot": "chip.icon.foreground",
+          "token": "var(--cars24-semantic-icon-primary)"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
       "canonicalId": "component.horizontalTab",
       "canonicalName": "Horizontal Tab",
       "layer": "component",
@@ -5014,7 +5334,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Horizontal Tab",
       "description": "Horizontal tab navigation for switching between peer views, with optional leading and trailing icons plus a tag on each item across light and inverse default and small sizes.",
-      "webExport": "@geist/web/canonical/horizontal-tab",
+      "webExport": "@turbo/web/canonical/horizontal-tab",
       "nativeExport": "",
       "variants": [
         {
@@ -5285,7 +5605,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "_segment-box",
       "description": "Item-level segmented-control button supporting light, inverse, and brand selections plus hover and disabled states.",
-      "webExport": "@geist/web/canonical/segment-button",
+      "webExport": "@turbo/web/canonical/segment-button",
       "nativeExport": "",
       "variants": [
         {
@@ -5460,8 +5780,8 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "shared",
       "figmaComponentName": "Accordion",
       "description": "Expandable content container that reveals or hides related information within the same layout.",
-      "webExport": "@geist/web/canonical/accordion",
-      "nativeExport": "@geist/native/canonical/accordion",
+      "webExport": "@turbo/web/canonical/accordion",
+      "nativeExport": "@turbo/native/canonical/accordion",
       "variants": [
         {
           "name": "size",
@@ -5612,7 +5932,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Checkbox Label",
       "description": "Composed checkbox field with inline label and supporting description sized to match the checkbox control.",
-      "webExport": "@geist/web/canonical/checkbox-label",
+      "webExport": "@turbo/web/canonical/checkbox-label",
       "nativeExport": "",
       "variants": [
         {
@@ -5753,7 +6073,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Radio Label",
       "description": "Composed radio field with inline label and supporting description sized to match the underlying radio control.",
-      "webExport": "@geist/web/canonical/radio-label",
+      "webExport": "@turbo/web/canonical/radio-label",
       "nativeExport": "",
       "variants": [
         {
@@ -5871,7 +6191,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Switch Label",
       "description": "Composed switch field with inline label and supporting description sized to match the underlying switch control.",
-      "webExport": "@geist/web/canonical/switch-label",
+      "webExport": "@turbo/web/canonical/switch-label",
       "nativeExport": "",
       "variants": [
         {
@@ -5989,8 +6309,8 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "shared",
       "figmaComponentName": "Badge",
       "description": "Compact indicator used to show count, status, or a short state attached to another element.",
-      "webExport": "@geist/web/canonical/badge",
-      "nativeExport": "@geist/native/canonical/badge",
+      "webExport": "@turbo/web/canonical/badge",
+      "nativeExport": "@turbo/native/canonical/badge",
       "variants": [
         {
           "name": "size",
@@ -6481,7 +6801,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Grid Cards",
       "description": "Fixed-dimension discovery card that adapts its content density to the intended grid column count.",
-      "webExport": "@geist/web/canonical/grid-card",
+      "webExport": "@turbo/web/canonical/grid-card",
       "nativeExport": "",
       "variants": [
         {
@@ -6658,6 +6978,39 @@ export const designSystemRegistry: DesignSystemRegistry = {
           "values": [
             "2",
             "3"
+      "canonicalId": "component.staticSliderCard",
+      "canonicalName": "Static Slider Card",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": "_base-Slider-container",
+      "description": "Slot-based fixed-dimension card used in the static slider widget, adapting density to the approved slider column count.",
+      "webExport": "@turbo/web/canonical/static-slider-card",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "columnCount",
+          "values": [
+            "1+",
+            "2+",
+            "3+",
+            "4+"
+          ]
+        },
+        {
+          "name": "type",
+          "values": [
+            "Text Inside",
+            "Text Outside",
+            "With Icon"
+          ]
+        },
+        {
+          "name": "size",
+          "values": [
+            "Large",
+            "Medium",
+            "Small"
           ]
         }
       ],
@@ -6667,6 +7020,1718 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "tokenBindings": [
         {
           "slot": "row.width",
+          "slot": "container.insideGap",
+          "token": "spacing.2"
+        },
+        {
+          "slot": "container.outsideGap",
+          "token": "spacing.2"
+        },
+        {
+          "slot": "container.padding.regular",
+          "token": "spacing.3"
+        },
+        {
+          "slot": "container.padding.compact",
+          "token": "var(--cars24-misc-gap-10)"
+        },
+        {
+          "slot": "slot.background",
+          "token": "color.brand.primary.50"
+        },
+        {
+          "slot": "slot.radius.regular",
+          "token": "radius.xl"
+        },
+        {
+          "slot": "slot.radius.compact",
+          "token": "radius.lg"
+        },
+        {
+          "slot": "slot.radius.outsideCompact",
+          "token": "radius.md"
+        },
+        {
+          "slot": "content.title.color",
+          "token": "color.text.primary"
+        },
+        {
+          "slot": "content.description.color",
+          "token": "color.text.secondary"
+        },
+        {
+          "slot": "content.title.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "content.title.fontWeight",
+          "token": "typography.fontWeight.semibold"
+        },
+        {
+          "slot": "content.title.lg",
+          "token": "utility/label-1/semibold"
+        },
+        {
+          "slot": "content.title.sm",
+          "token": "utility/label-2/semibold"
+        },
+        {
+          "slot": "content.description.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "content.description.fontWeight",
+          "token": "typography.fontWeight.regular"
+        },
+        {
+          "slot": "content.description.lg",
+          "token": "paragraph/body-2"
+        },
+        {
+          "slot": "content.description.sm",
+          "token": "paragraph/body-3"
+        },
+        {
+          "slot": "tag.background",
+          "token": "var(--cars24-semantic-bg-danger-base)"
+        },
+        {
+          "slot": "tag.foreground",
+          "token": "var(--cars24-semantic-text-primary-inverse)"
+        },
+        {
+          "slot": "tag.typography",
+          "token": "utility/label-4/medium"
+        },
+        {
+          "slot": "tag.radius",
+          "token": "var(--cars24-theme-radius-full)"
+        },
+        {
+          "slot": "icon.color",
+          "token": "color.text.primary"
+        },
+        {
+          "slot": "icon.size.1col",
+          "token": "var(--cars24-misc-size-32)"
+        },
+        {
+          "slot": "icon.size.2col",
+          "token": "var(--cars24-misc-size-24)"
+        },
+        {
+          "slot": "icon.size.3col",
+          "token": "var(--cars24-misc-size-20)"
+        },
+        {
+          "slot": "icon.size.4col",
+          "token": "var(--cars24-misc-size-16)"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
+      "canonicalId": "component.listCard",
+      "canonicalName": "List Card",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": "List_Card",
+      "description": "Fixed-width list card with a persistent media slot, optional badge or price row, and light or inverse surfaces.",
+      "webExport": "@turbo/web/canonical/list-card",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "inverse",
+          "values": [
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "type",
+          "values": [
+            "Small: 1T + 1ST",
+            "Med: 1B + 1T + 1ST",
+            "Med: 2T + 1ST",
+            "Med: 1T + 2ST",
+            "Med: 1T + 1ST + 1P",
+            "Large: 1B + 1T + 2ST"
+          ]
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "container.surface.light",
+          "token": "color.surface.canvas"
+        },
+        {
+          "slot": "container.surface.dark",
+          "token": "color.surface.inverse"
+        },
+        {
+          "slot": "container.border.light",
+          "token": "color.border.default"
+        },
+        {
+          "slot": "container.radius",
+          "token": "radius.md"
+        },
+        {
+          "slot": "container.width",
+          "token": "336px"
+        },
+        {
+          "slot": "container.height.small",
+          "token": "67px"
+        },
+        {
+          "slot": "container.height.medium",
+          "token": "84px"
+        },
+        {
+          "slot": "container.height.large",
+          "token": "118px"
+        },
+        {
+          "slot": "media.background",
+          "token": "color.brand.primary.50"
+        },
+        {
+          "slot": "media.width.default",
+          "token": "84px"
+        },
+        {
+          "slot": "media.width.large",
+          "token": "100px"
+        },
+        {
+          "slot": "content.padding.inline",
+          "token": "spacing.3"
+        },
+        {
+          "slot": "content.stackGap.spacious",
+          "token": "spacing.1"
+        },
+        {
+          "slot": "content.title.color.light",
+          "token": "color.text.primary"
+        },
+        {
+          "slot": "content.title.color.dark",
+          "token": "color.text.inverse"
+        },
+        {
+          "slot": "content.subtitle.color.light",
+          "token": "color.text.secondary"
+        },
+        {
+          "slot": "content.subtitle.color.dark",
+          "token": "component.sectionHeader.color.dark.description"
+        },
+        {
+          "slot": "content.price.color.light",
+          "token": "color.text.primary"
+        },
+        {
+          "slot": "content.price.color.dark",
+          "token": "color.text.inverse"
+        },
+        {
+          "slot": "content.strikePrice.color.light",
+          "token": "color.text.secondary"
+        },
+        {
+          "slot": "content.strikePrice.color.dark",
+          "token": "component.sectionHeader.color.dark.description"
+        },
+        {
+          "slot": "action.chevron.color.light",
+          "token": "color.text.primary"
+        },
+        {
+          "slot": "action.chevron.color.dark",
+          "token": "color.text.inverse"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
+      "canonicalId": "component.addressCard",
+      "canonicalName": "Address Card",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": "Address card",
+      "description": "Compact address summary row with a location glyph, optional distance label, and either card or full-bleed surface treatment.",
+      "webExport": "@turbo/web/canonical/address-card",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "type",
+          "values": [
+            "Address + chevron (Card)",
+            "Address + chevron (Full bleed)"
+          ]
+        },
+        {
+          "name": "showDistance",
+          "values": [
+            "false",
+            "true"
+          ]
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "container.surface",
+          "token": "var(--cars24-semantic-bg-primary)"
+        },
+        {
+          "slot": "container.border.card",
+          "token": "var(--cars24-semantic-border-primary-hover)"
+        },
+        {
+          "slot": "container.border.fullBleed",
+          "token": "var(--cars24-semantic-border-primary)"
+        },
+        {
+          "slot": "container.radius.card",
+          "token": "radius.md"
+        },
+        {
+          "slot": "layout.container.gap",
+          "token": "var(--cars24-misc-gap-8)"
+        },
+        {
+          "slot": "layout.content.gap",
+          "token": "var(--cars24-misc-gap-4)"
+        },
+        {
+          "slot": "layout.text.gap",
+          "token": "var(--cars24-misc-gap-2)"
+        },
+        {
+          "slot": "layout.padding.card",
+          "token": "spacing.3"
+        },
+        {
+          "slot": "layout.padding.fullBleed.inline",
+          "token": "spacing.3"
+        },
+        {
+          "slot": "layout.chevron.paddingInline",
+          "token": "spacing.2"
+        },
+        {
+          "slot": "size.card.width",
+          "token": "336px"
+        },
+        {
+          "slot": "size.fullBleed.width",
+          "token": "360px"
+        },
+        {
+          "slot": "size.height",
+          "token": "60px"
+        },
+        {
+          "slot": "size.indicator.width",
+          "token": "40px"
+        },
+        {
+          "slot": "icon.leading.color",
+          "token": "var(--cars24-semantic-border-secondary-inverse)"
+        },
+        {
+          "slot": "icon.leading.size",
+          "token": "var(--cars24-misc-size-18)"
+        },
+        {
+          "slot": "icon.trailing.color",
+          "token": "var(--cars24-semantic-border-primary)"
+        },
+        {
+          "slot": "icon.trailing.size",
+          "token": "icon.size.lg"
+        },
+        {
+          "slot": "content.distance.color",
+          "token": "var(--cars24-semantic-text-brand-base)"
+        },
+        {
+          "slot": "content.distance.fontSize",
+          "token": "component.label.xs.typography.description.fontSize"
+        },
+        {
+          "slot": "content.distance.lineHeight",
+          "token": "component.label.xs.typography.description.lineHeight"
+        },
+        {
+          "slot": "content.distance.letterSpacing",
+          "token": "component.label.xs.typography.description.letterSpacing"
+        },
+        {
+          "slot": "content.title.color",
+          "token": "var(--cars24-semantic-text-primary)"
+        },
+        {
+          "slot": "content.title.fontSize",
+          "token": "component.label.md.typography.label.fontSize"
+        },
+        {
+          "slot": "content.title.lineHeight",
+          "token": "component.label.md.typography.label.lineHeight"
+        },
+        {
+          "slot": "content.title.letterSpacing",
+          "token": "component.label.md.typography.label.letterSpacing"
+        },
+        {
+          "slot": "content.description.color",
+          "token": "var(--cars24-semantic-text-secondary)"
+        },
+        {
+          "slot": "content.description.fontSize",
+          "token": "component.label.sm.typography.label.fontSize"
+        },
+        {
+          "slot": "content.description.lineHeight",
+          "token": "component.label.sm.typography.label.lineHeight"
+        },
+        {
+          "slot": "content.description.letterSpacing",
+          "token": "component.label.sm.typography.label.letterSpacing"
+        },
+        {
+          "slot": "typography.regular.weight",
+          "token": "typography.fontWeight.regular"
+        },
+        {
+          "slot": "typography.semibold.weight",
+          "token": "typography.fontWeight.semibold"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
+      "canonicalId": "component.videoCard",
+      "canonicalName": "Video Card",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": "_Video_Card",
+      "description": "Media-first video preview card with a centered play affordance and inverse metadata overlay.",
+      "webExport": "@turbo/web/canonical/video-card",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "size",
+          "values": [
+            "Small",
+            "Medium",
+            "Large"
+          ]
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "container.radius",
+          "token": "radius.xl"
+        },
+        {
+          "slot": "size.small.width",
+          "token": "132px"
+        },
+        {
+          "slot": "size.small.height",
+          "token": "175px"
+        },
+        {
+          "slot": "size.medium.width",
+          "token": "210px"
+        },
+        {
+          "slot": "size.medium.height",
+          "token": "280px"
+        },
+        {
+          "slot": "size.large.width",
+          "token": "280px"
+        },
+        {
+          "slot": "size.large.height",
+          "token": "280px"
+        },
+        {
+          "slot": "surface.background",
+          "token": "color.brand.primary.50"
+        },
+        {
+          "slot": "surface.overlay.start",
+          "token": "rgba(0, 0, 0, 0)"
+        },
+        {
+          "slot": "surface.overlay.mid",
+          "token": "rgba(0, 0, 0, 0.64)"
+        },
+        {
+          "slot": "surface.overlay.end",
+          "token": "rgba(0, 0, 0, 1)"
+        },
+        {
+          "slot": "surface.overlay.midStop",
+          "token": "36%"
+        },
+        {
+          "slot": "content.paddingTop",
+          "token": "20px"
+        },
+        {
+          "slot": "content.paddingInline",
+          "token": "spacing.3"
+        },
+        {
+          "slot": "content.paddingBottom.small",
+          "token": "12px"
+        },
+        {
+          "slot": "content.paddingBottom.medium",
+          "token": "16px"
+        },
+        {
+          "slot": "content.paddingBottom.large",
+          "token": "16px"
+        },
+        {
+          "slot": "content.valueGap",
+          "token": "spacing.2"
+        },
+        {
+          "slot": "content.title.color",
+          "token": "color.text.inverse"
+        },
+        {
+          "slot": "content.description.color",
+          "token": "component.sectionHeader.color.dark.description"
+        },
+        {
+          "slot": "content.value.color",
+          "token": "component.sectionHeader.color.dark.description"
+        },
+        {
+          "slot": "typography.title.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "typography.title.fontWeight",
+          "token": "typography.fontWeight.semibold"
+        },
+        {
+          "slot": "typography.body.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "typography.body.fontWeight",
+          "token": "typography.fontWeight.regular"
+        },
+        {
+          "slot": "typography.title.small.fontSize",
+          "token": "13px"
+        },
+        {
+          "slot": "typography.title.small.lineHeight",
+          "token": "16px"
+        },
+        {
+          "slot": "typography.body.small.fontSize",
+          "token": "11px"
+        },
+        {
+          "slot": "typography.body.small.lineHeight",
+          "token": "17px"
+        },
+        {
+          "slot": "typography.title.medium.fontSize",
+          "token": "15px"
+        },
+        {
+          "slot": "typography.title.medium.lineHeight",
+          "token": "18px"
+        },
+        {
+          "slot": "typography.body.medium.fontSize",
+          "token": "13px"
+        },
+        {
+          "slot": "typography.body.medium.lineHeight",
+          "token": "18px"
+        },
+        {
+          "slot": "typography.title.large.fontSize",
+          "token": "17px"
+        },
+        {
+          "slot": "typography.title.large.lineHeight",
+          "token": "20px"
+        },
+        {
+          "slot": "typography.body.large.fontSize",
+          "token": "15px"
+        },
+        {
+          "slot": "typography.body.large.lineHeight",
+          "token": "20px"
+        },
+        {
+          "slot": "playButton.surface",
+          "token": "component.iconButton.color.dark.solid.primary.rest.background"
+        },
+        {
+          "slot": "playButton.icon.color",
+          "token": "component.iconButton.color.dark.solid.primary.rest.foreground"
+        },
+        {
+          "slot": "playButton.size.box",
+          "token": "component.iconButton.size.lg.boxSize"
+        },
+        {
+          "slot": "playButton.size.icon",
+          "token": "component.iconButton.size.lg.iconSize"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
+      "canonicalId": "component.blogCard",
+      "canonicalName": "Blog Card",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": ".Blog card",
+      "description": "Media-first editorial card with optional badge and play affordance, plus author metadata on light or inverse surfaces.",
+      "webExport": "@turbo/web/canonical/blog-card",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "inverse",
+          "values": [
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "type",
+          "values": [
+            "Large"
+          ]
+        },
+        {
+          "name": "showTag",
+          "values": [
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "showPlayButton",
+          "values": [
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "showDescription",
+          "values": [
+            "false",
+            "true"
+          ]
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "container.surface.light",
+          "token": "var(--cars24-semantic-bg-primary)"
+        },
+        {
+          "slot": "container.surface.dark",
+          "token": "var(--cars24-semantic-bg-secondary-inverse)"
+        },
+        {
+          "slot": "container.border.light",
+          "token": "var(--cars24-semantic-border-primary)"
+        },
+        {
+          "slot": "container.border.dark",
+          "token": "var(--cars24-semantic-border-secondary-inverse)"
+        },
+        {
+          "slot": "container.radius",
+          "token": "radius.xl"
+        },
+        {
+          "slot": "container.width",
+          "token": "284px"
+        },
+        {
+          "slot": "media.height",
+          "token": "213px"
+        },
+        {
+          "slot": "media.surface",
+          "token": "var(--cars24-primitive-drive-pink-50)"
+        },
+        {
+          "slot": "media.placeholder.icon",
+          "token": "var(--cars24-primitive-drive-pink-400)"
+        },
+        {
+          "slot": "layout.tag.inset",
+          "token": "spacing.3"
+        },
+        {
+          "slot": "layout.content.padding",
+          "token": "spacing.3"
+        },
+        {
+          "slot": "layout.content.gap",
+          "token": "20px"
+        },
+        {
+          "slot": "layout.text.gap",
+          "token": "4px"
+        },
+        {
+          "slot": "layout.author.gap",
+          "token": "spacing.2"
+        },
+        {
+          "slot": "layout.meta.gap",
+          "token": "4px"
+        },
+        {
+          "slot": "playButton.surface",
+          "token": "var(--cars24-semantic-bg-brand-subtler)"
+        },
+        {
+          "slot": "playButton.icon.color",
+          "token": "var(--cars24-semantic-icon-primary)"
+        },
+        {
+          "slot": "playButton.size",
+          "token": "40px"
+        },
+        {
+          "slot": "playButton.shadow",
+          "token": "0px 10px 15px -3px rgba(0, 0, 0, 0.1), 0px 4px 6px -4px rgba(0, 0, 0, 0.1)"
+        },
+        {
+          "slot": "content.title.color.light",
+          "token": "var(--cars24-semantic-text-primary)"
+        },
+        {
+          "slot": "content.title.color.dark",
+          "token": "var(--cars24-semantic-text-primary-inverse)"
+        },
+        {
+          "slot": "content.title.fontSize",
+          "token": "16px"
+        },
+        {
+          "slot": "content.title.lineHeight",
+          "token": "20px"
+        },
+        {
+          "slot": "content.description.color.light",
+          "token": "var(--cars24-semantic-text-secondary)"
+        },
+        {
+          "slot": "content.description.color.dark",
+          "token": "var(--cars24-semantic-text-secondary-on-color)"
+        },
+        {
+          "slot": "content.description.fontSize",
+          "token": "12px"
+        },
+        {
+          "slot": "content.description.lineHeight",
+          "token": "18px"
+        },
+        {
+          "slot": "content.authorName.color.light",
+          "token": "var(--cars24-semantic-text-primary)"
+        },
+        {
+          "slot": "content.authorName.color.dark",
+          "token": "var(--cars24-semantic-text-primary-inverse)"
+        },
+        {
+          "slot": "content.authorName.fontSize",
+          "token": "12px"
+        },
+        {
+          "slot": "content.authorName.lineHeight",
+          "token": "16px"
+        },
+        {
+          "slot": "content.meta.color.light",
+          "token": "var(--cars24-semantic-text-disabled)"
+        },
+        {
+          "slot": "content.meta.color.dark",
+          "token": "var(--cars24-semantic-text-secondary-on-color)"
+        },
+        {
+          "slot": "content.meta.divider.color",
+          "token": "var(--cars24-semantic-icon-secondary)"
+        },
+        {
+          "slot": "content.meta.fontSize",
+          "token": "12px"
+        },
+        {
+          "slot": "content.meta.lineHeight",
+          "token": "18px"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
+      "canonicalId": "component.videoTopBar",
+      "canonicalName": "Video Top Bar",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": ".Video top bar",
+      "description": "Overlay top-bar component for fullscreen story and video media with header controls plus progress or playback affordances.",
+      "webExport": "@turbo/web/canonical/video-top-bar",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "type",
+          "values": [
+            "Story",
+            "Video"
+          ]
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "surface.overlay",
+          "token": "linear-gradient(180deg, rgba(0, 0, 0, 1) 12%, rgba(0, 0, 0, 0) 100%)"
+        },
+        {
+          "slot": "content.title.color",
+          "token": "color.text.inverse"
+        },
+        {
+          "slot": "content.subtitle.color",
+          "token": "component.sectionHeader.color.dark.description"
+        },
+        {
+          "slot": "content.title.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "content.title.fontWeight",
+          "token": "typography.fontWeight.semibold"
+        },
+        {
+          "slot": "content.title.fontSize",
+          "token": "component.button.typography.md.fontSize"
+        },
+        {
+          "slot": "content.title.lineHeight",
+          "token": "component.button.typography.md.lineHeight"
+        },
+        {
+          "slot": "content.subtitle.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "content.subtitle.fontWeight",
+          "token": "typography.fontWeight.regular"
+        },
+        {
+          "slot": "content.subtitle.fontSize",
+          "token": "component.linkButton.typography.xs.fontSize"
+        },
+        {
+          "slot": "content.subtitle.lineHeight",
+          "token": "component.linkButton.typography.xs.lineHeight"
+        },
+        {
+          "slot": "story.progress.track",
+          "token": "rgba(255, 255, 255, 0.4)"
+        },
+        {
+          "slot": "story.progress.fill",
+          "token": "color.text.inverse"
+        },
+        {
+          "slot": "video.progress.track",
+          "token": "rgba(255, 255, 255, 0.6)"
+        },
+        {
+          "slot": "video.progress.fill",
+          "token": "var(--cars24-semantic-icon-primary-inverse)"
+        },
+        {
+          "slot": "video.progress.thumb",
+          "token": "var(--cars24-semantic-icon-primary-inverse)"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
+      "canonicalId": "component.seoContentCard",
+      "canonicalName": "SEO Content Card",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": ".atom SEO Card",
+      "description": "Media-first SEO content card with a fixed showcase slot, a two-line headline, and a four-line body block.",
+      "webExport": "@turbo/web/canonical/seo-content-card",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "size",
+          "values": [
+            "Small"
+          ]
+        },
+        {
+          "name": "cardType",
+          "values": [
+            "Showroom card"
+          ]
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "container.width",
+          "token": "288px"
+        },
+        {
+          "slot": "layout.stackGap",
+          "token": "spacing.3"
+        },
+        {
+          "slot": "media.height",
+          "token": "140px"
+        },
+        {
+          "slot": "media.surface",
+          "token": "color.brand.primary.50"
+        },
+        {
+          "slot": "media.radius",
+          "token": "radius.xl"
+        },
+        {
+          "slot": "media.placeholder.icon",
+          "token": "var(--cars24-primitive-drive-pink-400)"
+        },
+        {
+          "slot": "content.stackGap",
+          "token": "spacing.1"
+        },
+        {
+          "slot": "content.title.color",
+          "token": "color.text.primary"
+        },
+        {
+          "slot": "content.title.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "content.title.fontWeight",
+          "token": "typography.fontWeight.semibold"
+        },
+        {
+          "slot": "content.title.lg",
+          "token": "utility/label-1/semibold"
+        },
+        {
+          "slot": "content.description.color",
+          "token": "color.text.secondary"
+        },
+        {
+          "slot": "content.description.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "content.description.fontWeight",
+          "token": "typography.fontWeight.regular"
+        },
+        {
+          "slot": "content.description.md",
+          "token": "paragraph/body-3"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
+      "canonicalId": "component.showroomCard",
+      "canonicalName": "Showroom Card",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": "Showroom card",
+      "description": "Showroom discovery card with a fixed media slot, store metadata, directions CTA, opening-hours row, and paired button actions.",
+      "webExport": "@turbo/web/canonical/showroom-card",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "size",
+          "values": [
+            "Small",
+            "Large"
+          ]
+        },
+        {
+          "name": "showDirectionsLink",
+          "values": [
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "showPrimaryAction",
+          "values": [
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "showSecondaryAction",
+          "values": [
+            "false",
+            "true"
+          ]
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "container.radius",
+          "token": "radius.xl"
+        },
+        {
+          "slot": "container.surface",
+          "token": "var(--cars24-semantic-bg-primary)"
+        },
+        {
+          "slot": "container.border",
+          "token": "var(--cars24-semantic-border-white)"
+        },
+        {
+          "slot": "container.borderWidth",
+          "token": "2px"
+        },
+        {
+          "slot": "container.shadow.primary",
+          "token": "0px 6px 16px 0px rgba(31, 41, 55, 0.04)"
+        },
+        {
+          "slot": "container.shadow.secondary",
+          "token": "0px 2px 8px 0px rgba(31, 41, 55, 0.02)"
+        },
+        {
+          "slot": "size.small.width",
+          "token": "288px"
+        },
+        {
+          "slot": "size.large.width",
+          "token": "336px"
+        },
+        {
+          "slot": "media.height.small",
+          "token": "140px"
+        },
+        {
+          "slot": "media.height.large",
+          "token": "144px"
+        },
+        {
+          "slot": "media.surface",
+          "token": "color.brand.primary.50"
+        },
+        {
+          "slot": "media.radius.top",
+          "token": "radius.xl"
+        },
+        {
+          "slot": "badge.surface",
+          "token": "var(--cars24-semantic-bg-primary)"
+        },
+        {
+          "slot": "badge.foreground",
+          "token": "color.text.primary"
+        },
+        {
+          "slot": "badge.tail.color",
+          "token": "var(--cars24-semantic-icon-primary-inverse)"
+        },
+        {
+          "slot": "badge.height.small",
+          "token": "28px"
+        },
+        {
+          "slot": "badge.height.large",
+          "token": "24px"
+        },
+        {
+          "slot": "badge.paddingInlineStart",
+          "token": "spacing.3"
+        },
+        {
+          "slot": "badge.paddingInlineEnd",
+          "token": "0px"
+        },
+        {
+          "slot": "badge.gap",
+          "token": "5px"
+        },
+        {
+          "slot": "badge.tailWidth",
+          "token": "40px"
+        },
+        {
+          "slot": "content.padding",
+          "token": "spacing.3"
+        },
+        {
+          "slot": "content.stackGap",
+          "token": "spacing.2"
+        },
+        {
+          "slot": "content.detailGap",
+          "token": "spacing.1"
+        },
+        {
+          "slot": "content.inlineGap",
+          "token": "spacing.1"
+        },
+        {
+          "slot": "content.title.color",
+          "token": "color.text.primary"
+        },
+        {
+          "slot": "content.title.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "content.title.fontWeight",
+          "token": "typography.fontWeight.semibold"
+        },
+        {
+          "slot": "content.title.fontSize",
+          "token": "17px"
+        },
+        {
+          "slot": "content.title.lineHeight",
+          "token": "22px"
+        },
+        {
+          "slot": "content.title.letterSpacing",
+          "token": "0px"
+        },
+        {
+          "slot": "content.bodyPrimary.color",
+          "token": "color.text.primary"
+        },
+        {
+          "slot": "content.bodySecondary.color",
+          "token": "color.text.secondary"
+        },
+        {
+          "slot": "content.body.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "content.body.fontWeight",
+          "token": "typography.fontWeight.regular"
+        },
+        {
+          "slot": "content.body.fontSize",
+          "token": "12px"
+        },
+        {
+          "slot": "content.body.lineHeight",
+          "token": "18px"
+        },
+        {
+          "slot": "content.body.letterSpacing",
+          "token": "0px"
+        },
+        {
+          "slot": "content.label.md.fontSize",
+          "token": "component.label.md.typography.label.fontSize"
+        },
+        {
+          "slot": "content.label.md.lineHeight",
+          "token": "component.label.md.typography.label.lineHeight"
+        },
+        {
+          "slot": "content.label.md.letterSpacing",
+          "token": "component.label.md.typography.label.letterSpacing"
+        },
+        {
+          "slot": "content.label.xs.fontSize",
+          "token": "11px"
+        },
+        {
+          "slot": "content.label.xs.lineHeight",
+          "token": "14px"
+        },
+        {
+          "slot": "content.label.xs.letterSpacing",
+          "token": "0px"
+        },
+        {
+          "slot": "directions.foreground",
+          "token": "var(--cars24-semantic-text-brand-base)"
+        },
+        {
+          "slot": "divider.color",
+          "token": "component.divider.color.line"
+        },
+        {
+          "slot": "rating.iconColor",
+          "token": "var(--cars24-primitive-amber-500)"
+        },
+        {
+          "slot": "rating.iconSize",
+          "token": "18px"
+        },
+        {
+          "slot": "rating.gap",
+          "token": "2.4px"
+        },
+        {
+          "slot": "status.success.color",
+          "token": "var(--cars24-semantic-text-success-base)"
+        },
+        {
+          "slot": "status.dot.size",
+          "token": "2px"
+        },
+        {
+          "slot": "actions.gap",
+          "token": "spacing.2"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
+      "canonicalId": "component.storyCircle",
+      "canonicalName": "Story Circle",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": "_Story_circle",
+      "description": "Circular story/media wrapper with an accent ring and centered single-line title underneath.",
+      "webExport": "@turbo/web/canonical/story-circle",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "size",
+          "values": [
+            "Large",
+            "Small"
+          ]
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "container.gap.large",
+          "token": "spacing.2"
+        },
+        {
+          "slot": "container.gap.small",
+          "token": "spacing.1"
+        },
+        {
+          "slot": "circle.surface",
+          "token": "color.surface.canvas"
+        },
+        {
+          "slot": "circle.border.color",
+          "token": "color.brand.primary.500"
+        },
+        {
+          "slot": "circle.border.width",
+          "token": "2px"
+        },
+        {
+          "slot": "circle.diameter.large",
+          "token": "88px"
+        },
+        {
+          "slot": "circle.diameter.small",
+          "token": "70px"
+        },
+        {
+          "slot": "circle.padding.large",
+          "token": "6px"
+        },
+        {
+          "slot": "circle.padding.small",
+          "token": "5px"
+        },
+        {
+          "slot": "slot.placeholder",
+          "token": "color.brand.primary.50"
+        },
+        {
+          "slot": "slot.diameter.large",
+          "token": "76px"
+        },
+        {
+          "slot": "slot.diameter.small",
+          "token": "60px"
+        },
+        {
+          "slot": "title.width.large",
+          "token": "96px"
+        },
+        {
+          "slot": "title.width.small",
+          "token": "70px"
+        },
+        {
+          "slot": "title.color",
+          "token": "color.text.primary"
+        },
+        {
+          "slot": "title.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "title.fontWeight",
+          "token": "typography.fontWeight.semibold"
+        },
+        {
+          "slot": "title.fontSize",
+          "token": "component.button.typography.sm.fontSize"
+        },
+        {
+          "slot": "title.lineHeight",
+          "token": "component.button.typography.sm.lineHeight"
+        },
+        {
+          "slot": "title.letterSpacing",
+          "token": "component.button.typography.sm.letterSpacing"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
+      "canonicalId": "component.fullBleedBannerCard",
+      "canonicalName": "Full Bleed Banner Card",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": "FullBleedBanner",
+      "description": "Full-bleed banner media slot with six fixed heights and an optional centered play affordance for video use cases.",
+      "webExport": "@turbo/web/canonical/full-bleed-banner-card",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "size",
+          "values": [
+            "XXS",
+            "XS",
+            "S",
+            "M",
+            "L",
+            "XL"
+          ]
+        },
+        {
+          "name": "video",
+          "values": [
+            "false",
+            "true"
+          ]
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "container.radius",
+          "token": "radius.none"
+        },
+        {
+          "slot": "size.xxs.width",
+          "token": "360px"
+        },
+        {
+          "slot": "size.xxs.height",
+          "token": "80px"
+        },
+        {
+          "slot": "size.xs.width",
+          "token": "360px"
+        },
+        {
+          "slot": "size.xs.height",
+          "token": "120px"
+        },
+        {
+          "slot": "size.s.width",
+          "token": "360px"
+        },
+        {
+          "slot": "size.s.height",
+          "token": "180px"
+        },
+        {
+          "slot": "size.m.width",
+          "token": "360px"
+        },
+        {
+          "slot": "size.m.height",
+          "token": "240px"
+        },
+        {
+          "slot": "size.l.width",
+          "token": "360px"
+        },
+        {
+          "slot": "size.l.height",
+          "token": "360px"
+        },
+        {
+          "slot": "size.xl.width",
+          "token": "360px"
+        },
+        {
+          "slot": "size.xl.height",
+          "token": "450px"
+        },
+        {
+          "slot": "surface.background",
+          "token": "color.brand.primary.50"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
+      "canonicalId": "component.singleBannerCard",
+      "canonicalName": "Single Banner Card",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": "_Single_Card_Banner",
+      "description": "Fixed-width banner card with a single media slot and an optional centered play affordance for video use cases.",
+      "webExport": "@turbo/web/canonical/single-banner-card",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "video",
+          "values": [
+            "false",
+            "true"
+          ]
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "container.radius",
+          "token": "radius.none"
+        },
+        {
+          "slot": "container.width",
+          "token": "336px"
+        },
+        {
+          "slot": "container.height",
+          "token": "168px"
+        },
+        {
+          "slot": "surface.background",
+          "token": "color.brand.primary.50"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
+      "canonicalId": "component.rotatingBannerCard",
+      "canonicalName": "Rotating Banner Card",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": "_Rotating_Banner_Card",
+      "description": "Animated banner carousel that keeps the active banner centered while adjacent banners scale down into the clipped side peeks.",
+      "webExport": "@turbo/web/canonical/rotating-banner-card",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "size",
+          "values": [
+            "Small",
+            "Medium",
+            "Large"
+          ]
+        },
+        {
+          "name": "slideMode",
+          "values": [
+            "Auto",
+            "Manual"
+          ]
+        },
+        {
+          "name": "showCopy",
+          "values": [
+            "false",
+            "true"
+          ]
+        },
+        {
+          "name": "autoPlay",
+          "values": [
+            "false",
+            "true"
+          ]
+        }
+      ],
+      "states": [
+        "default",
+        "transitioning"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "container.width",
+          "token": "336px"
+        },
+        {
+          "slot": "container.radius",
+          "token": "radius.xl"
+        },
+        {
+          "slot": "container.peek",
+          "token": "spacing.3"
+        },
+        {
+          "slot": "container.gap",
+          "token": "spacing.3"
+        },
+        {
+          "slot": "media.width",
+          "token": "288px"
+        },
+        {
+          "slot": "media.radius",
+          "token": "radius.xl"
+        },
+        {
+          "slot": "media.surface",
+          "token": "color.brand.primary.50"
+        },
+        {
+          "slot": "size.small.height",
+          "token": "162px"
+        },
+        {
+          "slot": "size.medium.height",
+          "token": "288px"
+        },
+        {
+          "slot": "size.large.height",
+          "token": "360px"
+        },
+        {
+          "slot": "motion.sideScale.small",
+          "token": "0.7986111111"
+        },
+        {
+          "slot": "motion.sideScale.medium",
+          "token": "0.7222222222"
+        },
+        {
+          "slot": "motion.sideScale.large",
+          "token": "0.8333333333"
+        },
+        {
+          "slot": "content.inset.inline",
+          "token": "spacing.4"
+        },
+        {
+          "slot": "content.inset.top",
+          "token": "spacing.4"
+        },
+        {
+          "slot": "content.stackGap",
+          "token": "2px"
+        },
+        {
+          "slot": "content.title.color",
+          "token": "color.text.primary"
+        },
+        {
+          "slot": "content.title.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "content.title.fontWeight",
+          "token": "typography.fontWeight.semibold"
+        },
+        {
+          "slot": "content.title.fontSize",
+          "token": "15px"
+        },
+        {
+          "slot": "content.title.lineHeight",
+          "token": "18px"
+        },
+        {
+          "slot": "content.title.letterSpacing",
+          "token": "0px"
+        },
+        {
+          "slot": "content.description.color",
+          "token": "color.text.secondary"
+        },
+        {
+          "slot": "content.description.fontFamily",
+          "token": "typography.fontFamily.sans"
+        },
+        {
+          "slot": "content.description.fontWeight",
+          "token": "typography.fontWeight.regular"
+        },
+        {
+          "slot": "content.description.fontSize",
+          "token": "13px"
+        },
+        {
+          "slot": "content.description.lineHeight",
+          "token": "18px"
+        },
+        {
+          "slot": "content.description.letterSpacing",
+          "token": "0px"
+        }
+      ],
+      "themeScopes": [
+        "cars24",
+        "teambhp",
+        "carinfo",
+        "vehicleinfo"
+      ]
+    },
+    {
+      "canonicalId": "component.storySlider",
+      "canonicalName": "Story Slider",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": "Story Slider",
+      "description": "Fixed-width horizontal story rail that composes repeated Story Circle items and supports native horizontal scrolling.",
+      "webExport": "@turbo/web/canonical/story-slider",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "size",
+          "values": [
+            "Large",
+            "Small"
+          ]
+        }
+      ],
+      "states": [
+        "default",
+        "scroll"
+      ],
+      "tokenBindings": [
+        {
+          "slot": "viewport.width",
           "token": "336px"
         },
         {
@@ -6696,6 +8761,24 @@ export const designSystemRegistry: DesignSystemRegistry = {
         {
           "slot": "card.tag.typography",
           "token": "utility/label-4/medium"
+          "slot": "item.large.width",
+          "token": "96px"
+        },
+        {
+          "slot": "item.small.width",
+          "token": "70px"
+        },
+        {
+          "slot": "row.large.sampleWidth",
+          "token": "528px"
+        },
+        {
+          "slot": "row.small.sampleWidth",
+          "token": "398px"
+        },
+        {
+          "slot": "item.component",
+          "token": "component.storyCircle"
         }
       ],
       "themeScopes": [
@@ -6716,6 +8799,49 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "webExport": "@geist/web/canonical/sold-car-card",
       "nativeExport": "",
       "variants": [],
+      "canonicalId": "component.staticSliderFlexbox",
+      "canonicalName": "Static Slider Flexbox",
+      "layer": "component",
+      "status": "approved",
+      "platform": "web",
+      "figmaComponentName": "_base-container-box",
+      "description": "Fixed-width slider row composition built from the approved Static Slider Card and clipped to the Figma viewport.",
+      "webExport": "@turbo/web/canonical/static-slider-flexbox",
+      "nativeExport": "",
+      "variants": [
+        {
+          "name": "columnCount",
+          "values": [
+            "1+",
+            "2+",
+            "3+",
+            "4+"
+          ]
+        },
+        {
+          "name": "type",
+          "values": [
+            "Text Inside",
+            "Text Outside",
+            "With Icon"
+          ]
+        },
+        {
+          "name": "size",
+          "values": [
+            "Large",
+            "Medium",
+            "Small"
+          ]
+        },
+        {
+          "name": "row2",
+          "values": [
+            "true",
+            "false"
+          ]
+        }
+      ],
       "states": [
         "default"
       ],
@@ -6875,6 +9001,28 @@ export const designSystemRegistry: DesignSystemRegistry = {
         {
           "slot": "avatar.type",
           "token": "Status dot"
+          "slot": "container.viewport.width",
+          "token": "336px"
+        },
+        {
+          "slot": "container.row.gap",
+          "token": "var(--cars24-misc-gap-10)"
+        },
+        {
+          "slot": "container.row.width.1col",
+          "token": "410px"
+        },
+        {
+          "slot": "container.row.width.2col",
+          "token": "440px"
+        },
+        {
+          "slot": "container.row.width.3col",
+          "token": "398px"
+        },
+        {
+          "slot": "container.row.width.4col",
+          "token": "390px"
         }
       ],
       "themeScopes": [
@@ -6892,7 +9040,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Notification Badge",
       "description": "Compact indicator dot used to show short notification or status presence attached to another element.",
-      "webExport": "@geist/web/canonical/notification-badge",
+      "webExport": "@turbo/web/canonical/notification-badge",
       "nativeExport": "",
       "variants": [
         {
@@ -6967,8 +9115,8 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "shared",
       "figmaComponentName": "Tooltip",
       "description": "Compact inverse helper surface that exposes contextual guidance with directional stem variants.",
-      "webExport": "@geist/web/canonical/tooltip",
-      "nativeExport": "@geist/native/canonical/tooltip",
+      "webExport": "@turbo/web/canonical/tooltip",
+      "nativeExport": "@turbo/native/canonical/tooltip",
       "variants": [
         {
           "name": "tip",
@@ -7060,8 +9208,8 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "shared",
       "figmaComponentName": "Banner",
       "description": "Inline notification surface for status messaging with optional icon and action.",
-      "webExport": "@geist/web/canonical/banner",
-      "nativeExport": "@geist/native/canonical/banner",
+      "webExport": "@turbo/web/canonical/banner",
+      "nativeExport": "@turbo/native/canonical/banner",
       "variants": [
         {
           "name": "theme",
@@ -7648,8 +9796,8 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "shared",
       "figmaComponentName": "Section Text Header",
       "description": "Section heading block with optional second title line, supporting description, tag, and trailing action.",
-      "webExport": "@geist/web/canonical/section-header",
-      "nativeExport": "@geist/native/canonical/section-header",
+      "webExport": "@turbo/web/canonical/section-header",
+      "nativeExport": "@turbo/native/canonical/section-header",
       "variants": [
         {
           "name": "inverse",
@@ -8363,8 +10511,8 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "shared",
       "figmaComponentName": "divider",
       "description": "Visual separator with optional token-driven label content and left, center, or right alignment.",
-      "webExport": "@geist/web/canonical/divider",
-      "nativeExport": "@geist/native/canonical/divider",
+      "webExport": "@turbo/web/canonical/divider",
+      "nativeExport": "@turbo/native/canonical/divider",
       "variants": [
         {
           "name": "labelPosition",
@@ -8485,7 +10633,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Lazy Loader",
       "description": "Loading placeholder component used while content is still being prepared.",
-      "webExport": "@geist/web/canonical/lazy-loader",
+      "webExport": "@turbo/web/canonical/lazy-loader",
       "nativeExport": "",
       "variants": [],
       "states": [
@@ -8548,7 +10696,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Progress bar",
       "description": "Compact linear progress indicator with the documented 10%, 40%, and 100% canonical variants.",
-      "webExport": "@geist/web/canonical/progress-bar",
+      "webExport": "@turbo/web/canonical/progress-bar",
       "nativeExport": "",
       "variants": [
         {
@@ -8639,7 +10787,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Progress stepper",
       "description": "Linear step indicator component for multi-step flows with canonical rest, active, loading, success, error, and disabled states.",
-      "webExport": "@geist/web/canonical/progress-stepper",
+      "webExport": "@turbo/web/canonical/progress-stepper",
       "nativeExport": "",
       "variants": [
         {
@@ -8825,7 +10973,7 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "platform": "web",
       "figmaComponentName": "Ratings",
       "description": "Canonical ratings lockup with Small and Medium sizes, plus the underlying star-state glyph system for default, half, and full stars.",
-      "webExport": "@geist/web/canonical/ratings",
+      "webExport": "@turbo/web/canonical/ratings",
       "nativeExport": "",
       "variants": [
         {
@@ -9827,6 +11975,135 @@ export const designSystemRegistry: DesignSystemRegistry = {
       "allowedChildren": [
         "component.buttonGroup",
         "component.button"
+      "canonicalId": "widget.staticSliderWidget",
+      "canonicalName": "Static Slider Widget",
+      "layer": "widget",
+      "status": "approved",
+      "platform": "web",
+      "description": "Discovery widget that packages a section header, optional choice-chip tab slider, a static slider flexbox, and a single primary CTA.",
+      "composition": [
+        "component.sectionHeader",
+        "component.staticSliderFlexbox",
+        "component.button"
+      ],
+      "allowedChildren": [
+        "component.staticSliderFlexbox"
+      ]
+    },
+    {
+      "canonicalId": "widget.faqWidget",
+      "canonicalName": "FAQ Widget",
+      "layer": "widget",
+      "status": "approved",
+      "platform": "web",
+      "description": "FAQ widget that packages an optional section header, optional chip bar, a single-select accordion list, and an optional primary CTA.",
+      "composition": [
+        "component.sectionHeader",
+        "component.chipBar",
+        "component.accordion",
+        "component.buttonGroup"
+      ],
+      "allowedChildren": [
+        "component.accordion"
+      ]
+    },
+    {
+      "canonicalId": "widget.listWidget",
+      "canonicalName": "List Widget",
+      "layer": "widget",
+      "status": "approved",
+      "platform": "web",
+      "description": "Discovery widget that packages a section header, a vertical stack of list cards, and a single full-width primary CTA.",
+      "composition": [
+        "component.sectionHeader",
+        "component.listCard",
+        "component.button"
+      ],
+      "allowedChildren": [
+        "component.listCard"
+      ]
+    },
+    {
+      "canonicalId": "widget.storyWidget",
+      "canonicalName": "Story Widget",
+      "layer": "widget",
+      "status": "approved",
+      "platform": "web",
+      "description": "Story-focused widget that packages a section header, a horizontal story slider rail, and a single primary CTA on light or inverse surfaces.",
+      "composition": [
+        "component.sectionHeader",
+        "component.storySlider",
+        "component.button"
+      ],
+      "allowedChildren": [
+        "component.storySlider"
+      ]
+    },
+    {
+      "canonicalId": "widget.videoWidget",
+      "canonicalName": "Video Widget",
+      "layer": "widget",
+      "status": "approved",
+      "platform": "web",
+      "description": "Video-focused widget that packages a section header, a clipped row of small video cards, and a single full-width primary CTA on light or inverse surfaces.",
+      "composition": [
+        "component.sectionHeader",
+        "component.videoCard",
+        "component.buttonGroup"
+      ],
+      "allowedChildren": [
+        "component.videoCard"
+      ]
+    },
+    {
+      "canonicalId": "widget.videoFullscreenWidget",
+      "canonicalName": "Video Fullscreen Widget",
+      "layer": "widget",
+      "status": "approved",
+      "platform": "web",
+      "description": "Full-screen video player shell with an overlaid header, story-style progress rail, related-card carousel, and a single bottom CTA.",
+      "composition": [
+        "component.videoTopBar",
+        "component.buttonGroup"
+      ],
+      "allowedChildren": []
+    },
+    {
+      "canonicalId": "widget.bannerWidget",
+      "canonicalName": "Banner Widget",
+      "layer": "widget",
+      "status": "approved",
+      "platform": "web",
+      "description": "Discovery widget that packages a section header, a selectable full-bleed, single, or rotating banner card, and a single full-width primary CTA on light or inverse surfaces.",
+      "composition": [
+        "component.sectionHeader",
+        "component.fullBleedBannerCard",
+        "component.singleBannerCard",
+        "component.rotatingBannerCard",
+        "component.buttonGroup"
+      ],
+      "allowedChildren": [
+        "component.fullBleedBannerCard",
+        "component.singleBannerCard",
+        "component.rotatingBannerCard"
+      ]
+    },
+    {
+      "canonicalId": "widget.topTabHeaderWidget",
+      "canonicalName": "Top Tab Header Widget",
+      "layer": "widget",
+      "status": "approved",
+      "platform": "web",
+      "description": "Mobile discovery header widget that combines the L1 app header, country-aware search treatment, a horizontally scrollable top-tab rail, and an optional promotional banner slot.",
+      "composition": [
+        "component.appHeader",
+        "component.searchBar",
+        "component.iconButton"
+      ],
+      "allowedChildren": [
+        "component.banner",
+        "component.fullBleedBannerCard",
+        "component.singleBannerCard"
       ]
     },
     {

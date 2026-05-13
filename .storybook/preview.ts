@@ -1,7 +1,7 @@
 import type { Preview } from "@storybook/react";
 import performancePreview from "@github-ui/storybook-addon-performance-panel/preview";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
-import "@geist/icons/style.css";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
+import "@turbo/icons/style.css";
 import { centeredCanvasDecorator, ComponentDocsPage } from "../apps/storybook/src/storybook-docs";
 import type { StorybookBrandGlobal } from "../apps/storybook/src/storybook-brand";
 

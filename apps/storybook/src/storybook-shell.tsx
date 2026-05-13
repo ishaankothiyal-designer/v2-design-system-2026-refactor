@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
-import { coreTokenCatalog } from "@geist/tokens";
-import { Text, type TextProps } from "@geist/web";
+import { coreTokenCatalog } from "@turbo/tokens";
+import { Text, type TextProps } from "@turbo/web";
 
 // Storybook page content should inherit the design-system typography by default.
 const storySansFontFamily = `var(--typography-font-family-sans, ${String(coreTokenCatalog.typography.fontFamily.sans)}), sans-serif`;

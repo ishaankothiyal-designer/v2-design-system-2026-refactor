@@ -5,8 +5,8 @@ import {
   isValidElement
 } from "react";
 import { Pressable, Text, View, type TextStyle, type ViewStyle } from "react-native";
-import type { DisplayBrandId } from "@geist/tokens";
-import { designSystemRegistry } from "@geist/contracts";
+import type { DisplayBrandId } from "@turbo/tokens";
+import { designSystemRegistry } from "@turbo/contracts";
 import { getRequiredNativeThemeTokenValue } from "../theme";
 
 export const canonicalLinkButtonNativeContract = designSystemRegistry.components.find(

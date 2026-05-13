@@ -1,11 +1,11 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
 import {
   OwnershipBadge,
   type OwnershipBadgeProps,
   type OwnershipBadgeSeller
-} from "@geist/web";
+} from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryPage } from "../storybook-shell";
 
@@ -47,7 +47,7 @@ function VariantMatrixStory({ brand }: { brand: DisplayBrandId }) {
 }
 
 function buildVariantsSourceCode(brand: DisplayBrandId) {
-  return `import { OwnershipBadge } from "@geist/web";
+  return `import { OwnershipBadge } from "@turbo/web";
 
 const sellers = [
   "Cars24 owned stock",

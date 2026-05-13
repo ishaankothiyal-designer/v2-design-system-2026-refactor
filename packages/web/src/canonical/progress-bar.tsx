@@ -1,6 +1,6 @@
 import type { CSSProperties, HTMLAttributes } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
-import { designSystemRegistry } from "@geist/contracts";
+import type { DisplayBrandId } from "@turbo/tokens";
+import { designSystemRegistry } from "@turbo/contracts";
 import { getRequiredThemeTokenValue, pxToRem, tokenValueToRem } from "../theme";
 
 export const canonicalProgressBarWebContract = designSystemRegistry.components.find(

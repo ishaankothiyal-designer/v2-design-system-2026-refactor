@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import type { DisplayBrandId } from "@geist/tokens";
+import type { DisplayBrandId } from "@turbo/tokens";
 import {
   Badge,
   Divider,
@@ -9,7 +9,7 @@ import {
   SectionHeader,
   Text,
   getRequiredThemeTokenValue
-} from "@geist/web";
+} from "@turbo/web";
 
 export type UsedCarListingCardProps = {
   brand?: DisplayBrandId;
@@ -452,7 +452,7 @@ export const carListingScreenSourceCode = `import {
   OwnershipBadge,
   SectionHeader,
   Text
-} from "@geist/web";
+} from "@turbo/web";
 
 export function UsedCarListingCard() {
   return (

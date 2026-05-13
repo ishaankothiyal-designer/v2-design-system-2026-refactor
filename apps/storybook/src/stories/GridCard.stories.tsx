@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@geist/tokens";
-import { GridCard, type GridCardColumnCount, type GridCardProps, type GridCardSize, type GridCardType } from "@geist/web";
+import { STORYBOOK_BRAND_OPTIONS, type DisplayBrandId } from "@turbo/tokens";
+import { GridCard, type GridCardColumnCount, type GridCardProps, type GridCardSize, type GridCardType } from "@turbo/web";
 import { createFigspecDesign } from "../storybookFigma";
 import { StoryCard, StoryCopy, StoryHeading, StoryPage } from "../storybook-shell";
 
@@ -262,7 +262,7 @@ export function GridCardPlayground(props: GridCardPlaygroundProps) {
 }
 
 const meta: Meta<GridCardPlaygroundProps> = {
-  title: "Components/Grid Card",
+  title: "Components/Cards/Grid Card",
   component: GridCardPlayground,
   tags: ["autodocs"],
   parameters: {
