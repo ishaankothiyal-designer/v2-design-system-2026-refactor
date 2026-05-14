@@ -180,6 +180,50 @@ Text-only compliance is not sufficient.
 
 ---
 
+## 2.1 Design.md Reference Rule
+
+Before composing any page, the AI must consult `reference/design.md` alongside this Logicbook.
+
+`design.md` is the living design-analysis document. It captures observed patterns extracted from the reference screens — navigation structure, hero behavior, service bucket composition, spacing rhythm, card density, header patterns, and brand-specific visual logic. Where `logicbook.md` defines the rules, `design.md` shows how those rules manifest visually in real CARS24, Team BHP, CarInfo, and VehicleInfo screens.
+
+### How to use design.md
+
+The AI must use `design.md` to:
+
+- understand the structural anatomy of a page before deciding what to build
+- learn the visual pattern for hero sections, service buckets, navigation, and footers
+- evaluate spacing, hierarchy, and density expectations specific to each page type
+- confirm whether a requested page fits an existing DLS pattern or genuinely requires new composition
+
+### DLS Compliance Decision Rule
+
+Every page-build request must pass through a compliance check using both files:
+
+1. Read the prompt and identify the page type, brand, and user goal.
+2. Open `design.md` and locate the matching pattern (L1, L2, internal, or specific page family).
+3. Cross-check the pattern against the widget registry and rules in this Logicbook.
+4. Decide one of the following:
+   - **DLS-compliant build** — the requested page matches an existing pattern in `design.md` and can be assembled from approved widgets. Use the documented structure, widgets, and variants.
+   - **DLS-extension build** — the page is mostly covered by existing patterns but needs one or two new sections. Use approved widgets for the known parts and `Module Widget` for the gap.
+   - **New page build** — no pattern in `design.md` matches the requested page. Only then is a fully new composition justified. The new page must still respect widget contracts, brand rules, and the Golden Rule.
+
+### Priority Order (Updated)
+
+1. `reference/logicbook.md`
+2. `reference/design.md`
+3. `reference/ai-execution.json`
+4. `reference/pages/*`
+5. `reference/widget/*`
+6. Mobbin as additional support when needed
+
+### Validation
+
+If `design.md` was not reviewed before deciding whether a build is DLS-compliant, an extension, or a new page, the output should be treated as process-invalid even if visually acceptable.
+
+When new reference screens are added, the AI should append the corresponding analysis to `design.md` so future builds can reference the updated patterns.
+
+---
+
 ## 3. Core Design Principle
 
 The AI must design with intent.
